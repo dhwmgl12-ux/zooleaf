@@ -1,5 +1,11 @@
 import React from "react";
+import AppRouter from "./routes/AppRouter";
 
 export default function App() {
-  return <div>ZooLeaf</div>;
+  return (
+    <>
+    <AppRouter />
+    <h1>안녕하세요</h1>
+    </>
+  )
 }
