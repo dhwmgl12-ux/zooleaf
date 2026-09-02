@@ -3,7 +3,38 @@ import { create } from "zustand";
 // Zustand 장바구니 전역 상태 생성
 const useCartStore = create((set) => ({
   // 장바구니 상품 목록,
-  cartItems: [],
+  cartItems: [
+    {
+      id: 1,
+      type: "ticket",
+      name: "종일 입장권 + 나이트 사파리",
+      price: 32000,
+      quantity: 2,
+      visitDate: "2026-09-10",
+      imageUrl: "https://via.placeholder.com/150",
+    },
+
+    {
+      id: 2,
+      type: "experience",
+      name: "알파카 먹이주기",
+      price: 10000,
+      quantity: 2,
+      visitDate: "2026-09-10",
+      time: "14:00",
+      imageUrl: "https://via.placeholder.com/150",
+    },
+
+    {
+      id: 3,
+      type: "goods",
+      name: "레서판다 봉제인형",
+      price: 25000,
+      quantity: 1,
+      option: "기본",
+      imageUrl: "https://via.placeholder.com/150",
+    },
+  ],
 
   // 장바구니에 상품 추가
   addToCart: (item) =>
@@ -97,7 +128,7 @@ const useCartStore = create((set) => ({
       //삭제할 상품을 제외한 새로운 배열 생성
       cartItems: state.cartItems.filter(
         // id와 type이 둘 다 같은 상품만 제거
-        (imte) => !(item.id === id && item.type === type),
+        (item) => !(item.id === id && item.type === type),
       ),
     })),
 
