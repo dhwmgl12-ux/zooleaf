@@ -1,76 +1,149 @@
-import { useState } from "react";
-import { getEmailError, getPasswordError, getPasswordConfirmError, getNameError } from "../utils/validation";
+import { useState } from 'react';
+import {
+  getEmailError,
+  getPasswordError,
+  getPasswordConfirmError,
+  getNameError,
+  getPhoneError,
+  getBirthDateError,
+  formatPhoneNumber,
+  formatBirthDate,
+} from '../utils/validation';
+import { useNavigate } from 'react-router-dom';
+import { login, signup } from '../api/authApi';
+
 
 export function useLogin() {
-  const [email, setEmail] = useState('');
+  const navigate = useNavigate();
+  const [id, setId] = useState('');
   const [password, setPassword] = useState('');
-  const [errors, setErrors] = useState({ email: '', password: '' });
+  const [errors, setErrors] = useState({ id: '', password: '' });
 
   const handleChange = (e) => {
     const { name, value } = e.target;
-    if (name === 'email') setEmail(value);
-    if (name === 'password') setPassword(value)
+    if (name === 'id') setId(value);
+    if (name === 'password') setPassword(value);
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
 
-    const emailError = getEmailError(email)
+    const idError = getEmailError(id);
     const passwordError = getPasswordError(password);
 
-    setErrors({ email: emailError, password: passwordError })
+    setErrors({ id: idError, password: passwordError });
 
-    if (emailError || passwordError) {
+    if (idError || passwordError) {
       return;
     }
-    // API 명세 확정되면 authApi.js의 login() 함수로 교체
-    console.log('로그인 시도:', {email, password});
-  }
 
-  return { email, password, errors, handleChange, handleSubmit }
+    try {
+      const result = await login({ id, password });
+
+      sessionStorage.setItem('token', result.token);
+
+      // TODO : 장바구니 Zustand 스토어 완성되면 여기서 localStorage -> 서버 병합 로직 호출
+
+      navigate('/');
+    } catch (err) {
+      setErrors((prev) => ({ ...prev, password: err.message }));
+    }
+  };
+
+  return { id, password, errors, handleChange, handleSubmit };
 }
 
 export function useSignup() {
-  const [name, setName] = useState('');
-  const [email, setEmail] = useState('');
+  const navigate = useNavigate();
+  const [id, setId] = useState('');
   const [password, setPassword] = useState('');
   const [passwordConfirm, setPasswordConFirm] = useState('');
+  const [name, setName] = useState('');
+  const [phone, setPhone] = useState('');
+  const [birthDate, setBirthDate] = useState('');
+  const [agreeTerms, setAgreeTerms] = useState(false);
+  const [agreePrivacy, setAgreePrivacy] = useState(false);
+  const [agreeMarketing, setAgreeMarketing] = useState(false);
   const [errors, setErrors] = useState({
-    name: '',
-    email: '',
+    id: '',
     password: '',
     passwordConfirm: '',
+    name: '',
+    phone: '',
+    birthDate: '',
+    agreeTerms: '',
+    agreePrivacy: '',
   });
 
   const handleChange = (e) => {
-    const { name: fieldName, value } = e.target;
-    if (fieldName === 'name') setName(value);
-    if (fieldName === 'email') setEmail(value);
-    if (fieldName === 'password') setPassword(value);
-    if (fieldName === 'passwordConfirm') setPasswordConFirm(value);
+    const { name: fieldName, value, type, checked } = e.target;
+    const val = type === 'checkbox' ? checked : value;
+
+    if (fieldName === 'id') setId(val);
+    if (fieldName === 'password') setPassword(val);
+    if (fieldName === 'passwordConfirm') setPasswordConFirm(val);
+    if (fieldName === 'name') setName(val);
+    if (fieldName === 'phone') setPhone(formatPhoneNumber(val));
+    if (fieldName === 'birthDate') setBirthDate(formatBirthDate(val));
+    if (fieldName === 'agreeTerms') setAgreeTerms(val);
+    if (fieldName === 'agreePrivacy') setAgreePrivacy(val);
+    if (fieldName === 'agreeMarketing') setAgreeMarketing(val);
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
 
-    const nameError = getNameError(name);
-    const emailError = getEmailError(email);
+    const idError = getEmailError(id);
     const passwordError = getPasswordError(password);
     const passwordConfirmError = getPasswordConfirmError(password, passwordConfirm);
-    
+    const nameError = getNameError(name);
+    const phoneError = getPhoneError(phone);
+    const birthDateError = getBirthDateError(birthDate);
+    const agreeTermsError = agreeTerms ? '' : '약관에 동의하여 주세요.';
+    const agreePrivacyError = agreePrivacy ? '' : '수집 및 이용에 동의하여 주세요.';
+
     setErrors({
-      name: nameError,
-      email: emailError,
+      id: idError,
       password: passwordError,
       passwordConfirm: passwordConfirmError,
+      name: nameError,
+      phone: phoneError,
+      birthDate: birthDateError,
+      agreeTerms: agreeTermsError,
+      agreePrivacy: agreePrivacyError,
     });
-    
-    if (nameError || emailError || passwordError || passwordConfirmError) {
+
+    if (
+      idError ||
+      passwordError ||
+      passwordConfirmError ||
+      nameError ||
+      phoneError ||
+      birthDateError ||
+      agreeTermsError ||
+      agreePrivacyError
+    ) {
       return;
     }
-    
-    // API 명세 확정되면 authApi.js의 login() 함수로 교체
-    console.log('회원가입 시도:', { name, email, password });
-  }
-  return { name, email, password, passwordConfirm, errors, handleChange, handleSubmit }
-};
+
+    try {
+      await signup({
+        id,
+        password,
+        passwordConfirm,
+        name,
+        phone,
+        birthDate,
+        agreeTerms,
+        agreePrivacy,
+        agreeMarketing,
+      });
+
+      navigate('/login')
+    } catch (err) {
+      setErrors((prev) => ({ ...prev, id: err.message }));
+    }
+  };
+
+  return { id, password, passwordConfirm, name, phone, birthDate, agreeTerms, agreePrivacy, agreeMarketing, errors, handleChange, handleSubmit };
+}
