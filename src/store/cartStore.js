@@ -3,7 +3,52 @@ import { create } from "zustand";
 // Zustand 장바구니 전역 상태 생성
 const useCartStore = create((set) => ({
   // 장바구니 상품 목록,
-  cartItems: [],
+  cartItems: [
+    {
+      id: 1,
+      type: "ticket",
+      name: "종일 + 나이트 입장권",
+      imageUrl: "https://placehold.co/120x120",
+      visitDate: "2026-09-10",
+      price: 32000,
+      quantity: 2,
+      discountRate: 0,
+    },
+
+    {
+      id: 2,
+      type: "experience",
+      name: "알파카 먹이주기",
+      imageUrl: "https://placehold.co/120x120",
+      visitDate: "2026-09-10",
+      time: "14:00",
+      price: 10000,
+      quantity: 2,
+      discountRate: 0,
+    },
+
+    {
+      id: 3,
+      type: "goods",
+      name: "레서판다 인형",
+      imageUrl: "https://placehold.co/120x120",
+      option: "기본",
+      price: 25000,
+      quantity: 1,
+      discountRate: 0.1,
+    },
+
+    {
+      id: 4,
+      type: "goods",
+      name: "사파리 캡",
+      imageUrl: "https://placehold.co/120x120",
+      option: "FG",
+      price: 19000,
+      quantity: 1,
+      discountRate: 0,
+    },
+  ],
 
   // 장바구니에 상품 추가
   addToCart: (item) =>

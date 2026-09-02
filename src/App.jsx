@@ -7,7 +7,6 @@ export default function App() {
   return (
     <>
       <AppRouter />
-      <h1>안녕하세요</h1>
     </>
   );
 }
