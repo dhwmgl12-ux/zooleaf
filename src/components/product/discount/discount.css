@@ -1,0 +1,282 @@
+/* 1. 전체 페이지 컨테이너 및 배경 설정 */
+
+@font-face {
+  font-family: "Pretendard";
+  src: url("https://cdn.jsdelivr.net/gh/projectnoonnu/pretendard@1.0/Pretendard-Regular.woff2")
+    format("woff2");
+  font-weight: 400;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Pretendard";
+  src: url("https://cdn.jsdelivr.net/gh/projectnoonnu/pretendard@1.0/Pretendard-Medium.woff2")
+    format("woff2");
+  font-weight: 500;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Pretendard";
+  src: url("https://cdn.jsdelivr.net/gh/projectnoonnu/pretendard@1.0/Pretendard-SemiBold.woff2")
+    format("woff2");
+  font-weight: 600;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Pretendard";
+  src: url("https://cdn.jsdelivr.net/gh/projectnoonnu/pretendard@1.0/Pretendard-Bold.woff2")
+    format("woff2");
+  font-weight: 700;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Pretendard";
+  src: url("https://cdn.jsdelivr.net/gh/projectnoonnu/pretendard@1.0/Pretendard-ExtraBold.woff2")
+    format("woff2");
+  font-weight: 800;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Pretendard";
+  src: url("https://cdn.jsdelivr.net/gh/projectnoonnu/pretendard@1.0/Pretendard-Black.woff2")
+    format("woff2");
+  font-weight: 900;
+  font-display: swap;
+}
+@font-face {
+  font-family: "Wave";
+  src: url("https://cdn.jsdelivr.net/gh/projectnoonnu/2404@1.0/WavvePADO-Regular.woff2")
+    format("woff2");
+  font-weight: normal;
+  font-display: swap;
+}
+
+body {
+  background-color: #e8ece9;
+}
+/* src/components/product/discount.css */
+
+/* 1. 페이지 전체를 감싸는 영역 */
+.page-wrapper {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+/* 2. 콘텐츠를 모아주는 박스 */
+.container {
+  width: 100%;
+  max-width: 1200px;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+/* 페이지 타이틀 영역 */
+.page-title-area {
+  width: 100%;
+  text-align: left; /* 👈 flex-start를 left로 수정 */
+  margin: 40px 0 30px 0;
+}
+
+.page-title {
+  font-size: 44px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: normal;
+  letter-spacing: 4.84px;
+  color: #2c3e35;
+}
+
+/* 주의사항 박스 */
+.notice-box {
+  background-color: #ffffff;
+  width: 100%;
+  max-width: 1000px;
+  border-radius: 16px;
+  padding: 20px 40px;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 30px;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.04);
+}
+
+.notice-box h3 {
+  color: #d90429;
+  font-size: 36px;
+  font-weight: bold;
+  margin: 24px 0 24px 0;
+}
+
+.notice-box p {
+  color: #d90429;
+  font-size: 24px;
+  margin: 0 0 24px 0;
+}
+
+/* 3. 카드 목록 영역 */
+.card-list {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 40px;
+  width: 100%;
+}
+
+.card-item {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 80px;
+  width: 1000px;
+  margin: 0 auto;
+  padding: 50px 70px;
+  box-sizing: border-box;
+  background-color: #ffffff;
+  border-radius: 24px;
+}
+
+.card-thumb {
+  flex-shrink: 0;
+  width: 240px;
+  height: 159px;
+  display: flex;
+  padding: 0 120px 0 60px;
+  justify-content: center;
+  align-items: center;
+  background-color: #ffffff;
+  border-radius: 20px;
+  overflow: hidden;
+}
+
+.card-thumb img {
+  max-width: 240px;
+  max-height: 159px;
+  width: auto;
+  height: auto;
+  object-fit: contain;
+}
+
+.card-desc {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  flex-grow: 1;
+  text-align: left;
+}
+
+.card-desc h3 {
+  font-size: 24px;
+  font-weight: bold;
+  color: #2c3e35;
+  margin-bottom: 14px;
+  text-align: left;
+}
+
+.card-desc p {
+  font-size: 16px;
+  color: #2c3e35;
+  line-height: 1.6;
+  margin: 0;
+  text-align: left;
+}
+
+.condition-text .highlightWord {
+  color: #d90429;
+}
+
+/* 우대 적용 섹션 타이틀 박스 */
+.prefer-section-title {
+  background-color: #ffffff;
+  width: 1000px;
+  margin: 60px auto 40px auto;
+  padding: 25px 0;
+  text-align: center;
+  color: #d90429;
+  font-size: 28px;
+  font-weight: bold;
+  border-radius: 16px;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.04);
+}
+
+.prefer-list {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 30px;
+  width: 100%;
+}
+
+/* 우대 카드 개별 박스 */
+.prefer-item {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  width: 1000px;
+  margin: 0 auto;
+  padding: 50px 0 50px 200px; /* 👈 왼쪽 여백 200px 기준점 */
+  box-sizing: border-box;
+  background-color: #ffffff;
+  border-radius: 24px;
+}
+
+.prefer-thumb {
+  flex-shrink: 0;
+  width: 120px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.prefer-thumb img {
+  max-width: 100px;
+  max-height: 100px;
+  object-fit: contain;
+}
+
+/* 우대 텍스트 영역 (중복 패딩 제거) */
+.prefer-item .prefer-desc {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  text-align: left;
+  flex-grow: 1;
+  padding-left: 120px;
+}
+
+.prefer-item .prefer-desc-item {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  text-align: left;
+  width: 100%;
+  margin-bottom: 16px;
+}
+
+.prefer-item .prefer-desc-item:last-child {
+  margin-bottom: 0;
+}
+
+.prefer-item .prefer-desc-item h3 {
+  font-size: 20px;
+  font-weight: bold;
+  color: #2c3e35;
+  margin: 0 0 4px 0;
+  text-align: left;
+}
+
+.prefer-item .prefer-desc-item p {
+  font-size: 18px;
+  color: #2c3e35;
+  margin: 0;
+  text-align: left;
+}
