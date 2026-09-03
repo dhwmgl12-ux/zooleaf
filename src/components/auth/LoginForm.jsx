@@ -46,9 +46,29 @@ export default function LoginForm() {
 
       <LinkRow>
         <LinkText>아이디 찾기</LinkText>
-        <span>|</span>
+        <span>
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            width="1"
+            height="9"
+            viewBox="0 0 1 9"
+            fill="none"
+          >
+            <path d="M0.5 0L0.5 9" stroke="#C8C9C9" />
+          </svg>
+        </span>
         <LinkText>비밀번호 찾기</LinkText>
-        <span>|</span>
+        <span>
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            width="1"
+            height="9"
+            viewBox="0 0 1 9"
+            fill="none"
+          >
+            <path d="M0.5 0L0.5 9" stroke="#C8C9C9" />
+          </svg>
+        </span>
         <LinkText>회원가입</LinkText>
       </LinkRow>
     </FormCard>
