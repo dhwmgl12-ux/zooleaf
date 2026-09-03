@@ -1,5 +1,4 @@
 // src/styles/variables.js
-import styled from '@emotion/styled';
 export const theme = {
   colors: {
     primary: '#2D6A4F',
@@ -80,12 +79,12 @@ export const theme = {
       lineheight: '20px',
       letterspacing: '0.01%',
     },
-    fontWeight: {
-      regular: 400,
-      medium: 500,
-      semiBold: 600,
-      bold: 700,
-    },
+  },
+  fontWeight: {
+    regular: 400,
+    medium: 500,
+    semiBold: 600,
+    bold: 700,
   },
 
   spacing: {
@@ -112,6 +111,7 @@ export const theme = {
     button: '999px',
     box: '20px',
     image: '20px',
+    input: '10px',
   },
 
   layout: {
