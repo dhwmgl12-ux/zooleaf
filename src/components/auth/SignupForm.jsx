@@ -1,5 +1,5 @@
 import { useSignup } from '../../hooks/useAuth';
-import { ErrorText, Form, FormCard, Input, Label, SubmitButton, Title } from './styles';
+import { ErrorText, Form, FormCard, Input, Label, SubmitButton, Title } from './auth.styles';
 
 export default function SignupForm() {
   const {

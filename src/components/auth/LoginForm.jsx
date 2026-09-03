@@ -1,4 +1,14 @@
-import { ErrorText, Form, FormCard, Input, Label, LinkRow, LinkText, SubmitButton, Title } from './styles';
+import {
+  ErrorText,
+  Form,
+  FormCard,
+  Input,
+  Label,
+  LinkRow,
+  LinkText,
+  SubmitButton,
+  Title,
+} from './auth.styles';
 import { useLogin } from '../../hooks/useAuth';
 
 export default function LoginForm() {
