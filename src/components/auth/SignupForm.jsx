@@ -1,88 +1,128 @@
 import { useSignup } from '../../hooks/useAuth';
-import AuthInput from './AuthInput';
+import { ErrorText, Form, FormCard, Input, Label, SubmitButton, Title } from './styles';
 
 export default function SignupForm() {
-  const { id, password, passwordConfirm, name, phone, birthDate, agreeTerms, agreePrivacy, agreeMarketing, errors, handleChange, handleSubmit } = useSignup();
+  const {
+    id,
+    password,
+    passwordConfirm,
+    name,
+    phone,
+    birthDate,
+    agreeTerms,
+    agreePrivacy,
+    agreeMarketing,
+    errors,
+    handleChange,
+    handleSubmit,
+  } = useSignup();
   return (
-    <form onSubmit={handleSubmit}>
-      <AuthInput
-        label="이메일"
-        type="email"
-        name="id"
-        value={id}
-        onChange={handleChange}
-        placeholder="user@example.com"
-      />
-      {errors.id && <p className="error-text">{errors.id}</p>}
+    <FormCard>
+      <Title>회원가입</Title>
+      <Form onSubmit={handleSubmit}>
+        <div>
+          <Label>이메일 아이디</Label>
+          <Input
+            type="email"
+            name="id"
+            value={id}
+            onChange={handleChange}
+            placeholder="user@example.com"
+          />
+          {errors.id && <ErrorText>{errors.id}</ErrorText>}
+        </div>
 
-      <AuthInput
-        label="비밀번호"
-        type="password"
-        name="password"
-        value={password}
-        onChange={handleChange}
-        placeholder="8 ~ 20자 이상 영문 + 숫자 + 특수 문자를 포함하여 주세요."
-      />
-      {errors.password && <p className="error-text">{errors.password}</p>}
+        <div>
+          <Label>비밀번호</Label>
+          <Input
+            type="password"
+            name="password"
+            value={password}
+            onChange={handleChange}
+            placeholder="8 ~ 20자 이상 영문 + 숫자 + 특수 문자를 포함하여 주세요."
+          />
+          {errors.password && <ErrorText>{errors.password}</ErrorText>}
+        </div>
 
-      <AuthInput
-        label="비밀번호 확인"
-        type="password"
-        name="passwordConfirm"
-        value={passwordConfirm}
-        onChange={handleChange}
-        placeholder="비밀번호를 다시 입력해주세요!"
-      />
-      {errors.passwordConfirm && (<p className="error-text">{errors.passwordConfirm}</p>)}
+        <div>
+          <Label>비밀번호 확인</Label>
+          <Input
+            type="password"
+            name="passwordConfirm"
+            value={passwordConfirm}
+            onChange={handleChange}
+            placeholder="비밀번호를 다시 입력해주세요!"
+          />
+          {errors.passwordConfirm && <ErrorText>{errors.passwordConfirm}</ErrorText>}
+        </div>
 
-      <AuthInput
-        label="이름"
-        type="text"
-        name="name"
-        value={name}
-        onChange={handleChange}
-        placeholder="홍길동"
-      />
-      {errors.name && <p className="error-text">{errors.name}</p>}
+        <div>
+          <Label>이름</Label>
+          <Input
+            type="text"
+            name="name"
+            value={name}
+            onChange={handleChange}
+            placeholder="홍길동"
+          />
+          {errors.name && <ErrorText>{errors.name}</ErrorText>}
+        </div>
 
-      <AuthInput
-        label="휴대폰 번호"
-        type="text"
-        name="phone"
-        value={phone}
-        onChange={handleChange}
-        placeholder="010-0000-0000"
-      />
-      {errors.phone && <p className="error-text">{errors.phone}</p>}
+        <div>
+          <Label>휴대폰 번호</Label>
+          <Input
+            type="text"
+            inputMode="numeric"
+            name="phone"
+            value={phone}
+            onChange={handleChange}
+            placeholder="010-0000-0000"
+          />
+          {errors.phone && <ErrorText>{errors.phone}</ErrorText>}
+        </div>
 
-      <AuthInput
-        label="생년월일"
-        type="text"
-        name="birthDate"
-        value={birthDate}
-        onChange={handleChange}
-        placeholder="2000.00.00"
-      />
-      {errors.birthDate && <p className="error-text">{errors.birthDate}</p>}
+        <div>
+          <Label>생년월일</Label>
+          <Input
+            type="text"
+            inputMode="numeric"
+            name="birthDate"
+            value={birthDate}
+            onChange={handleChange}
+            placeholder="2000.00.00"
+          />
+          {errors.birthDate && <ErrorText>{errors.birthDate}</ErrorText>}
+        </div>
 
-      <label>
-        <input type="checkbox" name="agreeTerms" checked={agreeTerms} onChange={handleChange} />
-        [필수] 이용약관 동의
-      </label>
-      {errors.agreeTerms && (<p className="error-text">{errors.agreeTerms}</p>)}
+        <label>
+          <input type="checkbox" name="agreeTerms" checked={agreeTerms} onChange={handleChange} />
+          [필수] 이용약관 동의
+        </label>
+        {errors.agreeTerms && <ErrorText>{errors.agreeTerms}</ErrorText>}
 
-      <label>
-        <input type="checkbox" name="agreePrivacy" checked={agreePrivacy} onChange={handleChange} />
-        [필수] 개인정보 수집 및 이용 동의
-      </label>
-      {errors.agreePrivacy && (<p className="error-text">{errors.agreePrivacy}</p>)}
+        <label>
+          <input
+            type="checkbox"
+            name="agreePrivacy"
+            checked={agreePrivacy}
+            onChange={handleChange}
+          />
+          [필수] 개인정보 수집 및 이용 동의
+        </label>
+        {errors.agreePrivacy && <ErrorText>{errors.agreePrivacy}</ErrorText>}
 
-      <label>
-        <input type="checkbox" name="agreeMarketing" checked={agreeMarketing} onChange={handleChange} />
-        [선택] 마케팅 정보 수신 동의
-      </label>
+        <label>
+          <input
+            type="checkbox"
+            name="agreeMarketing"
+            checked={agreeMarketing}
+            onChange={handleChange}
+          />
+          [선택] 마케팅 정보 수신 동의
+        </label>
 
-      <button type="submit">가입 하기</button>
-    </form>
+        <SubmitButton type="submit">가입 하기</SubmitButton>
+      </Form>
+    </FormCard>
   );
 }
