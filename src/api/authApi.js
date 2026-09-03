@@ -42,5 +42,11 @@ export function login({id, password}) {
   });
 }
 
+export function getMe() {
+  return apiClient('/auth/me', {
+    method: 'GET',
+  })
+}
+
 // 로그아웃
 
