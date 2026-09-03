@@ -11,7 +11,7 @@ import {
 } from '../utils/validation';
 import { useNavigate } from 'react-router-dom';
 import { login, signup, getMe } from '../api/authApi';
-import useAuthStore  from '../api/authApi';
+import useAuthStore  from '../store/authStore';
 
 
 
