@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import {
   getEmailError,
   getPasswordError,
@@ -10,7 +10,9 @@ import {
   formatBirthDate,
 } from '../utils/validation';
 import { useNavigate } from 'react-router-dom';
-import { login, signup } from '../api/authApi';
+import { login, signup, getMe } from '../api/authApi';
+import useAuthStore  from '../api/authApi';
+
 
 
 export function useLogin() {
@@ -146,4 +148,27 @@ export function useSignup() {
   };
 
   return { id, password, passwordConfirm, name, phone, birthDate, agreeTerms, agreePrivacy, agreeMarketing, errors, handleChange, handleSubmit };
+}
+
+
+export function useAuthRestore() {
+  const setAuth = useAuthStore((state) => state.setAuth);
+  const clearAuth = useAuthStore((state) => state.clearAuth);
+
+  useEffect(() => {
+    const token = sessionStorage.getItem('token');
+
+    if (!token) {
+      return;
+    }
+
+    getMe()
+      .then((result) => {
+        setAuth(result.data);
+      })
+      .catch(() => {
+        sessionStorage.removeItem('token');
+        clearAuth();
+      });
+    }, [setAuth, clearAuth]);
 }
