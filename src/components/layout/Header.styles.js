@@ -22,7 +22,7 @@ export const HeaderContainer = styled.header`
     display: flex;
     gap: ${theme.spacing[56]};
     font-size: ${theme.fontSize.h5};
-    font-weight: ${theme.fontSize.fontWeight.semiBold};
+    font-weight: ${theme.fontWeight.semiBold};
   }
 
   .header__nav-list li:hover {
