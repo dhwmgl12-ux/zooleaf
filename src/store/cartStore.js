@@ -7,7 +7,7 @@ const useCartStore = create((set) => ({
     {
       id: 1,
       type: "ticket",
-      name: "종일 + 나이트 입장권",
+      name: "일반입장권",
       imageUrl: "https://placehold.co/120x120",
       visitDate: "2026-09-10",
       price: 32000,
@@ -18,7 +18,7 @@ const useCartStore = create((set) => ({
     {
       id: 2,
       type: "experience",
-      name: "알파카 먹이주기",
+      name: "기린 먹이주기 체험",
       imageUrl: "https://placehold.co/120x120",
       visitDate: "2026-09-10",
       time: "14:00",
@@ -30,7 +30,7 @@ const useCartStore = create((set) => ({
     {
       id: 3,
       type: "goods",
-      name: "레서판다 인형",
+      name: "ZooLeaf 에코백",
       imageUrl: "https://placehold.co/120x120",
       option: "기본",
       price: 25000,
