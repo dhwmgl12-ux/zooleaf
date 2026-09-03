@@ -1,57 +1,430 @@
 const TICKET_DATA = [
-  { id: 1, name: '종일권 대인', price: 32000, category: '입장권', target: '가족', theme: '#FFFFFF' },
-  { id: 2, name: '종일권 소인', price: 22000, category: '입장권', target: '어린이', theme: '#FFFFFF' },
-  { id: 3, name: '종일권 우대', price: 16000, category: '입장권', target: '어린이', theme: '#FFFFFF' },
-  { id: 4, name: '오후권 대인', price: 24000, category: '입장권', target: '가족', theme: '#FFFFFF' },
-  { id: 5, name: '오후권 소인', price: 16000, category: '입장권', target: '어린이', theme: '#FFFFFF' },
-  { id: 6, name: '오후권 우대', price: 12000, category: '입장권', target: '어린이', theme: '#FFFFFF' },
-  { id: 7, name: '나이트 사파리 패키지 대인', price: 49000, category: '패키지', target: '커플', theme: '#2C3E35' },
-  { id: 8, name: '나이트 사파리 패키지 소인', price: 39000, category: '패키지', target: '어린이', theme: '#2C3E35' },
-  { id: 9, name: '나이트 사파리 패키지 우대', price: 25000, category: '패키지', target: '커플', theme: '#2C3E35' },
-  { id: 10, name: '패밀리 데이 패키지', price: 89000, category: '패키지', target: '가족', theme: '#F1EEE2' },
-  { id: 11, name: '커플 데이트 패키지', price: 59000, category: '패키지', target: '커플', theme: '#FEEBF8' },
-  { id: 12, name: '드림 투어 패키지', price: 69000, category: '패키지', target: '가족', theme: '#E2EDF1' },
-  { id: 13, name: '연간 멤버십', price: 149000, category: 'Membership', target: '가족', theme: '#FFF891' },
+  {
+    id: 1,
+    name: '종일권 대인',
+    price: 32000,
+    discountRate: null,
+    discountPrice: null,
+    imageUrl: null,
+    detailImage: null,
+    thumbnails: [],
+    description: '만 19세 이상 성인 대상 종일권',
+    badge: [],
+    usageGuide: '09:00 ~ 18:00 이용 가능',
+    target: '만 19세 이상 성인',
+    visitorType: '대인',
+    availableTime: '09:00 ~ 18:00',
+    availableTimeType: '종일',
+    categoryId: 'ticket',
+  },
+  {
+    id: 2,
+    name: '종일권 소인',
+    price: 22000,
+    discountRate: null,
+    discountPrice: null,
+    imageUrl: null,
+    detailImage: null,
+    thumbnails: [],
+    description: '어린이 대상 종일권',
+    badge: [],
+    usageGuide: '09:00 ~ 18:00 이용 가능',
+    target: '어린이',
+    visitorType: '소인',
+    availableTime: '09:00 ~ 18:00',
+    availableTimeType: '종일',
+    categoryId: 'ticket',
+  },
+  {
+    id: 3,
+    name: '종일권 우대',
+    price: 16000,
+    discountRate: null,
+    discountPrice: null,
+    imageUrl: null,
+    detailImage: null,
+    thumbnails: [],
+    description: '우대 대상 종일권',
+    badge: [],
+    usageGuide: '09:00 ~ 18:00 이용 가능',
+    target: '우대 대상',
+    visitorType: '우대',
+    availableTime: '09:00 ~ 18:00',
+    availableTimeType: '종일',
+    categoryId: 'ticket',
+  },
+  {
+    id: 4,
+    name: '오후권 대인',
+    price: 24000,
+    discountRate: null,
+    discountPrice: null,
+    imageUrl: null,
+    detailImage: null,
+    thumbnails: [],
+    description: '만 19세 이상 성인 대상 오후 시간 입장권',
+    badge: [],
+    usageGuide: '14:00 ~ 18:00 이용 가능',
+    target: '만 19세 이상 성인',
+    visitorType: '대인',
+    availableTime: '14:00 ~ 18:00',
+    availableTimeType: '오후',
+    categoryId: 'ticket',
+  },
+  {
+    id: 5,
+    name: '오후권 소인',
+    price: 16000,
+    discountRate: null,
+    discountPrice: null,
+    imageUrl: null,
+    detailImage: null,
+    thumbnails: [],
+    description: '어린이 대상 오후 시간 입장권',
+    badge: [],
+    usageGuide: '14:00 ~ 18:00 이용 가능',
+    target: '어린이',
+    visitorType: '소인',
+    availableTime: '14:00 ~ 18:00',
+    availableTimeType: '오후',
+    categoryId: 'ticket',
+  },
+  {
+    id: 6,
+    name: '오후권 우대',
+    price: 12000,
+    discountRate: null,
+    discountPrice: null,
+    imageUrl: null,
+    detailImage: null,
+    thumbnails: [],
+    description: '우대 대상 오후 시간 입장권',
+    badge: [],
+    usageGuide: '14:00 ~ 18:00 이용 가능',
+    target: '우대 대상',
+    visitorType: '우대',
+    availableTime: '14:00 ~ 18:00',
+    availableTimeType: '오후',
+    categoryId: 'ticket',
+  },
+  {
+    id: 7,
+    name: '나이트 사파리 패키지 대인',
+    price: 49000,
+    discountRate: null,
+    discountPrice: null,
+    imageUrl: null,
+    detailImage: null,
+    thumbnails: [],
+    description: '나이트 사파리 패키지 대인',
+    badge: [],
+    usageGuide: '',
+    target: '만 19세 이상 성인',
+    visitorType: '전체',
+    availableTime: '',
+    availableTimeType: '전체',
+    categoryId: 'package',
+  },
+  {
+    id: 8,
+    name: '나이트 사파리 패키지 소인',
+    price: 39000,
+    discountRate: null,
+    discountPrice: null,
+    imageUrl: null,
+    detailImage: null,
+    thumbnails: [],
+    description: '나이트 사파리 패키지 소인',
+    badge: [],
+    usageGuide: '',
+    target: '어린이',
+    visitorType: '전체',
+    availableTime: '',
+    availableTimeType: '전체',
+    categoryId: 'package',
+  },
+  {
+    id: 9,
+    name: '나이트 사파리 패키지 우대',
+    price: 25000,
+    discountRate: null,
+    discountPrice: null,
+    imageUrl: null,
+    detailImage: null,
+    thumbnails: [],
+    description: '나이트 사파리 패키지 우대',
+    badge: [],
+    usageGuide: '',
+    target: '우대 대상',
+    visitorType: '전체',
+    availableTime: '',
+    availableTimeType: '전체',
+    categoryId: 'package',
+  },
+  {
+    id: 10,
+    name: '패밀리 데이 패키지',
+    price: 89000,
+    discountRate: null,
+    discountPrice: null,
+    imageUrl: null,
+    detailImage: null,
+    thumbnails: [],
+    description: '가족을 위한 패키지',
+    badge: [],
+    usageGuide: '',
+    target: '가족',
+    visitorType: '전체',
+    availableTime: '',
+    availableTimeType: '전체',
+    categoryId: 'package',
+  },
+  {
+    id: 11,
+    name: '커플 데이트 패키지',
+    price: 59000,
+    discountRate: null,
+    discountPrice: null,
+    imageUrl: null,
+    detailImage: null,
+    thumbnails: [],
+    description: '커플을 위한 패키지',
+    badge: [],
+    usageGuide: '',
+    target: '커플',
+    visitorType: '전체',
+    availableTime: '',
+    availableTimeType: '전체',
+    categoryId: 'package',
+  },
+  {
+    id: 12,
+    name: '드림 투어 패키지',
+    price: 69000,
+    discountRate: null,
+    discountPrice: null,
+    imageUrl: null,
+    detailImage: null,
+    thumbnails: [],
+    description: 'ZOOLEAF 드림 투어 패키지',
+    badge: [],
+    usageGuide: '',
+    target: '가족',
+    visitorType: '전체',
+    availableTime: '',
+    availableTimeType: '전체',
+    categoryId: 'package',
+  },
+  {
+    id: 13,
+    name: '연간 멤버십',
+    price: 149000,
+    discountRate: null,
+    discountPrice: null,
+    imageUrl: null,
+    detailImage: null,
+    thumbnails: [],
+    description: 'ZOOLEAF 연간 멤버십',
+    badge: [],
+    usageGuide: '',
+    target: '전체',
+    visitorType: '전체',
+    availableTime: '',
+    availableTimeType: '전체',
+    categoryId: 'membership',
+  },
 ];
 
 const GOODS_DATA = [
-  { id: 101, name: '레서판다 봉제인형', price: 35200, originalPrice: 39000, discountRate: 10, category: '인형', badge: 'BEST' },
-  { id: 102, name: '코끼리 봉제인형', price: 26000, originalPrice: 26000, discountRate: 0, category: '인형', badge: null },
-  { id: 103, name: '기린 봉제인형', price: 26000, originalPrice: 26000, discountRate: 0, category: '인형', badge: null },
-  { id: 104, name: 'ZooLeaf 머그컵', price: 15000, originalPrice: 15000, discountRate: 0, category: '생활', badge: null },
-  { id: 105, name: 'ZooLeaf 스텐인리스 보틀', price: 25200, originalPrice: 28000, discountRate: 10, category: '생활', badge: null },
-  { id: 106, name: 'ZooLeaf 애니멀 텀블러', price: 19800, originalPrice: 22000, discountRate: 10, category: '생활', badge: null },
-  { id: 107, name: 'ZooLeaf 사파리 탐험 노트', price: 6000, originalPrice: 6000, discountRate: 0, category: '문구', badge: null },
-  { id: 108, name: 'ZooLeaf 포토카드 & 엽서 세트', price: 10200, originalPrice: 12000, discountRate: 15, category: '문구', badge: null },
-  { id: 109, name: 'ZooLeaf 주니어 탐험가 세트', price: 33150, originalPrice: 39000, discountRate: 15, category: '문구', badge: null },
+  {
+    id: 101,
+    name: '레서판다 봉제인형',
+    price: 35200,
+    discountRate: 10,
+    discountPrice: 35200,
+    imageUrl: null,
+    detailImage: null,
+    thumbnails: [],
+    description: '레서판다 봉제인형',
+    badge: ['BEST'],
+    categoryId: 'goods',
+    subCategory: '인형',
+  },
+  {
+    id: 102,
+    name: '코끼리 봉제인형',
+    price: 26000,
+    discountRate: 0,
+    discountPrice: null,
+    imageUrl: null,
+    detailImage: null,
+    thumbnails: [],
+    description: '코끼리 봉제인형',
+    badge: [],
+    categoryId: 'goods',
+    subCategory: '인형',
+  },
+  {
+    id: 103,
+    name: '기린 봉제인형',
+    price: 26000,
+    discountRate: 0,
+    discountPrice: null,
+    imageUrl: null,
+    detailImage: null,
+    thumbnails: [],
+    description: '기린 봉제인형',
+    badge: [],
+    categoryId: 'goods',
+    subCategory: '인형',
+  },
+  {
+    id: 104,
+    name: 'ZooLeaf 머그컵',
+    price: 15000,
+    discountRate: 0,
+    discountPrice: null,
+    imageUrl: null,
+    detailImage: null,
+    thumbnails: [],
+    description: 'ZooLeaf 머그컵',
+    badge: [],
+    categoryId: 'goods',
+    subCategory: '생활',
+  },
+  {
+    id: 105,
+    name: 'ZooLeaf 스텐인리스 보틀',
+    price: 25200,
+    discountRate: 10,
+    discountPrice: 25200,
+    imageUrl: null,
+    detailImage: null,
+    thumbnails: [],
+    description: 'ZooLeaf 스테인리스 보틀',
+    badge: [],
+    categoryId: 'goods',
+    subCategory: '생활',
+  },
+  {
+    id: 106,
+    name: 'ZooLeaf 애니멀 텀블러',
+    price: 19800,
+    discountRate: 10,
+    discountPrice: 19800,
+    imageUrl: null,
+    detailImage: null,
+    thumbnails: [],
+    description: 'ZooLeaf 애니멀 텀블러',
+    badge: [],
+    categoryId: 'goods',
+    subCategory: '생활',
+  },
+  {
+    id: 107,
+    name: 'ZooLeaf 사파리 탐험 노트',
+    price: 6000,
+    discountRate: 0,
+    discountPrice: null,
+    imageUrl: null,
+    detailImage: null,
+    thumbnails: [],
+    description: 'ZooLeaf 사파리 탐험 노트',
+    badge: [],
+    categoryId: 'goods',
+    subCategory: '문구',
+  },
+  {
+    id: 108,
+    name: 'ZooLeaf 포토카드 & 엽서 세트',
+    price: 10200,
+    discountRate: 15,
+    discountPrice: 10200,
+    imageUrl: null,
+    detailImage: null,
+    thumbnails: [],
+    description: 'ZooLeaf 포토카드 & 엽서 세트',
+    badge: [],
+    categoryId: 'goods',
+    subCategory: '문구',
+  },
+  {
+    id: 109,
+    name: 'ZooLeaf 주니어 탐험가 세트',
+    price: 33150,
+    discountRate: 15,
+    discountPrice: 33150,
+    imageUrl: null,
+    detailImage: null,
+    thumbnails: [],
+    description: 'ZooLeaf 주니어 탐험가 세트',
+    badge: [],
+    categoryId: 'goods',
+    subCategory: '문구',
+  },
 ];
 
-export async function getTickets(options = {}) {
-  const { category = '전체상품', targets = [] } = options;
+export async function getProducts(options = {}) {
+  const {
+    category,
+    visitorType,
+    availableTimeType,
+    subCategory,
+    sort = '추천순',
+    page = 1,
+    limit = 12,
+  } = options;
 
   await new Promise((resolve) => setTimeout(resolve, 300));
 
-  let result = TICKET_DATA;
+  let result = [...TICKET_DATA, ...GOODS_DATA];
 
-  if (category !== '전체상품') {
-    result = result.filter((item) => item.category === category);
+  // category 필터
+  if (category) {
+    result = result.filter((item) => item.categoryId === category);
   }
 
-  if (targets.length > 0) {
-    result = result.filter((item) => targets.includes(item.target));
+  // 입장권 관람 대상 필터
+  if (visitorType && visitorType !== '전체') {
+    result = result.filter(
+      (item) => item.visitorType === visitorType
+    );
   }
 
-  return result;
-}
-
-export async function getGoods(options = {}) {
-  const { category = '전체' } = options;
-
-  await new Promise((resolve) => setTimeout(resolve, 300));
-
-  if (category !== '전체') {
-    return GOODS_DATA.filter((item) => item.category === category);
+  // 입장권 이용 시간 필터
+  if (availableTimeType && availableTimeType !== '전체') {
+    result = result.filter(
+      (item) => item.availableTimeType === availableTimeType
+    );
   }
 
-  return GOODS_DATA;
+  // 굿즈 소분류 필터
+  if (subCategory) {
+    result = result.filter(
+      (item) => item.subCategory === subCategory
+    );
+  }
+
+  // 굿즈 정렬
+  if (sort === '낮은가격순') {
+    result.sort((a, b) => a.price - b.price);
+  }
+
+  if (sort === '높은가격순') {
+    result.sort((a, b) => b.price - a.price);
+  }
+
+  // 페이지네이션
+  const startIndex = (page - 1) * limit;
+  const endIndex = startIndex + limit;
+
+  return {
+    products: result.slice(startIndex, endIndex),
+    pagination: {
+      page,
+      limit,
+      totalItems: result.length,
+      totalPages: Math.ceil(result.length / limit),
+    },
+  };
 }
