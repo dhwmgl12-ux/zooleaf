@@ -1,6 +1,6 @@
 import styled from "@emotion/styled";
 
-export const Footer = styled.footer`
+export const FooterContainer = styled.footer`
   width: 100%;
   color: #fff;
 

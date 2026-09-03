@@ -1,8 +1,8 @@
-import { Footer } from "./Footer.styles.js"
+import { FooterContainer } from "./Footer.styles.js"
 
 export default function Footer() {
   return (
-    <Footer>
+    <FooterContainer>
       <div className="footer-content">
         <div className="footer-company">
           <h2 className="footer__title">ZOOLEAF</h2>
@@ -45,6 +45,6 @@ export default function Footer() {
         <li>이메일무단수집거부</li>
       </ul>
       <p className="footer-copyright">© 2026 ZOOLEAF. All rights reserved.</p>
-    </Footer>
+    </FooterContainer>
   )
 }
