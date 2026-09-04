@@ -1,3 +1,5 @@
+import { apiClient } from "./client";
+
 
 export function checkId(id) {
   return apiClient('/auth/check-id', {
@@ -40,6 +42,12 @@ export function login({id, password}) {
     method: 'POST',
     body: JSON.stringify({id, password}),
   });
+}
+
+export function logout() {
+  return apiClient('/auth/logout', {
+    method: 'POST',
+  })
 }
 
 export function getMe() {

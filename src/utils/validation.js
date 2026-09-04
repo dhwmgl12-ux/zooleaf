@@ -5,8 +5,8 @@ const NAME_MAX_LENGTH = 8;
 
 const EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 const PASSWORD_REGEX = /^(?=.*[A-Za-z])(?=.*\d)(?=.*[!@#$%^&*])[A-Za-z\d!@#$%^&*]+$/;
-const PHONE_REGEX = /^10[016789]-\d{3,4}-\d{4}$/;
-const BIRTH_DATE_REGEX = /^\d{4}.\d{2}.\d{2}$/;
+const PHONE_REGEX = /^01[016789]-\d{3,4}-\d{4}$/;
+const BIRTH_DATE_REGEX = /^\d{4}\.\d{2}\.\d{2}$/;
 
 export function getEmailError(email) {
   if (!email) return '이메일을 입력해주세요!';
@@ -66,4 +66,17 @@ export function getBirthDateError(birthDate) {
     return '올바른 생년월일 형식이 아닙니다. (yyyy-mm-dd)';
   }
   return '';
+}
+
+export function mapServerErrorToField(message) {
+  if (message.includes('아이디')) return 'id';
+  if (message.includes('비밀번호')) return 'password';
+  if (message.includes('비밀번호 확인') || message.includes('일치')) return 'passwordConfirm';
+  if (message.includes('이름')) return 'name';
+  if (message.includes('전화번호') || message.includes('휴대폰')) return 'phone';
+  if (message.includes('생년월일')) return 'birthDate';
+  if (message.includes('약관')) return 'agreeTerms';
+  if (message.includes('개인정보')) return 'agreePrivacy';
+
+  return 'form';
 }
