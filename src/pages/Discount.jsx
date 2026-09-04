@@ -3,8 +3,23 @@ import React from 'react';
 import {
   PARTNERSHIP_DISCOUNTS,
   SPECIAL_DISCOUNTS,
-} from '../constants/discountData';
-
+} from '../constants/DiscountData';
+import {
+  DiscountPage,
+  PageTitle,
+  NoticeBox,
+  DiscountSection,
+  DiscountCard,
+  CardImageWrap,
+  CardInfoWrap,
+  ConditionArea,
+  SubCond,
+  SpecialHeader,
+  SpecialSection,
+  SpecialCard,
+  SpecialImageWrap,
+  SpecialTextWrap,
+} from './Discount.styles';
 export default function Discount() {
   return (
     <DiscountPage>
