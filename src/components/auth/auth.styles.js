@@ -3,10 +3,14 @@ import { theme } from "../../styles/variables";
 
 export const FormCard = styled.div`
   width: 100%;
-  max-width: 420px;
+  max-width: 550px;
   background: ${theme.colors.white};
   border-radius: ${theme.radius.box};
-  padding: ${theme.spacing[48]};
+  padding: ${(props) => props.variant === 'signup' ? '32px 40px' : '52px 38px'};
+  box-shadow: 4px 4px 8px 0 rgba(0, 0, 0, 0.08);
+  display: flex;
+  flex-direction: column;
+  gap: ${theme.spacing[20]};
 `;
 
 export const Title = styled.h2 `
@@ -14,7 +18,7 @@ export const Title = styled.h2 `
   line-height: ${theme.fontSize.h3.lineheight};
   color: ${theme.colors.textPrimary};
   font-weight: ${theme.fontWeight.bold};
-  margin-bottom: ${theme.spacing[32]};
+  /* margin-bottom: ${theme.spacing[32]}; */
 `;
 
 export const Form = styled.form`
@@ -33,8 +37,9 @@ export const Label = styled.label`
 
 export const Input = styled.input`
   width: 100%;
+  height: 45px;
   padding: ${theme.spacing[14]} ${theme.spacing[16]};
-  border: 1px solid ${theme.colors.border};
+  border: 2px solid ${theme.colors.border};
   border-radius: ${theme.radius.input};
   font-size: ${theme.fontSize.body.size};
   color: ${theme.colors.textPrimary};
@@ -55,6 +60,40 @@ export const ErrorText = styled.p`
   margin-top: ${theme.spacing[4]};
 `;
 
+export const AgreeGroup = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: ${theme.spacing[8]};
+  align-items: flex-start;
+  align-self: stretch;
+`;
+
+export const AgreeRow = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  align-self: stretch;
+`;
+
+export const AgreeLeftGroup = styled.label`
+  display: flex;
+  align-items: center;
+  gap: ${theme.spacing[8]};
+  font-size: ${theme.fontSize.bodysmall.size};
+  color: ${theme.colors.textPrimary};
+  cursor: pointer;
+`;
+
+export const InlineErrorText = styled.span`
+  color: ${theme.colors.error};
+  font-size: ${theme.fontSize.bodysmall.size};
+`;
+
+export const ArrowIcon = styled.span`
+  color: ${theme.colors.textSecondary};
+  font-size: ${theme.fontSize.body.size};
+`
+
 
 export const SubmitButton = styled.button`
   width: 100%;
@@ -63,7 +102,8 @@ export const SubmitButton = styled.button`
   color: ${theme.colors.white};
   border: none;
   border-radius: ${theme.radius.button};
-  font-weight: ${theme.fontWeight.semiBold};
+  font-size: ${theme.fontSize.bodylarge};
+  font-weight: ${theme.fontWeight.bold};
   cursor: pointer;
   transition: background 0.2s;
 
@@ -74,10 +114,12 @@ export const SubmitButton = styled.button`
 
 export const LinkRow = styled.div`
   display: flex;
-  justify-content: center;
-  gap: ${theme.spacing[16]};
-  margin-top: ${theme.spacing[24]};
-  font-size: ${theme.fontSize.caption.size};
+  width: 348px;
+  justify-content: space-between;
+  align-items: center;
+  margin: 0 auto;
+  font-size: ${theme.fontSize.bodysmall.size};
+  font-weight: 400;
   color: ${theme.colors.textSecondary};
 `;
 
