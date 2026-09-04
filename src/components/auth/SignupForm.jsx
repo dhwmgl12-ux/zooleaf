@@ -5,6 +5,8 @@ import {
   AgreeLeftGroup,
   AgreeRow,
   ArrowIcon,
+  BottomLink,
+  BottomLinkRow,
   ErrorText,
   Form,
   FormCard,
@@ -327,6 +329,9 @@ export default function SignupForm() {
 
         <SubmitButton type="submit">가입 하기</SubmitButton>
       </Form>
+      <BottomLinkRow>
+        이미 회원이신가요? <BottomLink to='/login'>로그인하러 가기</BottomLink>
+      </BottomLinkRow>
     </FormCard>
   );
 }

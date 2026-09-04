@@ -1,5 +1,6 @@
 import styled from "@emotion/styled";
 import { theme } from "../../styles/variables";
+import { Link } from "react-router-dom";
 
 export const FormCard = styled.div`
   width: 550px;
@@ -150,6 +151,22 @@ export const LinkText = styled.span`
   cursor: pointer;
   &:hover {
     color: ${theme.colors.primary};
+  }
+`
+
+export const BottomLinkRow = styled.p `
+  text-align: center;
+  margin-top: ${theme.spacing[24]};
+  font-size: ${theme.fontSize.bodysmall.size};
+  color: ${theme.colors.textSecondary};
+`;
+
+export const BottomLink = styled(Link)`
+  color: ${theme.colors.textPrimary};
+  text-decoration: underline;
+  font-weight: ${theme.fontWeight.medium};
+  &:hover {
+    color: ${theme.colors.primary}
   }
 `
 
