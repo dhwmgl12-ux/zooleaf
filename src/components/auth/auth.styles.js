@@ -54,6 +54,29 @@ export const Input = styled.input`
 }
 `;
 
+export const InputWrapper = styled.div`
+  position: relative;
+  width: 100%;
+`;
+
+export const ToggleButton = styled.button`
+  position: absolute;
+  right: ${theme.spacing[16]};
+  top: 50%;
+  transform: translateY(-50%);
+  background: none;
+  border: none;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  color: ${theme.colors.textSecondary};
+
+  &:hover {
+    color: ${theme.colors.textPrimary};
+  }
+`;
+
+
 export const ErrorText = styled.p`
   color: ${theme.colors.error};
   font-size: ${theme.fontSize.caption.size};
