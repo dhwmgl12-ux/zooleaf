@@ -5,7 +5,6 @@ export const PageWrapper = styled.div`
 display: flex;
 flex: 1;
 min-height: 732px;
-background: ${theme.colors.background2};
 `;
 
 export const PageContainer = styled.div`
