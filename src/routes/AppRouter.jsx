@@ -1,11 +1,12 @@
-import { BrowserRouter, Routes, Route } from "react-router-dom";
-import Layout from "../components/layout/Layout";
+import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import Layout from '../components/layout/Layout';
 
-import ProductPage from "../pages/ProductPage";
-import LoginPage from "../pages/LoginPage";
-import SignupPage from "../pages/SignupPage";
-import CartPage from "../pages/CartPage";
-import ProductDetailPage from "../pages/ProductDetailPage";
+import ProductPage from '../pages/ProductPage';
+import LoginPage from '../pages/LoginPage';
+import SignupPage from '../pages/SignupPage';
+import CartPage from '../pages/CartPage';
+import ProductDetailPage from '../pages/ProductDetailPage';
+import Discount from '../pages/Discount';
 
 export default function AppRouter() {
   return (
@@ -18,6 +19,7 @@ export default function AppRouter() {
           <Route path="/cart" element={<CartPage />} />
           <Route path="/products/:productId" element={<ProductDetailPage />} />
         </Route>
+        <Route path="/discount" element={<Discount />} />
       </Routes>
     </BrowserRouter>
   );
