@@ -1,9 +1,9 @@
 import { useEffect, useState } from "react"
 import { Link, useParams } from "react-router-dom"
 
-import ProductDetailContent from "../components/product/ProductDetailContent.jsx"
-import ProductGallery from "../components/product/ProductGallery.jsx"
-import ProductInfo from "../components/product/ProductInfo.jsx"
+import DetailImage from "../components/detail/DetailImage";
+import DetailLayout from "../components/detail/DetailLayout";
+import DetailPrice from "../components/detail/DetailPrice";
 
 export default function ProductDetailPage() {
   const { productId } = useParams();
@@ -72,16 +72,13 @@ export default function ProductDetailPage() {
   return (
     <>
       <div className="product-details">
-        <ProductGallery 
-          thumbnailImage={product.thumbnailImage}
-          imageUrl={product.imageUrl}
-          thumbnails={product.thumbnails ?? []}
-          options={product.options ?? []}
+        <DetailImage 
+          imageUrl={product.thumbnailImage || product.imageUrl}
           name={product.name}
         />
-        <ProductDetailContent product={product} />
+        <DetailLayout product={product} />
       </div>
-      <ProductInfo product={product} />
+      <DetailPrice product={product} />
     </>
   )
 }
