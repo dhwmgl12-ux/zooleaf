@@ -15,7 +15,7 @@ export const PARTNERSHIP_DISCOUNTS = [
     benefitName: 'ZOOLEAF 제휴카드 할인',
     discountRate: '종일권 50% 할인',
     target: '제휴카드 회원 본인 + 동반 1인',
-    applicableItems: '대인·소인 종일권',
+    applicableItems: '대인 · 소인 종일권',
     conditions: [
       { text: '지정 제휴카드', highlight: true },
       { text: '로 결제 시 적용', highlight: false },
@@ -29,7 +29,7 @@ export const PARTNERSHIP_DISCOUNTS = [
     benefitName: 'ZOOLEAF 통신사 멤버십 할인',
     discountRate: '종일권 40% 할인',
     target: '제휴 통신사 멤버십 회원',
-    applicableItems: '대인·소인 종일권',
+    applicableItems: '대인 · 소인 종일권',
     conditions: [
       { text: '유효한 멤버십 인증', highlight: true },
       { text: ' 필요, ', highlight: false },
@@ -59,11 +59,11 @@ export const PARTNERSHIP_DISCOUNTS = [
     benefitName: 'ZOOLEAF 문화가 있는 날 할인',
     discountRate: '종일권 30% 할인',
     target: '해당 행사일 ZOOLEAF 방문객',
-    applicableItems: '대인·소인 종일권',
+    applicableItems: '대인 · 소인 종일권',
     useDay: '매월 마지막주 수요일',
     conditions: [
       { text: '해당 행사일', highlight: true },
-      { text: '방문 시 적용, ', highlight: false },
+      { text: ' 방문 시 적용, ', highlight: false },
       { text: '지정된 날짜', highlight: true },
       { text: '에만 이용 가능', highlight: false },
     ],
@@ -76,16 +76,16 @@ export const SPECIAL_DISCOUNTS = [
     id: 1,
     image: disabledImg,
     descriptions: [
-      '장애인 1~3급: 본인 및 동반 1인 50% 할인 (복지카드 소지자)',
-      '장애인 4~6급: 본인 50% 할인 (복지카드 소지자)',
+      '장애인 1~3급: 본인 및 동반 1인 50% 할인\n(복지카드 소지자)',
+      '장애인 4~6급: 본인 50% 할인\n(복지카드 소지자)',
     ],
   },
   {
     id: 2,
     image: soldierImg,
     descriptions: [
-      '군인/군무원: 할인 또는 현역병 우대 혜택 적용 (휴가증, 외출증등 신분 증빙 서류 지참)',
-      '국군 장병 특별 우대: 휴가자 본인 할인 적용 (휴가증 및 군인 신분증 제시)',
+      '군인/군무원: 할인 또는 현역병 우대 혜택 적용\n(휴가증, 외출증등 신분 증빙 서류 지참)',
+      '국군 장병 특별 우대: 휴가자 본인 할인 적용\n(휴가증 및 군인 신분증 제시)',
     ],
   },
   {
@@ -96,6 +96,8 @@ export const SPECIAL_DISCOUNTS = [
   {
     id: 4,
     image: veteranImg,
-    descriptions: ['본인 및 유족/배우자 50% 할인 (유공자증 또는 증서 제시 시)'],
+    descriptions: [
+      '본인 및 유족/배우자 50% 할인\n(유공자증 또는 증서 제시 시)',
+    ],
   },
 ];
