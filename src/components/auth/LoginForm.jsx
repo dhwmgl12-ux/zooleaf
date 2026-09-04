@@ -10,6 +10,7 @@ import {
   Title,
 } from './auth.styles';
 import { useLogin } from '../../hooks/useAuth';
+import { Link } from 'react-router-dom';
 
 export default function LoginForm() {
   const { id, password, errors, handleChange, handleSubmit } = useLogin();
@@ -69,7 +70,7 @@ export default function LoginForm() {
             <path d="M0.5 0L0.5 9" stroke="#C8C9C9" />
           </svg>
         </span>
-        <LinkText>회원가입</LinkText>
+        <LinkText as={Link} to="/signup">회원가입</LinkText>
       </LinkRow>
     </FormCard>
   );
