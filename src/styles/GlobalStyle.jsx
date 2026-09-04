@@ -1,6 +1,6 @@
 // src/styles/GlobalStyle.jsx
 import { Global, css } from '@emotion/react';
-import { variables } from './variables';
+import { theme } from './variables';
 
 const fontStyles = css`
   @font-face {
@@ -79,8 +79,8 @@ const resetStyles = css`
     margin: 0;
     padding: 0;
     font-family: 'Pretendard', sans-serif;
-    color: ${variables.colors.textPrimary};
-    background-color: ${variables.colors.background};
+    color: ${theme.colors.textPrimary};
+    background-color: ${theme.colors.background};
 
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;

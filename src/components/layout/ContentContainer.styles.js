@@ -5,7 +5,7 @@ export const ContentContainer = styled.div`
   width: 100%;
   max-width: ${theme.layout.maxWidth};
   margin: 0 auto;
-  padding-inline: ${theme.spacing[40]};
+  padding-inline: ${theme.spacing[20]};
   
   @media screen and (max-width: ${theme.layout.breakpoint.tablet}) {
     padding-inline: ${theme.spacing[20]};
