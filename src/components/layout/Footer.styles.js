@@ -3,7 +3,6 @@ import { theme } from "../../styles/variables";
 
 export const FooterContainer = styled.footer`
   width: 100%;
-  margin-top: ${theme.spacing[200]};
   padding: ${theme.spacing[32]} 0 ${theme.spacing[24]} 0;
 
   color: ${theme.colors.white};
