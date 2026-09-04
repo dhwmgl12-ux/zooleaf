@@ -30,7 +30,7 @@ export default function Footer() {
             <li>동물복지 프로그램</li>
           </ul>
         </div>
-        <div className="footer-content__partners">
+        <div className="footer-partners">
           <h2 className="footer__title">PARTNERS</h2>
           <ul>
             <li>협력기관</li>

@@ -13,6 +13,7 @@ export const theme = {
 
     background: '#FFFFFC',
     background2: '#F7F9F6',
+    backgroundFooter: '#91A995',
     border: '#C8C9C9',
   },
 
