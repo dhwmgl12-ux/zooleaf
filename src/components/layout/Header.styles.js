@@ -12,8 +12,12 @@ export const HeaderContainer = styled.header`
     padding: ${theme.spacing[16]} 0;
   }
 
-  .header__logo {
+  .header-inner h1 {
     width: 200px;
+  }
+  
+  .header__logo {
+    width: 100%;
   }
   
   .header__logo img {
