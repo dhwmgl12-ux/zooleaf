@@ -130,8 +130,8 @@ export default function SignupForm() {
                 <path
                   d="M0.5 18.5L7.5 8.99983L0.5 0.5"
                   stroke="#999999"
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
                 />
               </svg>
             </ArrowIcon>
@@ -159,8 +159,8 @@ export default function SignupForm() {
                 <path
                   d="M0.5 18.5L7.5 8.99983L0.5 0.5"
                   stroke="#999999"
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
                 />
               </svg>
             </ArrowIcon>

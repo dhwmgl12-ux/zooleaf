@@ -12,7 +12,7 @@ export const theme = {
     textSecondary: '#687C73',
 
     background: '#FFFFFC',
-    background2: '#F7F9F6',
+    background2: '#E1E8E1',
     border: '#C8C9C9',
   },
 
