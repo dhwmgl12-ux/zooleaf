@@ -8,12 +8,12 @@ import {
   getBirthDateError,
   formatPhoneNumber,
   formatBirthDate,
+  mapServerErrorToField,
 } from '../utils/validation';
 import { useNavigate } from 'react-router-dom';
 import { login, signup, getMe } from '../api/authApi';
-import useAuthStore  from '../store/authStore';
-
-
+import useAuthSore from '../store/authStore';
+import useAuthStore from '../store/authStore';
 
 export function useLogin() {
   const navigate = useNavigate();
@@ -75,6 +75,7 @@ export function useSignup() {
     birthDate: '',
     agreeTerms: '',
     agreePrivacy: '',
+    form: '',
   });
 
   const handleChange = (e) => {
@@ -129,27 +130,41 @@ export function useSignup() {
     }
 
     try {
+      const birthDateForServer = birthDate.replace(/\./g, '-');
       await signup({
         id,
         password,
         passwordConfirm,
         name,
         phone,
-        birthDate,
+        birthDate: birthDateForServer,
         agreeTerms,
         agreePrivacy,
         agreeMarketing,
       });
 
-      navigate('/login')
+      navigate('/login');
     } catch (err) {
-      setErrors((prev) => ({ ...prev, id: err.message }));
+      const field = mapServerErrorToField(err.message);
+      setErrors((prev) => ({...prev, [field]: err.message}))
     }
   };
 
-  return { id, password, passwordConfirm, name, phone, birthDate, agreeTerms, agreePrivacy, agreeMarketing, errors, handleChange, handleSubmit };
+  return {
+    id,
+    password,
+    passwordConfirm,
+    name,
+    phone,
+    birthDate,
+    agreeTerms,
+    agreePrivacy,
+    agreeMarketing,
+    errors,
+    handleChange,
+    handleSubmit,
+  };
 }
-
 
 export function useAuthRestore() {
   const setAuth = useAuthStore((state) => state.setAuth);
@@ -170,5 +185,5 @@ export function useAuthRestore() {
         sessionStorage.removeItem('token');
         clearAuth();
       });
-    }, [setAuth, clearAuth]);
+  }, [setAuth, clearAuth]);
 }

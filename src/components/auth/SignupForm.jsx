@@ -32,6 +32,7 @@ export default function SignupForm() {
   return (
     <FormCard>
       <Title>회원가입</Title>
+      {errors.form && <ErrorText>{errors.form}</ErrorText>}
       <Form onSubmit={handleSubmit}>
         <div>
           <Label>이메일 아이디</Label>
