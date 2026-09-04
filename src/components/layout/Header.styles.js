@@ -53,6 +53,6 @@ export const HeaderContainer = styled.header`
   .header__utils button:hover,
   .header__utils a:focus-visible,
   .header__utils button:focus-visible {
-    color: red;
+    color: ${theme.colors.primary};
   }
 `
