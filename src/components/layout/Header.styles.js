@@ -4,11 +4,13 @@ import { theme } from "../../styles/variables";
 export const HeaderContainer = styled.header`
   width: 100%;
   color: ${theme.colors.textPrimary};
-
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: ${theme.spacing[16]} 0;
+  
+  .header-inner {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: ${theme.spacing[16]} 0;
+  }
 
   .header__logo {
     width: 200px;
