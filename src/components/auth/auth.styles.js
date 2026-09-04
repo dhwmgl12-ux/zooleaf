@@ -2,7 +2,7 @@ import styled from "@emotion/styled";
 import { theme } from "../../styles/variables";
 
 export const FormCard = styled.div`
-  width: 100%;
+  width: 550px;
   max-width: 550px;
   background: ${theme.colors.white};
   border-radius: ${theme.radius.box};
@@ -28,7 +28,7 @@ export const Form = styled.form`
 `
 
 export const Label = styled.label`
-  font-size: ${theme.fontSize.label.size};
+  font-size: ${theme.fontSize.bodylarge.size};
   color: ${theme.colors.textPrimary};
   font-weight: ${theme.fontWeight.medium};
   margin-bottom: ${theme.spacing[8]};
