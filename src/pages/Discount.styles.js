@@ -13,9 +13,9 @@ export const DiscountPage = styled.div`
 `;
 
 export const PageTitle = styled.h1`
-  font-size: ${theme.fontSize.h2.size};
+  font-size: ${theme.fontSize.h3.size};
   line-height: ${theme.fontSize.h2.lineheight};
-  font-weight: ${theme.fontWeight.regular};
+  font-weight: ${theme.fontWeight.bold};
   color: ${theme.colors.textPrimary};
   margin-bottom: ${theme.spacing[80]};
   margin-top: ${theme.spacing[100]};
