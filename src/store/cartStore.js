@@ -11,7 +11,7 @@ const useCartStore = create((set) => ({
       imageUrl: "https://placehold.co/120x120",
       visitDate: "2026-09-10",
       price: 32000,
-      quantity: 2,
+      quantity: 1,
       discountRate: 0,
     },
 
@@ -23,7 +23,7 @@ const useCartStore = create((set) => ({
       visitDate: "2026-09-10",
       time: "14:00",
       price: 10000,
-      quantity: 2,
+      quantity: 1,
       discountRate: 0,
     },
 

@@ -24,6 +24,7 @@ import {
   QuantityControl,
   QuantityButton,
   Quantity,
+  ContinueShoppingButton,
   OrderSummary,
   SummaryTitle,
   SummaryRow,
@@ -31,11 +32,21 @@ import {
   BenefitArea,
   BenefitTitle,
   BenefitSelect,
-  TotalRow,
+  TotalArea,
+  TotalLabel,
+  DiscountInfo,
+  TotalPrice,
   NoticeArea,
   NoticeButton,
   NoticeContent,
   PurchaseButton,
+  ModalOverlay,
+  ModalBox,
+  ModalTitle,
+  ModalText,
+  ModalButtonArea,
+  ModalCancelButton,
+  ModalDeleteButton,
 } from "./CartPage.styles";
 
 function CartPage() {
@@ -59,6 +70,11 @@ function CartPage() {
   // =========================
 
   const [selectedItems, setSelectedItems] = useState([]);
+  const [deleteModal, setDeleteModal] = useState({
+    open: false,
+    mode: null,
+    item: null,
+  });
 
   // 상품마다 고유한 key 생성
   const getItemKey = (item) => `${item.type}-${item.id}-${item.option ?? ""}`;
@@ -88,24 +104,62 @@ function CartPage() {
     setSelectedItems(cartItems.map((item) => getItemKey(item)));
   };
 
-  // 선택 상품 삭제
-  const handleSelectedDelete = () => {
-    cartItems.forEach((item) => {
-      if (selectedItems.includes(getItemKey(item))) {
-        removeFromCart(item.id, item.type);
-      }
-    });
-
-    setSelectedItems([]);
-  };
-
-  // 개별 상품 삭제
+  // 개별 상품 삭제 모달 열기
   const handleDelete = (item) => {
-    removeFromCart(item.id, item.type);
-
-    setSelectedItems((prev) => prev.filter((key) => key !== getItemKey(item)));
+    setDeleteModal({
+      open: true,
+      mode: "single",
+      item,
+    });
   };
 
+  // 선택 상품 삭제 모달 열기
+  const handleOpenDeleteModal = () => {
+    if (selectedItems.length === 0) return;
+
+    setDeleteModal({
+      open: true,
+      mode: "selected",
+      item: null,
+    });
+  };
+
+  // 모달 닫기
+  const handleCloseDeleteModal = () => {
+    setDeleteModal({
+      open: false,
+      mode: null,
+      item: null,
+    });
+  };
+
+  // 실제 삭제 실행
+  const handleConfirmDelete = () => {
+    // 개별 상품 삭제
+    if (deleteModal.mode === "single" && deleteModal.item) {
+      const item = deleteModal.item;
+
+      removeFromCart(item.id, item.type);
+
+      setSelectedItems((prev) =>
+        prev.filter((key) => key !== getItemKey(item)),
+      );
+    }
+
+    // 선택 상품 삭제
+    if (deleteModal.mode === "selected") {
+      cartItems.forEach((item) => {
+        if (selectedItems.includes(getItemKey(item))) {
+          removeFromCart(item.id, item.type);
+        }
+      });
+
+      setSelectedItems([]);
+    }
+
+    // 삭제 후 모달 닫기
+    handleCloseDeleteModal();
+  };
   // =========================
   // 결제 금액
   // =========================
@@ -169,7 +223,7 @@ function CartPage() {
         <SelectDeleteButton
           type="button"
           disabled={selectedItems.length === 0}
-          onClick={handleSelectedDelete}
+          onClick={handleOpenDeleteModal}
         >
           선택 삭제
         </SelectDeleteButton>
@@ -214,6 +268,24 @@ function CartPage() {
                           {item.price.toLocaleString()}원 / 1인
                         </ItemText>
                       </ItemInfo>
+
+                      <QuantityControl>
+                        <QuantityButton
+                          type="button"
+                          onClick={() => decreaseQuantity(item.id, item.type)}
+                        >
+                          −
+                        </QuantityButton>
+
+                        <Quantity>{item.quantity}</Quantity>
+
+                        <QuantityButton
+                          type="button"
+                          onClick={() => increaseQuantity(item.id, item.type)}
+                        >
+                          +
+                        </QuantityButton>
+                      </QuantityControl>
 
                       <ItemPriceArea>
                         <DeleteButton
@@ -260,8 +332,26 @@ function CartPage() {
 
                         {item.time && <ItemText>시간: {item.time}</ItemText>}
 
-                        <ItemText>인원: {item.quantity}명</ItemText>
+                        <ItemText>10,000원 / 인원: {item.quantity}명</ItemText>
                       </ItemInfo>
+
+                      <QuantityControl>
+                        <QuantityButton
+                          type="button"
+                          onClick={() => decreaseQuantity(item.id, item.type)}
+                        >
+                          −
+                        </QuantityButton>
+
+                        <Quantity>{item.quantity}</Quantity>
+
+                        <QuantityButton
+                          type="button"
+                          onClick={() => increaseQuantity(item.id, item.type)}
+                        >
+                          +
+                        </QuantityButton>
+                      </QuantityControl>
 
                       <ItemPriceArea>
                         <DeleteButton
@@ -307,26 +397,25 @@ function CartPage() {
                         )}
 
                         <ItemText>{item.price.toLocaleString()}원</ItemText>
-
-                        {/* 굿즈만 수량 변경 */}
-                        <QuantityControl>
-                          <QuantityButton
-                            type="button"
-                            onClick={() => decreaseQuantity(item.id, item.type)}
-                          >
-                            −
-                          </QuantityButton>
-
-                          <Quantity>{item.quantity}</Quantity>
-
-                          <QuantityButton
-                            type="button"
-                            onClick={() => increaseQuantity(item.id, item.type)}
-                          >
-                            +
-                          </QuantityButton>
-                        </QuantityControl>
                       </ItemInfo>
+
+                      <QuantityControl>
+                        <QuantityButton
+                          type="button"
+                          onClick={() => decreaseQuantity(item.id, item.type)}
+                        >
+                          −
+                        </QuantityButton>
+
+                        <Quantity>{item.quantity}</Quantity>
+
+                        <QuantityButton
+                          type="button"
+                          onClick={() => increaseQuantity(item.id, item.type)}
+                        >
+                          +
+                        </QuantityButton>
+                      </QuantityControl>
 
                       <ItemPriceArea>
                         <DeleteButton
@@ -398,11 +487,20 @@ function CartPage() {
 
           <Divider />
 
-          <TotalRow>
-            <span>총 금액</span>
+          <TotalArea>
+            <TotalLabel>총 금액</TotalLabel>
 
-            <strong>{finalTotal.toLocaleString()}원</strong>
-          </TotalRow>
+            <div>
+              {benefitRate > 0 && (
+                <DiscountInfo>
+                  -{Math.round(benefitRate * 100)}% (
+                  {benefitDiscount.toLocaleString()}원 할인)
+                </DiscountInfo>
+              )}
+
+              <TotalPrice>{finalTotal.toLocaleString()}원</TotalPrice>
+            </div>
+          </TotalArea>
 
           {/* 유의사항 */}
           <NoticeArea>
@@ -437,6 +535,32 @@ function CartPage() {
           </PurchaseButton>
         </OrderSummary>
       </CartLayout>
+
+      {deleteModal.open && (
+        <ModalOverlay>
+          <ModalBox>
+            <ModalTitle>
+              {deleteModal.mode === "selected" ? "선택 상품 삭제" : "상품 삭제"}
+            </ModalTitle>
+
+            <ModalText>
+              {deleteModal.mode === "selected"
+                ? "선택한 상품을 정말로 삭제하시겠습니까?"
+                : "정말로 삭제하시겠습니까?"}
+            </ModalText>
+
+            <ModalButtonArea>
+              <ModalCancelButton type="button" onClick={handleCloseDeleteModal}>
+                취소
+              </ModalCancelButton>
+
+              <ModalDeleteButton type="button" onClick={handleConfirmDelete}>
+                삭제
+              </ModalDeleteButton>
+            </ModalButtonArea>
+          </ModalBox>
+        </ModalOverlay>
+      )}
     </Container>
   );
 }

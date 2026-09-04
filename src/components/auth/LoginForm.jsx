@@ -11,14 +11,14 @@ import {
   SubmitButton,
   Title,
   ToggleButton,
-} from './auth.styles';
-import { useLogin } from '../../hooks/useAuth';
-import { Link } from 'react-router-dom';
-import { useState } from 'react';
+} from "./auth.styles";
+import { useLogin } from "../../hooks/useAuth";
+import { Link } from "react-router-dom";
+import { useState } from "react";
 
 export default function LoginForm() {
   const { id, password, errors, handleChange, handleSubmit } = useLogin();
-  const [showPassword, setShowPassword] = useState(false)
+  const [showPassword, setShowPassword] = useState(false);
 
   return (
     <FormCard>
@@ -40,7 +40,7 @@ export default function LoginForm() {
           <Label>비밀번호</Label>
           <InputWrapper>
             <Input
-              type={showPassword ? 'text' : 'password'}
+              type={showPassword ? "text" : "password"}
               name="password"
               autoComplete="current-password"
               value={password}
@@ -50,7 +50,7 @@ export default function LoginForm() {
             <ToggleButton
               type="button"
               onClick={() => setShowPassword((prev) => !prev)}
-              aria-label={showPassword ? '비밀번호 숨기기' : '비밀번호 보이기'}
+              aria-label={showPassword ? "비밀번호 숨기기" : "비밀번호 보이기"}
             >
               {showPassword ? (
                 <svg

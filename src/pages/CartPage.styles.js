@@ -11,11 +11,9 @@ export const Container = styled.main`
 export const Title = styled.h1`
   max-width: ${theme.layout.maxWidth};
   margin: 0 auto ${theme.spacing[24]};
-
   font-size: ${theme.fontSize.h4.size};
   line-height: ${theme.fontSize.h4.lineheight};
-  font-weight: ${theme.fontSize.fontWeight.bold};
-
+  font-weight: ${theme.fontWeight.bold};
   color: ${theme.colors.textPrimary};
 `;
 
@@ -26,6 +24,18 @@ export const CartTopBar = styled.div`
 
   max-width: ${theme.layout.maxWidth};
   margin: 0 auto ${theme.spacing[16]};
+
+  padding-right: 364px;
+
+  @media (max-width: ${theme.layout.breakpoint.tablet}) {
+    padding-right: 0;
+  }
+
+  @media (max-width: ${theme.layout.breakpoint.mobile}) {
+    flex-direction: column;
+    align-items: stretch;
+    gap: ${theme.spacing[8]};
+  }
 `;
 
 export const SelectAllLabel = styled.label`
@@ -35,7 +45,7 @@ export const SelectAllLabel = styled.label`
 
   font-size: ${theme.fontSize.bodysmall.size};
   line-height: ${theme.fontSize.bodysmall.lineheight};
-  font-weight: ${theme.fontSize.fontWeight.medium};
+  font-weight: ${theme.fontWeight.medium};
 
   color: ${theme.colors.textPrimary};
 
@@ -66,14 +76,8 @@ export const SelectDeleteButton = styled.button`
 
   cursor: pointer;
 
-  &:hover:not(:disabled) {
-    border-color: ${theme.colors.primary};
-    color: ${theme.colors.primary};
-  }
-
-  &:disabled {
-    opacity: 0.4;
-    cursor: not-allowed;
+  @media (max-width: ${theme.layout.breakpoint.mobile}) {
+    align-self: flex-end;
   }
 `;
 
@@ -131,7 +135,7 @@ export const CategoryTitle = styled.h2`
 
   font-size: ${theme.fontSize.h6.size};
   line-height: ${theme.fontSize.h6.lineheight};
-  font-weight: ${theme.fontSize.fontWeight.bold};
+  font-weight: ${theme.fontWeight.bold};
 `;
 
 export const CartItem = styled.article`
@@ -141,6 +145,7 @@ export const CartItem = styled.article`
     18px
     92px
     minmax(0, 1fr)
+    120px
     120px;
 
   gap: ${theme.spacing[16]};
@@ -193,7 +198,7 @@ export const ItemName = styled.h3`
 
   font-size: ${theme.fontSize.body.size};
   line-height: ${theme.fontSize.body.lineheight};
-  font-weight: ${theme.fontSize.fontWeight.bold};
+  font-weight: ${theme.fontWeight.bold};
 `;
 
 export const ItemText = styled.p`
@@ -230,7 +235,7 @@ export const ItemTotal = styled.strong`
 
   font-size: ${theme.fontSize.body.size};
   line-height: ${theme.fontSize.body.lineheight};
-  font-weight: ${theme.fontSize.fontWeight.bold};
+  font-weight: ${theme.fontWeight.bold};
 `;
 
 export const DeleteButton = styled.button`
@@ -261,13 +266,34 @@ export const DeleteButton = styled.button`
   }
 `;
 
+export const ContinueShoppingButton = styled.button`
+  width: 100%;
+  height: 44px;
+
+  border: 1px solid ${theme.colors.primary};
+  border-radius: 10px;
+
+  background: ${theme.colors.white};
+  color: ${theme.colors.primary};
+
+  font-size: ${theme.fontSize.body.size};
+  font-weight: ${theme.fontWeight.bold};
+
+  cursor: pointer;
+
+  &:hover {
+    background: ${theme.colors.background2};
+  }
+`;
+
 export const QuantityControl = styled.div`
   display: flex;
   align-items: center;
+  justify-content: center;
+
+  justify-self: center;
 
   width: fit-content;
-
-  margin-top: ${theme.spacing[8]};
 `;
 
 export const QuantityButton = styled.button`
@@ -304,7 +330,7 @@ export const Quantity = styled.span`
   color: ${theme.colors.textPrimary};
 
   font-size: ${theme.fontSize.bodysmall.size};
-  font-weight: ${theme.fontSize.fontWeight.medium};
+  font-weight: ${theme.fontWeight.medium};
 `;
 
 export const OrderSummary = styled.aside`
@@ -337,7 +363,7 @@ export const SummaryTitle = styled.h2`
 
   font-size: ${theme.fontSize.h5.size};
   line-height: ${theme.fontSize.h5.lineheight};
-  font-weight: ${theme.fontSize.fontWeight.bold};
+  font-weight: ${theme.fontWeight.bold};
 `;
 
 export const SummaryRow = styled.div`
@@ -353,12 +379,12 @@ export const SummaryRow = styled.div`
   line-height: ${theme.fontSize.bodysmall.lineheight};
 
   span {
-    font-weight: ${theme.fontSize.fontWeight.medium};
+    font-weight: ${theme.fontWeight.medium};
   }
 
   strong {
     color: ${theme.colors.textSecondary};
-    font-weight: ${theme.fontSize.fontWeight.regular};
+    font-weight: ${theme.fontWeight.regular};
   }
 `;
 
@@ -382,7 +408,7 @@ export const BenefitTitle = styled.h3`
 
   font-size: ${theme.fontSize.body.size};
   line-height: ${theme.fontSize.body.lineheight};
-  font-weight: ${theme.fontSize.fontWeight.bold};
+  font-weight: ${theme.fontWeight.bold};
 `;
 
 export const BenefitSelect = styled.select`
@@ -409,29 +435,37 @@ export const BenefitSelect = styled.select`
     border-color: ${theme.colors.primary};
   }
 `;
-
-export const TotalRow = styled.div`
+export const TotalArea = styled.div`
   display: flex;
   justify-content: space-between;
   align-items: center;
 
   margin-bottom: ${theme.spacing[16]};
 
-  span {
-    color: ${theme.colors.textPrimary};
-
-    font-size: ${theme.fontSize.h5.size};
-    line-height: ${theme.fontSize.h5.lineheight};
-    font-weight: ${theme.fontSize.fontWeight.bold};
+  > div {
+    display: flex;
+    align-items: center;
+    gap: ${theme.spacing[8]};
   }
+`;
 
-  strong {
-    color: ${theme.colors.primary};
+export const TotalLabel = styled.span`
+  font-size: ${theme.fontSize.h5.size};
+  font-weight: ${theme.fontWeight.bold};
+`;
 
-    font-size: ${theme.fontSize.h5.size};
-    line-height: ${theme.fontSize.h5.lineheight};
-    font-weight: ${theme.fontSize.fontWeight.bold};
-  }
+export const DiscountInfo = styled.span`
+  color: ${theme.colors.error};
+
+  font-size: ${theme.fontSize.caption.size};
+  font-weight: ${theme.fontWeight.semiBold};
+`;
+
+export const TotalPrice = styled.strong`
+  color: ${theme.colors.primary};
+
+  font-size: ${theme.fontSize.h5.size};
+  font-weight: ${theme.fontWeight.bold};
 `;
 
 export const NoticeArea = styled.div`
@@ -457,7 +491,7 @@ export const NoticeButton = styled.button`
 
   font-size: ${theme.fontSize.bodysmall.size};
   line-height: ${theme.fontSize.bodysmall.lineheight};
-  font-weight: ${theme.fontSize.fontWeight.semiBold};
+  font-weight: ${theme.fontWeight.semiBold};
 
   cursor: pointer;
 `;
@@ -491,7 +525,7 @@ export const PurchaseButton = styled.button`
 
   font-size: ${theme.fontSize.button.size};
   line-height: ${theme.fontSize.button.lineheight};
-  font-weight: ${theme.fontSize.fontWeight.bold};
+  font-weight: ${theme.fontWeight.bold};
 
   cursor: pointer;
 
@@ -505,4 +539,80 @@ export const PurchaseButton = styled.button`
     opacity: 0.4;
     cursor: not-allowed;
   }
+`;
+
+// 모달
+
+export const ModalOverlay = styled.div`
+  position: fixed;
+  inset: 0;
+
+  z-index: 1000;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  background: rgba(0, 0, 0, 0.35);
+`;
+
+export const ModalBox = styled.div`
+  width: min(400px, calc(100% - 32px));
+
+  padding: ${theme.spacing[24]};
+
+  border-radius: 16px;
+
+  background: ${theme.colors.white};
+
+  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.15);
+`;
+
+export const ModalTitle = styled.h2`
+  margin: 0 0 ${theme.spacing[12]};
+
+  font-size: ${theme.fontSize.h5.size};
+  font-weight: ${theme.fontWeight.bold};
+`;
+
+export const ModalText = styled.p`
+  margin: 0 0 ${theme.spacing[24]};
+
+  color: ${theme.colors.textSecondary};
+
+  font-size: ${theme.fontSize.body.size};
+`;
+
+export const ModalButtonArea = styled.div`
+  display: flex;
+  justify-content: flex-end;
+  gap: ${theme.spacing[8]};
+`;
+
+export const ModalCancelButton = styled.button`
+  height: 40px;
+
+  padding: 0 ${theme.spacing[20]};
+
+  border: 1px solid ${theme.colors.border};
+  border-radius: 6px;
+
+  background: ${theme.colors.white};
+  color: ${theme.colors.textPrimary};
+
+  cursor: pointer;
+`;
+
+export const ModalDeleteButton = styled.button`
+  height: 40px;
+
+  padding: 0 ${theme.spacing[20]};
+
+  border: 0;
+  border-radius: 6px;
+
+  background: ${theme.colors.error};
+  color: ${theme.colors.white};
+
+  cursor: pointer;
 `;
