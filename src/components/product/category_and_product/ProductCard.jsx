@@ -4,7 +4,7 @@ export default function ProductCard({ product }) {
     price,
     discountRate,
     discountPrice,
-    imageUrl,
+    thumbnailImage,
     badge = [],
   } = product ?? {};
 
@@ -17,8 +17,8 @@ export default function ProductCard({ product }) {
     <article>
       {/* 상품 이미지 */}
       <div>
-        {imageUrl ? (
-          <img src={imageUrl} alt={name} />
+        {thumbnailImage ? (
+          <img src={thumbnailImage} alt={name} />
         ) : (
           <span aria-hidden="true">상품 이미지</span>
         )}
@@ -42,9 +42,11 @@ export default function ProductCard({ product }) {
         {hasDiscount ? (
           <div>
             <span>{discountRate}%</span>
+
             <strong>
               {discountPrice.toLocaleString()}원
             </strong>
+
             <del>{price.toLocaleString()}원</del>
           </div>
         ) : (
