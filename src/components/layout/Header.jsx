@@ -7,9 +7,11 @@ export default function Header() {
   return (
     <HeaderContainer>
       <ContentContainer className="header-inner">
-        <Link to="/" className="header__logo">
-          <img src={zooleafLogo} alt="ZOOLEAF" />
-        </Link>
+        <h1>
+          <Link to="/" className="header__logo">
+            <img src={zooleafLogo} alt="ZOOLEAF" />
+          </Link>
+        </h1>
         <nav className="header__nav">
           <ul className="header__nav-list">
             <li><Link to="/about">동물원 소개</Link></li>
