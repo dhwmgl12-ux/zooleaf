@@ -8,6 +8,8 @@ import CartPage from '../pages/CartPage';
 import ProductDetailPage from '../pages/ProductDetailPage';
 import Discount from '../pages/Discount';
 import Main from '../pages/Main';
+import ExperienceDetailPage from '../pages/ExperienceDetailPage';
+import GoodsDetailPage from '../pages/GoodsDetailPage';
 
 export default function AppRouter() {
   return (
@@ -20,8 +22,10 @@ export default function AppRouter() {
           <Route path="/signup" element={<SignupPage />} />
           <Route path="/cart" element={<CartPage />} />
           <Route path="/products/:productId" element={<ProductDetailPage />} />
+          <Route path="/experience/:experienceId" element={<ExperienceDetailPage />} />
+          <Route path="/goods/:goodsId" element={<GoodsDetailPage />} />
+          <Route path="/discount" element={<Discount />} />
         </Route>
-        <Route path="/discount" element={<Discount />} />
       </Routes>
     </BrowserRouter>
   );
