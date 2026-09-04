@@ -18,7 +18,6 @@ export default function ProductPage() {
   // 이용 시간
   const [selectedTime, setSelectedTime] = useState('전체');
 
-  // 카테고리 categoryId 연결
   const categoryMap = {
     전체상품: undefined,
     입장권: 'ticket',
@@ -26,13 +25,15 @@ export default function ProductPage() {
     Membership: 'membership',
   };
 
-  // 카테고리 선택
+  const isTicketCategory = selectedCategory === '입장권';
   const handleSelectCategory = (category) => {
     setSelectedCategory(category);
+    setSelectedTargets([]);
+    setSelectedTime('전체');
     setCurrentPage(1);
   };
 
-  // 관람 대상 선택
+
   const handleToggleTarget = (target) => {
     setSelectedTargets((prev) =>
       prev.includes(target)
@@ -43,7 +44,6 @@ export default function ProductPage() {
     setCurrentPage(1);
   };
 
-  // 이용 시간 선택
   const handleSelectTime = (time) => {
     setSelectedTime(time);
     setCurrentPage(1);
@@ -55,8 +55,14 @@ export default function ProductPage() {
         category: categoryMap[selectedCategory],
         page: currentPage,
         limit: 12,
-        visitorType: selectedTargets[0],
-        availableTimeType: selectedTime,
+
+        visitorType: isTicketCategory
+          ? selectedTargets[0]
+          : undefined,
+
+        availableTimeType: isTicketCategory
+          ? selectedTime
+          : undefined,
       });
 
       setProducts(data.products);
@@ -64,10 +70,16 @@ export default function ProductPage() {
     };
 
     fetchProducts();
-  }, [currentPage, selectedCategory, selectedTargets, selectedTime]);
+  }, [
+    currentPage,
+    selectedCategory,
+    selectedTargets,
+    selectedTime,
+    isTicketCategory,
+  ]);
 
   return (
-    <div style={{ display: 'flex', gap: '20px', padding: '20px' }}>
+    <main>
       <CategorySidebar
         selectedCategory={selectedCategory}
         onSelectCategory={handleSelectCategory}
@@ -77,20 +89,26 @@ export default function ProductPage() {
         onSelectTime={handleSelectTime}
       />
 
-      <div style={{ flex: 1 }}>
-        {products.map((product) => (
-          <ProductCard
-            key={product.id}
-            product={product}
-          />
-        ))}
+      <section aria-label="상품 목록">
+        {products.length > 0 ? (
+          <div>
+            {products.map((product) => (
+              <ProductCard
+                key={product.id}
+                product={product}
+              />
+            ))}
+          </div>
+        ) : (
+          <p>상품이 없습니다.</p>
+        )}
 
         <Pagination
           currentPage={currentPage}
           totalPages={totalPages}
-          onPageChange={(page) => setCurrentPage(page)}
+          onPageChange={setCurrentPage}
         />
-      </div>
-    </div>
+      </section>
+    </main>
   );
 }
