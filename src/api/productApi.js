@@ -235,6 +235,69 @@ const TICKET_DATA = [
   },
 ];
 
+const EXPERIENCE_DATA = [
+  {
+    id: 201,
+    name: '기린 먹이주기 체험',
+    price: 10000,
+    discountRate: null,
+    discountPrice: null,
+    imageUrl: null,
+    detailImage: null,
+    thumbnails: [],
+    description: '기린에게 먹이를 주는 체험 프로그램',
+    badge: [],
+    usageGuide: '',
+    target: '전체',
+    categoryId: 'experience',
+  },
+  {
+    id: 202,
+    name: '사육사 체험',
+    price: 18000,
+    discountRate: null,
+    discountPrice: null,
+    imageUrl: null,
+    detailImage: null,
+    thumbnails: [],
+    description: '사육사와 함께하는 동물 체험 프로그램',
+    badge: [],
+    usageGuide: '',
+    target: '전체',
+    categoryId: 'experience',
+  },
+  {
+    id: 203,
+    name: '나이트 사파리',
+    price: 25000,
+    discountRate: null,
+    discountPrice: null,
+    imageUrl: null,
+    detailImage: null,
+    thumbnails: [],
+    description: '밤에 즐기는 사파리 체험 프로그램',
+    badge: [],
+    usageGuide: '',
+    target: '전체',
+    categoryId: 'experience',
+  },
+  {
+    id: 204,
+    name: '작은 동물 교감 체험',
+    price: 8000,
+    discountRate: null,
+    discountPrice: null,
+    imageUrl: null,
+    detailImage: null,
+    thumbnails: [],
+    description: '작은 동물들과 교감하는 체험 프로그램',
+    badge: [],
+    usageGuide: '',
+    target: '전체',
+    categoryId: 'experience',
+  },
+];
+
 const GOODS_DATA = [
   {
     id: 101,
@@ -377,7 +440,7 @@ export async function getProducts(options = {}) {
 
   await new Promise((resolve) => setTimeout(resolve, 300));
 
-  let result = [...TICKET_DATA, ...GOODS_DATA];
+  let result = [...TICKET_DATA, ...EXPERIENCE_DATA, ...GOODS_DATA];
 
   // category 필터
   if (category) {
