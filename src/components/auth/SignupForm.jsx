@@ -1,5 +1,18 @@
 import { useSignup } from '../../hooks/useAuth';
-import { ErrorText, Form, FormCard, Input, Label, SubmitButton, Title } from './auth.styles';
+import {
+  AgreeGroup,
+  AgreeLeftGroup,
+  AgreeRow,
+  ArrowIcon,
+  ErrorText,
+  Form,
+  FormCard,
+  InlineErrorText,
+  Input,
+  Label,
+  SubmitButton,
+  Title,
+} from './auth.styles';
 
 export default function SignupForm() {
   const {
@@ -94,32 +107,77 @@ export default function SignupForm() {
           {errors.birthDate && <ErrorText>{errors.birthDate}</ErrorText>}
         </div>
 
-        <label>
-          <input type="checkbox" name="agreeTerms" checked={agreeTerms} onChange={handleChange} />
-          [필수] 이용약관 동의
-        </label>
-        {errors.agreeTerms && <ErrorText>{errors.agreeTerms}</ErrorText>}
+        <AgreeGroup>
+          <AgreeRow>
+            <AgreeLeftGroup>
+              <input
+                type="checkbox"
+                name="agreeTerms"
+                checked={agreeTerms}
+                onChange={handleChange}
+              />
+              <span>[필수] 이용약관 동의</span>
+              {errors.agreeTerms && <InlineErrorText>{errors.agreeTerms}</InlineErrorText>}
+            </AgreeLeftGroup>
+            <ArrowIcon>
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="8"
+                height="19"
+                viewBox="0 0 8 19"
+                fill="none"
+              >
+                <path
+                  d="M0.5 18.5L7.5 8.99983L0.5 0.5"
+                  stroke="#999999"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                />
+              </svg>
+            </ArrowIcon>
+          </AgreeRow>
 
-        <label>
-          <input
-            type="checkbox"
-            name="agreePrivacy"
-            checked={agreePrivacy}
-            onChange={handleChange}
-          />
-          [필수] 개인정보 수집 및 이용 동의
-        </label>
-        {errors.agreePrivacy && <ErrorText>{errors.agreePrivacy}</ErrorText>}
+          <AgreeRow>
+            <AgreeLeftGroup>
+              <input
+                type="checkbox"
+                name="agreePrivacy"
+                checked={agreePrivacy}
+                onChange={handleChange}
+              />
+              [필수] 개인정보 수집 및 이용 동의
+              {errors.agreePrivacy && <InlineErrorText>{errors.agreePrivacy}</InlineErrorText>}
+            </AgreeLeftGroup>
+            <ArrowIcon>
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="8"
+                height="19"
+                viewBox="0 0 8 19"
+                fill="none"
+              >
+                <path
+                  d="M0.5 18.5L7.5 8.99983L0.5 0.5"
+                  stroke="#999999"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                />
+              </svg>
+            </ArrowIcon>
+          </AgreeRow>
 
-        <label>
-          <input
-            type="checkbox"
-            name="agreeMarketing"
-            checked={agreeMarketing}
-            onChange={handleChange}
-          />
-          [선택] 마케팅 정보 수신 동의
-        </label>
+          <AgreeRow>
+            <AgreeLeftGroup>
+              <input
+                type="checkbox"
+                name="agreeMarketing"
+                checked={agreeMarketing}
+                onChange={handleChange}
+              />
+              [선택] 마케팅 정보 수신 동의
+            </AgreeLeftGroup>
+          </AgreeRow>
+        </AgreeGroup>
 
         <SubmitButton type="submit">가입 하기</SubmitButton>
       </Form>
