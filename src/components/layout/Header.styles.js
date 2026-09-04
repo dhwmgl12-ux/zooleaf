@@ -8,36 +8,49 @@ export const HeaderContainer = styled.header`
   display: flex;
   justify-content: space-between;
   align-items: center;
+  padding: ${theme.spacing[16]} 0;
 
   .header__logo {
     width: 200px;
-    height: auto;
   }
-
+  
   .header__logo img {
     width: 100%;
+    height: auto;
   }
 
   .header__nav-list {
     display: flex;
     gap: ${theme.spacing[56]};
-    font-size: ${theme.fontSize.h5};
+    font-size: ${theme.fontSize.h5.size};
+    line-height: ${theme.fontSize.h5.lineheight};
     font-weight: ${theme.fontWeight.semiBold};
   }
 
-  .header__nav-list li:hover {
+  .header__nav list a {
+    transition: color 0.2s ease;
+  }
+
+  .header__nav-list a:hover,
+  .header__nav-list a:focus-visible  {
     color: ${theme.colors.primary};
   }
 
   .header__utils {
     display: flex;
-    gap: ${theme.spacing[32]};
     align-items: center;
+    gap: ${theme.spacing[32]};
   }
 
-  // 호버 색상 문제 생김...
-  .header__utils li:hover {
- 
+  .header__utils .icon {
+    color: inherit;
+    transition: color 0.2s ease;
   }
-  
+
+  .header__utils a:hover,
+  .header__utils button:hover,
+  .header__utils a:focus-visible,
+  .header__utils button:focus-visible {
+    color: red;
+  }
 `
