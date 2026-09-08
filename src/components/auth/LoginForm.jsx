@@ -29,6 +29,7 @@ export default function LoginForm() {
           <Input
             type="email"
             name="id"
+            autoComplete="username"
             value={id}
             onChange={handleChange}
             placeholder="user@example.com"
@@ -41,6 +42,7 @@ export default function LoginForm() {
             <Input
               type={showPassword ? 'text' : 'password'}
               name="password"
+              autoComplete="current-password"
               value={password}
               onChange={handleChange}
               placeholder="비밀번호를 입력해주세요!"
@@ -115,7 +117,7 @@ export default function LoginForm() {
           </InputWrapper>
           {errors.password && <ErrorText>{errors.password}</ErrorText>}
         </div>
-              {errors.form && <FormErrorText>{errors.form}</FormErrorText>}
+        {errors.form && <FormErrorText>{errors.form}</FormErrorText>}
         <SubmitButton type="submit">로그인</SubmitButton>
       </Form>
 
