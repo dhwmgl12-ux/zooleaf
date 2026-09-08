@@ -18,7 +18,7 @@ export function useLogin() {
   const navigate = useNavigate();
   const [id, setId] = useState('');
   const [password, setPassword] = useState('');
-  const [errors, setErrors] = useState({ id: '', password: '' });
+  const [errors, setErrors] = useState({ id: '', password: '', form: '' });
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -47,7 +47,7 @@ export function useLogin() {
 
       navigate('/');
     } catch (err) {
-      setErrors((prev) => ({ ...prev, password: err.message }));
+      setErrors((prev) => ({ ...prev, form: err.message }));
     }
   };
 

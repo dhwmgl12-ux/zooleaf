@@ -118,6 +118,12 @@ export const ArrowIcon = styled.span`
   font-size: ${theme.fontSize.body.size};
 `
 
+export const FormErrorText = styled.p`
+  color: ${theme.colors.error};
+  font-size: ${theme.fontSize.caption.size};
+  text-align: center;
+  margin: 0 0 ${theme.spacing[8]} 0;
+  `
 
 export const SubmitButton = styled.button`
   width: 100%;

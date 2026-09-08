@@ -28,14 +28,14 @@ export function getPasswordError(password) {
 
 export function getPasswordConfirmError(password, passwordConfirm) {
   if (!passwordConfirm) return '비밀번호 확인을 입력해주세요!';
-  if (password !== passwordConfirm) return '비밀번호가 일치하지 않습니다!';
+  if (password !== passwordConfirm) return '비밀번호가 일치하지 않습니다.';
   return '';
 }
 
 export function getNameError(name) {
   if (!name) return '이름을 입력해주세요!';
   if (name.length < NAME_MIN_LENGTH || name.length > NAME_MAX_LENGTH) {
-    return `이름은 ${NAME_MIN_LENGTH} ~ ${NAME_MAX_LENGTH}자로 입력해주세요!`;
+    return `이름은 ${NAME_MIN_LENGTH} ~ ${NAME_MAX_LENGTH}자로 입력해주세요.`;
   }
   return '';
 }

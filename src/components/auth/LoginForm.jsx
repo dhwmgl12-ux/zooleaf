@@ -7,6 +7,7 @@ import {
   Label,
   LinkRow,
   LinkText,
+  FormErrorText,
   SubmitButton,
   Title,
   ToggleButton,
@@ -114,7 +115,7 @@ export default function LoginForm() {
           </InputWrapper>
           {errors.password && <ErrorText>{errors.password}</ErrorText>}
         </div>
-
+              {errors.form && <FormErrorText>{errors.form}</FormErrorText>}
         <SubmitButton type="submit">로그인</SubmitButton>
       </Form>
 
