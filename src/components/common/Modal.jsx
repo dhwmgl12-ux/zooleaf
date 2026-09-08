@@ -1,14 +1,28 @@
-import { useEffect } from "react"
-import { CloseButton, ModalBody, ModalBox, ModalHeader, ModalOverlay, ModalTitle } from "./Modal..styles";
+import { useEffect } from 'react';
+import {
+  CloseButton,
+  ModalBody,
+  ModalBox,
+  ModalHeader,
+  ModalOverlay,
+  ModalTitle,
+} from './Modal.styles';
 
-export default function Modal({isOpen, onClose, title, children}) {
+export default function Modal({ isOpen, onClose, title, children }) {
   useEffect(() => {
     if (!isOpen) return;
+    
+    document.body.style.overflow = "hidden"
+    
     const handleEsc = (e) => {
       if (e.key === 'Escape') onClose();
     };
     window.addEventListener('keydown', handleEsc);
-    return () => window.removeEventListener('keydown', handleEsc);
+    
+    return () => {
+      window.removeEventListener('keydown', handleEsc);
+      document.body.style.overflow = "";
+    };
   }, [isOpen, onClose]);
 
   if (!isOpen) return null;

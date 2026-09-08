@@ -14,7 +14,8 @@ export const ModalOverlay = styled.div`
 export const ModalBox = styled.div`
   background: ${theme.colors.white};
   border-radius: ${theme.radius.box};
-  width: 90;
+  overflow: hidden;
+  width: 90%;
   max-width: 500px;
   max-height: 70%;
   display: flex;
@@ -50,8 +51,31 @@ export const CloseButton = styled.button`
 export const ModalBody = styled.div`
   padding: ${theme.spacing[24]};
   overflow-y: auto;
+  flex: 1;
   font-size: ${theme.fontSize.bodysmall.size};
   color: ${theme.colors.textPrimary};
   line-height: 1.6;
   white-space: pre-line;
+
+  /* 스크롤바 커스텀 - FireFox */
+  scrollbar-width: thin;
+  scrollbar-color: ${theme.colors.textSecondary} transprent;
+
+  /* 스크롤바 커스텀 chrome edge safari (webkit 계열) */
+  &::-webkit-scrollbar {
+    width: 6px;
+  }
+
+  &::-webkit-scrollbar-track {
+    background: transparent;
+  }
+
+  &::-webkit-scrollbar-thumb {
+    background-color: ${theme.colors.textSecondary};
+    border-radius: 999px
+  }
+
+  &::-webkit-scrollbar-thumb:hover {
+    background-color: ${theme.colors.textPrimary};
+  }
 `;
