@@ -29,6 +29,29 @@ import {
   QuantityControl,
   QuantityButton,
   Quantity,
+  ContinueShoppingButton,
+  OrderSummary,
+  SummaryTitle,
+  SummaryRow,
+  Divider,
+  BenefitArea,
+  BenefitTitle,
+  BenefitSelect,
+  TotalArea,
+  TotalLabel,
+  DiscountInfo,
+  TotalPrice,
+  NoticeArea,
+  NoticeButton,
+  NoticeContent,
+  PurchaseButton,
+  ModalOverlay,
+  ModalBox,
+  ModalTitle,
+  ModalText,
+  ModalButtonArea,
+  ModalCancelButton,
+  ModalDeleteButton,
 } from "./CartPage.styles";
 
 function CartPage() {
@@ -273,6 +296,65 @@ function CartPage() {
                   ))}
                 </CategorySection>
               )}
+
+              {/* 체험권 */}
+              {experienceItems.length > 0 && (
+                <CategorySection>
+                  <CategoryTitle>체험권 항목</CategoryTitle>
+
+                  {experienceItems.map((item) => (
+                    <CartItem key={getItemKey(item)}>
+                      <CheckBox
+                        type="checkbox"
+                        checked={selectedItems.includes(getItemKey(item))}
+                        onChange={() => handleItemSelect(item)}
+                      />
+
+                      <ItemImage src={item.imageUrl} alt={item.name} />
+                      <ItemInfo>
+                        <ItemName>{item.name}</ItemName>
+                        {item.visitDate && (
+                          <ItemText>이용일: {item.visitDate}</ItemText>
+                        )}
+                        {item.time && <ItemText>시간: {item.time}</ItemText>}
+                      </ItemInfo>
+
+                      <QuantityControl>
+                        <QuantityButton
+                          type="button"
+                          onClick={() => decreaseQuantity(item.id, item.type)}
+                        >
+                          -
+                        </QuantityButton>
+
+                        <Quantity>{item.quantity}</Quantity>
+
+                        <QuantityButton
+                          type="button"
+                          onClick={() => increaseQuantity(item.id, item.type)}
+                        >
+                          +
+                        </QuantityButton>
+                      </QuantityControl>
+
+                      <ItemPriceArea>
+                        <DeleteButton
+                          type="button"
+                          aria-label="상품 삭제"
+                          onClick={() => handleDelete(item)}
+                        >
+                          x
+                        </DeleteButton>
+                        <ItemTotal>
+                          {(item.price * item.quantity).toLocaleString()}원
+                        </ItemTotal>
+                      </ItemPriceArea>
+                    </CartItem>
+                  ))}
+                </CategorySection>
+              )}
+
+              {/* 굿즈 */}
             </>
           )}
         </CartContent>
