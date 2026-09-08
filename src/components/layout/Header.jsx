@@ -1,11 +1,48 @@
 import zooleafLogo from "../../assets/images/zooleaf-logo-2.webp"
-import { Link } from "react-router-dom"
+import { Link, useLocation } from "react-router-dom"
 import { HeaderContainer } from "./Header.styles.js"
 import { ContentContainer } from "./ContentContainer.styles.js"
+import { useEffect, useRef, useState } from "react"
 
 export default function Header() {
+  const { pathname } = useLocation();
+  const headerRef = useRef(null);
+  const [isOverHero, setIsOverHero] = useState(false);
+
+  useEffect(() => {
+    if (pathname !== "/") {
+      setIsOverHero(false)
+      return
+    }
+
+    const hero = document.querySelector("[data-header-hero]");
+
+    if (!hero) {
+      setIsOverHero(false)
+      return
+    }
+
+    const updateHeader = () => {
+      const headerHeight = headerRef.current?.offsetHeight ?? 0;
+      const heroBottom = hero.getBoundingClientRect().bottom;
+
+      setIsOverHero(heroBottom > headerHeight)
+    }
+
+    updateHeader()
+
+    window.addEventListener("scroll", updateHeader, {passive: true})
+    window.addEventListener("resize", updateHeader)
+
+    return () => {
+      window.removeEventListener("scroll", updateHeader)
+      window.removeEventListener("resize", updateHeader)
+    }
+  }, [pathname])
+
+
   return (
-    <HeaderContainer>
+    <HeaderContainer ref={headerRef} $isOverHero={isOverHero}>
       <ContentContainer className="header-inner">
         <h1>
           <Link to="/" className="header__logo">
