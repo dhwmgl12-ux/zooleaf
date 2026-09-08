@@ -4,6 +4,19 @@ import { theme } from "../../styles/variables";
 export const HeaderContainer = styled.header`
   width: 100%;
   color: ${theme.colors.textPrimary};
+
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 1000;
+
+  background-color: ${({ $isOverHero }) =>
+    $isOverHero ? "rgba(255, 255, 252, 0.35)" : theme.colors.background
+  };
+
+  backdrop-filter: ${({$isOverHero}) => $isOverHero ? "blur(10px)" : "none"};
+
+  transition : background-color 0.25s ease, backdrop-filter 0.25s ease, box-shadow 0.25s ease;
   
   .header-inner {
     display: flex;
@@ -33,7 +46,7 @@ export const HeaderContainer = styled.header`
     font-weight: ${theme.fontWeight.semiBold};
   }
 
-  .header__nav list a {
+  .header__nav-list a {
     transition: color 0.2s ease;
   }
 

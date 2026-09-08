@@ -54,7 +54,7 @@ export const FooterContainer = styled.footer`
     background-color: ${theme.colors.white};
   }
 
-  .footer-policy li:first-child::before {
+  .footer-policy li:first-of-type::before {
     display: none;
   }
 `

@@ -7,7 +7,7 @@ import SignupPage from '../pages/SignupPage';
 import CartPage from '../pages/CartPage';
 import ProductDetailPage from '../pages/ProductDetailPage';
 import Discount from '../pages/Discount';
-import Main from '../pages/Main';
+import MainPage from '../pages/MainPage';
 import ExperienceDetailPage from '../pages/ExperienceDetailPage';
 import GoodsDetailPage from '../pages/GoodsDetailPage';
 
@@ -16,7 +16,7 @@ export default function AppRouter() {
     <BrowserRouter>
       <Routes>
         <Route element={<Layout />}>
-          <Route path="/" element={<Main />} />
+          <Route path="/" element={<MainPage />} />
           <Route path="/products" element={<ProductPage />} />
           <Route path="/login" element={<LoginPage />} />
           <Route path="/signup" element={<SignupPage />} />
