@@ -27,7 +27,7 @@ export const ModalHeader = styled.div`
   justify-content: space-between;
   align-items: center;
   padding: ${theme.spacing[24]};
-  border-bottom: ${theme.colors.textPrimary};
+  border-bottom: 1px solid ${theme.colors.textSecondary};
 `;
 
 export const ModalTitle = styled.h3`
@@ -59,7 +59,7 @@ export const ModalBody = styled.div`
 
   /* 스크롤바 커스텀 - FireFox */
   scrollbar-width: thin;
-  scrollbar-color: ${theme.colors.textSecondary} transprent;
+  scrollbar-color: ${theme.colors.textSecondary} transparent;
 
   /* 스크롤바 커스텀 chrome edge safari (webkit 계열) */
   &::-webkit-scrollbar {

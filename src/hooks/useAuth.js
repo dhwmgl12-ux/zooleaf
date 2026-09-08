@@ -11,7 +11,7 @@ import {
   mapServerErrorToField,
 } from '../utils/validation';
 import { useNavigate } from 'react-router-dom';
-import { login, signup, logout, getMe } from '../api/authApi';
+import { login, signup, checkId, logout, getMe } from '../api/authApi';
 import useAuthStore from '../store/authStore';
 import useToastStore from '../store/toastStore';
 
@@ -46,7 +46,6 @@ export function useLogin() {
       setAuth(result.token, result.userInfo);
       showToast(result.message); // 로그인에 성공했습니다.
       navigate('/');
-
     } catch (err) {
       setErrors((prev) => ({ ...prev, form: err.message }));
     }
@@ -59,6 +58,7 @@ export function useSignup() {
   const navigate = useNavigate();
   const showToast = useToastStore((state) => state.showToast);
   const [id, setId] = useState('');
+  const [idCheckStatus, setIdCheckStatus] = useState('idle');
   const [password, setPassword] = useState('');
   const [passwordConfirm, setPasswordConFirm] = useState('');
   const [name, setName] = useState('');
@@ -83,7 +83,10 @@ export function useSignup() {
     const { name: fieldName, value, type, checked } = e.target;
     const val = type === 'checkbox' ? checked : value;
 
-    if (fieldName === 'id') setId(val);
+    if (fieldName === 'id') {
+      setId(val);
+      setIdCheckStatus('idle');
+    }
     if (fieldName === 'password') setPassword(val);
     if (fieldName === 'passwordConfirm') setPasswordConFirm(val);
     if (fieldName === 'name') setName(val);
@@ -92,6 +95,29 @@ export function useSignup() {
     if (fieldName === 'agreeTerms') setAgreeTerms(val);
     if (fieldName === 'agreePrivacy') setAgreePrivacy(val);
     if (fieldName === 'agreeMarketing') setAgreeMarketing(val);
+  };
+
+  const handleCheckId = async () => {
+    const idError = getEmailError(id);
+    if (idError) {
+      setErrors((prev) => ({ ...prev, id: idError }));
+      return;
+    }
+
+    setIdCheckStatus('checking');
+    try {
+      const result = await checkId(id);
+      if (result.isDuplicate) {
+        setIdCheckStatus('duplicate');
+        setErrors((prev) => ({ ...prev, id: result.message }));
+      } else {
+        setIdCheckStatus('available');
+        setErrors((prev) => ({...prev, id: ''}))
+      }
+    } catch (err) {
+      setIdCheckStatus('idle');
+      setErrors((prev) => ({ ...prev, id: err.message }));
+    }
   };
 
   const handleSubmit = async (e) => {
@@ -130,6 +156,11 @@ export function useSignup() {
       return;
     }
 
+    if (idCheckStatus !== 'available') {
+      setErrors((prev) => ({ ...prev, id: '아이디 중복확인을 진행해주세요.' }));
+      return;
+    }
+
     try {
       const birthDateForServer = birthDate.replace(/\./g, '-');
       const result = await signup({
@@ -148,12 +179,13 @@ export function useSignup() {
       navigate('/login');
     } catch (err) {
       const field = mapServerErrorToField(err.message);
-      setErrors((prev) => ({...prev, [field]: err.message}))
+      setErrors((prev) => ({ ...prev, [field]: err.message }));
     }
   };
 
   return {
     id,
+    idCheckStatus,
     password,
     passwordConfirm,
     name,
@@ -164,6 +196,7 @@ export function useSignup() {
     agreeMarketing,
     errors,
     handleChange,
+    handleCheckId,
     handleSubmit,
   };
 }
@@ -175,17 +208,19 @@ export function useLogout() {
 
   const handleLogout = async () => {
     try {
-      await logout();
-    } catch (err) {
-      console.error(err);
-    } finally {
+      const result = await logout();
       sessionStorage.removeItem('token');
       clearAuth();
-      showToast('로그아웃되었습니다.');
+      showToast(result.message)
+    } catch (err) {
+      showToast(err.message);
+    } finally {
+      sessionStorage.removeItem('token');
+      clearAuth()
       navigate('/login');
     }
-  }
-  return { handleLogout }
+  };
+  return { handleLogout };
 }
 
 export function useAuthRestore() {

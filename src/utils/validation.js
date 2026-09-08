@@ -63,15 +63,15 @@ export function formatBirthDate(value) {
 export function getBirthDateError(birthDate) {
   if (!birthDate) return '생년월일을 입력해주세요!'
   if (!BIRTH_DATE_REGEX.test(birthDate)) {
-    return '올바른 생년월일 형식이 아닙니다. (yyyy-mm-dd)';
+    return '올바른 생년월일 형식이 아닙니다. (yyyy.mm.dd)';
   }
   return '';
 }
 
 export function mapServerErrorToField(message) {
   if (message.includes('아이디')) return 'id';
-  if (message.includes('비밀번호')) return 'password';
   if (message.includes('비밀번호 확인') || message.includes('일치')) return 'passwordConfirm';
+  if (message.includes('비밀번호')) return 'password';
   if (message.includes('이름')) return 'name';
   if (message.includes('전화번호') || message.includes('휴대폰')) return 'phone';
   if (message.includes('생년월일')) return 'birthDate';
