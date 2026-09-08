@@ -29,7 +29,7 @@ export default function AppRouter() {
           />
           <Route path="/goods/:goodsId" element={<GoodsDetailPage />} />
           <Route path="/discount" element={<Discount />} />
-          <Route path="/Intro" element={<IntroPage />} />
+          <Route path="/About" element={<IntroPage />} />
         </Route>
       </Routes>
     </BrowserRouter>
