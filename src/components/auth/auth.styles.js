@@ -84,6 +84,14 @@ export const ErrorText = styled.p`
   margin-top: ${theme.spacing[4]};
 `;
 
+export const Checkbox = styled.input`
+  width: 20px;
+  height: 20px;
+  accent-color: ${theme.colors.primary};
+  cursor: pointer;
+  flex-shrink: 0;
+`;
+
 export const AgreeGroup = styled.div`
   display: flex;
   flex-direction: column;
