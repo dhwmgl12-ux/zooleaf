@@ -3,8 +3,8 @@ import GlobalStyle from "./styles/GlobalStyle.jsx"
 import AppRouter from "./routes/AppRouter";
 
 export default function App() {
-
-  useAuthRestore
+  useAuthRestore();
+  
   return (
     <>
       <GlobalStyle />

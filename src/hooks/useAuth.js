@@ -16,6 +16,7 @@ import useAuthStore from '../store/authStore';
 
 export function useLogin() {
   const navigate = useNavigate();
+  const setAuth = useAuthStore((state) => state.setAuth);
   const [id, setId] = useState('');
   const [password, setPassword] = useState('');
   const [errors, setErrors] = useState({ id: '', password: '', form: '' });
@@ -41,7 +42,7 @@ export function useLogin() {
     try {
       const result = await login({ id, password });
 
-      sessionStorage.setItem('token', result.token);
+      setAuth(result.token, result.userInfo);
 
       // TODO : 장바구니 Zustand 스토어 완성되면 여기서 localStorage -> 서버 병합 로직 호출
 
@@ -196,7 +197,7 @@ export function useAuthRestore() {
 
     getMe()
       .then((result) => {
-        setAuth(result.data);
+        setAuth(sessionStorage.getItem('token'), result.data);
       })
       .catch(() => {
         sessionStorage.removeItem('token');
