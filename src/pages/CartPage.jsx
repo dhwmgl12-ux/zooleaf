@@ -417,7 +417,98 @@ function CartPage() {
               )}
             </>
           )}
+
+          <ContinueShoppingButton
+            type="button"
+            onClick={() => navigate("/goods")}
+          >
+            쇼핑 계속하기
+          </ContinueShoppingButton>
         </CartContent>
+
+        {/* 구매하기 */}
+        <OrderSummary>
+          <SummaryTitle>구매 하기</SummaryTitle>
+
+          <SummaryRow>
+            <span>상품 금액</span>
+
+            <string>{productTotal.toLocaleString()}원</string>
+          </SummaryRow>
+
+          <SummaryRow>
+            <span>할인 금액</span>
+            <strong>-{discountTotal.toLocaleString()}원</strong>
+          </SummaryRow>
+
+          <SummaryRow>
+            <span>배송비</span>
+            <strong>{shippingFee.toLocaleString()}원</strong>
+          </SummaryRow>
+
+          <Divider />
+
+          {/* 결제 혜택 */}
+          <BenefitArea>
+            <BenefitTitle>결제 혜택</BenefitTitle>
+
+            <BenefitSelect
+              value={benefitRate}
+              onChange={(e) => setBenefitRate(Number(e.target.value))}
+            >
+              <option value={0}>할인 혜택을 선택해주세요.</option>
+              <option value={0.5}>ZooLeaf 제휴카드 - 최대 50%</option>
+              <option value={0.4}>통신사 멤버십 - 40%</option>
+              <option value={0.3}>문화 누리 카드 - 30%</option>
+              <option value={0.3}>문화가 있는 날 - 30%</option>
+            </BenefitSelect>
+          </BenefitArea>
+
+          <Divider />
+
+          <TotalArea>
+            <TotalLabel>총 금액</TotalLabel>
+
+            <div>
+              {benefitRate > 0 && (
+                <DiscountInfo>
+                  -{Math.round(benefitRate * 100)}& (
+                  {benefitDiscount.toLocaleString()}원 할인 )
+                </DiscountInfo>
+              )}
+
+              <TotalPrice>{finalTotal.toLocaleString()}원</TotalPrice>
+            </div>
+          </TotalArea>
+
+          {/* 유의사항 */}
+          <NoticeArea>
+            <NoticeButton
+              type="button"
+              onClick={() => setIsNoticeOpen((prev) => !prev)}
+            >
+              <span>유의 사항</span>
+              <span>{isNoticeOpen ? "▲" : "▼"}</span>
+            </NoticeButton>
+
+            {isNoticeOpen && (
+              <NoticeContent>
+                <p>· 할인 혜택은 다른 할인과 중복 적용되지 않을 수 있습니다.</p>
+                <p>
+                  · 입장권 및 체험권은 지정된 이용일에만 사용할 수 있습니다.
+                </p>
+                <p>· 굿즈가 포함된 주문에는 배송비가 추가될 수 있습니다.</p>
+                <p>
+                  · 결제 완료 후 취소 및 환불은 상품별 정책에 따라 처리됩니다.
+                </p>
+              </NoticeContent>
+            )}
+          </NoticeArea>
+
+          <PurchaseButton type="button" disabled={cartItems.length === 0}>
+            구매하기
+          </PurchaseButton>
+        </OrderSummary>
       </CartLayout>
     </Container>
   );
