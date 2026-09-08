@@ -39,7 +39,7 @@ export default function SignupForm() {
   const [showPasswordConfirm, setShowPasswordConfirm] = useState(false);
 
   return (
-    <FormCard>
+    <FormCard variant="signup">
       <Title>회원가입</Title>
       {errors.form && <ErrorText>{errors.form}</ErrorText>}
       <Form onSubmit={handleSubmit}>
