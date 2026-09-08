@@ -1,10 +1,11 @@
+import CartDeleteModal from "../components/cart/CartDeleteModal";
 import CartOrderSummary from "../components/cart/CartOrderSummary";
 import { useNavigate } from "react-router-dom";
 import useCart from "../hooks/useCart";
 import emptyCartImage from "../assets/images/cart-empty.webp";
 import CartItemRow from "../components/cart/CartItemRow";
 import {
-  Container, Title, CartTopBar, SelectAllLabel, CheckBox,
+  Container, Title, CartTopBar, SelectAllLabel, CheckBox, SelectDeleteButton,
   CartLayout, CartContent, EmptyCart, EmptyCartImage,
   CategorySection, CategoryTitle, ContinueShoppingButton,
 } from "./CartPage.styles";
@@ -27,6 +28,13 @@ export default function CartPage() {
           <CheckBox type="checkbox" checked={cart.isAllSelected} onChange={cart.toggleAll} />
           전체 선택 ({cart.selectedCount} / {cart.cartItems.length})
         </SelectAllLabel>
+        <SelectDeleteButton
+          type="button"
+          disabled={cart.selectedCount === 0}
+          onClick={() => cart.openDeleteModal()}
+        >
+          선택 삭제
+        </SelectDeleteButton>
       </CartTopBar>
       <CartLayout>
         <CartContent>
@@ -51,6 +59,7 @@ export default function CartPage() {
                     onSelect={() => cart.toggleItem(item)}
                     onIncrease={() => cart.increaseQuantity(item.id, item.type)}
                     onDecrease={() => cart.decreaseQuantity(item.id, item.type)}
+                    onDelete={() => cart.openDeleteModal(item)}
                   />
                 ))}
               </CategorySection>
@@ -62,6 +71,13 @@ export default function CartPage() {
         </CartContent>
         <CartOrderSummary cartItems={cart.cartItems} />
       </CartLayout>
+      {cart.deleteModal && (
+        <CartDeleteModal
+          mode={cart.deleteModal.mode}
+          onClose={cart.closeDeleteModal}
+          onConfirm={cart.confirmDelete}
+        />
+      )}
     </Container>
   );
 }
