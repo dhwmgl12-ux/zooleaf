@@ -2,9 +2,11 @@ import styled from '@emotion/styled';
 import { theme } from '../styles/variables';
 
 export const PageWrapper = styled.div`
-display: flex;
-flex: 1;
-min-height: 732px;
+  display: flex;
+  flex: 1;
+  min-height: 732px;
+  padding: ${(props) => (props.variant === 'signup' ? theme.spacing[40] : theme.spacing[80])} 0;
+  margin-bottom: -${theme.spacing[200]}; // 협의 or 수정 필요
 `;
 
 export const PageContainer = styled.div`
@@ -17,43 +19,41 @@ export const PageContainer = styled.div`
   width: 100%;
 `;
 
-
 export const IllustrationSide = styled.div`
   display: flex;
   flex-direction: column;
   justify-content: center;
-  align-items: flex-start;
+  align-items: ${(props) => (props.variant === 'signup' ? 'flex-end' : 'flex-start')};
   padding: ${theme.spacing[40]} 0 ${theme.spacing[80]} ${theme.spacing[80]};
-`;
+  `;
 
 export const HeroGroup = styled.div`
   display: flex;
   width: 658px;
   flex-direction: column;
-  align-items: flex-start;
+  align-items: ${(props) => (props.variant === 'signup' ? 'center' : 'flex-start')};
+  justify-content: center;
   gap: ${theme.spacing[8]};
-`;
+  `;
 
 export const HeroImage = styled.img`
   max-width: 100%;
   height: auto;
-  /* margin-bottom: ${theme.spacing[24]}; */
-`;
+  `;
 
 export const TextGroup = styled.div`
   width: 658px;
   display: flex;
-  align-items: flex-start;
+  justify-content: center;
   gap: ${theme.spacing[4]};
-  flex-shrink:0;
-`
-
+  flex-shrink: 0;
+  `;
 
 export const SubText = styled.p`
   font-size: ${theme.fontSize.h3.size};
   font-weight: ${theme.fontWeight.bold};
   color: ${theme.colors.primary};
-  text-align: left;
+  text-align: ${(props) => (props.variant === 'signup' ? 'right' : 'left')};
   margin: 0;
   `;
 
@@ -61,7 +61,7 @@ export const SubTextLight = styled.p`
   font-size: ${theme.fontSize.h3.size};
   font-weight: ${theme.fontWeight.bold};
   color: ${theme.colors.secondary};
-  text-align: center;
+  text-align: ${(props) => (props.variant === 'signup' ? 'right' : 'left')};
   margin: 0;
 `;
 
@@ -71,4 +71,3 @@ export const FormSide = styled.div`
   align-items: center;
   padding: ${theme.spacing[40]} 0;
 `;
-
