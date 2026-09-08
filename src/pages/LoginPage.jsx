@@ -1,15 +1,24 @@
-import heroImage  from '../assets/images/zooleaf-letter-pc.webp'
-import LoginForm from '../components/auth/LoginForm'
-import { FormSide, HeroGroup, HeroImage, IllustrationSide, PageContainer, PageWrapper, SubText, SubTextLight, TextGroup } from './LoginPage.styles'
+import heroImage from '../assets/images/zooleaf-letter-pc.webp';
+import LoginForm from '../components/auth/LoginForm';
+import {
+  FormSide,
+  HeroGroup,
+  HeroImage,
+  IllustrationSide,
+  PageContainer,
+  PageWrapper,
+  SubText,
+  SubTextLight,
+  TextGroup,
+} from './AuthPage.styles';
 
 export default function LoginPage() {
-
   return (
-    <PageWrapper> 
+    <PageWrapper>
       <PageContainer>
         <IllustrationSide>
           <HeroGroup>
-            <HeroImage src={heroImage} alt='자연과 동물이 숨쉬는 행복한 공간 ZOOLEAF'/>
+            <HeroImage src={heroImage} alt="자연과 동물이 숨쉬는 행복한 공간 ZOOLEAF" />
             <TextGroup>
               <SubText>티켓 예매 및 조회를 위해</SubText>
               <SubTextLight>로그인 해주세요!</SubTextLight>
@@ -17,9 +26,9 @@ export default function LoginPage() {
           </HeroGroup>
         </IllustrationSide>
         <FormSide>
-          <LoginForm/>
+          <LoginForm />
         </FormSide>
       </PageContainer>
     </PageWrapper>
-  )
-}              
+  );
+}
