@@ -11,7 +11,7 @@ import {
   mapServerErrorToField,
 } from '../utils/validation';
 import { useNavigate } from 'react-router-dom';
-import { login, signup, getMe } from '../api/authApi';
+import { login, signup, logout, getMe } from '../api/authApi';
 import useAuthStore from '../store/authStore';
 
 export function useLogin() {
@@ -163,6 +163,24 @@ export function useSignup() {
     handleChange,
     handleSubmit,
   };
+}
+
+export function useLogout() {
+  const navigate = useNavigate();
+  const clearAuth = useAuthStore((state) => state.clearAuth);
+
+  const handleLogout = async () => {
+    try {
+      await logout();
+    } catch (err) {
+      console.error(err);
+    } finally {
+      sessionStorage.removeItem('token');
+      clearAuth();
+      navigate('/login');
+    }
+  }
+  return { handleLogout }
 }
 
 export function useAuthRestore() {

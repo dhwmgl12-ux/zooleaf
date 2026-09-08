@@ -1,7 +1,10 @@
 const BASE_URL = import.meta.env.VITE_API_BASE_URL;
 
+const PUBLIC_ENDPOINTS = ['/auth/login', '/auth/signup', '/auth/check-id'];
+
 export async function apiClient(endpoint, options = {}) {
-  const token = sessionStorage.getItem('token');
+  const isPublic = PUBLIC_ENDPOINTS.includes(endpoint);
+  const token = !isPublic ? sessionStorage.getItem('token') : null;
 
   const response = await fetch(`${BASE_URL}${endpoint}`, {
     ...options,
