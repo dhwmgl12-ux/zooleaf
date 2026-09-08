@@ -1,10 +1,15 @@
 import { useState } from "react";
 import useCartStore from "../store/cartStore";
+import emptyCartImage from "../assets/images/cart-empty.webp";
+import { useNavigate } from "react-router-dom";
+
+import { getCart, updateCartQuantity, deleteCartItem } from "../api/cartApi";
 
 import {
   Container,
   Title,
   CartTopBar,
+  EmptyCartImage,
   SelectAllLabel,
   SelectDeleteButton,
   CartLayout,
@@ -24,39 +29,17 @@ import {
   QuantityControl,
   QuantityButton,
   Quantity,
-  ContinueShoppingButton,
-  OrderSummary,
-  SummaryTitle,
-  SummaryRow,
-  Divider,
-  BenefitArea,
-  BenefitTitle,
-  BenefitSelect,
-  TotalArea,
-  TotalLabel,
-  DiscountInfo,
-  TotalPrice,
-  NoticeArea,
-  NoticeButton,
-  NoticeContent,
-  PurchaseButton,
-  ModalOverlay,
-  ModalBox,
-  ModalTitle,
-  ModalText,
-  ModalButtonArea,
-  ModalCancelButton,
-  ModalDeleteButton,
 } from "./CartPage.styles";
 
 function CartPage() {
+  // Zustand 장바구니 전역 상태와 수량 변경/삭제 기능 가져오기
   const { cartItems, increaseQuantity, decreaseQuantity, removeFromCart } =
     useCartStore();
 
-  // =========================
-  // 상품 분류
-  // =========================
+  // 다른 페이지로 이동할 때 사용하는 함수
+  const navigate = useNavigate();
 
+  // 상품 분류
   const ticketItems = cartItems.filter((item) => item.type === "ticket");
 
   const experienceItems = cartItems.filter(
@@ -65,18 +48,17 @@ function CartPage() {
 
   const goodsItems = cartItems.filter((item) => item.type === "goods");
 
-  // =========================
-  // 상품 선택
-  // =========================
-
+  // 선택된 상품 관리
   const [selectedItems, setSelectedItems] = useState([]);
+
+  // 삭제 모달 상태 관리
   const [deleteModal, setDeleteModal] = useState({
-    open: false,
-    mode: null,
-    item: null,
+    open: false, // 모달이 열려있는지 여부
+    mode: null, // 개별 삭제인지 선택 삭제인지 구분
+    item: null, // 개별 삭제할 상품 정보
   });
 
-  // 상품마다 고유한 key 생성
+  // 상품마다 고유한 key 생성(같은 id라도 상품 종류와 옵션이 다를 수 있어서 고유한 식별값 생성)
   const getItemKey = (item) => `${item.type}-${item.id}-${item.option ?? ""}`;
 
   // 상품 하나 선택 / 선택 해제
@@ -156,13 +138,11 @@ function CartPage() {
 
       setSelectedItems([]);
     }
-
     // 삭제 후 모달 닫기
     handleCloseDeleteModal();
   };
-  // =========================
+
   // 결제 금액
-  // =========================
 
   const productTotal = cartItems.reduce((sum, item) => {
     return sum + item.price * item.quantity;
@@ -175,9 +155,7 @@ function CartPage() {
     return sum + item.price * discountRate * item.quantity;
   }, 0);
 
-  // =========================
   // 결제 혜택
-  // =========================
 
   const [benefitRate, setBenefitRate] = useState(0);
 
@@ -185,30 +163,23 @@ function CartPage() {
 
   const discountTotal = itemDiscountTotal + benefitDiscount;
 
-  // =========================
   // 배송비
-  // =========================
 
   const hasGoods = goodsItems.length > 0;
 
   const shippingFee = hasGoods ? 3000 : 0;
 
-  // =========================
   // 최종 금액
-  // =========================
 
   const finalTotal = Math.max(0, productTotal - discountTotal + shippingFee);
 
-  // =========================
   // 유의사항 아코디언
-  // =========================
 
   const [isNoticeOpen, setIsNoticeOpen] = useState(false);
 
   return (
     <Container>
       <Title>장바구니</Title>
-
       {/* 전체 선택 / 선택 삭제 */}
       <CartTopBar>
         <SelectAllLabel>
@@ -233,13 +204,14 @@ function CartPage() {
         <CartContent>
           {cartItems.length === 0 ? (
             <EmptyCart>
-              <p>장바구니에 담긴 상품이 없습니다.</p>
+              <EmptyCartImage src={emptyCartImage} alt="빈 장바구니" />
+              <p>장바구니에 담긴 상품이 없습니다</p>
+
+              <p>다양한 상품들과 굿즈를 둘러보고 쇼핑의 즐거움을 만나보세요</p>
             </EmptyCart>
           ) : (
             <>
-              {/* =========================
-                  입장권
-              ========================= */}
+              {/* 입장권 */}
 
               {ticketItems.length > 0 && (
                 <CategorySection>
@@ -254,10 +226,7 @@ function CartPage() {
                       />
 
                       <ItemImage src={item.imageUrl} alt={item.name} />
-
                       <ItemInfo>
-                        <ItemName>{item.name}</ItemName>
-
                         {item.visitDate && (
                           <ItemText>이용일: {item.visitDate}</ItemText>
                         )}
@@ -293,137 +262,7 @@ function CartPage() {
                           aria-label="상품 삭제"
                           onClick={() => handleDelete(item)}
                         >
-                          ×
-                        </DeleteButton>
-
-                        <ItemTotal>
-                          {(item.price * item.quantity).toLocaleString()}원
-                        </ItemTotal>
-                      </ItemPriceArea>
-                    </CartItem>
-                  ))}
-                </CategorySection>
-              )}
-
-              {/* =========================
-                  체험권
-              ========================= */}
-
-              {experienceItems.length > 0 && (
-                <CategorySection>
-                  <CategoryTitle>체험권 항목</CategoryTitle>
-
-                  {experienceItems.map((item) => (
-                    <CartItem key={getItemKey(item)}>
-                      <CheckBox
-                        type="checkbox"
-                        checked={selectedItems.includes(getItemKey(item))}
-                        onChange={() => handleItemSelect(item)}
-                      />
-
-                      <ItemImage src={item.imageUrl} alt={item.name} />
-
-                      <ItemInfo>
-                        <ItemName>{item.name}</ItemName>
-
-                        {item.visitDate && (
-                          <ItemText>이용일: {item.visitDate}</ItemText>
-                        )}
-
-                        {item.time && <ItemText>시간: {item.time}</ItemText>}
-
-                        <ItemText>10,000원 / 인원: {item.quantity}명</ItemText>
-                      </ItemInfo>
-
-                      <QuantityControl>
-                        <QuantityButton
-                          type="button"
-                          onClick={() => decreaseQuantity(item.id, item.type)}
-                        >
-                          −
-                        </QuantityButton>
-
-                        <Quantity>{item.quantity}</Quantity>
-
-                        <QuantityButton
-                          type="button"
-                          onClick={() => increaseQuantity(item.id, item.type)}
-                        >
-                          +
-                        </QuantityButton>
-                      </QuantityControl>
-
-                      <ItemPriceArea>
-                        <DeleteButton
-                          type="button"
-                          aria-label="상품 삭제"
-                          onClick={() => handleDelete(item)}
-                        >
-                          ×
-                        </DeleteButton>
-
-                        <ItemTotal>
-                          {(item.price * item.quantity).toLocaleString()}원
-                        </ItemTotal>
-                      </ItemPriceArea>
-                    </CartItem>
-                  ))}
-                </CategorySection>
-              )}
-
-              {/* =========================
-                  굿즈
-              ========================= */}
-
-              {goodsItems.length > 0 && (
-                <CategorySection>
-                  <CategoryTitle>굿즈 항목</CategoryTitle>
-
-                  {goodsItems.map((item) => (
-                    <CartItem key={getItemKey(item)}>
-                      <CheckBox
-                        type="checkbox"
-                        checked={selectedItems.includes(getItemKey(item))}
-                        onChange={() => handleItemSelect(item)}
-                      />
-
-                      <ItemImage src={item.imageUrl} alt={item.name} />
-
-                      <ItemInfo>
-                        <ItemName>{item.name}</ItemName>
-
-                        {item.option && (
-                          <ItemText>옵션: {item.option}</ItemText>
-                        )}
-
-                        <ItemText>{item.price.toLocaleString()}원</ItemText>
-                      </ItemInfo>
-
-                      <QuantityControl>
-                        <QuantityButton
-                          type="button"
-                          onClick={() => decreaseQuantity(item.id, item.type)}
-                        >
-                          −
-                        </QuantityButton>
-
-                        <Quantity>{item.quantity}</Quantity>
-
-                        <QuantityButton
-                          type="button"
-                          onClick={() => increaseQuantity(item.id, item.type)}
-                        >
-                          +
-                        </QuantityButton>
-                      </QuantityControl>
-
-                      <ItemPriceArea>
-                        <DeleteButton
-                          type="button"
-                          aria-label="상품 삭제"
-                          onClick={() => handleDelete(item)}
-                        >
-                          ×
+                          x
                         </DeleteButton>
 
                         <ItemTotal>
@@ -437,130 +276,7 @@ function CartPage() {
             </>
           )}
         </CartContent>
-
-        {/* =========================
-            구매하기
-        ========================= */}
-
-        <OrderSummary>
-          <SummaryTitle>구매 하기</SummaryTitle>
-
-          <SummaryRow>
-            <span>상품 금액</span>
-
-            <strong>{productTotal.toLocaleString()}원</strong>
-          </SummaryRow>
-
-          <SummaryRow>
-            <span>할인 금액</span>
-
-            <strong>-{discountTotal.toLocaleString()}원</strong>
-          </SummaryRow>
-
-          <SummaryRow>
-            <span>배송비</span>
-
-            <strong>{shippingFee.toLocaleString()}원</strong>
-          </SummaryRow>
-
-          <Divider />
-
-          {/* 결제 혜택 */}
-          <BenefitArea>
-            <BenefitTitle>결제 혜택</BenefitTitle>
-
-            <BenefitSelect
-              value={benefitRate}
-              onChange={(e) => setBenefitRate(Number(e.target.value))}
-            >
-              <option value={0}>할인 혜택을 선택해주세요.</option>
-
-              <option value={0.5}>ZooLeaf 제휴카드 - 최대 50%</option>
-
-              <option value={0.4}>통신사 멤버십 - 40%</option>
-
-              <option value={0.3}>문화 누리 카드 - 30%</option>
-
-              <option value={0.3}>문화가 있는 날 - 30%</option>
-            </BenefitSelect>
-          </BenefitArea>
-
-          <Divider />
-
-          <TotalArea>
-            <TotalLabel>총 금액</TotalLabel>
-
-            <div>
-              {benefitRate > 0 && (
-                <DiscountInfo>
-                  -{Math.round(benefitRate * 100)}% (
-                  {benefitDiscount.toLocaleString()}원 할인)
-                </DiscountInfo>
-              )}
-
-              <TotalPrice>{finalTotal.toLocaleString()}원</TotalPrice>
-            </div>
-          </TotalArea>
-
-          {/* 유의사항 */}
-          <NoticeArea>
-            <NoticeButton
-              type="button"
-              onClick={() => setIsNoticeOpen((prev) => !prev)}
-            >
-              <span>유의 사항</span>
-
-              <span>{isNoticeOpen ? "▲" : "▼"}</span>
-            </NoticeButton>
-
-            {isNoticeOpen && (
-              <NoticeContent>
-                <p>· 할인 혜택은 다른 할인과 중복 적용되지 않을 수 있습니다.</p>
-
-                <p>
-                  · 입장권 및 체험권은 지정된 이용일에만 사용할 수 있습니다.
-                </p>
-
-                <p>· 굿즈가 포함된 주문에는 배송비가 추가될 수 있습니다.</p>
-
-                <p>
-                  · 결제 완료 후 취소 및 환불은 상품별 정책에 따라 처리됩니다.
-                </p>
-              </NoticeContent>
-            )}
-          </NoticeArea>
-
-          <PurchaseButton type="button" disabled={cartItems.length === 0}>
-            구매하기
-          </PurchaseButton>
-        </OrderSummary>
       </CartLayout>
-
-      {deleteModal.open && (
-        <ModalOverlay>
-          <ModalBox>
-            <ModalTitle>
-              {deleteModal.mode === "selected" ? "선택 상품 삭제" : "상품 삭제"}
-            </ModalTitle>
-
-            <ModalText>
-              {deleteModal.mode === "selected"
-                ? "선택한 상품을 정말로 삭제하시겠습니까?"
-                : "정말로 삭제하시겠습니까?"}
-            </ModalText>
-
-            <ModalButtonArea>
-              <ModalCancelButton type="button" onClick={handleCloseDeleteModal}>
-                취소
-              </ModalCancelButton>
-
-              <ModalDeleteButton type="button" onClick={handleConfirmDelete}>
-                삭제
-              </ModalDeleteButton>
-            </ModalButtonArea>
-          </ModalBox>
-        </ModalOverlay>
-      )}
     </Container>
   );
 }

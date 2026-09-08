@@ -616,3 +616,24 @@ export const ModalDeleteButton = styled.button`
 
   cursor: pointer;
 `;
+
+export const EmptyCartImage = styled.img`
+  width: 280px;
+  max-width: 70%;
+  height: auto;
+
+  object-fit: contain;
+
+  @media (max-width: ${theme.layout.breakpoint.tablet}) {
+    width: 240px;
+  }
+
+  @media (max-width: ${theme.layout.breakpoint.mobile}) {
+    width: 180px;
+    max-width: 80%;
+  }
+
+  @media (max-width: ${theme.layout.breakpoint.smallMobile}) {
+    width: 150px;
+  }
+`;
