@@ -1,3 +1,4 @@
+import { EmptyStateContainer } from "./EmptyState.styles";
 
 export default function EmptyState({
   title,
@@ -6,7 +7,7 @@ export default function EmptyState({
   buttonText,
 }) {
   return (
-    <div className="empty-state">
+    <EmptyStateContainer className="empty-state">
       <h2>{title}</h2>
       {description && <p>{description}</p>}
 
@@ -15,7 +16,7 @@ export default function EmptyState({
           {buttonText}
         </button>
       )}
-    </div>
+    </EmptyStateContainer>
   );
 }
 
