@@ -355,6 +355,66 @@ function CartPage() {
               )}
 
               {/* 굿즈 */}
+
+              {goodsItems.length > 0 && (
+                <CategorySection>
+                  <CategoryTitle>굿즈 항목</CategoryTitle>
+
+                  {goodsItems.map((item) => (
+                    <CartItem key={getItemKey(item)}>
+                      <CheckBox
+                        type="checkbox"
+                        checked={selectedItems.includes(getItemKey(item))}
+                        onChange={() => handleItemSelect(item)}
+                      />
+
+                      <ItemImage src={item.imageUrl} alt={item.name} />
+
+                      <ItemInfo>
+                        <ItemName>{item.name}</ItemName>
+
+                        {item.option && (
+                          <ItemText>옵션: {item.option}</ItemText>
+                        )}
+
+                        <ItemText>{item.price.toLocaleString()}원</ItemText>
+                      </ItemInfo>
+
+                      <QuantityControl>
+                        <QuantityButton
+                          type="button"
+                          onClick={() => decreaseQuantity(item.id, item.type)}
+                        >
+                          -
+                        </QuantityButton>
+
+                        <Quantity>{item.quantity}</Quantity>
+
+                        <QuantityButton
+                          type="button"
+                          onClick={() => increaseQuantity(item.id, item.type)}
+                        >
+                          +
+                        </QuantityButton>
+                      </QuantityControl>
+
+                      <ItemPriceArea>
+                        <DeleteButton
+                          type="button"
+                          aria-label="상품 삭제"
+                          onClick={() => handleDelete(item)}
+                        >
+                          x
+                        </DeleteButton>
+
+                        <ItemTotal>
+                          {(item.price * item.quantity).toLocaleString()}원
+                        </ItemTotal>
+                      </ItemPriceArea>
+                    </CartItem>
+                  ))}
+                </CategorySection>
+              )}
             </>
           )}
         </CartContent>
