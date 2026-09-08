@@ -157,7 +157,7 @@ export const CardImageWrap = styled.div`
   border-radius: ${theme.radius.image};
   overflow: hidden;
   margin-left: ${theme.spacing[64]};
-  margin-right: ${theme.spacing[100]};
+  margin-right: ${theme.spacing[200]};
   img {
     width: 100%;
     height: 100%;
@@ -394,7 +394,7 @@ export const SpecialImageWrap = styled.div`
   flex-shrink: 0;
   display: flex;
   margin-left: ${theme.spacing[100]};
-  margin-right: ${theme.spacing[100]};
+  margin-right: ${theme.spacing[200]};
   align-items: center;
   justify-content: center;
   img {
