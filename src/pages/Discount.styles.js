@@ -21,7 +21,15 @@ export const PageTitle = styled.h1`
   margin-top: ${theme.spacing[100]};
   text-align: center;
 
+  @media (max-width: ${theme.layout.breakpoint.tablet}) {
+    font-size: ${theme.fontSize.h3.size};
+    line-height: ${theme.fontSize.h3.lineheight};
+  }
   @media (max-width: ${theme.layout.breakpoint.mobile}) {
+    font-size: ${theme.fontSize.h3.size};
+    line-height: ${theme.fontSize.h3.lineheight};
+  }
+  @media (max-width: ${theme.layout.breakpoint.smallMobile}) {
     font-size: ${theme.fontSize.h3.size};
     line-height: ${theme.fontSize.h3.lineheight};
   }
@@ -56,6 +64,16 @@ export const NoticeBox = styled.div`
     color: ${theme.colors.error};
     margin: 0;
   }
+
+  @media (max-width: ${theme.layout.breakpoint.tablet}) {
+    max-width: 816px;
+  }
+  @media (max-width: ${theme.layout.breakpoint.mobile}) {
+    max-width: 726px;
+  }
+  @media (max-width: ${theme.layout.breakpoint.smallMobile}) {
+    max-width: 343px;
+  }
 `;
 
 export const DiscountSection = styled.section`
@@ -66,6 +84,25 @@ export const DiscountSection = styled.section`
   flex-direction: column;
   gap: ${theme.spacing[16]};
   margin-bottom: ${theme.spacing[32]};
+
+  @media (max-width: ${theme.layout.breakpoint.tablet}) {
+    max-width: 100%;
+    width: 100%;
+    align-items: center; /* 👈 태블릿에서도 중앙 정렬 유지 */
+    padding: 0 ${theme.spacing[16]};
+  }
+  @media (max-width: ${theme.layout.breakpoint.mobile}) {
+    max-width: 100%;
+    width: 100%;
+    align-items: center; /* 👈 태블릿에서도 중앙 정렬 유지 */
+    padding: 0;
+  }
+  @media (max-width: ${theme.layout.breakpoint.smallMobile}) {
+    max-width: 100%;
+    width: 100%;
+    align-items: center; /* 👈 태블릿에서도 중앙 정렬 유지 */
+    padding: 0;
+  }
 `;
 
 export const DiscountCard = styled.div`
@@ -83,6 +120,34 @@ export const DiscountCard = styled.div`
   flex-shrink: 0;
 
   margin-bottom: ${theme.spacing[24]};
+
+  @media (max-width: ${theme.layout.breakpoint.tablet}) {
+    max-width: 816px;
+    height: 410px;
+    padding: ${theme.spacing[24]};
+    gap: ${theme.spacing[32]};
+    margin-left: auto; /* 👈 미디어쿼리 안에서도 중앙 정렬 유지 */
+    margin-right: auto;
+  }
+  @media (max-width: ${theme.layout.breakpoint.mobile}) {
+    max-width: 726px;
+    height: 410px;
+    padding: ${theme.spacing[24]};
+    gap: ${theme.spacing[8]};
+    margin-left: auto; /* 👈 미디어쿼리 안에서도 중앙 정렬 유지 */
+    margin-right: auto;
+  }
+  @media (max-width: ${theme.layout.breakpoint.smallMobile}) {
+    flex-direction: column;
+    height: auto;
+    align-items: center;
+    text-align: center;
+    gap: ${theme.spacing[16]};
+    padding: ${theme.spacing[24]};
+    > div:first-of-type {
+      margin-left: 0;
+      margin-right: 0;
+    }
 `;
 
 export const CardImageWrap = styled.div`
@@ -128,6 +193,13 @@ export const CardInfoWrap = styled.div`
       font-weight: ${theme.fontWeight.medium};
     }
   }
+    @media (max-width: ${theme.layout.breakpoint.smallMobile}) {
+    > p {
+      font-size: ${theme.fontSize.body.size};
+      align-items: center;
+    text-align: center;
+    width: 100%;
+    }
 `;
 
 export const ConditionArea = styled.div`
@@ -153,6 +225,13 @@ export const ConditionArea = styled.div`
     color: ${theme.colors.textPrimary};
     margin: 0;
   }
+  @media (max-width: ${theme.layout.breakpoint.smallMobile}) {
+    > p {
+      font-size: ${theme.fontSize.body.size};
+    }
+    padding: 0;
+    gap: 0;
+  }
 `;
 
 export const SubCond = styled.span`
@@ -162,6 +241,10 @@ export const SubCond = styled.span`
   color: ${theme.colors.textPrimary};
   margin-top: ${theme.spacing[8]};
   margin-bottom: ${theme.spacing[32]};
+
+  @media (max-width: ${theme.layout.breakpoint.smallMobile}) {
+    font-size: ${theme.fontSize.body.size};
+  }
 `;
 
 export const SpecialHeader = styled.div`
@@ -183,6 +266,16 @@ export const SpecialHeader = styled.div`
     color: ${theme.colors.error};
     margin: 0;
   }
+
+  @media (max-width: ${theme.layout.breakpoint.tablet}) {
+    max-width: 816px;
+    magin-top: ${theme.spacing[200]};
+  @media (max-width: ${theme.layout.breakpoint.mobile}) {
+    max-width: 726px;
+    magin-top: ${theme.spacing[200]};}
+  @media (max-width: ${theme.layout.breakpoint.smallMobile}) {
+    max-width: 343px;
+  }
 `;
 
 export const SpecialSection = styled.section`
@@ -191,18 +284,34 @@ export const SpecialSection = styled.section`
   display: flex;
   flex-direction: column;
   gap: ${theme.spacing[12]};
+
+  @media (max-width: ${theme.layout.breakpoint.tablet}) {
+    max-width: 100%;
+    width: 100%;
+    align-items: center;
+    padding: 0 ${theme.spacing[16]};
+  }
+  @media (max-width: ${theme.layout.breakpoint.mobile}) {
+    max-width: 100%;
+    width: 100%;
+    align-items: center;
+    padding: 0;
+  }
+  @media (max-width: ${theme.layout.breakpoint.smallMobile}) {
+    max-width: 100%;
+    width: 100%;
+    align-items: center; /* 👈 태블릿에서도 중앙 정렬 유지 */
+    padding: 0;
+  }
 `;
 
 export const SpecialCard = styled.div`
   background-color: ${theme.colors.white};
   border-radius: ${theme.radius.box};
-  /* 상하좌우 여백 */
   padding: ${theme.spacing[24]} ${theme.spacing[40]};
   display: flex;
   flex-direction: row;
   align-items: center;
-
-  /* 아이콘과 텍스트 사이 간격 */
   gap: ${theme.spacing[100]};
   box-sizing: border-box;
   width: 100%;
@@ -211,27 +320,46 @@ export const SpecialCard = styled.div`
   margin-bottom: ${theme.spacing[40]};
 
   p {
-    white-space: pre-line; /* \n 문자를 실제 줄바꿈으로 인식 */
+    white-space: pre-line;
     font-size: ${theme.fontSize.body.size};
     line-height: ${theme.fontSize.body.lineheight};
-    color: ${theme.colors.textSecondary};
+    color: ${theme.colors.textPrimary};
     margin: 0;
   }
-`;
 
-export const SpecialImageWrap = styled.div`
-  width: 100px; /* 아이콘 영역 크기를 시안 비율에 맞게 확보 */
-  height: 100px;
-  flex-shrink: 0;
-  display: flex;
-  margin-left: ${theme.spacing[100]};
-  margin-right: ${theme.spacing[100]};
-  align-items: center;
-  justify-content: center;
-  img {
-    width: 100%;
-    height: 100%;
-    object-fit: contain;
+  @media (max-width: ${theme.layout.breakpoint.tablet}) {
+    max-width: 816px;
+    height: 200px;
+    gap: ${theme.spacing[100]};
+    padding: ${theme.spacing[24]} ${theme.spacing[40]};
+    margin-bottom: ${theme.spacing[40]};
+    margin-left: auto;
+    margin-right: auto;
+  }
+  @media (max-width: ${theme.layout.breakpoint.mobile}) {
+    max-width: 826px;
+    height: 200px;
+    gap: ${theme.spacing[64]};
+    padding: ${theme.spacing[24]} ${theme.spacing[40]};
+    margin-bottom: ${theme.spacing[40]};
+    margin-left: auto;
+    margin-right: auto;
+  } /* 👈 여기에 닫는 중괄호 추가 완료 */
+
+  @media (max-width: ${theme.layout.breakpoint.smallMobile}) {
+    flex-direction: column;
+    height: auto;
+    align-items: center;
+    text-align: center; /* 👈 카드 전체 텍스트 중앙 정렬 */
+    gap: ${theme.spacing[16]};
+    padding: ${theme.spacing[24]};
+    margin-left: auto;
+    margin-right: auto;
+
+    > div:first-of-type {
+      margin-left: 0;
+      margin-right: 0;
+    }
   }
 `;
 
@@ -249,5 +377,29 @@ export const SpecialTextWrap = styled.div`
     margin: 0;
     text-align: left;
     word-break: keep-all;
+  }
+
+  @media (max-width: ${theme.layout.breakpoint.smallMobile}) {
+    align-items: center; /* 👈 375px에서 내부 텍스트 영역도 가운데 정렬 */
+
+    p {
+      font-size: ${theme.fontSize.body.size};
+      text-align: center; /* 👈 텍스트 문구들도 정가운데로 정렬 */
+    }
+  }
+`;
+export const SpecialImageWrap = styled.div`
+  width: 100px; /* 아이콘 영역 크기를 시안 비율에 맞게 확보 */
+  height: 100px;
+  flex-shrink: 0;
+  display: flex;
+  margin-left: ${theme.spacing[100]};
+  margin-right: ${theme.spacing[100]};
+  align-items: center;
+  justify-content: center;
+  img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
   }
 `;

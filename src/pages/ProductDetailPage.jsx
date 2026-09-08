@@ -1,8 +1,9 @@
 import { useEffect, useState } from "react"
 import { Link, useParams } from "react-router-dom"
 
+import { getProductById } from "../api/productApi"
 import DetailImage from "../components/detail/DetailImage";
-import DetailLayout from "../components/detail/DetailLayout";
+import DetailContent from "../components/detail/DetailContent";
 import DetailPrice from "../components/detail/DetailPrice";
 
 export default function ProductDetailPage() {
@@ -70,15 +71,15 @@ export default function ProductDetailPage() {
   }
 
   return (
-    <>
+    <article>
       <div className="product-details">
         <DetailImage 
           imageUrl={product.thumbnailImage || product.imageUrl}
           name={product.name}
         />
-        <DetailLayout product={product} />
+        <DetailContent product={product} />
       </div>
       <DetailPrice product={product} />
-    </>
+    </article>
   )
 }

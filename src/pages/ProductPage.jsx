@@ -9,14 +9,12 @@ export default function ProductPage() {
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
 
-  // 카테고리
   const [selectedCategory, setSelectedCategory] = useState('전체상품');
-
-  // 관람 대상
   const [selectedTargets, setSelectedTargets] = useState([]);
-
-  // 이용 시간
   const [selectedTime, setSelectedTime] = useState('전체');
+
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState('');
 
   const categoryMap = {
     전체상품: undefined,
@@ -26,13 +24,13 @@ export default function ProductPage() {
   };
 
   const isTicketCategory = selectedCategory === '입장권';
+
   const handleSelectCategory = (category) => {
     setSelectedCategory(category);
     setSelectedTargets([]);
     setSelectedTime('전체');
     setCurrentPage(1);
   };
-
 
   const handleToggleTarget = (target) => {
     setSelectedTargets((prev) =>
@@ -51,22 +49,30 @@ export default function ProductPage() {
 
   useEffect(() => {
     const fetchProducts = async () => {
-      const data = await getProducts({
-        category: categoryMap[selectedCategory],
-        page: currentPage,
-        limit: 12,
+      setLoading(true);
+      setError('');
 
-        visitorType: isTicketCategory
-          ? selectedTargets[0]
-          : undefined,
+      try {
+        const data = await getProducts({
+          category: categoryMap[selectedCategory],
+          page: currentPage,
+          limit: 12,
+          visitorType: isTicketCategory
+            ? selectedTargets[0]
+            : undefined,
+          availableTimeType: isTicketCategory
+            ? selectedTime
+            : undefined,
+        });
 
-        availableTimeType: isTicketCategory
-          ? selectedTime
-          : undefined,
-      });
-
-      setProducts(data.products);
-      setTotalPages(data.pagination.totalPages);
+        setProducts(data?.products ?? []);
+        setTotalPages(data?.pagination?.totalPages ?? 1);
+      } catch (err) {
+        setProducts([]);
+        setError(err.message || '상품을 불러오지 못했습니다.');
+      } finally {
+        setLoading(false);
+      }
     };
 
     fetchProducts();
@@ -90,7 +96,19 @@ export default function ProductPage() {
       />
 
       <section aria-label="상품 목록">
-        {products.length > 0 ? (
+        <h1>
+          {selectedCategory === '전체상품'
+            ? '입장권 · 패키지'
+            : selectedCategory}
+        </h1>
+
+        {loading ? (
+          <p>불러오는 중...</p>
+        ) : error ? (
+          <p>{error}</p>
+        ) : products.length === 0 ? (
+          <p>상품이 없습니다.</p>
+        ) : (
           <div>
             {products.map((product) => (
               <ProductCard
@@ -99,8 +117,6 @@ export default function ProductPage() {
               />
             ))}
           </div>
-        ) : (
-          <p>상품이 없습니다.</p>
         )}
 
         <Pagination
