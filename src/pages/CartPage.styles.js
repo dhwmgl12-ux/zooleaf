@@ -50,6 +50,11 @@ export const SelectAllLabel = styled.label`
   color: ${theme.colors.textPrimary};
 
   cursor: pointer;
+
+  input[type="checkbox"] {
+    position: static;
+    flex-shrink: 0;
+  }
 `;
 
 export const CheckBox = styled.input`
@@ -111,21 +116,64 @@ export const CartContent = styled.section`
 
 export const EmptyCart = styled.div`
   display: flex;
+  flex-direction: column;
   justify-content: center;
   align-items: center;
-
-  min-height: 240px;
-
-  padding: ${theme.spacing[40]};
-
-  border: 1px solid ${theme.colors.border};
-  border-radius: ${theme.radius.box};
-
-  background: ${theme.colors.white};
-
+  box-sizing: border-box;
+  min-height: 560px;
+  padding: ${theme.spacing[48]} ${theme.spacing[24]};
+  text-align: center;
   color: ${theme.colors.textSecondary};
+  background: transparent;
 
-  font-size: ${theme.fontSize.body.size};
+  p {
+    max-width: 100%;
+    margin: 0;
+    word-break: keep-all;
+    overflow-wrap: anywhere;
+  }
+
+  p:first-of-type {
+    margin-top: ${theme.spacing[40]};
+    color: ${theme.colors.textPrimary};
+    font-size: ${theme.fontSize.h6.size};
+    line-height: ${theme.fontSize.h6.lineheight};
+    font-weight: ${theme.fontWeight.bold};
+  }
+
+  p + p {
+    margin-top: ${theme.spacing[12]};
+    font-size: ${theme.fontSize.bodysmall.size};
+    line-height: ${theme.fontSize.bodysmall.lineheight};
+  }
+
+  @media (max-width: ${theme.layout.breakpoint.tablet}) {
+    min-height: 480px;
+    padding: ${theme.spacing[40]} ${theme.spacing[20]};
+  }
+
+  @media (max-width: ${theme.layout.breakpoint.mobile}) {
+    min-height: 380px;
+    padding: ${theme.spacing[32]} ${theme.spacing[12]};
+
+    p:first-of-type {
+      margin-top: ${theme.spacing[24]};
+      font-size: ${theme.fontSize.body.size};
+      line-height: ${theme.fontSize.body.lineheight};
+    }
+
+    p + p {
+      max-width: 280px;
+      margin-top: ${theme.spacing[8]};
+      font-size: ${theme.fontSize.caption.size};
+      line-height: ${theme.fontSize.caption.lineheight};
+    }
+  }
+
+  @media (max-width: ${theme.layout.breakpoint.smallMobile}) {
+    min-height: 340px;
+    padding-inline: ${theme.spacing[8]};
+  }
 `;
 
 export const CategorySection = styled.section`
@@ -691,22 +739,23 @@ export const ModalDeleteButton = styled.button`
 `;
 
 export const EmptyCartImage = styled.img`
-  width: 280px;
-  max-width: 70%;
+  display: block;
+  width: 420px;
+  max-width: 100%;
   height: auto;
+  flex-shrink: 0;
 
   object-fit: contain;
 
   @media (max-width: ${theme.layout.breakpoint.tablet}) {
-    width: 240px;
+    width: 340px;
   }
 
   @media (max-width: ${theme.layout.breakpoint.mobile}) {
-    width: 180px;
-    max-width: 80%;
+    width: 260px;
   }
 
   @media (max-width: ${theme.layout.breakpoint.smallMobile}) {
-    width: 150px;
+    width: 220px;
   }
 `;
