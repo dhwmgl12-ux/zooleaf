@@ -1,4 +1,8 @@
+import { useNavigate } from 'react-router-dom';
+
 export default function ProductCard({ product }) {
+  const navigate = useNavigate();
+
   const {
     name,
     price,
@@ -6,6 +10,7 @@ export default function ProductCard({ product }) {
     discountPrice,
     thumbnailImage,
     badge = [],
+    id,
   } = product ?? {};
 
   const hasDiscount =
@@ -15,7 +20,6 @@ export default function ProductCard({ product }) {
 
   return (
     <article>
-      {/* 상품 이미지 */}
       <div>
         {thumbnailImage ? (
           <img src={thumbnailImage} alt={name} />
@@ -24,9 +28,7 @@ export default function ProductCard({ product }) {
         )}
       </div>
 
-      {/* 상품 정보 */}
       <div>
-        {/* 상품 배지 */}
         {badge.length > 0 && (
           <ul aria-label="상품 혜택">
             {badge.map((item) => (
@@ -35,10 +37,8 @@ export default function ProductCard({ product }) {
           </ul>
         )}
 
-        {/* 상품명 */}
         <h3>{name || '상품명'}</h3>
 
-        {/* 가격 */}
         {hasDiscount ? (
           <div>
             <span>{discountRate}%</span>
@@ -55,8 +55,10 @@ export default function ProductCard({ product }) {
           </strong>
         )}
 
-        {/* 상품 이동 */}
-        <button type="button">
+        <button
+          type="button"
+          onClick={() => navigate(`/products/${id}`)}
+        >
           예매
         </button>
       </div>
