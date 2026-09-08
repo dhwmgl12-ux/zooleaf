@@ -8,6 +8,8 @@ import {
   BottomLink,
   BottomLinkRow,
   Checkbox,
+  CheckIdButton,
+  CheckIdRow,
   ErrorText,
   Form,
   FormCard,
@@ -16,6 +18,7 @@ import {
   InputWrapper,
   Label,
   SubmitButton,
+  SuccessText,
   Title,
   ToggleButton,
 } from './auth.styles';
@@ -70,6 +73,7 @@ const PRIVACY_TEXT = `1. 수집하는 개인정보 항목
 export default function SignupForm() {
   const {
     id,
+    idCheckStatus,
     password,
     passwordConfirm,
     name,
@@ -80,6 +84,7 @@ export default function SignupForm() {
     agreeMarketing,
     errors,
     handleChange,
+    handleCheckId,
     handleSubmit,
   } = useSignup();
 
@@ -95,6 +100,7 @@ export default function SignupForm() {
       <Form onSubmit={handleSubmit}>
         <div>
           <Label>이메일 아이디</Label>
+          <CheckIdRow>
           <Input
             type="email"
             name="id"
@@ -102,8 +108,17 @@ export default function SignupForm() {
             value={id}
             onChange={handleChange}
             placeholder="user@example.com"
-          />
+            />
+            <CheckIdButton
+            type='button'
+            onClick={handleCheckId}
+            disabled={idCheckStatus === 'checking'}
+            >
+              중복확인
+            </CheckIdButton>
+            </CheckIdRow>
           {errors.id && <ErrorText>{errors.id}</ErrorText>}
+          {idCheckStatus === 'available' && <SuccessText>사용 가능한 아이디입니다.</SuccessText>}
         </div>
 
         <div>

@@ -60,6 +60,39 @@ export const InputWrapper = styled.div`
   width: 100%;
 `;
 
+export const CheckIdRow = styled.div`
+  display: flex;
+  gap: ${theme.spacing[8]};
+`;
+
+export const CheckIdButton = styled.button`
+  flex-shrink: 0;
+  padding: 0 ${theme.spacing[16]};
+  border: 2px solid ${theme.colors.primary};
+  border-radius: ${theme.radius.input};
+  background: ${theme.colors.white};
+  color: ${theme.fontSize.bodysmall.size};
+  font-weight: ${theme.fontWeight.medium};
+  cursor: pointer;
+  white-space: nowrap;
+
+  &:hover {
+    background: ${theme.colors.primary};
+    color: ${theme.colors.white};
+  }
+
+  &:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
+`;
+
+export const SuccessText = styled.p`
+  color: ${theme.colors.primary};
+  font-size: ${theme.fontSize.caption.size};
+  margin-top: ${theme.spacing[4]};
+`;
+
 export const ToggleButton = styled.button`
   position: absolute;
   right: ${theme.spacing[16]};
