@@ -1,3 +1,5 @@
+import { ErrorStateContainer } from "./ErrorState.styles.jsx";
+
 export default function ErrorState({
   title,
   description,
@@ -5,7 +7,7 @@ export default function ErrorState({
   buttonText = "다시 시도하기",
 }) {
   return (
-    <div className="error-state">
+    <ErrorStateContainer className="error-state">
       <h2>{title}</h2>
       {description && <p>{description}</p>}
 
@@ -14,6 +16,6 @@ export default function ErrorState({
           {buttonText}
         </button>
       )}
-    </div>
+    </ErrorStateContainer>
   );
 }
