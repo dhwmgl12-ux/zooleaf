@@ -13,10 +13,12 @@ import {
 import { useNavigate } from 'react-router-dom';
 import { login, signup, logout, getMe } from '../api/authApi';
 import useAuthStore from '../store/authStore';
+import useToastStore from '../store/toastStore';
 
 export function useLogin() {
   const navigate = useNavigate();
   const setAuth = useAuthStore((state) => state.setAuth);
+  const showToast = useToastStore((state) => state.showToast);
   const [id, setId] = useState('');
   const [password, setPassword] = useState('');
   const [errors, setErrors] = useState({ id: '', password: '', form: '' });
@@ -41,12 +43,10 @@ export function useLogin() {
 
     try {
       const result = await login({ id, password });
-
       setAuth(result.token, result.userInfo);
-
-      // TODO : 장바구니 Zustand 스토어 완성되면 여기서 localStorage -> 서버 병합 로직 호출
-
+      showToast(result.message); // 로그인에 성공했습니다.
       navigate('/');
+
     } catch (err) {
       setErrors((prev) => ({ ...prev, form: err.message }));
     }
@@ -57,6 +57,7 @@ export function useLogin() {
 
 export function useSignup() {
   const navigate = useNavigate();
+  const showToast = useToastStore((state) => state.showToast);
   const [id, setId] = useState('');
   const [password, setPassword] = useState('');
   const [passwordConfirm, setPasswordConFirm] = useState('');
@@ -131,7 +132,7 @@ export function useSignup() {
 
     try {
       const birthDateForServer = birthDate.replace(/\./g, '-');
-      await signup({
+      const result = await signup({
         id,
         password,
         passwordConfirm,
@@ -143,6 +144,7 @@ export function useSignup() {
         agreeMarketing,
       });
 
+      showToast(`${result.data.name}님 환영합니다.`);
       navigate('/login');
     } catch (err) {
       const field = mapServerErrorToField(err.message);
@@ -169,6 +171,7 @@ export function useSignup() {
 export function useLogout() {
   const navigate = useNavigate();
   const clearAuth = useAuthStore((state) => state.clearAuth);
+  const showToast = useToastStore((state) => state.showToast);
 
   const handleLogout = async () => {
     try {
@@ -178,6 +181,7 @@ export function useLogout() {
     } finally {
       sessionStorage.removeItem('token');
       clearAuth();
+      showToast('로그아웃되었습니다.');
       navigate('/login');
     }
   }
