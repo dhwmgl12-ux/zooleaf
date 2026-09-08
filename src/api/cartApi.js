@@ -1,4 +1,4 @@
-const BASE_URL = "https://api.mylecture.kr/api/14/team2";
+/*const BASE_URL = "https://api.mylecture.kr/api/14/team2";
 
 // 로그인 토큰 가져오기
 const getToken = () => {
@@ -92,4 +92,4 @@ export const deleteAllCartItems = async () => {
   const data = await response.json();
 
   return data;
-};
+};*/

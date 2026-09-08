@@ -3,7 +3,7 @@ import useCartStore from "../store/cartStore";
 import emptyCartImage from "../assets/images/cart-empty.webp";
 import { useNavigate } from "react-router-dom";
 
-import { getCart, updateCartQuantity, deleteCartItem } from "../api/cartApi";
+//import { getCart, updateCartQuantity, deleteCartItem } from "../api/cartApi";
 
 import {
   Container,
@@ -250,6 +250,7 @@ function CartPage() {
 
                       <ItemImage src={item.imageUrl} alt={item.name} />
                       <ItemInfo>
+                        <ItemName>{item.name}</ItemName>
                         {item.visitDate && (
                           <ItemText>이용일: {item.visitDate}</ItemText>
                         )}
@@ -472,7 +473,7 @@ function CartPage() {
             <div>
               {benefitRate > 0 && (
                 <DiscountInfo>
-                  -{Math.round(benefitRate * 100)}& (
+                  -{Math.round(benefitRate * 100)}% (
                   {benefitDiscount.toLocaleString()}원 할인 )
                 </DiscountInfo>
               )}
@@ -510,6 +511,32 @@ function CartPage() {
           </PurchaseButton>
         </OrderSummary>
       </CartLayout>
+
+      {deleteModal.open && (
+        <ModalOverlay>
+          <ModalBox>
+            <ModalTitle>
+              {deleteModal.mode === "selected" ? "선택 상품 삭제" : "상품 삭제"}
+            </ModalTitle>
+
+            <ModalText>
+              {deleteModal.mode === "selected"
+                ? "선택한 상품을 정말로 삭제하시겠습니까?"
+                : "정말로 삭제하시겠습니까?"}
+            </ModalText>
+
+            <ModalButtonArea>
+              <ModalCancelButton type="button" onClick={handleCloseDeleteModal}>
+                취소
+              </ModalCancelButton>
+
+              <ModalDeleteButton type="button" onClick={handleConfirmDelete}>
+                삭제
+              </ModalDeleteButton>
+            </ModalButtonArea>
+          </ModalBox>
+        </ModalOverlay>
+      )}
     </Container>
   );
 }
