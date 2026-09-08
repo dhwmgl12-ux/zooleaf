@@ -1,16 +1,16 @@
 const BASE_URL = import.meta.env.VITE_API_BASE_URL;
 
-const PUBLIC_ENDPOINTS = ['/auth/login', '/auth/signup', '/auth/check-id'];
+const PUBLIC_ENDPOINTS = ["/auth/login", "/auth/signup", "/auth/check-id"];
 
 export async function apiClient(endpoint, options = {}) {
   const isPublic = PUBLIC_ENDPOINTS.includes(endpoint);
-  const token = !isPublic ? sessionStorage.getItem('token') : null;
+  const token = !isPublic ? sessionStorage.getItem("token") : null;
 
   const response = await fetch(`${BASE_URL}${endpoint}`, {
     ...options,
     headers: {
-      'Content-Type': 'application/json',
-      ...(token && { Authorization: `Bearer ${token}`}),
+      "Content-Type": "application/json",
+      ...(token && { Authorization: `Bearer ${token}` }),
       ...options.headers,
     },
   });
@@ -20,5 +20,6 @@ export async function apiClient(endpoint, options = {}) {
   if (!data.success) {
     throw new Error(data.message || "요청에 실패했습니다.");
   }
-   return data;
+  return data;
+  console.log(import.meta.env.VITE_API_BASE_URL);
 }
