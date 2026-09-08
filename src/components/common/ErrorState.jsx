@@ -1,4 +1,4 @@
-import { ErrorStateContainer } from "./ErrorState.styles.jsx";
+import { ErrorStateContainer } from "./ErrorState.styles.js";
 
 export default function ErrorState({
   title,
