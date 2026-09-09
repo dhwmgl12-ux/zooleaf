@@ -1,5 +1,4 @@
-import { BrowserRouter, Routes, Route /*Navigate*/ } from 'react-router-dom'; // 배포 전 주석 해제
-import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom'; // 배포 전 주석 해제
+import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 import Layout from '../components/layout/Layout';
 import useAuthStore from '../store/authStore';
 import ProductPage from '../pages/ProductPage';
@@ -19,18 +18,18 @@ import Animal from '../pages/AnimalStory';
 import MyPage from '../pages/MyPage';
 
 const ProtectedRoute = ({ children }) => {
- const isLoggedIn = useAuthStore((state) => state.isLoggedIn);
- const isAuthReady = useAuthStore((state) => state.isAuthReady)
+  const isLoggedIn = useAuthStore((state) => state.isLoggedIn);
+  const isAuthReady = useAuthStore((state) => state.isAuthReady);
 
- if (!isAuthReady) {
-  return null;
- }
+  if (!isAuthReady) {
+    return null;
+  }
 
   if (!isLoggedIn) {
     return <Navigate to="/login" replace />;
   }
   return children;
-}; 
+};
 
 export default function AppRouter() {
   return (
@@ -41,20 +40,22 @@ export default function AppRouter() {
           <Route path="/products" element={<ProductPage />} />
           <Route path="/login" element={<LoginPage />} />
           <Route path="/signup" element={<SignupPage />} />
-          <Route path="/mypage" element={
-            <ProtectedRoute>
-            <MyPage />
-            </ProtectedRoute>
-            } />
+          <Route
+            path="/mypage"
+            element={
+              <ProtectedRoute>
+                <MyPage />
+              </ProtectedRoute>
+            }
+          />
           <Route path="/authTest" element={<AuthTest />} />
           <Route path="/cart" element={<CartPage />} />
           <Route path="/products/:productId" element={<ProductDetailPage />} />
+          <Route path="/experiences" element={<ExperiencePage />} />
           <Route
             path="/experience/:experienceId"
             element={<ExperienceDetailPage />}
           />
-          <Route path="/experiences" element={<ExperiencePage />} />
-          <Route path="/experience/:experienceId" element={<ExperienceDetailPage />} />
           <Route path="/goods" element={<GoodsPage />} />
           <Route path="/goods/:goodsId" element={<GoodsDetailPage />} />
           <Route path="/discount" element={<Discount />} />
