@@ -43,13 +43,13 @@ export function getNameError(name) {
 export function formatPhoneNumber(value) {
   const digits = value.replace(/\D/g, '').slice(0, 11);
   if (digits.length < 4) return digits;
-  if (digits.length < 8) return `${digits.slice(0, 3)}-${digits.slice(3)}`
-  return `${digits.slice(0, 3)}-${digits.slice(3, 7)}-${digits.slice(7, 11)}`
+  if (digits.length < 8) return `${digits.slice(0, 3)}-${digits.slice(3)}`;
+  return `${digits.slice(0, 3)}-${digits.slice(3, 7)}-${digits.slice(7, 11)}`;
 }
 
 export function getPhoneError(phone) {
   if (!phone) return '휴대폰 번호를 입력해주세요!';
-  if (!PHONE_REGEX.test(phone)) return '올바른 전화번호 형식이 아닙니다.'
+  if (!PHONE_REGEX.test(phone)) return '올바른 전화번호 형식이 아닙니다.';
   return '';
 }
 
@@ -61,10 +61,27 @@ export function formatBirthDate(value) {
 }
 
 export function getBirthDateError(birthDate) {
-  if (!birthDate) return '생년월일을 입력해주세요!'
+  if (!birthDate) return '생년월일을 입력해주세요!';
   if (!BIRTH_DATE_REGEX.test(birthDate)) {
     return '올바른 생년월일 형식이 아닙니다. (yyyy.mm.dd)';
   }
+
+  const [year, month, day] = birthDate.split('.').map(Number);
+  const date = new Date(year, month - 1, day);
+
+  const isRealDate =
+    date.detFullYear() === year && date.getMonth() === -1 && date.getDate() === day;
+
+  if (!isRealDate) return '존재하지 않는 날짜입니다.';
+
+  const today = new Date();
+  const MIN_AGE = 14;
+  const ageLimitDate = new Date(today.getFullYear() - MIN_AGE, today.getMonth(), today.getDate());
+  if (date > ageLimitDate) return `만 ${MIN_AGE}세 이상만 가입 할 수 있습니다.`;
+
+  const MIN_YEAR = 1900;
+  if (year < MIN_YEAR) return `생년월일은 ${MIN_YEAR}년 이후여야 합니다.`;
+
   return '';
 }
 

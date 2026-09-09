@@ -176,7 +176,7 @@ export const SubmitButton = styled.button`
   font-size: ${theme.fontSize.bodylarge};
   font-weight: ${theme.fontWeight.bold};
   cursor: pointer;
-  transition: background 0.2s;
+  transition: background 0.3s;
 
   &:hover {
     background: ${theme.colors.hover};
