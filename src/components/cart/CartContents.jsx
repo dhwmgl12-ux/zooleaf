@@ -4,6 +4,7 @@ import emptyCartImage from "../../assets/images/cart-empty.webp";
 import CartItemRow from "./CartItemRow";
 import CartOrderSummary from "./CartOrderSummary";
 import CartDeleteModal from "./CartDeleteModal";
+
 import {
   CartTopBar,
   SelectAllLabel,
@@ -34,6 +35,7 @@ export default function CartContents() {
 
   return (
     <>
+      {/* 장바구니 조회/수정 중 발생한 에러 표시*/}
       {cart.error && (
         <div role="alert">
           {cart.error}
@@ -46,6 +48,8 @@ export default function CartContents() {
           </button>
         </div>
       )}
+
+      {/* 전체 선택 및 선택 삭제 영역 */}
       <CartTopBar>
         <SelectAllLabel>
           <CheckBox
@@ -63,8 +67,10 @@ export default function CartContents() {
           선택 삭제
         </SelectDeleteButton>
       </CartTopBar>
+
       <CartLayout>
         <CartContent>
+          {/* 장바구니가 비어 있을 때 */}
           {cart.cartItems.length === 0 ? (
             <EmptyCart>
               <EmptyCartImage src={emptyCartImage} alt="빈 장바구니" />
@@ -72,6 +78,7 @@ export default function CartContents() {
               <p>다양한 상품들과 굿즈를 둘러보고 쇼핑의 즐거움을 만나보세요</p>
             </EmptyCart>
           ) : (
+            // 상품을 카테고리별로 나누어 출력
             categories.map(({ type, title }) => {
               const items = cart.cartItems.filter((item) => item.type === type);
               if (items.length === 0) return null;
@@ -79,6 +86,8 @@ export default function CartContents() {
               return (
                 <CategorySection key={type}>
                   <CategoryTitle>{title}</CategoryTitle>
+
+                  {/* 해당 카테고리의 상품 목록 */}
                   {items.map((item) => (
                     <CartItemRow
                       key={cart.getItemKey(item)}
@@ -95,6 +104,7 @@ export default function CartContents() {
               );
             })
           )}
+          {/* 굿즈 페이지로 이동 */}
           <ContinueShoppingButton
             type="button"
             onClick={() => navigate("/goods")}
@@ -102,8 +112,11 @@ export default function CartContents() {
             쇼핑 계속하기
           </ContinueShoppingButton>
         </CartContent>
+        {/* 결제 금액 요약 영역 */}
         <CartOrderSummary cartItems={cart.cartItems} />
       </CartLayout>
+
+      {/* 상품 삭제 확인 모달 */}
       {cart.deleteModal && (
         <CartDeleteModal
           disabled={cart.isUpdating}
