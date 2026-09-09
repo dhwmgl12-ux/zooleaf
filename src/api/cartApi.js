@@ -47,4 +47,8 @@ export const deleteCartItem = (id) =>
   request(`/cart/${encodeURIComponent(id)}`, "DELETE");
 
 // 선택한 장바구니 상품들 삭제
+export const deleteSelectedCartItems = (cartItemIds) =>
+  request("/cart", "DELETE", { cartItemIds });
+
+// 장바구니 전체 상품 삭제
 export const deleteAllCartItems = () => request("/cart", "DELETE");
