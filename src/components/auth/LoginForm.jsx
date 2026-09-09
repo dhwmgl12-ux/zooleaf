@@ -11,14 +11,14 @@ import {
   SubmitButton,
   Title,
   ToggleButton,
-} from './auth.styles';
-import { useLogin } from '../../hooks/useAuth';
-import { Link } from 'react-router-dom';
-import { useState } from 'react';
+} from "./auth.styles";
+import { useLogin } from "../../hooks/useAuth";
+import { Link } from "react-router-dom";
+import { useState } from "react";
 
 export default function LoginForm() {
-  const { id, password, errors, handleChange, handleSubmit } = useLogin();
-  const [showPassword, setShowPassword] = useState(false)
+  const { id, password, errors, isSubmitting, handleChange, handleSubmit } = useLogin();
+  const [showPassword, setShowPassword] = useState(false);
 
   return (
     <FormCard>
@@ -29,6 +29,7 @@ export default function LoginForm() {
           <Input
             type="email"
             name="id"
+            autoComplete="username"
             value={id}
             onChange={handleChange}
             placeholder="user@example.com"
@@ -39,8 +40,9 @@ export default function LoginForm() {
           <Label>비밀번호</Label>
           <InputWrapper>
             <Input
-              type={showPassword ? 'text' : 'password'}
+              type={showPassword ? "text" : "password"}
               name="password"
+              autoComplete="current-password"
               value={password}
               onChange={handleChange}
               placeholder="비밀번호를 입력해주세요!"
@@ -48,7 +50,7 @@ export default function LoginForm() {
             <ToggleButton
               type="button"
               onClick={() => setShowPassword((prev) => !prev)}
-              aria-label={showPassword ? '비밀번호 숨기기' : '비밀번호 보이기'}
+              aria-label={showPassword ? "비밀번호 숨기기" : "비밀번호 보이기"}
             >
               {showPassword ? (
                 <svg
@@ -115,8 +117,8 @@ export default function LoginForm() {
           </InputWrapper>
           {errors.password && <ErrorText>{errors.password}</ErrorText>}
         </div>
-              {errors.form && <FormErrorText>{errors.form}</FormErrorText>}
-        <SubmitButton type="submit">로그인</SubmitButton>
+        {errors.form && <FormErrorText>{errors.form}</FormErrorText>}
+        <SubmitButton type="submit" disabled={isSubmitting}>{isSubmitting ? '로그인 중' : '로그인'}</SubmitButton>
       </Form>
 
       <LinkRow>

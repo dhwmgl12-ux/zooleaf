@@ -55,6 +55,3 @@ export function getMe() {
     method: 'GET',
   })
 }
-
-// 로그아웃
-

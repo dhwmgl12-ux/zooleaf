@@ -60,6 +60,39 @@ export const InputWrapper = styled.div`
   width: 100%;
 `;
 
+export const CheckIdRow = styled.div`
+  display: flex;
+  gap: ${theme.spacing[8]};
+`;
+
+export const CheckIdButton = styled.button`
+  flex-shrink: 0;
+  padding: 0 ${theme.spacing[16]};
+  border: 2px solid ${theme.colors.primary};
+  border-radius: ${theme.radius.input};
+  background: ${theme.colors.white};
+  color: ${theme.fontSize.bodysmall.size};
+  font-weight: ${theme.fontWeight.medium};
+  cursor: pointer;
+  white-space: nowrap;
+
+  &:hover {
+    background: ${theme.colors.primary};
+    color: ${theme.colors.white};
+  }
+
+  &:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
+`;
+
+export const SuccessText = styled.p`
+  color: ${theme.colors.primary};
+  font-size: ${theme.fontSize.caption.size};
+  margin-top: ${theme.spacing[4]};
+`;
+
 export const ToggleButton = styled.button`
   position: absolute;
   right: ${theme.spacing[16]};
@@ -82,6 +115,14 @@ export const ErrorText = styled.p`
   color: ${theme.colors.error};
   font-size: ${theme.fontSize.caption.size};
   margin-top: ${theme.spacing[4]};
+`;
+
+export const Checkbox = styled.input`
+  width: 20px;
+  height: 20px;
+  accent-color: ${theme.colors.primary};
+  cursor: pointer;
+  flex-shrink: 0;
 `;
 
 export const AgreeGroup = styled.div`
@@ -113,7 +154,7 @@ export const InlineErrorText = styled.span`
   font-size: ${theme.fontSize.bodysmall.size};
 `;
 
-export const ArrowIcon = styled.span`
+export const ArrowIcon = styled.button`
   color: ${theme.colors.textSecondary};
   font-size: ${theme.fontSize.body.size};
 `
@@ -132,13 +173,18 @@ export const SubmitButton = styled.button`
   color: ${theme.colors.white};
   border: none;
   border-radius: ${theme.radius.button};
-  font-size: ${theme.fontSize.bodylarge};
+  font-size: ${theme.fontSize.bodylarge.size};
   font-weight: ${theme.fontWeight.bold};
   cursor: pointer;
-  transition: background 0.2s;
+  transition: background 0.3s;
 
   &:hover {
     background: ${theme.colors.hover};
+  }
+
+  &:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
   }
 `;
 

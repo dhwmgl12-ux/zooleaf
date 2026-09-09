@@ -1,4 +1,11 @@
+import { useState } from "react";
 import { DetailContentContainer } from "./DetailContent.styles.js";
+import { DetailTabs } from "./DetailContent.styles.js";
+import { DetailTabLink } from "./DetailContent.styles.js";
+import { DetailDescription } from "./DetailContent.styles.js";
+import { DetailInfoSection } from "./DetailContent.styles.js";
+import { DetailImageViewport } from "./DetailContent.styles.js";
+import { DetailToggleButton } from "./DetailContent.styles.js";
 
 export default function DetailContent({product}) {
   const {
@@ -6,23 +13,47 @@ export default function DetailContent({product}) {
     detailImage,
   } = product;
 
+  const [isExpanded, setIsExpanded] = useState(false);
+
+  const handleToggleDetail = () => {
+    setIsExpanded((prev) => !prev);
+  };
+
+
   return (
-    <DetailContentContainer className="detail-content">
-      <ul className="detail-utils">
-        <li><a href="#detail-description">상세 설명</a></li>
-        <li><a href="#detail-guide">이용 안내</a></li>
-        <li><a href="#detail-refund">취소/환불</a></li>
-      </ul>
+    <DetailContentContainer>
+      <DetailTabs>
+        <li><DetailTabLink href="#detail-description">상세 설명</DetailTabLink></li>
+        <li><DetailTabLink href="#detail-guide">이용 안내</DetailTabLink></li>
+        <li><DetailTabLink href="#detail-refund">취소/환불</DetailTabLink></li>
+      </DetailTabs>
 
-      <section id="detail-description" className="detail-description">
-        {detailImage ? (
-          <img src={detailImage} alt={`&{name} 상세 설명`} />
-        ) : (
-          <p>등록된 상세 이미지가 없습니다.</p>
+      <DetailDescription id="detail-description">
+        <DetailImageViewport id="detail-image-content" $isExpanded={isExpanded}>
+          {detailImage ? (
+            <img src={detailImage} alt={`${name} 상세 설명`} />
+          ) : (
+            <p>등록된 상세 이미지가 없습니다.</p>
+          )}
+        </DetailImageViewport>
+        
+        {detailImage && (
+          <DetailToggleButton
+            type="button"
+            onClick={handleToggleDetail}
+            aria-expanded={isExpanded}
+            aria-controls="detail-image-content"
+            $isExpanded={isExpanded}
+          >
+            {isExpanded ? "상세 정보 접기" : "상세 정보 더보기"}
+            <svg width="13" height="6" viewBox="0 0 13 6" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M0.5 0.5L6.83345 5.5L12.5 0.5" stroke="#687C73" strokeLinecap="round" strokeLinejoin="round"/>
+            </svg>
+          </DetailToggleButton>
         )}
-      </section>
+      </DetailDescription>
 
-      <section id="detail-guide" className="detail-guide">
+      <DetailInfoSection id="detail-guide">
         <h2>이용 안내</h2>
         <ul>
           <li>상품 구매 전 옵션 및 상품 정보를 반드시 확인해 주세요.</li>
@@ -30,9 +61,9 @@ export default function DetailContent({product}) {
           <li>상품 준비 및 배송 상황에 따라 배송 일정이 변경될 수 있습니다.</li>
           <li>상품 관련 문의는 고객센터를 이용해 주세요.</li>
         </ul>
-      </section>
+      </DetailInfoSection>
 
-      <section id="detail-refund" className="detail-refund">
+      <DetailInfoSection id="detail-refund">
         <h2>취소 / 환불 안내</h2>
         <ul>
           <li>상품 준비 전에는 주문 취소가 가능합니다.</li>
@@ -41,7 +72,7 @@ export default function DetailContent({product}) {
           <li>사용 또는 훼손된 상품은 교환 및 환불이 어려울 수 있습니다.</li>
           <li>상품 불량 및 오배송의 경우 배송비는 ZOOLEAF에서 부담합니다.</li>
         </ul>
-      </section>
+      </DetailInfoSection>
       
     </DetailContentContainer>
   )
