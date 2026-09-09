@@ -21,8 +21,10 @@ import {
   LogoutButton,
   NavLink,
   NavList,
+  Tooltip,
   UtilsList,
 } from './Header.styles.js';
+import useToastStore from '../../store/toastStore.js';
 
 export default function Header() {
   const { pathname } = useLocation();
@@ -31,6 +33,8 @@ export default function Header() {
   const isLoggedIn = useAuthStore((state) => state.isLoggedIn);
   const user = useAuthStore((state) => state.user);
   const { handleLogout } = useLogout();
+  const showToast = useToastStore((state) => state.showToast);
+
 
   useEffect(() => {
     if (pathname !== '/') {
@@ -132,7 +136,11 @@ export default function Header() {
           </li>
           {isLoggedIn ? (
             <AccountMenuTrigger tabIndex={0}>
-              <IconLink to="/mypage" aria-label="마이페이지">
+              <IconLink 
+                to="/mypage" 
+                aria-label="마이페이지"
+                onClick={(e) => e.currentTarget.blur()}
+                >
                 <svg
                   width="32"
                   height="32"
@@ -180,7 +188,14 @@ export default function Header() {
             </AccountMenuTrigger>
           ) : (
             <li>
-              <IconLink to="/login" aria-label="로그인">
+              <IconLink 
+                to="/login" 
+                aria-label="로그인"
+                onClick={(e) => {
+                  e.currentTarget.blur();
+                  showToast('로그인이 필요합니다.');
+                }}
+                >
                 <svg
                   width="32"
                   height="32"
@@ -206,6 +221,7 @@ export default function Header() {
                     strokeLinecap="round"
                   />
                 </svg>
+                <Tooltip data-tooltip>로그인 해주세요.</Tooltip>
               </IconLink>
             </li>
           )}

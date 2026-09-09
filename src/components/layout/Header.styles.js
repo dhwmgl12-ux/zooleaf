@@ -66,6 +66,7 @@ export const UtilsList = styled.ul`
 `;
 
 export const IconLink = styled(Link)`
+  position: relative;
   display: flex;
   color: inherit;
 
@@ -78,6 +79,32 @@ export const IconLink = styled(Link)`
   &:focus-visible svg {
     color: ${theme.colors.primary};
   }
+
+  &:hover [data-tooltip],
+  &:focus-within [data-tooltip] {
+    opacity: 1;
+    visibility: visible;
+    transform: translate(-50%, 0);
+  }
+`;
+
+export const Tooltip = styled.span`
+  position: absolute;
+  top: calc(100% + ${theme.spacing[12]});
+  left: 50%;
+  transform: translate(-50%, -4px);
+  white-space: nowrap;
+
+  padding: ${theme.spacing[8]} ${theme.spacing[12]};
+  border-radius: ${theme.radius.input};
+  background: ${theme.colors.textPrimary};
+  color: ${theme.colors.white};
+  font-size: ${theme.fontSize.caption.size};
+
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+  transition: opacity 0.15s ease, transform 0.15s ease, visibility 0.15s ease;
 `;
 
 export const IconButton = styled.button`
