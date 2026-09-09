@@ -21,5 +21,4 @@ export async function apiClient(endpoint, options = {}) {
     throw new Error(data.message || "요청에 실패했습니다.");
   }
   return data;
-  console.log(import.meta.env.VITE_API_BASE_URL);
 }
