@@ -38,23 +38,11 @@ export default function Discount() {
             </CardImageWrap>
             <CardInfoWrap>
               <h2>{item.title}</h2>
-              <p>
-                <strong>혜택명:</strong> {item.benefitName}
-              </p>
-              <p>
-                <strong>할인:</strong> {item.discountRate}
-              </p>
-              <p>
-                <strong>대상:</strong> {item.target}
-              </p>
-              <p>
-                <strong>적용 상품:</strong> {item.applicableItems}
-              </p>
-              {item.useDay && (
-                <p>
-                  <strong>이용일:</strong> {item.useDay}
-                </p>
-              )}
+              <p>혜택명: {item.benefitName}</p>
+              <p>할인: {item.discountRate}</p>
+              <p>대상: {item.target}</p>
+              <p>적용 상품: {item.applicableItems}</p>
+              {item.useDay && <p>이용일: {item.useDay}</p>}
 
               <ConditionArea>
                 <strong>이용 조건</strong>

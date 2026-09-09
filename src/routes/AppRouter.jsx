@@ -1,4 +1,4 @@
-import { BrowserRouter, Routes, Route, /*Navigate*/ } from 'react-router-dom'; // 배포 전 주석 해제
+import { BrowserRouter, Routes, Route /*Navigate*/ } from 'react-router-dom'; // 배포 전 주석 해제
 import Layout from '../components/layout/Layout';
 // import useAuthStore from '../store/authStore'; //배포 전 주석 해제
 import ProductPage from '../pages/ProductPage';
@@ -12,6 +12,7 @@ import ExperienceDetailPage from '../pages/ExperienceDetailPage';
 import GoodsDetailPage from '../pages/GoodsDetailPage';
 import { IntroPage } from '../pages/Intro';
 import AuthTest from '../components/auth/AuthTest';
+import Animal from '../pages/AnimalStory';
 
 // const ProtectedRoute = ({ children }) => {
 //   const isLoggedIn = useAuthStore((state) => state.isLoggedIn);
@@ -34,10 +35,14 @@ export default function AppRouter() {
           <Route path="/authTest" element={<AuthTest />} />
           <Route path="/cart" element={<CartPage />} />
           <Route path="/products/:productId" element={<ProductDetailPage />} />
-          <Route path="/experience/:experienceId" element={<ExperienceDetailPage />} />
+          <Route
+            path="/experience/:experienceId"
+            element={<ExperienceDetailPage />}
+          />
           <Route path="/goods/:goodsId" element={<GoodsDetailPage />} />
           <Route path="/discount" element={<Discount />} />
           <Route path="/About" element={<IntroPage />} />
+          <Route path="/animals" element={<Animal />} />
         </Route>
       </Routes>
     </BrowserRouter>
