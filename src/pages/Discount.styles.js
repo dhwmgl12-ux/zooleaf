@@ -344,7 +344,7 @@ export const SpecialCard = styled.div`
     margin-bottom: ${theme.spacing[40]};
     margin-left: auto;
     margin-right: auto;
-  } /* 👈 여기에 닫는 중괄호 추가 완료 */
+  }
 
   @media (max-width: ${theme.layout.breakpoint.smallMobile}) {
     flex-direction: column;

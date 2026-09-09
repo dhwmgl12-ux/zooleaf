@@ -1,3 +1,4 @@
+import { BrowserRouter, Routes, Route /*Navigate*/ } from 'react-router-dom'; // 배포 전 주석 해제
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom'; // 배포 전 주석 해제
 import Layout from '../components/layout/Layout';
 import useAuthStore from '../store/authStore';
@@ -14,6 +15,7 @@ import GoodsPage from '../pages/GoodsPage';
 import ExperiencePage from '../pages/ExperiencePage';
 import { IntroPage } from '../pages/Intro';
 import AuthTest from '../components/auth/AuthTest';
+import Animal from '../pages/AnimalStory';
 import MyPage from '../pages/MyPage';
 
 const ProtectedRoute = ({ children }) => {
@@ -47,12 +49,17 @@ export default function AppRouter() {
           <Route path="/authTest" element={<AuthTest />} />
           <Route path="/cart" element={<CartPage />} />
           <Route path="/products/:productId" element={<ProductDetailPage />} />
+          <Route
+            path="/experience/:experienceId"
+            element={<ExperienceDetailPage />}
+          />
           <Route path="/experiences" element={<ExperiencePage />} />
           <Route path="/experience/:experienceId" element={<ExperienceDetailPage />} />
           <Route path="/goods" element={<GoodsPage />} />
           <Route path="/goods/:goodsId" element={<GoodsDetailPage />} />
           <Route path="/discount" element={<Discount />} />
           <Route path="/About" element={<IntroPage />} />
+          <Route path="/animals" element={<Animal />} />
         </Route>
       </Routes>
     </BrowserRouter>
