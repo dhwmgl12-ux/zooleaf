@@ -154,7 +154,7 @@ export const InlineErrorText = styled.span`
   font-size: ${theme.fontSize.bodysmall.size};
 `;
 
-export const ArrowIcon = styled.span`
+export const ArrowIcon = styled.button`
   color: ${theme.colors.textSecondary};
   font-size: ${theme.fontSize.body.size};
 `
@@ -173,13 +173,18 @@ export const SubmitButton = styled.button`
   color: ${theme.colors.white};
   border: none;
   border-radius: ${theme.radius.button};
-  font-size: ${theme.fontSize.bodylarge};
+  font-size: ${theme.fontSize.bodylarge.size};
   font-weight: ${theme.fontWeight.bold};
   cursor: pointer;
   transition: background 0.3s;
 
   &:hover {
     background: ${theme.colors.hover};
+  }
+
+  &:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
   }
 `;
 

@@ -17,7 +17,7 @@ import { Link } from "react-router-dom";
 import { useState } from "react";
 
 export default function LoginForm() {
-  const { id, password, errors, handleChange, handleSubmit } = useLogin();
+  const { id, password, errors, isSubmitting, handleChange, handleSubmit } = useLogin();
   const [showPassword, setShowPassword] = useState(false);
 
   return (
@@ -118,7 +118,7 @@ export default function LoginForm() {
           {errors.password && <ErrorText>{errors.password}</ErrorText>}
         </div>
         {errors.form && <FormErrorText>{errors.form}</FormErrorText>}
-        <SubmitButton type="submit">로그인</SubmitButton>
+        <SubmitButton type="submit" disabled={isSubmitting}>{isSubmitting ? '로그인 중' : '로그인'}</SubmitButton>
       </Form>
 
       <LinkRow>

@@ -74,6 +74,7 @@ export default function SignupForm() {
   const {
     id,
     idCheckStatus,
+    idCheckMessage,
     password,
     passwordConfirm,
     name,
@@ -82,16 +83,16 @@ export default function SignupForm() {
     agreeTerms,
     agreePrivacy,
     agreeMarketing,
+    isSubmitting,
     errors,
     handleChange,
     handleCheckId,
     handleSubmit,
   } = useSignup();
 
-  const [openModal, setOpenModal] = useState(null)
+  const [openModal, setOpenModal] = useState(null);
   const [showPassword, setShowPassword] = useState(false);
   const [showPasswordConfirm, setShowPasswordConfirm] = useState(false);
-
 
   return (
     <FormCard variant="signup">
@@ -101,24 +102,24 @@ export default function SignupForm() {
         <div>
           <Label>이메일 아이디</Label>
           <CheckIdRow>
-          <Input
-            type="email"
-            name="id"
-            autoComplete="username"
-            value={id}
-            onChange={handleChange}
-            placeholder="user@example.com"
+            <Input
+              type="email"
+              name="id"
+              autoComplete="username"
+              value={id}
+              onChange={handleChange}
+              placeholder="user@example.com"
             />
             <CheckIdButton
-            type='button'
-            onClick={handleCheckId}
-            disabled={idCheckStatus === 'checking'}
+              type="button"
+              onClick={handleCheckId}
+              disabled={idCheckStatus === 'checking'}
             >
               중복확인
             </CheckIdButton>
-            </CheckIdRow>
+          </CheckIdRow>
           {errors.id && <ErrorText>{errors.id}</ErrorText>}
-          {idCheckStatus === 'available' && <SuccessText>사용 가능한 아이디입니다.</SuccessText>}
+          {idCheckStatus === 'available' && <SuccessText>{idCheckMessage}</SuccessText>}
         </div>
 
         <div>
@@ -335,7 +336,11 @@ export default function SignupForm() {
               <span>[필수] 이용약관 동의</span>
               {errors.agreeTerms && <InlineErrorText>{errors.agreeTerms}</InlineErrorText>}
             </AgreeLeftGroup>
-            <ArrowIcon onClick={() => setOpenModal('terms')}>
+            <ArrowIcon
+              type="button"
+              onClick={() => setOpenModal('terms')}
+              aria-label="약관 전체보기"
+            >
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 width="8"
@@ -364,7 +369,11 @@ export default function SignupForm() {
               [필수] 개인정보 수집 및 이용 동의
               {errors.agreePrivacy && <InlineErrorText>{errors.agreePrivacy}</InlineErrorText>}
             </AgreeLeftGroup>
-            <ArrowIcon onClick={() => setOpenModal('privacy')}>
+            <ArrowIcon 
+              type='button' 
+              onClick={() => setOpenModal('privacy')}
+              aria-label='개인정보 수집 및 이용 전체 보기'
+            >
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 width="8"
@@ -395,24 +404,22 @@ export default function SignupForm() {
           </AgreeRow>
         </AgreeGroup>
 
-        <SubmitButton type="submit">가입 하기</SubmitButton>
+        <SubmitButton type="submit" disabled={isSubmitting}>
+          {isSubmitting ? '가입 처리 중...' : '가입 하기'}
+        </SubmitButton>
       </Form>
       <BottomLinkRow>
         이미 회원이신가요? <BottomLink to="/login">로그인하러 가기</BottomLink>
       </BottomLinkRow>
 
-      <Modal
-        isOpen={openModal === 'terms'}
-        onClose={() => setOpenModal(null)}
-        title="이용약관"
-      >
+      <Modal isOpen={openModal === 'terms'} onClose={() => setOpenModal(null)} title="이용약관">
         {TERMS_TEXT}
       </Modal>
 
-      <Modal 
-      isOpen={openModal === 'privacy'}
-      onClose={() => setOpenModal(null)}
-      title="개인정보 수집 및 이용 동의"
+      <Modal
+        isOpen={openModal === 'privacy'}
+        onClose={() => setOpenModal(null)}
+        title="개인정보 수집 및 이용 동의"
       >
         {PRIVACY_TEXT}
       </Modal>

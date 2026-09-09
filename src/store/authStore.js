@@ -5,7 +5,7 @@ const useAuthStore = create((set) => ({
   isLoggedIn: !!sessionStorage.getItem("token"),
   user: null, // {id, name} 형태 (userInfo)
   token: sessionStorage.getItem("token") || null,
-
+  isAuthReady: false,
 
   // 로그인 성공 시 호출
   setAuth: (token, userInfo) => {
@@ -14,6 +14,7 @@ const useAuthStore = create((set) => ({
       isLoggedIn: true,
       user: userInfo,
       token,
+      isAuthReady: true,
     });
   },
     // 로그아웃 시 호출
@@ -23,6 +24,7 @@ const useAuthStore = create((set) => ({
         isLoggedIn: false,
         user: null,
         token: null,
+        isAuthReady: true
       });
     },
 }))

@@ -15,6 +15,18 @@ import { login, signup, checkId, logout, getMe } from '../api/authApi';
 import useAuthStore from '../store/authStore';
 import useToastStore from '../store/toastStore';
 
+const initialSignupForm = {
+  id: '',
+  password: '',
+  passwordConfirm: '',
+  name: '',
+  phone: '',
+  birthDate: '',
+  agreeTerms: false,
+  agreePrivacy: false,
+  agreeMarketing: false,
+};
+
 export function useLogin() {
   const navigate = useNavigate();
   const setAuth = useAuthStore((state) => state.setAuth);
@@ -22,6 +34,15 @@ export function useLogin() {
   const [id, setId] = useState('');
   const [password, setPassword] = useState('');
   const [errors, setErrors] = useState({ id: '', password: '', form: '' });
+  const [isSubmitting, setIsSubmitting] = useState(false);
+
+  useEffect(() => {
+    if (useAuthStore.getState().isLoggedIn) {
+      showToast('이미 로그인되어 있습니다.');
+      navigate('/', { replace: true });
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -41,6 +62,7 @@ export function useLogin() {
       return;
     }
 
+    setIsSubmitting(true);
     try {
       const result = await login({ id, password });
       setAuth(result.token, result.userInfo);
@@ -48,25 +70,22 @@ export function useLogin() {
       navigate('/');
     } catch (err) {
       setErrors((prev) => ({ ...prev, form: err.message }));
+      setPassword('');
+    } finally {
+      setIsSubmitting(false);
     }
   };
 
-  return { id, password, errors, handleChange, handleSubmit };
+  return { id, password, errors, isSubmitting, handleChange, handleSubmit };
 }
 
 export function useSignup() {
   const navigate = useNavigate();
   const showToast = useToastStore((state) => state.showToast);
-  const [id, setId] = useState('');
+  const [form, setForm] = useState(initialSignupForm);
   const [idCheckStatus, setIdCheckStatus] = useState('idle');
-  const [password, setPassword] = useState('');
-  const [passwordConfirm, setPasswordConFirm] = useState('');
-  const [name, setName] = useState('');
-  const [phone, setPhone] = useState('');
-  const [birthDate, setBirthDate] = useState('');
-  const [agreeTerms, setAgreeTerms] = useState(false);
-  const [agreePrivacy, setAgreePrivacy] = useState(false);
-  const [agreeMarketing, setAgreeMarketing] = useState(false);
+  const [idCheckMessage, setIdCheckMessage] = useState('');
+  const [isSubmitting, setIsSubmitting] = useState(false);
   const [errors, setErrors] = useState({
     id: '',
     password: '',
@@ -79,26 +98,31 @@ export function useSignup() {
     form: '',
   });
 
-  const handleChange = (e) => {
-    const { name: fieldName, value, type, checked } = e.target;
-    const val = type === 'checkbox' ? checked : value;
-
-    if (fieldName === 'id') {
-      setId(val);
-      setIdCheckStatus('idle');
+  useEffect(() => {
+    if (useAuthStore.getState().isLoggedIn) {
+      showToast('이미 로그인되어 있습니다.');
+      navigate('/', { replace: true });
     }
-    if (fieldName === 'password') setPassword(val);
-    if (fieldName === 'passwordConfirm') setPasswordConFirm(val);
-    if (fieldName === 'name') setName(val);
-    if (fieldName === 'phone') setPhone(formatPhoneNumber(val));
-    if (fieldName === 'birthDate') setBirthDate(formatBirthDate(val));
-    if (fieldName === 'agreeTerms') setAgreeTerms(val);
-    if (fieldName === 'agreePrivacy') setAgreePrivacy(val);
-    if (fieldName === 'agreeMarketing') setAgreeMarketing(val);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  const handleChange = (e) => {
+    const { name, value, type, checked } = e.target;
+    let val = type === 'checkbox' ? checked : value;
+
+    if (name === 'phone') val = formatPhoneNumber(val);
+    if (name === 'birthDate') val = formatBirthDate(val);
+
+    setForm((prev) => ({ ...prev, [name]: val }));
+
+    if (name === 'id') {
+      setIdCheckStatus('idle');
+      setIdCheckMessage('');
+    }
   };
 
   const handleCheckId = async () => {
-    const idError = getEmailError(id);
+    const idError = getEmailError(form.id);
     if (idError) {
       setErrors((prev) => ({ ...prev, id: idError }));
       return;
@@ -106,13 +130,14 @@ export function useSignup() {
 
     setIdCheckStatus('checking');
     try {
-      const result = await checkId(id);
+      const result = await checkId(form.id);
       if (result.isDuplicate) {
         setIdCheckStatus('duplicate');
         setErrors((prev) => ({ ...prev, id: result.message }));
       } else {
         setIdCheckStatus('available');
-        setErrors((prev) => ({...prev, id: ''}))
+        setIdCheckMessage(result.message)
+        setErrors((prev) => ({ ...prev, id: '' }));
       }
     } catch (err) {
       setIdCheckStatus('idle');
@@ -122,6 +147,18 @@ export function useSignup() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+
+    const {
+      id,
+      password,
+      passwordConfirm,
+      name,
+      phone,
+      birthDate,
+      agreeTerms,
+      agreePrivacy,
+      agreeMarketing,
+    } = form;
 
     const idError = getEmailError(id);
     const passwordError = getPasswordError(password);
@@ -161,6 +198,7 @@ export function useSignup() {
       return;
     }
 
+    setIsSubmitting(true);
     try {
       const birthDateForServer = birthDate.replace(/\./g, '-');
       const result = await signup({
@@ -180,20 +218,16 @@ export function useSignup() {
     } catch (err) {
       const field = mapServerErrorToField(err.message);
       setErrors((prev) => ({ ...prev, [field]: err.message }));
+    } finally {
+      setIsSubmitting(false);
     }
   };
 
   return {
-    id,
+    ...form,
     idCheckStatus,
-    password,
-    passwordConfirm,
-    name,
-    phone,
-    birthDate,
-    agreeTerms,
-    agreePrivacy,
-    agreeMarketing,
+    idCheckMessage,
+    isSubmitting,
     errors,
     handleChange,
     handleCheckId,
@@ -209,14 +243,12 @@ export function useLogout() {
   const handleLogout = async () => {
     try {
       const result = await logout();
-      sessionStorage.removeItem('token');
-      clearAuth();
-      showToast(result.message)
+      showToast(result.message);
     } catch (err) {
       showToast(err.message);
     } finally {
       sessionStorage.removeItem('token');
-      clearAuth()
+      clearAuth();
       navigate('/login');
     }
   };
@@ -231,6 +263,7 @@ export function useAuthRestore() {
     const token = sessionStorage.getItem('token');
 
     if (!token) {
+      clearAuth();
       return;
     }
 
