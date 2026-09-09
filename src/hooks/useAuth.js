@@ -18,10 +18,20 @@ import useToastStore from '../store/toastStore';
 export function useLogin() {
   const navigate = useNavigate();
   const setAuth = useAuthStore((state) => state.setAuth);
+  // const isLoggedIn = useAuthStore((state) => state.isLoggedIn);
   const showToast = useToastStore((state) => state.showToast);
   const [id, setId] = useState('');
   const [password, setPassword] = useState('');
   const [errors, setErrors] = useState({ id: '', password: '', form: '' });
+  const [isSubmitting, setIsSubmitting] = useState(false);
+
+  useEffect(() => {
+    if (useAuthStore.getState().isLoggedIn) {
+      showToast('이미 로그인되어 있습니다.');
+      navigate('/', { replace: true });
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -41,6 +51,7 @@ export function useLogin() {
       return;
     }
 
+    setIsSubmitting(true);
     try {
       const result = await login({ id, password });
       setAuth(result.token, result.userInfo);
@@ -48,10 +59,13 @@ export function useLogin() {
       navigate('/');
     } catch (err) {
       setErrors((prev) => ({ ...prev, form: err.message }));
+      setPassword('');
+    } finally {
+      setIsSubmitting(false);
     }
   };
 
-  return { id, password, errors, handleChange, handleSubmit };
+  return { id, password, errors, isSubmitting, handleChange, handleSubmit };
 }
 
 export function useSignup() {
@@ -67,6 +81,7 @@ export function useSignup() {
   const [agreeTerms, setAgreeTerms] = useState(false);
   const [agreePrivacy, setAgreePrivacy] = useState(false);
   const [agreeMarketing, setAgreeMarketing] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
   const [errors, setErrors] = useState({
     id: '',
     password: '',
@@ -78,6 +93,14 @@ export function useSignup() {
     agreePrivacy: '',
     form: '',
   });
+
+  useEffect(() => {
+    if (useAuthStore.getState().isLoggedIn) {
+      showToast('이미 로그인되어 있습니다.')
+      navigate('/', {replace: true})
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [])
 
   const handleChange = (e) => {
     const { name: fieldName, value, type, checked } = e.target;
@@ -112,7 +135,7 @@ export function useSignup() {
         setErrors((prev) => ({ ...prev, id: result.message }));
       } else {
         setIdCheckStatus('available');
-        setErrors((prev) => ({...prev, id: ''}))
+        setErrors((prev) => ({ ...prev, id: '' }));
       }
     } catch (err) {
       setIdCheckStatus('idle');
@@ -161,6 +184,7 @@ export function useSignup() {
       return;
     }
 
+    setIsSubmitting(true)
     try {
       const birthDateForServer = birthDate.replace(/\./g, '-');
       const result = await signup({
@@ -180,6 +204,8 @@ export function useSignup() {
     } catch (err) {
       const field = mapServerErrorToField(err.message);
       setErrors((prev) => ({ ...prev, [field]: err.message }));
+    } finally {
+      setIsSubmitting(false);
     }
   };
 
@@ -194,6 +220,7 @@ export function useSignup() {
     agreeTerms,
     agreePrivacy,
     agreeMarketing,
+    isSubmitting,
     errors,
     handleChange,
     handleCheckId,
@@ -209,14 +236,12 @@ export function useLogout() {
   const handleLogout = async () => {
     try {
       const result = await logout();
-      sessionStorage.removeItem('token');
-      clearAuth();
-      showToast(result.message)
+      showToast(result.message);
     } catch (err) {
       showToast(err.message);
     } finally {
       sessionStorage.removeItem('token');
-      clearAuth()
+      clearAuth();
       navigate('/login');
     }
   };
@@ -231,6 +256,7 @@ export function useAuthRestore() {
     const token = sessionStorage.getItem('token');
 
     if (!token) {
+      clearAuth();
       return;
     }
 
