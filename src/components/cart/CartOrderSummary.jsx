@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import {
   OrderSummary,
   SummaryTitle,
@@ -15,9 +16,37 @@ import {
   NoticeButton,
   NoticeContent,
   PurchaseButton,
+  ModalOverlay,
+  ModalBox,
+  ModalText,
+  ModalButtonArea,
+  ModalCancelButton,
+  ModalDeleteButton,
 } from "../../pages/CartPage.styles";
 
-export default function CartOrderSummary({ cartItems }) {
+export default function CartOrderSummary({ cartItems, hasShippingAddress }) {
+  // 페이지 이동에 사용할 함수
+  const navigate = useNavigate();
+
+  // 구매 모달 열림 여부: 처음에는 닫힘
+  const [isPurchaseModalOpen, setIsPurchaseModalOpen] = useState(false);
+
+  // 구매하기 클릭 → 모달 열기
+  const handlePurchase = () => {
+    setIsPurchaseModalOpen(true);
+  };
+
+  // 아니오 클릭 → 모달 닫기
+  const handleCloseModal = () => {
+    setIsPurchaseModalOpen(false);
+  };
+
+  // 예 클릭 → 마이페이지 이동
+  const handleConfirm = () => {
+    setIsPurchaseModalOpen(false);
+    navigate("/mypage"); // 실제 마이페이지 경로에 맞춰야 해요.
+  };
+
   const productTotal = cartItems.reduce((sum, item) => {
     return sum + item.price * item.quantity;
   }, 0);
@@ -126,9 +155,39 @@ export default function CartOrderSummary({ cartItems }) {
         )}
       </NoticeArea>
 
-      <PurchaseButton type="button" disabled={cartItems.length === 0}>
+      <PurchaseButton
+        type="button"
+        disabled={cartItems.length === 0}
+        onClick={handlePurchase}
+      >
         구매하기
       </PurchaseButton>
+
+      {isPurchaseModalOpen && (
+        <ModalOverlay>
+          <ModalBox
+            role="dialog"
+            aria-modal="true"
+            aria-labelledby="purchase-modal-message"
+          >
+            <ModalText id="purchase-modal-message">
+              {hasShippingAddress
+                ? "결제를 진행하시겠습니까?"
+                : "배송지를 등록해야 합니다."}
+            </ModalText>
+
+            <ModalButtonArea>
+              <ModalCancelButton type="button" onClick={handleCloseModal}>
+                아니오
+              </ModalCancelButton>
+
+              <ModalDeleteButton type="button" onClick={handleConfirm}>
+                예
+              </ModalDeleteButton>
+            </ModalButtonArea>
+          </ModalBox>
+        </ModalOverlay>
+      )}
     </OrderSummary>
   );
 }
