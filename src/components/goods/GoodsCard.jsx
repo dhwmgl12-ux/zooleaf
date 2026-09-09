@@ -1,27 +1,27 @@
 import { Link } from 'react-router-dom';
 
-export default function ProductCard({ product }) {
-  const name = product?.name || '상품명';
-
+export default function GoodsCard({ goods }) {
+  const name = goods?.name || '상품명';
   const {
-    price,
+    id,
+    imageUrl,
+    price = 0,
     discountRate,
     discountPrice,
-    thumbnailImage,
     badge = [],
-    id,
-  } = product ?? {};
+  } = goods ?? {};
 
   const hasDiscount =
     discountRate > 0 &&
     discountPrice !== null &&
     discountPrice !== undefined;
+  const discountPercent = Math.round(discountRate * 100);
 
   return (
     <article>
       <div>
-        {thumbnailImage ? (
-          <img src={thumbnailImage} alt={name} />
+        {imageUrl ? (
+          <img src={imageUrl} alt={name} />
         ) : (
           <span aria-hidden="true">상품 이미지</span>
         )}
@@ -36,27 +36,19 @@ export default function ProductCard({ product }) {
           </ul>
         )}
 
-        <h3>{name || '상품명'}</h3>
+        <h3>{name}</h3>
 
         {hasDiscount ? (
           <div>
-            <span>{discountRate}%</span>
-
-            <strong>
-              {discountPrice.toLocaleString()}원
-            </strong>
-
+            <span>{discountPercent}%</span>
+            <strong>{discountPrice.toLocaleString()}원</strong>
             <del>{price.toLocaleString()}원</del>
           </div>
         ) : (
-          <strong>
-            {price?.toLocaleString() || '0'}원
-          </strong>
+          <strong>{price.toLocaleString()}원</strong>
         )}
 
-        <Link to={`/products/${id}`}>
-          예매
-        </Link>
+        <Link to={`/goods/${id}`}>상품 보기</Link>
       </div>
     </article>
   );
