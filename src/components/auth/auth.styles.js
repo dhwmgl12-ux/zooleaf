@@ -4,7 +4,7 @@ import { Link } from "react-router-dom";
 
 export const FormCard = styled.div`
   width: 550px;
-  max-width: 550px;
+  max-width: 100%;
   background: ${theme.colors.white};
   border-radius: ${theme.radius.box};
   padding: ${(props) => props.variant === 'signup' ? '32px 40px' : '52px 38px'};
@@ -12,6 +12,10 @@ export const FormCard = styled.div`
   display: flex;
   flex-direction: column;
   gap: ${theme.spacing[20]};
+
+  @media (max-width: ${theme.layout.breakpoint.mobile}) {
+    padding: ${(props) => props.variant === 'signup' ? '24px 20px' : '32px 20px'};
+  }
 `;
 
 export const Title = styled.h2 `
@@ -19,7 +23,11 @@ export const Title = styled.h2 `
   line-height: ${theme.fontSize.h3.lineheight};
   color: ${theme.colors.textPrimary};
   font-weight: ${theme.fontWeight.bold};
-  /* margin-bottom: ${theme.spacing[32]}; */
+
+  @media (max-width: ${theme.layout.breakpoint.mobile}) {
+    font-size: ${theme.fontSize.h4.size};
+    line-height: ${theme.fontSize.h4.lineheight};
+  }
 `;
 
 export const Form = styled.form`
@@ -71,7 +79,7 @@ export const CheckIdButton = styled.button`
   border: 2px solid ${theme.colors.primary};
   border-radius: ${theme.radius.input};
   background: ${theme.colors.white};
-  color: ${theme.fontSize.bodysmall.size};
+  font-size: ${theme.fontSize.bodysmall.size};
   font-weight: ${theme.fontWeight.medium};
   cursor: pointer;
   white-space: nowrap;
@@ -191,6 +199,7 @@ export const SubmitButton = styled.button`
 export const LinkRow = styled.div`
   display: flex;
   width: 348px;
+  max-width: 100%;
   justify-content: space-between;
   align-items: center;
   margin: 0 auto;

@@ -119,6 +119,7 @@ export const theme = {
     maxWidth: '1440px',
 
     breakpoint: {
+      desktop: '1439px',
       tablet: '1023px',
       mobile: '767px',
       smallMobile: '375px',
