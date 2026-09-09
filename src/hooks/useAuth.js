@@ -15,10 +15,21 @@ import { login, signup, checkId, logout, getMe } from '../api/authApi';
 import useAuthStore from '../store/authStore';
 import useToastStore from '../store/toastStore';
 
+const initialSignupForm = {
+  id: '',
+  password: '',
+  passwordConfirm: '',
+  name: '',
+  phone: '',
+  birthDate: '',
+  agreeTerms: false,
+  agreePrivacy: false,
+  agreeMarketing: false,
+};
+
 export function useLogin() {
   const navigate = useNavigate();
   const setAuth = useAuthStore((state) => state.setAuth);
-  // const isLoggedIn = useAuthStore((state) => state.isLoggedIn);
   const showToast = useToastStore((state) => state.showToast);
   const [id, setId] = useState('');
   const [password, setPassword] = useState('');
@@ -71,16 +82,8 @@ export function useLogin() {
 export function useSignup() {
   const navigate = useNavigate();
   const showToast = useToastStore((state) => state.showToast);
-  const [id, setId] = useState('');
+  const [form, setForm] = useState(initialSignupForm);
   const [idCheckStatus, setIdCheckStatus] = useState('idle');
-  const [password, setPassword] = useState('');
-  const [passwordConfirm, setPasswordConFirm] = useState('');
-  const [name, setName] = useState('');
-  const [phone, setPhone] = useState('');
-  const [birthDate, setBirthDate] = useState('');
-  const [agreeTerms, setAgreeTerms] = useState(false);
-  const [agreePrivacy, setAgreePrivacy] = useState(false);
-  const [agreeMarketing, setAgreeMarketing] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [errors, setErrors] = useState({
     id: '',
@@ -96,32 +99,26 @@ export function useSignup() {
 
   useEffect(() => {
     if (useAuthStore.getState().isLoggedIn) {
-      showToast('이미 로그인되어 있습니다.')
-      navigate('/', {replace: true})
+      showToast('이미 로그인되어 있습니다.');
+      navigate('/', { replace: true });
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [])
+  }, []);
 
   const handleChange = (e) => {
-    const { name: fieldName, value, type, checked } = e.target;
-    const val = type === 'checkbox' ? checked : value;
+    const { name, value, type, checked } = e.target;
+    let val = type === 'checkbox' ? checked : value;
 
-    if (fieldName === 'id') {
-      setId(val);
-      setIdCheckStatus('idle');
-    }
-    if (fieldName === 'password') setPassword(val);
-    if (fieldName === 'passwordConfirm') setPasswordConFirm(val);
-    if (fieldName === 'name') setName(val);
-    if (fieldName === 'phone') setPhone(formatPhoneNumber(val));
-    if (fieldName === 'birthDate') setBirthDate(formatBirthDate(val));
-    if (fieldName === 'agreeTerms') setAgreeTerms(val);
-    if (fieldName === 'agreePrivacy') setAgreePrivacy(val);
-    if (fieldName === 'agreeMarketing') setAgreeMarketing(val);
+    if (name === 'phone') val = formatPhoneNumber(val);
+    if (name === 'birthDate') val = formatBirthDate(val);
+
+    setForm((prev) => ({ ...prev, [name]: val }));
+
+    if (name === 'id') setIdCheckStatus('idle');
   };
 
   const handleCheckId = async () => {
-    const idError = getEmailError(id);
+    const idError = getEmailError(form.id);
     if (idError) {
       setErrors((prev) => ({ ...prev, id: idError }));
       return;
@@ -129,7 +126,7 @@ export function useSignup() {
 
     setIdCheckStatus('checking');
     try {
-      const result = await checkId(id);
+      const result = await checkId(form.id);
       if (result.isDuplicate) {
         setIdCheckStatus('duplicate');
         setErrors((prev) => ({ ...prev, id: result.message }));
@@ -145,6 +142,18 @@ export function useSignup() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+
+    const {
+      id,
+      password,
+      passwordConfirm,
+      name,
+      phone,
+      birthDate,
+      agreeTerms,
+      agreePrivacy,
+      agreeMarketing,
+    } = form;
 
     const idError = getEmailError(id);
     const passwordError = getPasswordError(password);
@@ -184,7 +193,7 @@ export function useSignup() {
       return;
     }
 
-    setIsSubmitting(true)
+    setIsSubmitting(true);
     try {
       const birthDateForServer = birthDate.replace(/\./g, '-');
       const result = await signup({
@@ -210,16 +219,8 @@ export function useSignup() {
   };
 
   return {
-    id,
+    ...form,
     idCheckStatus,
-    password,
-    passwordConfirm,
-    name,
-    phone,
-    birthDate,
-    agreeTerms,
-    agreePrivacy,
-    agreeMarketing,
     isSubmitting,
     errors,
     handleChange,
