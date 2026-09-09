@@ -1,21 +1,45 @@
-import zooleafLogo from "../../assets/images/zooleaf-logo-2.webp";
-import { Link, useLocation } from "react-router-dom";
-import { HeaderContainer } from "./Header.styles.js";
-import { ContentContainer } from "./ContentContainer.styles.js";
-import { useEffect, useRef, useState } from "react";
+import { useLocation } from 'react-router-dom';
+import zooleafLogo from '../../assets/images/zooleaf-logo-2.webp';
+import { useEffect, useRef, useState } from 'react';
+import useAuthStore from '../../store/authStore';
+import { useLogout } from '../../hooks/useAuth';
+import {
+  AccountAvatar,
+  AccountCard,
+  AccountDivider,
+  AccountDropdown,
+  AccountInfoList,
+  AccountMenuTrigger,
+  AccountName,
+  HeaderContainer,
+  HeaderInner,
+  IconButton,
+  IconLink,
+  LogoHeading,
+  LogoImage,
+  LogoLink,
+  LogoutButton,
+  NavLink,
+  NavList,
+  UtilsList,
+} from './Header.styles.js';
 
 export default function Header() {
   const { pathname } = useLocation();
   const headerRef = useRef(null);
   const [isOverHero, setIsOverHero] = useState(false);
+  const isLoggedIn = useAuthStore((state) => state.isLoggedIn);
+  const user = useAuthStore((state) => state.user);
+  const { handleLogout } = useLogout();
 
   useEffect(() => {
-    if (pathname !== "/") {
+    if (pathname !== '/') {
+      // eslint-disable-next-line react-hooks/set-state-in-effect
       setIsOverHero(false);
       return;
     }
 
-    const hero = document.querySelector("[data-header-hero]");
+    const hero = document.querySelector('[data-header-hero]');
 
     if (!hero) {
       setIsOverHero(false);
@@ -31,55 +55,56 @@ export default function Header() {
 
     updateHeader();
 
-    window.addEventListener("scroll", updateHeader, { passive: true });
-    window.addEventListener("resize", updateHeader);
+    window.addEventListener('scroll', updateHeader, { passive: true });
+    window.addEventListener('resize', updateHeader);
 
     return () => {
-      window.removeEventListener("scroll", updateHeader);
-      window.removeEventListener("resize", updateHeader);
+      window.removeEventListener('scroll', updateHeader);
+      window.removeEventListener('resize', updateHeader);
     };
   }, [pathname]);
 
   return (
     <HeaderContainer ref={headerRef} $isOverHero={isOverHero}>
-      <ContentContainer className="header-inner">
-        <h1>
-          <Link to="/" className="header__logo">
-            <img src={zooleafLogo} alt="ZOOLEAF" />
-          </Link>
-        </h1>
-        <nav className="header__nav">
-          <ul className="header__nav-list">
+      <HeaderInner>
+        <LogoHeading>
+          <LogoLink to="/">
+            <LogoImage src={zooleafLogo} alt="ZOOLEAF" />
+          </LogoLink>
+        </LogoHeading>
+
+        <nav>
+          <NavList>
             <li>
-              <Link to="/about">동물원 소개</Link>
+              <NavLink to="/about">동물원 소개</NavLink>
             </li>
             <li>
-              <Link to="/products">입장권 & 패키지</Link>
+              <NavLink to="/products">입장권 & 패키지</NavLink>
             </li>
             <li>
-              <Link to="/experiences">프로그램</Link>
+              <NavLink to="/experienes">프로그램</NavLink>
             </li>
             <li>
-              <Link to="/animals">동물 이야기</Link>
+              <NavLink to="/animals">동물 이야기</NavLink>
             </li>
             <li>
-              <Link to="/goods">Shop</Link>
+              <NavLink to="/goods">Shop</NavLink>
             </li>
             <li>
-              <Link to="/community">커뮤니티</Link>
+              <NavLink to="/community">커뮤니티</NavLink>
             </li>
-          </ul>
+          </NavList>
         </nav>
-        <ul className="header__utils">
+
+        <UtilsList>
           <li>
-            <Link to="/cart" aria-label="장바구니">
+            <IconLink to="/cart" aria-label="장바구니">
               <svg
-                className="icon"
-                xmlns="http://www.w3.org/2000/svg"
                 width="32"
                 height="32"
                 viewBox="0 0 32 32"
                 fill="none"
+                xmlns="http://www.w3.org/2000/svg"
               >
                 <path
                   d="M4 6H7.2L9.25 19.1C9.4 20.05 10.22 20.75 11.18 20.75H23.65C24.56 20.75 25.35 20.13 25.57 19.25L27.2 12.75H8.25"
@@ -103,44 +128,91 @@ export default function Header() {
                   fill="currentColor"
                 />
               </svg>
-            </Link>
+            </IconLink>
           </li>
+          {isLoggedIn ? (
+            <AccountMenuTrigger tabIndex={0}>
+              <IconLink to="/mypage" aria-label="마이페이지">
+                <svg
+                  width="32"
+                  height="32"
+                  viewBox="0 0 32 32"
+                  fill="none"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <path
+                    d="M16 14.5C18.3472 14.5 20.25 12.5972 20.25 10.25C20.25 7.90279 18.3472 6 16 6C13.6528 6 11.75 7.90279 11.75 10.25C11.75 12.5972 13.6528 14.5 16 14.5Z"
+                    stroke="currentColor"
+                    strokeWidth="2.2"
+                  />
+                  <path
+                    d="M7 25.5C7.65 20.75 11.2 18 16 18C20.8 18 24.35 20.75 25 25.5"
+                    stroke="currentColor"
+                    strokeWidth="2.2"
+                    strokeLinecap="round"
+                  />
+                  <path
+                    d="M9.30078 23.1992C10.9008 24.9992 13.2508 25.9992 16.0008 25.9992C18.7508 25.9992 21.1008 24.9992 22.7008 23.1992"
+                    stroke="currentColor"
+                    strokeWidth="2.2"
+                    strokeLinecap="round"
+                  />
+                </svg>
+              </IconLink>
+              <AccountDropdown data-account-dropdown>
+                <AccountCard>
+                  <AccountAvatar>{user?.id?.[0]?.toUpperCase()}</AccountAvatar>
+                  <AccountName>{user?.name}</AccountName>
+
+                  <AccountInfoList>
+                    <span>{user?.id}</span>
+                    <span>{user?.phone ?? '-'}</span>
+                    <span>{user?.birthDate ?? '-'}</span>
+                  </AccountInfoList>
+
+                  <AccountDivider />
+
+                  <LogoutButton type="button" onClick={handleLogout}>
+                    로그아웃
+                  </LogoutButton>
+                </AccountCard>
+              </AccountDropdown>
+            </AccountMenuTrigger>
+          ) : (
+            <li>
+              <IconLink to="/login" aria-label="로그인">
+                <svg
+                  width="32"
+                  height="32"
+                  viewBox="0 0 32 32"
+                  fill="none"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <path
+                    d="M16 14.5C18.3472 14.5 20.25 12.5972 20.25 10.25C20.25 7.90279 18.3472 6 16 6C13.6528 6 11.75 7.90279 11.75 10.25C11.75 12.5972 13.6528 14.5 16 14.5Z"
+                    stroke="currentColor"
+                    strokeWidth="2.2"
+                  />
+                  <path
+                    d="M7 25.5C7.65 20.75 11.2 18 16 18C20.8 18 24.35 20.75 25 25.5"
+                    stroke="currentColor"
+                    strokeWidth="2.2"
+                    strokeLinecap="round"
+                  />
+                  <path
+                    d="M9.30078 23.1992C10.9008 24.9992 13.2508 25.9992 16.0008 25.9992C18.7508 25.9992 21.1008 24.9992 22.7008 23.1992"
+                    stroke="currentColor"
+                    strokeWidth="2.2"
+                    strokeLinecap="round"
+                  />
+                </svg>
+              </IconLink>
+            </li>
+          )}
 
           <li>
-            <Link to="/login" aria-label="로그인">
+            <IconButton type="button" aria-label="메뉴 열기">
               <svg
-                className="icon"
-                width="32"
-                height="32"
-                viewBox="0 0 32 32"
-                fill="none"
-                xmlns="http://www.w3.org/2000/svg"
-              >
-                <path
-                  d="M16 14.5C18.3472 14.5 20.25 12.5972 20.25 10.25C20.25 7.90279 18.3472 6 16 6C13.6528 6 11.75 7.90279 11.75 10.25C11.75 12.5972 13.6528 14.5 16 14.5Z"
-                  stroke="currentColor"
-                  strokeWidth="2.2"
-                />
-                <path
-                  d="M7 25.5C7.65 20.75 11.2 18 16 18C20.8 18 24.35 20.75 25 25.5"
-                  stroke="currentColor"
-                  strokeWidth="2.2"
-                  strokeLinecap="round"
-                />
-                <path
-                  d="M9.30078 23.1992C10.9008 24.9992 13.2508 25.9992 16.0008 25.9992C18.7508 25.9992 21.1008 24.9992 22.7008 23.1992"
-                  stroke="currentColor"
-                  strokeWidth="2.2"
-                  strokeLinecap="round"
-                />
-              </svg>
-            </Link>
-          </li>
-
-          <li>
-            <button type="button" aria-label="메뉴 열기">
-              <svg
-                className="icon"
                 width="22"
                 height="18"
                 viewBox="0 0 22 18"
@@ -154,10 +226,10 @@ export default function Header() {
                   fill="currentColor"
                 />
               </svg>
-            </button>
+            </IconButton>
           </li>
-        </ul>
-      </ContentContainer>
+        </UtilsList>
+      </HeaderInner>
     </HeaderContainer>
   );
 }
