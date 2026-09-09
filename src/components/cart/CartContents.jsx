@@ -30,6 +30,9 @@ export default function CartContents() {
   const cart = useCart();
   const navigate = useNavigate();
 
+  // 테스트용: 배송지가 없는 상태
+  const hasShippingAddress = false;
+
   // 장바구니 데이터를 불러오는 중일 때 표시
   if (cart.isLoading) return <p role="status">장바구니를 불러오는 중입니다.</p>;
 
@@ -113,7 +116,10 @@ export default function CartContents() {
           </ContinueShoppingButton>
         </CartContent>
         {/* 결제 금액 요약 영역 */}
-        <CartOrderSummary cartItems={cart.cartItems} />
+        <CartOrderSummary
+          cartItems={cart.cartItems}
+          hasShippingAddress={hasShippingAddress}
+        />
       </CartLayout>
 
       {/* 상품 삭제 확인 모달 */}
