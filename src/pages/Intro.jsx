@@ -8,19 +8,20 @@ import {
 } from './Intro.style';
 import MapImage from '../assets/images/Directions-map.webp';
 import BusImage from '../assets/images/directions.png';
-import HeroImage from '../assets/images/Intro-pc.png';
 
 export function IntroPage() {
+  const subtitleText = zooIntroData.hero.subtitle;
+  const parts = subtitleText.split('동물이 ');
   return (
     <PageContainer>
-      <HeroSection
-        style={{
-          background: `linear-gradient(rgba(0, 0, 0, 0.3), rgba(0, 0, 0, 0.3)), url(${HeroImage}) center/cover no-repeat`,
-        }}
-      >
+      <HeroSection>
         <div className="hero-content">
-          <p className="sub-title">{zooIntroData.hero.subtitle}</p>
-          <h1>{zooIntroData.hero.title}</h1>
+          <p className="sub-title">
+            {parts[0]}동물이
+            <br className="small-mobile-br" />
+            {parts[1]}
+          </p>
+          <h2>{zooIntroData.hero.title}</h2>
         </div>
       </HeroSection>
 
