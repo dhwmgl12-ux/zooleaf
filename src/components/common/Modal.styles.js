@@ -72,7 +72,7 @@ export const ModalBody = styled.div`
 
   &::-webkit-scrollbar-thumb {
     background-color: ${theme.colors.textSecondary};
-    border-radius: 999px
+    border-radius: ${theme.radius.button};
   }
 
   &::-webkit-scrollbar-thumb:hover {
