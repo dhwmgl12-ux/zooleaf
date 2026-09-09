@@ -74,6 +74,7 @@ export default function SignupForm() {
   const {
     id,
     idCheckStatus,
+    idCheckMessage,
     password,
     passwordConfirm,
     name,
@@ -118,7 +119,7 @@ export default function SignupForm() {
             </CheckIdButton>
           </CheckIdRow>
           {errors.id && <ErrorText>{errors.id}</ErrorText>}
-          {idCheckStatus === 'available' && <SuccessText>사용 가능한 아이디입니다.</SuccessText>}
+          {idCheckStatus === 'available' && <SuccessText>{idCheckMessage}</SuccessText>}
         </div>
 
         <div>
