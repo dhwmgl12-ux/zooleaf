@@ -10,6 +10,8 @@ import Discount from '../pages/Discount';
 import MainPage from '../pages/MainPage';
 import ExperienceDetailPage from '../pages/ExperienceDetailPage';
 import GoodsDetailPage from '../pages/GoodsDetailPage';
+import GoodsPage from '../pages/GoodsPage';
+import ExperiencePage from '../pages/ExperiencePage';
 
 export default function AppRouter() {
   return (
@@ -22,7 +24,9 @@ export default function AppRouter() {
           <Route path="/signup" element={<SignupPage />} />
           <Route path="/cart" element={<CartPage />} />
           <Route path="/products/:productId" element={<ProductDetailPage />} />
+          <Route path="/experiences" element={<ExperiencePage />} />
           <Route path="/experience/:experienceId" element={<ExperienceDetailPage />} />
+          <Route path="/goods" element={<GoodsPage />} />
           <Route path="/goods/:goodsId" element={<GoodsDetailPage />} />
           <Route path="/discount" element={<Discount />} />
         </Route>
