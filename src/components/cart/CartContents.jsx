@@ -1,4 +1,4 @@
-import { useNavigate } from "react-router-dom";
+﻿import { useNavigate } from "react-router-dom";
 import useCart from "../../hooks/useCart";
 import emptyCartImage from "../../assets/images/cart-empty.webp";
 import CartItemRow from "./CartItemRow";
@@ -20,14 +20,17 @@ export default function CartContents() {
   const cart = useCart();
   const navigate = useNavigate();
 
+  if (cart.isLoading) return <p role="status">장바구니를 불러오는 중입니다.</p>;
+
   return (
     <>
+      {cart.error && <div role="alert">{cart.error}<button type="button" disabled={cart.isUpdating} onClick={cart.fetchCart}>다시 불러오기</button></div>}
       <CartTopBar>
         <SelectAllLabel>
           <CheckBox type="checkbox" checked={cart.isAllSelected} onChange={cart.toggleAll} />
           전체 선택 ({cart.selectedCount} / {cart.cartItems.length})
         </SelectAllLabel>
-        <SelectDeleteButton type="button" disabled={cart.selectedCount === 0} onClick={() => cart.openDeleteModal()}>
+        <SelectDeleteButton type="button" disabled={cart.selectedCount === 0 || cart.isUpdating} onClick={() => cart.openDeleteModal()}>
           선택 삭제
         </SelectDeleteButton>
       </CartTopBar>
@@ -50,10 +53,11 @@ export default function CartContents() {
                   <CartItemRow
                     key={cart.getItemKey(item)}
                     item={item}
+                    disabled={cart.isUpdating}
                     selected={cart.isSelected(item)}
                     onSelect={() => cart.toggleItem(item)}
-                    onIncrease={() => cart.increaseQuantity(item.id, item.type)}
-                    onDecrease={() => cart.decreaseQuantity(item.id, item.type)}
+                    onIncrease={() => cart.increaseQuantity(item.cartItemId)}
+                    onDecrease={() => cart.decreaseQuantity(item.cartItemId)}
                     onDelete={() => cart.openDeleteModal(item)}
                   />
                 ))}
@@ -67,8 +71,10 @@ export default function CartContents() {
         <CartOrderSummary cartItems={cart.cartItems} />
       </CartLayout>
       {cart.deleteModal && (
-        <CartDeleteModal mode={cart.deleteModal.mode} onClose={cart.closeDeleteModal} onConfirm={cart.confirmDelete} />
+        <CartDeleteModal disabled={cart.isUpdating} error={cart.error} mode={cart.deleteModal.mode} onClose={cart.closeDeleteModal} onConfirm={cart.confirmDelete} />
       )}
     </>
   );
 }
+
+

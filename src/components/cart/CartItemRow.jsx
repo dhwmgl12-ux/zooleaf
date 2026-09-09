@@ -1,10 +1,10 @@
-import {
+﻿import {
   CartItem, CheckBox, ItemImage, ItemInfo, ItemName, ItemText,
   QuantityControl, QuantityButton, Quantity,
   ItemPriceArea, DeleteButton, ItemTotal,
 } from "../../pages/CartPage.styles";
 
-export default function CartItemRow({ item, selected, onSelect, onIncrease, onDecrease, onDelete }) {
+export default function CartItemRow({ item, disabled, selected, onSelect, onIncrease, onDecrease, onDelete }) {
   return (
     <CartItem>
       <CheckBox type="checkbox" checked={selected} onChange={onSelect} aria-label={`${item.name} 선택`} />
@@ -27,14 +27,15 @@ export default function CartItemRow({ item, selected, onSelect, onIncrease, onDe
         )}
       </ItemInfo>
       <QuantityControl>
-        <QuantityButton type="button" onClick={onDecrease} aria-label={`${item.name} 수량 감소`}>−</QuantityButton>
+        <QuantityButton type="button" disabled={disabled || item.quantity <= 1} onClick={onDecrease} aria-label={`${item.name} 수량 감소`}>−</QuantityButton>
         <Quantity>{item.quantity}</Quantity>
-        <QuantityButton type="button" onClick={onIncrease} aria-label={`${item.name} 수량 증가`}>+</QuantityButton>
+        <QuantityButton type="button" disabled={disabled} onClick={onIncrease} aria-label={`${item.name} 수량 증가`}>+</QuantityButton>
       </QuantityControl>
       <ItemPriceArea>
-        <DeleteButton type="button" aria-label="상품 삭제" onClick={onDelete}>x</DeleteButton>
+        <DeleteButton type="button" aria-label="상품 삭제" disabled={disabled} onClick={onDelete}>x</DeleteButton>
         <ItemTotal>{(item.price * item.quantity).toLocaleString()}원</ItemTotal>
       </ItemPriceArea>
     </CartItem>
   );
 }
+

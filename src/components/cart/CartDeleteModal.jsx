@@ -1,4 +1,4 @@
-import {
+﻿import {
   ModalOverlay,
   ModalBox,
   ModalTitle,
@@ -8,7 +8,7 @@ import {
   ModalDeleteButton,
 } from "../../pages/CartPage.styles";
 
-export default function CartDeleteModal({ mode, onClose, onConfirm }) {
+export default function CartDeleteModal({ mode, onClose, onConfirm, disabled, error }) {
   return (
     <ModalOverlay>
       <ModalBox>
@@ -22,12 +22,13 @@ export default function CartDeleteModal({ mode, onClose, onConfirm }) {
             : "정말로 삭제하시겠습니까?"}
         </ModalText>
 
+        {error && <ModalText role="alert">{error}</ModalText>}
         <ModalButtonArea>
-          <ModalCancelButton type="button" onClick={onClose}>
+          <ModalCancelButton type="button" disabled={disabled} onClick={onClose}>
             취소
           </ModalCancelButton>
 
-          <ModalDeleteButton type="button" onClick={onConfirm}>
+          <ModalDeleteButton type="button" disabled={disabled} onClick={onConfirm}>
             삭제
           </ModalDeleteButton>
         </ModalButtonArea>
@@ -35,3 +36,4 @@ export default function CartDeleteModal({ mode, onClose, onConfirm }) {
     </ModalOverlay>
   );
 }
+
