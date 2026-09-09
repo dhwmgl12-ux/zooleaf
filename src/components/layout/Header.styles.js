@@ -47,6 +47,21 @@ export const NavList = styled.ul`
   gap: ${theme.spacing[56]};
 `;
 
+export const LoginMenuItem = styled.li`
+  @media (max-width: ${theme.layout.breakpoint.tablet}) {
+    display: none;
+  }
+`;
+
+export const MenuTriggerItem = styled.li`
+  display: none;
+
+  @media (max-width: ${theme.layout.breakpoint.tablet}) {
+    display: flex;
+  }
+`;
+
+
 export const NavLink = styled(Link)`
   font-size: ${theme.fontSize.h5.size};
   line-height: ${theme.fontSize.h5.lineheight};
@@ -130,6 +145,10 @@ export const AccountMenuTrigger = styled.li`
     opacity: 1;
     visibility: visible;
     transform: translateY(0)
+  }
+
+  @media (max-width: ${theme.layout.breakpoint.tablet}) {
+    display: none;
   }
 `;
 

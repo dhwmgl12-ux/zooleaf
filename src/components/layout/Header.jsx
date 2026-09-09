@@ -15,10 +15,12 @@ import {
   HeaderInner,
   IconButton,
   IconLink,
+  LoginMenuItem,
   LogoHeading,
   LogoImage,
   LogoLink,
   LogoutButton,
+  MenuTriggerItem,
   NavLink,
   NavList,
   Tooltip,
@@ -135,7 +137,10 @@ export default function Header() {
             </IconLink>
           </li>
           {isLoggedIn ? (
-            <AccountMenuTrigger tabIndex={0}>
+            <AccountMenuTrigger 
+              tabIndex={0}
+              onClick={(e) => e.currentTarget.blur()}
+            >
               <IconLink 
                 to="/mypage" 
                 aria-label="마이페이지"
@@ -187,7 +192,7 @@ export default function Header() {
               </AccountDropdown>
             </AccountMenuTrigger>
           ) : (
-            <li>
+            <LoginMenuItem>
               <IconLink 
                 to="/login" 
                 aria-label="로그인"
@@ -223,10 +228,10 @@ export default function Header() {
                 </svg>
                 <Tooltip data-tooltip>로그인 해주세요.</Tooltip>
               </IconLink>
-            </li>
+            </LoginMenuItem>
           )}
 
-          <li>
+          <MenuTriggerItem>
             <IconButton type="button" aria-label="메뉴 열기">
               <svg
                 width="22"
@@ -243,7 +248,7 @@ export default function Header() {
                 />
               </svg>
             </IconButton>
-          </li>
+          </MenuTriggerItem>
         </UtilsList>
       </HeaderInner>
     </HeaderContainer>
