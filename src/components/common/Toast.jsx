@@ -34,4 +34,5 @@ const ToastWrapper = styled.div`
   background-color: ${theme.colors.textPrimary};
   color: ${theme.colors.white};
   font-size: ${theme.fontSize.body.size};
+  user-select: none;
 `;
