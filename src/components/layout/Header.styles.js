@@ -30,7 +30,12 @@ export const HeaderInner = styled(ContentContainer)`
 `;
 
 export const LogoHeading = styled.h1`
-  width: 200px;
+  width: 179px;
+  flex-shrink: 0;
+
+  @media (max-width: ${theme.layout.breakpoint.tablet}) {
+    width: 134px;
+  }
 `;
 
 export const LogoLink = styled(Link)`
@@ -45,6 +50,10 @@ export const LogoImage = styled.img`
 export const NavList = styled.ul`
   display: flex;
   gap: ${theme.spacing[56]};
+
+  @media (max-width: ${theme.layout.breakpoint.tablet}) {
+    display: none;
+  }
 `;
 
 export const LoginMenuItem = styled.li`
@@ -82,6 +91,11 @@ export const UtilsList = styled.ul`
   display: flex;
   align-items: center;
   gap: ${theme.spacing[32]};
+  flex-shrink: 0;
+
+  @media (max-width: ${theme.layout.breakpoint.tablet}) {
+    gap: ${theme.spacing[16]}
+  }
 `;
 
 export const IconLink = styled(Link)`
