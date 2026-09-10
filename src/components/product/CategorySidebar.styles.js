@@ -48,7 +48,7 @@ export const Sidebar = styled.aside`
 
   .filter-dropdown {
     position: relative;
-    margin-top: ${theme.spacing[8]};
+    margin-top: ${theme.spacing[12]};
   }
 
   .filter-dropdown > button {
@@ -57,9 +57,19 @@ export const Sidebar = styled.aside`
     border-radius: ${theme.radius.button};
   }
 
-  .filter-dropdown > button span {
+  .filter-arrow {
     position: absolute;
     right: ${theme.spacing[16]};
+    width: 7px;
+    height: 7px;
+    border-right: 1px solid ${theme.colors.textSecondary};
+    border-bottom: 1px solid ${theme.colors.textSecondary};
+    transform: rotate(45deg) translateY(-2px);
+    transition: transform 0.2s ease;
+  }
+
+  .filter-dropdown > button[aria-expanded='true'] .filter-arrow {
+    transform: rotate(225deg) translateY(-2px);
   }
 
   .filter-dropdown ul {
@@ -79,7 +89,6 @@ export const Sidebar = styled.aside`
   }
 
   section button[aria-pressed='true'] {
-    background-color: ${theme.colors.background2};
     color: ${theme.colors.primary};
   }
 
