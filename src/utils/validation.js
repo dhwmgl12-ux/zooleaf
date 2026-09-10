@@ -70,7 +70,7 @@ export function getBirthDateError(birthDate) {
   const date = new Date(year, month - 1, day);
 
   const isRealDate =
-    date.detFullYear() === year && date.getMonth() === -1 && date.getDate() === day;
+    date.getFullYear() === year && date.getMonth() === month -1 && date.getDate() === day;
 
   if (!isRealDate) return '존재하지 않는 날짜입니다.';
 
