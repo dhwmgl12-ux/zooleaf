@@ -97,9 +97,10 @@ export default function SignupForm() {
       {errors.form && <ErrorText>{errors.form}</ErrorText>}
       <Form onSubmit={handleSubmit}>
         <div>
-          <Label>이메일 아이디</Label>
+          <Label htmlFor='id'>이메일 아이디</Label>
           <CheckIdRow>
             <Input
+              id='id'
               type="email"
               name="id"
               autoComplete="username"
@@ -140,10 +141,12 @@ export default function SignupForm() {
         />
 
         <div>
-          <Label>이름</Label>
+          <Label htmlFor='name'>이름</Label>
           <Input
+            id='name'
             type="text"
             name="name"
+            autoComplete='name'
             value={name}
             onChange={handleChange}
             placeholder="홍길동"
@@ -152,11 +155,13 @@ export default function SignupForm() {
         </div>
 
         <div>
-          <Label>휴대폰 번호</Label>
+          <Label htmlFor='phone'>휴대폰 번호</Label>
           <Input
+            id='phone'
             type="text"
             inputMode="numeric"
             name="phone"
+            autoComplete='tel'
             value={phone}
             onChange={handleChange}
             placeholder="010-0000-0000"
@@ -165,11 +170,13 @@ export default function SignupForm() {
         </div>
 
         <div>
-          <Label>생년월일</Label>
+          <Label htmlFor='birthDate'>생년월일</Label>
           <Input
+            id='birthDate'
             type="text"
             inputMode="numeric"
             name="birthDate"
+            autoComplete='off'
             value={birthDate}
             onChange={handleChange}
             placeholder="2000.00.00"
