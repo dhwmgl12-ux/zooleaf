@@ -88,7 +88,7 @@ export default function Header() {
               <NavLink to="/products">입장권 & 패키지</NavLink>
             </li>
             <li>
-              <NavLink to="/experienes">프로그램</NavLink>
+              <NavLink to="/experiences">프로그램</NavLink>
             </li>
             <li>
               <NavLink to="/animals">동물 이야기</NavLink>
