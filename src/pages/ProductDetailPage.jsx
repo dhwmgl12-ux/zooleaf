@@ -5,6 +5,7 @@ import { getProductById } from "../api/productApi"
 import DetailImage from "../components/detail/DetailImage";
 import DetailContent from "../components/detail/DetailContent";
 import DetailPrice from "../components/detail/DetailPrice";
+import { ProductDetailPageContainer } from "./ProductDetailPage.styles";
 
 export default function ProductDetailPage() {
   const { productId } = useParams();
@@ -71,15 +72,19 @@ export default function ProductDetailPage() {
   }
 
   return (
-    <article>
-      <div className="product-details">
+    <ProductDetailPageContainer>
+      <div className="detail-image-area">
         <DetailImage 
           imageUrl={product.thumbnailImage || product.imageUrl}
           name={product.name}
         />
-        <DetailContent product={product} />
       </div>
-      <DetailPrice product={product} />
-    </article>
+      <div className="detail-content-area">
+        <DetailContent product={product} /> 
+      </div>
+      <div className="detail-price-area">
+        <DetailPrice product={product} />
+      </div>
+    </ProductDetailPageContainer>
   )
 }
