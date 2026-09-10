@@ -20,7 +20,7 @@ export const PageContainer = styled.div`
   margin: 0 auto;
   display: grid;
   grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
-  grid-template-areas: 'hero form';
+  grid-template-areas: ${(props) => (props.variant === 'signup' ? "'form hero'" : "'hero form'")};
   align-items: center;
   gap: ${theme.spacing[8]} ${theme.spacing[48]};
 
@@ -77,7 +77,6 @@ export const HeroImage = styled.img`
     max-width: 420px;
   }
 
-
   @media (max-width: ${theme.layout.breakpoint.tablet}) {
     max-width: 550px;
   }
@@ -119,28 +118,28 @@ export const SubText = styled.p`
   @media (max-width: ${theme.layout.breakpoint.tablet}) {
     font-size: ${theme.fontSize.h4.size};
   }
-  
+
   @media (max-width: ${theme.layout.breakpoint.smallMobile}) {
     font-size: ${theme.fontSize.h5.size};
     max-width: 100%;
   }
-  `;
+`;
 
 export const SubTextLight = styled.p`
   font-size: ${theme.fontSize.h3.size};
   font-weight: ${theme.fontWeight.bold};
   color: ${theme.colors.secondary};
   margin: 0;
-  
+
   @media (max-width: ${theme.layout.breakpoint.tablet}) {
     font-size: ${theme.fontSize.h4.size};
   }
-  
+
   @media (max-width: ${theme.layout.breakpoint.smallMobile}) {
     font-size: ${theme.fontSize.h5.size};
     max-width: 100%;
   }
-  `;
+`;
 
 export const FormSide = styled.div`
   grid-area: form;
