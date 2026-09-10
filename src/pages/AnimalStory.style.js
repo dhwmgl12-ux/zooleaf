@@ -16,6 +16,7 @@ export const Title = styled.h2`
   font-size: ${theme.fontSize.h3.size};
   color: ${theme.colors?.textPrimary};
   margin-bottom: ${theme.spacing[16]};
+  margin-top: ${theme.spacing[100]};
 `;
 
 export const SubTitle = styled.p`
