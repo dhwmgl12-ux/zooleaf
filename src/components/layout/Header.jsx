@@ -49,38 +49,51 @@ export default function Header() {
   const user = useAuthStore((state) => state.user);
   const { handleLogout } = useLogout();
   const showToast = useToastStore((state) => state.showToast);
+  
+  useEffect(() => {
+    const updateHeaderHeight = () => {
+      const headerHeight = headerRef.current.offsetHeight ?? 0;
+      document.documentElement.style.setProperty('--header-height', `${headerHeight}px`)
+    }
+    
+    updateHeaderHeight();
+    window.addEventListener('resize', updateHeaderHeight);
+    return () => window.removeEventListener('resize', updateHeaderHeight);
+  }, []);
 
   useEffect(() => {
     if (pathname !== '/') {
-      // eslint-disable-next-line react-hooks/set-state-in-effect
-      setIsOverHero(false);
-      return;
-    }
+        // eslint-disable-next-line react-hooks/set-state-in-effect
+        setIsOverHero(false);
+        return;
+      }
+      
+      const hero = document.querySelector('[data-header-hero]');
 
-    const hero = document.querySelector('[data-header-hero]');
+      if (!hero) {
+        setIsOverHero(false);
+        return;
+      }
+    
+      const updateHeader = () => {
+        const headerHeight = headerRef.current?.offsetHeight ?? 0;
+        const heroBottom = hero.getBoundingClientRect().bottom;
+    
+        setIsOverHero(heroBottom > headerHeight);
+      };
+      updateHeader();
+    
+      window.addEventListener('scroll', updateHeader, { passive: true });
+      window.addEventListener('resize', updateHeader);
+    
+      return () => {
+        window.removeEventListener('scroll', updateHeader);
+        window.removeEventListener('resize', updateHeader);
+      };
+  }, [pathname])
 
-    if (!hero) {
-      setIsOverHero(false);
-      return;
-    }
 
-    const updateHeader = () => {
-      const headerHeight = headerRef.current?.offsetHeight ?? 0;
-      const heroBottom = hero.getBoundingClientRect().bottom;
 
-      setIsOverHero(heroBottom > headerHeight);
-    };
-
-    updateHeader();
-
-    window.addEventListener('scroll', updateHeader, { passive: true });
-    window.addEventListener('resize', updateHeader);
-
-    return () => {
-      window.removeEventListener('scroll', updateHeader);
-      window.removeEventListener('resize', updateHeader);
-    };
-  }, [pathname]);
 
   useEffect(() => {
     // eslint-disable-next-line react-hooks/set-state-in-effect
@@ -105,7 +118,7 @@ export default function Header() {
     if (!isMenuOpen) return;
 
     const originalBodyOverflow = document.body.style.overflow;
-    const originalHtmlOverflow = document.documentElement.style.overflow
+    const originalHtmlOverflow = document.documentElement.style.overflow;
     document.body.style.overflow = 'hidden';
     document.documentElement.style.overflow = 'hidden';
 
@@ -113,7 +126,7 @@ export default function Header() {
       document.body.style.overflow = originalBodyOverflow;
       document.documentElement.style.overflow = originalHtmlOverflow;
     };
-  }, [isMenuOpen])
+  }, [isMenuOpen]);
 
   return (
     <HeaderContainer ref={headerRef} $isOverHero={isOverHero && !isMenuOpen}>
@@ -303,7 +316,7 @@ export default function Header() {
         <MobileNavPanel ref={menuPanelRef}>
           <MobileNavTop>
             <LogoLink to="/" onClick={() => setIsMenuOpen(false)}>
-              <LogoImage variant='menu' src={zooleafLogo} alt="ZOOLEAF" />
+              <LogoImage variant="menu" src={zooleafLogo} alt="ZOOLEAF" />
             </LogoLink>
             <MobileNavCloseButton
               type="button"

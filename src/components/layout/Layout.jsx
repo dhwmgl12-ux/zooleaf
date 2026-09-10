@@ -3,6 +3,7 @@ import Header from "./Header.jsx";
 import Footer from "./Footer.jsx"
 import { ContentContainer } from "./ContentContainer.styles.js";
 import { LayoutContainer } from "./Layout.styles.js";
+import ScrollTopButton from "../common/ScrollTopButton.jsx";
 
 
 export default function Layout() {
@@ -21,6 +22,7 @@ export default function Layout() {
       </LayoutContainer>
 
       <Footer />
+      <ScrollTopButton />
     </>
   )
 }
