@@ -1,3 +1,7 @@
+import { useState } from "react";
+import Modal from "../common/Modal";
+import useAddressStore from "../../store/addressStore";
+import useAuthStore from "../../store/authStore";
 import useToastStore from "../../store/toastStore";
 import {
   Card,
@@ -13,32 +17,154 @@ import {
   AddressTop,
   ButtonGroup,
   AddressDetails,
+  AddressEmpty,
+  DefaultAddressLabel,
+  ProfileEditForm,
+  ProfileField,
+  ProfileLabel,
+  ProfileInput,
+  ProfileModalActions,
+  ProfileCancelButton,
+  ProfileSaveButton,
 } from "../../pages/Mypage.styles";
 
-// 화면 확인용 데이터
-const previewAddresses = [
+const emptyAddresses = [];
+
+const initialForm = {
+  label: "",
+  recipientName: "",
+  phone: "",
+  address: "",
+  isDefault: false,
+};
+
+const fields = [
   {
-    addressId: 1,
-    label: "집",
-    recipientName: "고길동",
-    phone: "010-0000-0000",
-    address: "서울특별시 성동구 왕십리로 100",
-    detailAddress: "1203호",
-    isDefault: true,
+    name: "label",
+    label: "배송지명",
+    placeholder: "집, 회사 등",
+    autoComplete: "off",
+    maxLength: 30,
   },
   {
-    addressId: 2,
-    label: "회사",
-    recipientName: "고길동",
-    phone: "010-0000-0000",
-    address: "경기도 성남시 분당구 판교로 255",
-    detailAddress: "5층",
-    isDefault: false,
+    name: "recipientName",
+    label: "받는 분",
+    placeholder: "이름",
+    autoComplete: "name",
+    maxLength: 50,
+  },
+  {
+    name: "phone",
+    label: "연락처",
+    placeholder: "010-0000-0000",
+    autoComplete: "tel",
+    type: "tel",
+    pattern: "01[016789]-[0-9]{3,4}-[0-9]{4}",
+    maxLength: 13,
+  },
+  {
+    name: "address",
+    label: "주소",
+    placeholder: "기본주소와 상세주소를 입력해주세요",
+    autoComplete: "street-address",
+    maxLength: 200,
   },
 ];
 
 export default function AddressSection() {
+  const userId = useAuthStore((state) => state.user?.id);
   const showToast = useToastStore((state) => state.showToast);
+
+  const addresses = useAddressStore(
+    (state) => state.addressesByUser[userId] ?? emptyAddresses,
+  );
+  const saveAddress = useAddressStore((state) => state.saveAddress);
+  const setDefaultAddress = useAddressStore((state) => state.setDefaultAddress);
+  const removeAddress = useAddressStore((state) => state.removeAddress);
+
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [editingId, setEditingId] = useState(null);
+  const [form, setForm] = useState(initialForm);
+
+  const isEditing = editingId !== null;
+  const isEditingDefault = addresses.some(
+    (item) => item.addressId === editingId && item.isDefault,
+  );
+
+  // 새 배송지는 빈 입력창으로 시작
+  const openAddModal = () => {
+    if (!userId) {
+      showToast("로그인 후 이용해주세요.");
+      return;
+    }
+
+    setEditingId(null);
+    setForm({
+      ...initialForm,
+      isDefault: addresses.length === 0,
+    });
+    setIsModalOpen(true);
+  };
+
+  // 수정할 배송지 정보를 입력창에 표시
+  const openEditModal = (address) => {
+    setEditingId(address.addressId);
+    setForm({ ...address });
+    setIsModalOpen(true);
+  };
+
+  const closeModal = () => {
+    setIsModalOpen(false);
+  };
+
+  const handleChange = (event) => {
+    const { name, value, type, checked } = event.target;
+
+    setForm((prev) => ({
+      ...prev,
+      [name]: type === "checkbox" ? checked : value,
+    }));
+  };
+
+  const handleSave = (event) => {
+    event.preventDefault();
+
+    if (!userId) {
+      showToast("로그인 후 이용해주세요.");
+      return;
+    }
+
+    const trimmedForm = {
+      ...form,
+      label: form.label.trim(),
+      recipientName: form.recipientName.trim(),
+      phone: form.phone.trim(),
+      address: form.address.trim(),
+    };
+
+    if (
+      !trimmedForm.label ||
+      !trimmedForm.recipientName ||
+      !trimmedForm.phone ||
+      !trimmedForm.address
+    ) {
+      showToast("모든 항목을 입력해주세요.");
+      return;
+    }
+
+    saveAddress(userId, trimmedForm, editingId);
+    closeModal();
+    showToast(isEditing ? "배송지를 수정했습니다." : "배송지를 추가했습니다.");
+  };
+
+  const handleDelete = (address) => {
+    if (!window.confirm(`${address.label} 배송지를 삭제하시겠습니까?`)) {
+      return;
+    }
+
+    removeAddress(userId, address.addressId);
+    showToast("배송지를 삭제했습니다.");
+  };
 
   return (
     <Card>
@@ -63,64 +189,127 @@ export default function AddressSection() {
           </div>
         </HeadingGroup>
 
-        <OutlineButton
-          type="button"
-          onClick={() => showToast("배송지 추가 기능은 준비 중입니다.")}
-        >
+        <OutlineButton type="button" onClick={openAddModal}>
           + 새 배송지 추가
         </OutlineButton>
       </CardHeader>
 
-      <AddressList>
-        {previewAddresses.map((address) => (
-          <AddressBox key={address.addressId}>
-            {address.isDefault && <DefaultBadge>기본배송지</DefaultBadge>}
+      {addresses.length === 0 ? (
+        <AddressEmpty>
+          <p>현재 등록된 배송지가 없습니다.</p>
+          <p>배송지를 등록해주세요.</p>
+        </AddressEmpty>
+      ) : (
+        <AddressList>
+          {addresses.map((address) => (
+            <AddressBox key={address.addressId}>
+              {address.isDefault && <DefaultBadge>기본배송지</DefaultBadge>}
 
-            <AddressTop>
-              <ItemTitle>{address.label}</ItemTitle>
+              <AddressTop>
+                <ItemTitle>{address.label}</ItemTitle>
 
-              <ButtonGroup>
-                <OutlineButton
-                  type="button"
-                  aria-label={`${address.label} 배송지 수정`}
-                  onClick={() => showToast("배송지 수정 기능은 준비 중입니다.")}
-                >
-                  수정
-                </OutlineButton>
+                <ButtonGroup>
+                  <OutlineButton
+                    type="button"
+                    aria-label={`${address.label} 배송지 수정`}
+                    onClick={() => openEditModal(address)}
+                  >
+                    수정
+                  </OutlineButton>
 
-                <OutlineButton
-                  type="button"
-                  aria-label={`${address.label} 배송지 삭제`}
-                  onClick={() => showToast("배송지 삭제 기능은 준비 중입니다.")}
-                >
-                  삭제
-                </OutlineButton>
-              </ButtonGroup>
-            </AddressTop>
+                  <OutlineButton
+                    type="button"
+                    aria-label={`${address.label} 배송지 삭제`}
+                    onClick={() => handleDelete(address)}
+                  >
+                    삭제
+                  </OutlineButton>
 
-            <AddressDetails>
-              <div>
-                <dt>수령인</dt>
-                <dd>{address.recipientName}</dd>
-              </div>
+                  {!address.isDefault && (
+                    <OutlineButton
+                      type="button"
+                      aria-label={`${address.label} 기본 배송지로 설정`}
+                      onClick={() =>
+                        setDefaultAddress(userId, address.addressId)
+                      }
+                    >
+                      기본으로 설정
+                    </OutlineButton>
+                  )}
+                </ButtonGroup>
+              </AddressTop>
 
-              <div>
-                <dt>연락처</dt>
-                <dd>{address.phone}</dd>
-              </div>
+              <AddressDetails>
+                <div>
+                  <dt>수령인</dt>
+                  <dd>{address.recipientName}</dd>
+                </div>
+                <div>
+                  <dt>연락처</dt>
+                  <dd>{address.phone}</dd>
+                </div>
+                <div>
+                  <dt>주소</dt>
+                  <dd>{address.address}</dd>
+                </div>
+              </AddressDetails>
+            </AddressBox>
+          ))}
+        </AddressList>
+      )}
 
-              <div>
-                <dt>주소</dt>
-                <dd>
-                  {[address.address, address.detailAddress]
-                    .filter(Boolean)
-                    .join(", ")}
-                </dd>
-              </div>
-            </AddressDetails>
-          </AddressBox>
-        ))}
-      </AddressList>
+      <Modal
+        isOpen={isModalOpen}
+        onClose={closeModal}
+        title={isEditing ? "배송지 수정" : "배송지 추가"}
+      >
+        <ProfileEditForm onSubmit={handleSave}>
+          {fields.map((field) => (
+            <ProfileField key={field.name}>
+              <ProfileLabel htmlFor={`address-${field.name}`}>
+                {field.label}
+              </ProfileLabel>
+
+              <ProfileInput
+                id={`address-${field.name}`}
+                name={field.name}
+                type={field.type ?? "text"}
+                value={form[field.name]}
+                onChange={handleChange}
+                placeholder={field.placeholder}
+                autoComplete={field.autoComplete}
+                maxLength={field.maxLength}
+                pattern={field.pattern}
+                title={
+                  field.name === "phone"
+                    ? "010-1234-5678 형식으로 입력해주세요."
+                    : undefined
+                }
+                required
+              />
+            </ProfileField>
+          ))}
+
+          <DefaultAddressLabel>
+            <input
+              type="checkbox"
+              name="isDefault"
+              checked={form.isDefault}
+              onChange={handleChange}
+              disabled={addresses.length === 0 || isEditingDefault}
+            />
+            기본 배송지로 설정
+          </DefaultAddressLabel>
+
+          <ProfileModalActions>
+            <ProfileCancelButton type="button" onClick={closeModal}>
+              취소
+            </ProfileCancelButton>
+
+            <ProfileSaveButton type="submit">저장하기</ProfileSaveButton>
+          </ProfileModalActions>
+        </ProfileEditForm>
+      </Modal>
     </Card>
   );
 }

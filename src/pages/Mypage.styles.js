@@ -427,3 +427,52 @@ export const ItemTitle = styled.h3`
   font-weight: ${theme.fontWeight.bold};
   overflow-wrap: anywhere;
 `;
+
+// 등록된 배송지가 없을 때 안내
+export const AddressEmpty = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: ${theme.spacing[20]};
+
+  min-height: 280px;
+  padding: ${theme.spacing[40]} ${theme.spacing[16]};
+  border-top: 1px solid ${theme.colors.border};
+
+  color: ${theme.colors.textSecondary};
+  text-align: center;
+  word-break: keep-all;
+
+  > p {
+    font-size: ${theme.fontSize.body.size};
+    line-height: ${theme.fontSize.body.lineheight};
+  }
+
+  @media (max-width: ${theme.layout.breakpoint.mobile}) {
+    min-height: 200px;
+  }
+`;
+
+// 기본 배송지 선택 체크박스
+export const DefaultAddressLabel = styled.label`
+  display: flex;
+  align-items: center;
+  gap: ${theme.spacing[8]};
+
+  color: ${theme.colors.textPrimary};
+  font-size: ${theme.fontSize.bodysmall.size};
+  line-height: ${theme.fontSize.bodysmall.lineheight};
+
+  > input {
+    width: ${theme.spacing[16]};
+    height: ${theme.spacing[16]};
+    margin: 0;
+    accent-color: ${theme.colors.primary};
+  }
+
+  > input:focus-visible {
+    outline: 2px solid ${theme.colors.primary};
+    outline-offset: 3px;
+  }
+`;
