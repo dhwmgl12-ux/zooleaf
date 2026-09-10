@@ -72,6 +72,10 @@ export const NavLink = styled(Link)`
   &:focus-visible {
     color: ${theme.colors.primary};
   }
+
+  @media (max-width: ${theme.layout.breakpoint.tablet}) {
+    display: none;
+  }
 `;
 
 export const UtilsList = styled.ul`

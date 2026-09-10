@@ -84,6 +84,7 @@ export function useSignup() {
   const showToast = useToastStore((state) => state.showToast);
   const [form, setForm] = useState(initialSignupForm);
   const [idCheckStatus, setIdCheckStatus] = useState('idle');
+  const [idCheckMessage, setIdCheckMessage] = useState('');
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [errors, setErrors] = useState({
     id: '',
@@ -114,7 +115,10 @@ export function useSignup() {
 
     setForm((prev) => ({ ...prev, [name]: val }));
 
-    if (name === 'id') setIdCheckStatus('idle');
+    if (name === 'id') {
+      setIdCheckStatus('idle');
+      setIdCheckMessage('');
+    }
   };
 
   const handleCheckId = async () => {
@@ -132,6 +136,7 @@ export function useSignup() {
         setErrors((prev) => ({ ...prev, id: result.message }));
       } else {
         setIdCheckStatus('available');
+        setIdCheckMessage(result.message)
         setErrors((prev) => ({ ...prev, id: '' }));
       }
     } catch (err) {
@@ -221,6 +226,7 @@ export function useSignup() {
   return {
     ...form,
     idCheckStatus,
+    idCheckMessage,
     isSubmitting,
     errors,
     handleChange,

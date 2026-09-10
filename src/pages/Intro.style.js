@@ -1,6 +1,9 @@
 import styled from '@emotion/styled';
 import { theme } from '../styles/variables';
-import introPCImg from '../assets/images/Intro-tablet.png';
+import introPCImg from '../assets/images/Intro-pc.png';
+import introTabletImg from '../assets/images/Intro-tablet.png';
+import introMobileImg from '../assets/images/Intro-mobile.png';
+import introsmallImg from '../assets/images/Intro-small.png';
 
 export const PageContainer = styled.div`
   width: 100%;
@@ -17,8 +20,8 @@ export const HeroSection = styled.div`
   height: 500px;
   background-image:
     linear-gradient(rgba(0, 0, 0, 0.3), rgba(0, 0, 0, 0.3)), url(${introPCImg});
-  background-size: contain;
-  background-position: center;
+  background-size: cover;
+  background-position: right center; /* 오른쪽 끝에 딱 붙도록 설정 */
   background-repeat: no-repeat;
   background-color: #f4f6f0;
   display: flex;
@@ -34,16 +37,44 @@ export const HeroSection = styled.div`
     width: 100%;
 
     .sub-title {
-      font-size: ${theme.fontSize.bodylarge.size};
+      font-size: ${theme.fontSize.h3.size};
       margin-bottom: ${theme.spacing[12]};
       font-weight: ${theme.fontWeight.medium};
     }
 
-    h1 {
+    h2 {
       font-size: ${theme.fontSize.h2.size};
       font-weight: ${theme.fontWeight.bold};
       margin: 0;
     }
+  }
+
+  @media (max-width: ${theme.layout.breakpoint.tablet}) {
+    background-position: right center;
+    background-image:
+      linear-gradient(rgba(0, 0, 0, 0.3), rgba(0, 0, 0, 0.3)),
+      url(${introTabletImg});
+    max-width: 982px;
+    height: 547px;
+  }
+
+  @media (max-width: ${theme.layout.breakpoint.mobile}) {
+    background-position: right center;
+    background-image:
+      linear-gradient(rgba(0, 0, 0, 0.3), rgba(0, 0, 0, 0.3)),
+      url(${introMobileImg});
+    max-width: 723px;
+    height: 555px;
+  }
+
+  @media (max-width: ${theme.layout.breakpoint.smallMobile}) {
+    /* 오타 교정 포함 */
+    background-position: right center;
+    background-image:
+      linear-gradient(rgba(0, 0, 0, 0.3), rgba(0, 0, 0, 0.3)),
+      url(${introsmallImg});
+    max-width: 343px;
+    height: 455px;
   }
 `;
 
@@ -149,6 +180,18 @@ export const InfoBlock = styled.div`
         height: 271px;
         object-fit: cover;
         object-position: center top;
+      }
+    }
+
+    @media (max-width: ${theme.layout.breakpoint.mobile}) {
+      .map-wrap {
+        flex-direction: column;
+
+        .map-img,
+        .bus-img {
+          width: 100%;
+          height: auto;
+        }
       }
     }
   }
