@@ -30,7 +30,12 @@ export const HeaderInner = styled(ContentContainer)`
 `;
 
 export const LogoHeading = styled.h1`
-  width: 200px;
+  width: 179px;
+  flex-shrink: 0;
+
+  @media (max-width: ${theme.layout.breakpoint.tablet}) {
+    width: 134px;
+  }
 `;
 
 export const LogoLink = styled(Link)`
@@ -45,6 +50,10 @@ export const LogoImage = styled.img`
 export const NavList = styled.ul`
   display: flex;
   gap: ${theme.spacing[56]};
+
+  @media (max-width: ${theme.layout.breakpoint.tablet}) {
+    display: none;
+  }
 `;
 
 export const LoginMenuItem = styled.li`
@@ -82,6 +91,11 @@ export const UtilsList = styled.ul`
   display: flex;
   align-items: center;
   gap: ${theme.spacing[32]};
+  flex-shrink: 0;
+
+  @media (max-width: ${theme.layout.breakpoint.tablet}) {
+    gap: ${theme.spacing[16]}
+  }
 `;
 
 export const IconLink = styled(Link)`
@@ -166,7 +180,7 @@ export const AccountDropdown = styled.div`
   opacity: 0;
   visibility: hidden;
   transform: translateY(-8px);
-  transition: opacity 0.2s ease, transform 0.2s ease, visivility 0.2s ease;
+  transition: opacity 0.2s ease, transform 0.2s ease, visibility 0.2s ease;
   `;
 
 export const AccountCard = styled.div`
@@ -226,4 +240,91 @@ export const LogoutButton = styled.button`
   &:hover {
     color: ${theme.colors.hover};
   }
+`;
+
+export const MobileNavPanel = styled.nav`
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  overflow-y: auto;
+  background: ${theme.colors.background2};
+  padding: ${theme.spacing[20]};
+  display: flex;
+  flex-direction: column;
+  gap: ${theme.spacing[24]};
+`;
+
+export const MobileNavTop = styled.div`
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+`;
+
+export const MobileNavCloseButton = styled.button`
+  font-size: ${theme.fontSize.h4.size};
+  line-height: 1;
+  color: ${theme.colors.textPrimary};
+  background: none;
+  border: none;
+  cursor: pointer;
+`;
+
+export const MobileNavAccount = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: ${theme.spacing[4]};
+`;
+
+export const MobileNavGreeting = styled.p`
+  font-size: ${theme.fontSize.bodylarge.size};
+  font-weight: ${theme.fontWeight.medium};
+  color: ${theme.colors.textPrimary};
+  margin: 0;
+`;
+
+export const MobileAccountLink = styled(Link)`
+  display: inline-block;
+  width: fit-content;
+  font-size: ${theme.fontSize.h6.size};
+  font-weight: ${theme.fontWeight.semiBold};
+  color: ${theme.colors.textPrimary};
+  text-decoration: underline;
+
+  &:hover,
+  &:focus-visible {
+    color: ${theme.colors.primary};
+  }
+`;
+
+export const MobileNavList = styled.ul`
+  display: flex;
+  flex-direction: column;
+  gap: ${theme.spacing[20]};
+`;
+
+export const MobileNavLink = styled(Link)`
+  display: inline-block;
+  font-size: ${theme.fontSize.h6.size};
+  font-weight: ${theme.fontWeight.semiBold};
+  color: ${theme.colors.textPrimary};
+
+  &:hover,
+  &:focus-visible {
+    color: ${theme.colors.primary};
+  }
+`;
+
+export const MobileNavDivider = styled.hr`
+  border-top: 1px solid ${theme.colors.border};
+`;
+
+export const MobileNavLogoutButton = styled.button`
+  align-self: flex-start;
+  font-size: ${theme.fontSize.bodysmall.size};
+  color: ${theme.colors.textSecondary};
+  background: none;
+  border: none;
+  cursor: pointer;
 `;

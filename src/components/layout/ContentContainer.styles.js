@@ -7,14 +7,6 @@ export const ContentContainer = styled.div`
   margin: 0 auto;
   padding-inline: ${theme.spacing[20]};
   
-  @media screen and (max-width: ${theme.layout.breakpoint.tablet}) {
-    padding-inline: ${theme.spacing[20]};
-  }
-
-  @media screen and (max-width: ${theme.layout.breakpoint.mobile}) {
-    padding-inline: ${theme.spacing[20]};
-  }
-
   @media screen and (max-width: ${theme.layout.breakpoint.smallMobile}) {
     padding-inline: ${theme.spacing[16]};
   }
