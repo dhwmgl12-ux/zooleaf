@@ -83,7 +83,7 @@ export default function ProductDetailPage() {
         <DetailContent product={product} /> 
       </div>
       <div className="detail-price-area">
-        <DetailPrice product={product} />
+        <DetailPrice product={product} productType="experience" />
       </div>
     </ProductDetailPageContainer>
   )
