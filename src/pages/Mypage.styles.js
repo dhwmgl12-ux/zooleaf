@@ -190,3 +190,123 @@ export const LogoutButton = styled.button`
     outline-offset: 3px;
   }
 `;
+
+export const AddressList = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: ${theme.spacing[16]};
+`;
+
+export const AddressBox = styled.article`
+  padding: ${theme.spacing[20]};
+
+  border-radius: ${theme.radius.box};
+  background: ${theme.colors.background};
+
+  @media (max-width: ${theme.layout.breakpoint.mobile}) {
+    padding: ${theme.spacing[16]};
+  }
+`;
+
+export const DefaultBadge = styled.span`
+  display: inline-block;
+  margin-bottom: ${theme.spacing[8]};
+  padding: ${theme.spacing[4]} ${theme.spacing[12]};
+
+  border-radius: ${theme.radius.input};
+  background: ${theme.colors.primary};
+  color: ${theme.colors.white};
+
+  font-size: ${theme.fontSize.caption.size};
+  line-height: ${theme.fontSize.caption.lineheight};
+  font-weight: ${theme.fontWeight.semiBold};
+`;
+
+export const AddressTop = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: ${theme.spacing[12]};
+
+  margin-bottom: ${theme.spacing[12]};
+`;
+
+export const ButtonGroup = styled.div`
+  display: flex;
+  flex-wrap: wrap;
+  gap: ${theme.spacing[8]};
+`;
+
+export const AddressDetails = styled.dl`
+  display: flex;
+  flex-direction: column;
+  gap: ${theme.spacing[8]};
+
+  margin: 0;
+
+  font-size: ${theme.fontSize.bodysmall.size};
+  line-height: ${theme.fontSize.bodysmall.lineheight};
+
+  > div {
+    display: grid;
+    grid-template-columns: max-content minmax(0, 1fr);
+    gap: ${theme.spacing[12]};
+  }
+
+  > div > dt {
+    min-width: ${theme.spacing[48]};
+    color: ${theme.colors.textSecondary};
+  }
+
+  > div > dd {
+    margin: 0;
+    overflow-wrap: anywhere;
+  }
+`;
+
+export const CardTitle = styled.h2`
+  font-size: ${theme.fontSize.h4.size};
+  line-height: ${theme.fontSize.h4.lineheight};
+  font-weight: ${theme.fontWeight.bold};
+
+  @media (max-width: ${theme.layout.breakpoint.mobile}) {
+    font-size: ${theme.fontSize.h5.size};
+    line-height: ${theme.fontSize.h5.lineheight};
+  }
+`;
+
+export const ProfileList = styled.dl`
+  margin: 0;
+`;
+
+export const ProfileRow = styled.div`
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 3fr);
+  gap: ${theme.spacing[16]};
+
+  padding: ${theme.spacing[16]} 0;
+  border-top: 1px solid ${theme.colors.border};
+
+  font-size: ${theme.fontSize.body.size};
+  line-height: ${theme.fontSize.body.lineheight};
+
+  > dt {
+    color: ${theme.colors.textSecondary};
+  }
+
+  > dd {
+    margin: 0;
+    overflow-wrap: anywhere;
+  }
+
+  &:first-of-type > dd {
+    font-weight: ${theme.fontWeight.bold};
+  }
+
+  @media (max-width: ${theme.layout.breakpoint.mobile}) {
+    gap: ${theme.spacing[12]};
+    font-size: ${theme.fontSize.bodysmall.size};
+    line-height: ${theme.fontSize.bodysmall.lineheight};
+  }
+`;
