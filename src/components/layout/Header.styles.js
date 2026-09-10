@@ -180,7 +180,7 @@ export const AccountDropdown = styled.div`
   opacity: 0;
   visibility: hidden;
   transform: translateY(-8px);
-  transition: opacity 0.2s ease, transform 0.2s ease, visivility 0.2s ease;
+  transition: opacity 0.2s ease, transform 0.2s ease, visibility 0.2s ease;
   `;
 
 export const AccountCard = styled.div`
