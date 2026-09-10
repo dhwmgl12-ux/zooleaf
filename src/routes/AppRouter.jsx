@@ -16,6 +16,7 @@ import { IntroPage } from '../pages/Intro';
 import AuthTest from '../components/auth/AuthTest';
 import Animal from '../pages/AnimalStory';
 import MyPage from '../pages/MyPage';
+import NotFoundPage from '../pages/NotFoundPage';
 
 const ProtectedRoute = ({ children }) => {
   const isLoggedIn = useAuthStore((state) => state.isLoggedIn);
@@ -61,6 +62,7 @@ export default function AppRouter() {
           <Route path="/discount" element={<Discount />} />
           <Route path="/About" element={<IntroPage />} />
           <Route path="/animals" element={<Animal />} />
+          <Route path="*" element={<NotFoundPage />} />
         </Route>
       </Routes>
     </BrowserRouter>
