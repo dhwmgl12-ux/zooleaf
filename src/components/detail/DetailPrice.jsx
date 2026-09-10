@@ -3,6 +3,12 @@ import { useState } from "react";
 import fullStarIcon from "../../assets/icons/full-black.svg";
 import emptyStarIcon from "../../assets/icons/empty-black.svg";
 import halfStarIcon from "../../assets/icons/half-black.svg";
+import { DetailPriceContainer } from "./DetailPrice.styles"; 
+import { DetailPriceInfo } from "./DetailPrice.styles"; 
+import { Rating } from "./DetailPrice.styles"; 
+import { DetailPriceForm } from "./DetailPrice.styles"; 
+import { DeliveryInfo } from "./DetailPrice.styles"; 
+import { OptionSelector } from "./DetailPrice.styles"; 
 
 export default function DetailPrice({ product, productType, }) {
   const [selectedOptionValue, setSelectedOptionValue] = useState("");
@@ -10,6 +16,7 @@ export default function DetailPrice({ product, productType, }) {
 
   const {
     name,
+    // TODO(API): goods의 subCategory가 categoryId로 변경되면 제거
     subCategory,
     price = 0,
     discountRate,
@@ -24,11 +31,23 @@ export default function DetailPrice({ product, productType, }) {
 
   const CATEGORY_LABELS = {
     goods: "ZOOLEAF GOODS",
-    admission: "입장권 & 패키지",
+    product: "입장권 & 패키지",
     experience: "프로그램",
   };
 
   const categoryLabel = CATEGORY_LABELS[productType] ?? "";
+
+  const CATEGORY_ID_LABELS = {
+    ticket: "입장권",
+    package: "패키지",
+  };
+  // TODO(API): goods가 categoryId를 제공하면 subCategory fallback 제거
+  const detailCategoryKey = categoryId ?? subCategory;
+
+  const detailCategoryLabel =
+    CATEGORY_ID_LABELS[detailCategoryKey] ??
+    detailCategoryKey ??
+    "";
 
   const isGoods = productType === "goods";
 
@@ -112,22 +131,20 @@ export default function DetailPrice({ product, productType, }) {
   }
 
   return (
-    <section >
-      <header>
-        <div className="title">
-          <nav className="breadcrumb">
-            <ol>
-              <li></li>
-              <li>{subCategory}</li>
-            </ol>
-          </nav>
+    <DetailPriceContainer >
+      <DetailPriceInfo>
+        <nav>
+          <ol>
+            <li>{categoryLabel}</li>
+            {detailCategoryLabel && (
+              <li>{detailCategoryLabel}</li>
+            )}
+          </ol>
+        </nav>
+        <h2>{name}</h2>
+        {description && <p>{description}</p>}
 
-          <h2>{name}</h2>
-
-          {description && <p>{description}</p>}
-        </div>
-
-        <div className="detail-rating" aria-label={`평점 ${rating}점, 후기 ${reviewCount}개`}>
+        <Rating aria-label={`평점 ${rating}점, 후기 ${reviewCount}개`}>
           <div aria-hidden="true">
             {starIcons.map((icon, index) => ( 
               <img key={index} src={icon} alt="" />
@@ -136,15 +153,15 @@ export default function DetailPrice({ product, productType, }) {
           <span>
             {rating} ({reviewCount})
           </span>
-        </div>
+        </Rating>
 
         <p>
           {price.toLocaleString()}원
         </p>
-      </header>
+      </DetailPriceInfo>
 
-      <form onSubmit={handleSubmit}>
-        <dl>
+      <DetailPriceForm onSubmit={handleSubmit}>
+        <DeliveryInfo>
           <dt>배송비</dt>
           <dd>
             {isGoods ? (
@@ -155,11 +172,11 @@ export default function DetailPrice({ product, productType, }) {
             ) : <span>0원</span>
             }
           </dd>
-        </dl>
+        </DeliveryInfo>
 
         {hasOptions ? (
           <>
-            <fieldset>
+            <OptionSelector>
               <legend>옵션</legend>
               <select name="goodsOption" value={selectedOptionId} onChange={handleOptionChange} aria-label="상품 옵션">
                 <option value="">옵션을 선택해 주세요</option>
@@ -169,7 +186,7 @@ export default function DetailPrice({ product, productType, }) {
                   </option>
                 ))}
               </select>
-            </fieldset>
+            </OptionSelector>
           
             {selectedOption && (
               <div className="selected-option">
@@ -271,8 +288,8 @@ export default function DetailPrice({ product, productType, }) {
         >
           {isCartDisabled ? "상품을 선택해 주세요" : "장바구니"}
         </button>
-      </form>
+      </DetailPriceForm>
 
-    </section>
+    </DetailPriceContainer>
   )
 }
