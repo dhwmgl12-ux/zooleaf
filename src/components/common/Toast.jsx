@@ -1,14 +1,14 @@
-import { useEffect } from "react";
-import useToastStore from "../../store/toastStore"
-import { theme } from "../../styles/variables"
-import styled from "@emotion/styled";
+import { useEffect } from 'react';
+import useToastStore from '../../store/toastStore';
+import { theme } from '../../styles/variables';
+import styled from '@emotion/styled';
 
 export default function Toast() {
   const message = useToastStore((state) => state.message);
   const hideToast = useToastStore((state) => state.hideToast);
 
   useEffect(() => {
-    if (!message) return
+    if (!message) return;
 
     const timer = setTimeout(() => {
       hideToast();

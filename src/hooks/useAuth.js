@@ -27,14 +27,9 @@ const initialSignupForm = {
   agreeMarketing: false,
 };
 
-export function useLogin() {
+function useRedirectIfLoggedIn() {
   const navigate = useNavigate();
-  const setAuth = useAuthStore((state) => state.setAuth);
   const showToast = useToastStore((state) => state.showToast);
-  const [id, setId] = useState('');
-  const [password, setPassword] = useState('');
-  const [errors, setErrors] = useState({ id: '', password: '', form: '' });
-  const [isSubmitting, setIsSubmitting] = useState(false);
 
   useEffect(() => {
     if (useAuthStore.getState().isLoggedIn) {
@@ -43,15 +38,27 @@ export function useLogin() {
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
+}
+
+export function useLogin() {
+  const navigate = useNavigate();
+  const setAuth = useAuthStore((state) => state.setAuth);
+  const showToast = useToastStore((state) => state.showToast);
+  const [form, setForm] = useState({ id: '', password: '' });
+  const [errors, setErrors] = useState({ id: '', password: '', form: '' });
+  const [isSubmitting, setIsSubmitting] = useState(false);
+
+  useRedirectIfLoggedIn();
 
   const handleChange = (e) => {
     const { name, value } = e.target;
-    if (name === 'id') setId(value);
-    if (name === 'password') setPassword(value);
+    setForm((prev) => ({ ...prev, [name]: value }));
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+
+    const { id, password } = form;
 
     const idError = getEmailError(id);
     const passwordError = getPasswordError(password);
@@ -66,17 +73,17 @@ export function useLogin() {
     try {
       const result = await login({ id, password });
       setAuth(result.token, result.userInfo);
-      showToast(result.message); // 로그인에 성공했습니다.
+      showToast(result.message);
       navigate('/');
     } catch (err) {
       setErrors((prev) => ({ ...prev, form: err.message }));
-      setPassword('');
+      setForm((prev) => ({ ...prev, password: '' }));
     } finally {
       setIsSubmitting(false);
     }
   };
 
-  return { id, password, errors, isSubmitting, handleChange, handleSubmit };
+  return { ...form, errors, isSubmitting, handleChange, handleSubmit };
 }
 
 export function useSignup() {
@@ -98,13 +105,7 @@ export function useSignup() {
     form: '',
   });
 
-  useEffect(() => {
-    if (useAuthStore.getState().isLoggedIn) {
-      showToast('이미 로그인되어 있습니다.');
-      navigate('/', { replace: true });
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  useRedirectIfLoggedIn();
 
   const handleChange = (e) => {
     const { name, value, type, checked } = e.target;
@@ -136,7 +137,7 @@ export function useSignup() {
         setErrors((prev) => ({ ...prev, id: result.message }));
       } else {
         setIdCheckStatus('available');
-        setIdCheckMessage(result.message)
+        setIdCheckMessage(result.message);
         setErrors((prev) => ({ ...prev, id: '' }));
       }
     } catch (err) {
@@ -169,7 +170,7 @@ export function useSignup() {
     const agreeTermsError = agreeTerms ? '' : '약관에 동의하여 주세요.';
     const agreePrivacyError = agreePrivacy ? '' : '수집 및 이용에 동의하여 주세요.';
 
-    setErrors({
+    const nextErrors = {
       id: idError,
       password: passwordError,
       passwordConfirm: passwordConfirmError,
@@ -178,18 +179,11 @@ export function useSignup() {
       birthDate: birthDateError,
       agreeTerms: agreeTermsError,
       agreePrivacy: agreePrivacyError,
-    });
+    };
 
-    if (
-      idError ||
-      passwordError ||
-      passwordConfirmError ||
-      nameError ||
-      phoneError ||
-      birthDateError ||
-      agreeTermsError ||
-      agreePrivacyError
-    ) {
+    setErrors(nextErrors);
+
+    if (Object.values(nextErrors).some(Boolean)) {
       return;
     }
 
