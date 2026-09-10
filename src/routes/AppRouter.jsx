@@ -13,7 +13,6 @@ import GoodsDetailPage from '../pages/GoodsDetailPage';
 import GoodsPage from '../pages/GoodsPage';
 import ExperiencePage from '../pages/ExperiencePage';
 import { IntroPage } from '../pages/Intro';
-import AuthTest from '../components/auth/AuthTest';
 import Animal from '../pages/AnimalStory';
 import MyPage from '../pages/MyPage';
 import NotFoundPage from '../pages/NotFoundPage';
@@ -49,7 +48,6 @@ export default function AppRouter() {
               </ProtectedRoute>
             }
           />
-          <Route path="/authTest" element={<AuthTest />} />
           <Route path="/cart" element={<CartPage />} />
           <Route path="/products/:productId" element={<ProductDetailPage />} />
           <Route path="/experiences" element={<ExperiencePage />} />
@@ -60,7 +58,7 @@ export default function AppRouter() {
           <Route path="/goods" element={<GoodsPage />} />
           <Route path="/goods/:goodsId" element={<GoodsDetailPage />} />
           <Route path="/discount" element={<Discount />} />
-          <Route path="/About" element={<IntroPage />} />
+          <Route path="/about" element={<IntroPage />} />
           <Route path="/animals" element={<Animal />} />
           <Route path="*" element={<NotFoundPage />} />
         </Route>
