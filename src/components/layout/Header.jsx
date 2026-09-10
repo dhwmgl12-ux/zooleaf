@@ -21,6 +21,16 @@ import {
   LogoLink,
   LogoutButton,
   MenuTriggerItem,
+  MobileAccountLink,
+  MobileNavAccount,
+  MobileNavCloseButton,
+  MobileNavDivider,
+  MobileNavGreeting,
+  MobileNavLink,
+  MobileNavList,
+  MobileNavLogoutButton,
+  MobileNavPanel,
+  MobileNavTop,
   NavLink,
   NavList,
   Tooltip,
@@ -32,11 +42,13 @@ export default function Header() {
   const { pathname } = useLocation();
   const headerRef = useRef(null);
   const [isOverHero, setIsOverHero] = useState(false);
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const menuButtonRef = useRef(null);
+  const menuPanelRef = useRef(null);
   const isLoggedIn = useAuthStore((state) => state.isLoggedIn);
   const user = useAuthStore((state) => state.user);
   const { handleLogout } = useLogout();
   const showToast = useToastStore((state) => state.showToast);
-
 
   useEffect(() => {
     if (pathname !== '/') {
@@ -70,8 +82,41 @@ export default function Header() {
     };
   }, [pathname]);
 
+  useEffect(() => {
+    // eslint-disable-next-line react-hooks/set-state-in-effect
+    setIsMenuOpen(false);
+  }, [pathname]);
+
+  useEffect(() => {
+    if (!isMenuOpen) return;
+
+    const handleClickOutside = (e) => {
+      if (menuButtonRef.current?.contains(e.target) || menuPanelRef.current?.contains(e.target)) {
+        return;
+      }
+      setIsMenuOpen(false);
+    };
+
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => document.removeEventListener('mousedown', handleClickOutside);
+  }, [isMenuOpen]);
+
+  useEffect(() => {
+    if (!isMenuOpen) return;
+
+    const originalBodyOverflow = document.body.style.overflow;
+    const originalHtmlOverflow = document.documentElement.style.overflow
+    document.body.style.overflow = 'hidden';
+    document.documentElement.style.overflow = 'hidden';
+
+    return () => {
+      document.body.style.overflow = originalBodyOverflow;
+      document.documentElement.style.overflow = originalHtmlOverflow;
+    };
+  }, [isMenuOpen])
+
   return (
-    <HeaderContainer ref={headerRef} $isOverHero={isOverHero}>
+    <HeaderContainer ref={headerRef} $isOverHero={isOverHero && !isMenuOpen}>
       <HeaderInner>
         <LogoHeading>
           <LogoLink to="/">
@@ -88,7 +133,7 @@ export default function Header() {
               <NavLink to="/products">입장권 & 패키지</NavLink>
             </li>
             <li>
-              <NavLink to="/experienes">프로그램</NavLink>
+              <NavLink to="/experiences">프로그램</NavLink>
             </li>
             <li>
               <NavLink to="/animals">동물 이야기</NavLink>
@@ -137,15 +182,12 @@ export default function Header() {
             </IconLink>
           </li>
           {isLoggedIn ? (
-            <AccountMenuTrigger 
-              tabIndex={0}
-              onClick={(e) => e.currentTarget.blur()}
-            >
-              <IconLink 
-                to="/mypage" 
+            <AccountMenuTrigger tabIndex={0} onClick={(e) => e.currentTarget.blur()}>
+              <IconLink
+                to="/mypage"
                 aria-label="마이페이지"
                 onClick={(e) => e.currentTarget.blur()}
-                >
+              >
                 <svg
                   width="32"
                   height="32"
@@ -193,14 +235,14 @@ export default function Header() {
             </AccountMenuTrigger>
           ) : (
             <LoginMenuItem>
-              <IconLink 
-                to="/login" 
+              <IconLink
+                to="/login"
                 aria-label="로그인"
                 onClick={(e) => {
                   e.currentTarget.blur();
                   showToast('로그인이 필요합니다.');
                 }}
-                >
+              >
                 <svg
                   width="32"
                   height="32"
@@ -232,7 +274,13 @@ export default function Header() {
           )}
 
           <MenuTriggerItem>
-            <IconButton type="button" aria-label="메뉴 열기">
+            <IconButton
+              ref={menuButtonRef}
+              type="button"
+              aria-label={isMenuOpen ? '메뉴 닫기' : '메뉴 열기'}
+              aria-expanded={isMenuOpen}
+              onClick={() => setIsMenuOpen((prev) => !prev)}
+            >
               <svg
                 width="22"
                 height="18"
@@ -251,6 +299,90 @@ export default function Header() {
           </MenuTriggerItem>
         </UtilsList>
       </HeaderInner>
+      {isMenuOpen && (
+        <MobileNavPanel ref={menuPanelRef}>
+          <MobileNavTop>
+            <LogoLink to="/" onClick={() => setIsMenuOpen(false)}>
+              <LogoImage src={zooleafLogo} alt="ZOOLEAF" />
+            </LogoLink>
+            <MobileNavCloseButton
+              type="button"
+              aria-label="메뉴 닫기"
+              onClick={() => setIsMenuOpen(false)}
+            >
+              ×
+            </MobileNavCloseButton>
+          </MobileNavTop>
+
+          <MobileNavAccount>
+            {isLoggedIn ? (
+              <>
+                <MobileNavGreeting>{user?.name}님, 반가워요!</MobileNavGreeting>
+                <MobileAccountLink to="/mypage" onClick={() => setIsMenuOpen(false)}>
+                  마이페이지
+                </MobileAccountLink>
+              </>
+            ) : (
+              <MobileAccountLink to="/login" onClick={() => setIsMenuOpen(false)}>
+                로그인
+              </MobileAccountLink>
+            )}
+          </MobileNavAccount>
+
+          <MobileNavDivider />
+
+          <MobileNavList>
+            <li>
+              <MobileNavLink to="/about" onClick={() => setIsMenuOpen(false)}>
+                동물원 소개
+              </MobileNavLink>
+            </li>
+            <li>
+              <MobileNavLink to="/products" onClick={() => setIsMenuOpen(false)}>
+                입장권 & 패키지
+              </MobileNavLink>
+            </li>
+            <li>
+              <MobileNavLink to="/experiences" onClick={() => setIsMenuOpen(false)}>
+                프로그램
+              </MobileNavLink>
+            </li>
+            <li>
+              <MobileNavLink to="/animal" onClick={() => setIsMenuOpen(false)}>
+                동물 이야기
+              </MobileNavLink>
+            </li>
+            <li>
+              <MobileNavLink to="/goods" onClick={() => setIsMenuOpen(false)}>
+                Shop
+              </MobileNavLink>
+            </li>
+            <li>
+              <MobileNavLink to="/community" onClick={() => setIsMenuOpen(false)}>
+                커뮤니티
+              </MobileNavLink>
+            </li>
+          </MobileNavList>
+
+          <MobileNavDivider />
+
+          <MobileNavLink to="/cart" onClick={() => setIsMenuOpen(false)}>
+            장바구니
+          </MobileNavLink>
+
+          {isLoggedIn && (
+            <MobileNavLogoutButton
+              type="button"
+              onClick={() => {
+                setIsMenuOpen(false);
+                handleLogout();
+              }}
+            >
+              로그아웃
+            </MobileNavLogoutButton>
+          )}
+        </MobileNavPanel>
+      )}
     </HeaderContainer>
   );
 }

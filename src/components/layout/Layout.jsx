@@ -8,12 +8,13 @@ import { LayoutContainer } from "./Layout.styles.js";
 export default function Layout() {
   const { pathname } = useLocation();
   const isMainPage = pathname === "/";
+  const isAuthPage = pathname === "/login" || pathname === "/signup";
 
   return (
     <>
       <Header />
 
-      <LayoutContainer $isMainPage={isMainPage}>
+      <LayoutContainer $isMainPage={isMainPage} $noBottomPadding={isAuthPage}>
         <ContentContainer>
           <Outlet />
         </ContentContainer>

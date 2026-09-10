@@ -6,12 +6,10 @@ export const PageWrapper = styled.div`
   flex: 1;
   min-height: 732px;
   padding: ${(props) => (props.variant === 'signup' ? theme.spacing[40] : theme.spacing[80])} 0;
-  margin-bottom: -${theme.spacing[200]}; // 협의 or 수정 필요
 
   @media (max-width: ${theme.layout.breakpoint.tablet}) {
     min-height: auto;
     padding: ${theme.spacing[48]} ${theme.spacing[20]};
-    margin-bottom: 0;
   }
 `;
 
