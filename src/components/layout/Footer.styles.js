@@ -76,6 +76,19 @@ export const FooterPolicyList = styled.ul`
   }
 `;
 
+export const FooterPolicyButton = styled.button`
+  background: none;
+  border: none;
+  padding: 0;
+  color: inherit;
+  font: inherit;
+  cursor: pointer;
+
+  &:hover {
+    text-decoration: underline;
+  }
+`;
+
 export const FooterPolicyItem = styled.li`
   position: relative;
   padding-left: ${theme.spacing[24]};
