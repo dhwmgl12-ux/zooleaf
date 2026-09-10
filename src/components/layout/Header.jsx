@@ -303,7 +303,7 @@ export default function Header() {
         <MobileNavPanel ref={menuPanelRef}>
           <MobileNavTop>
             <LogoLink to="/" onClick={() => setIsMenuOpen(false)}>
-              <LogoImage src={zooleafLogo} alt="ZOOLEAF" />
+              <LogoImage variant='menu' src={zooleafLogo} alt="ZOOLEAF" />
             </LogoLink>
             <MobileNavCloseButton
               type="button"
@@ -348,7 +348,7 @@ export default function Header() {
               </MobileNavLink>
             </li>
             <li>
-              <MobileNavLink to="/animal" onClick={() => setIsMenuOpen(false)}>
+              <MobileNavLink to="/animals" onClick={() => setIsMenuOpen(false)}>
                 동물 이야기
               </MobileNavLink>
             </li>
