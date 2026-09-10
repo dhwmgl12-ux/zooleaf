@@ -26,25 +26,26 @@ export const HeaderInner = styled(ContentContainer)`
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: ${theme.spacing[16]} 0;
+  padding: ${theme.spacing[16]};
 `;
 
 export const LogoHeading = styled.h1`
-  width: 179px;
+  width: 180px;
   flex-shrink: 0;
 
-  @media (max-width: ${theme.layout.breakpoint.tablet}) {
-    width: 134px;
-  }
-`;
+  `;
 
 export const LogoLink = styled(Link)`
   display: block;
-`;
+  `;
 
 export const LogoImage = styled.img`
   width: 100%;
   height: auto;
+
+  @media (max-width: ${theme.layout.breakpoint.tablet}) {
+    width: ${(prop) => prop.variant === 'menu' ? '164px' : '134px' }; 
+  }
 `;
 
 export const NavList = styled.ul`
@@ -254,6 +255,11 @@ export const MobileNavPanel = styled.nav`
   display: flex;
   flex-direction: column;
   gap: ${theme.spacing[24]};
+`;
+
+export const MobileNavImg = styled.img`
+  width: 100%;
+  max-width: 165px;
 `;
 
 export const MobileNavTop = styled.div`
