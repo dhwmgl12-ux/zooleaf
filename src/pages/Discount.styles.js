@@ -12,6 +12,177 @@ export const DiscountPage = styled.div`
   width: 100%;
 `;
 
+/* 1. 제휴 할인 섹션: PC에서는 1번, 태블릿에서는 2번 */
+export const DiscountSection = styled.section`
+  width: 100%;
+  max-width: 1440px;
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 24px;
+  margin-bottom: ${theme.spacing[32]};
+  order: 1;
+
+  @media (max-width: ${theme.layout.breakpoint.tablet}) {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 0 ${theme.spacing[16]};
+    order: 2; /* 태블릿부터는 주의사항 아래로 이동 */
+  }
+  @media (max-width: ${theme.layout.breakpoint.mobile}) {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 0;
+    order: 2;
+  }
+  @media (max-width: ${theme.layout.breakpoint.smallMobile}) {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 0;
+    order: 2;
+  }
+`;
+
+/* 2. 주의사항 박스: PC에서는 배경 없이 한 줄 정렬, 태블릿에서는 1번(최상단 박스) */
+export const NoticeBox = styled.div`
+  /* [태블릿 및 모바일용 기본 스타일: 배경 박스 형태] */
+  width: 100%;
+  max-width: 1000px;
+  background-color: ${theme.colors.white};
+  border-radius: ${theme.radius.box};
+  padding: 24px 40px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  box-sizing: border-box;
+  margin-bottom: ${theme.spacing[24]};
+  order: 2;
+
+  h3 {
+    font-size: ${theme.fontSize.h3.size};
+    line-height: ${theme.fontSize.h5.lineheight};
+    font-weight: ${theme.fontWeight.bold};
+    color: ${theme.colors.error};
+    margin: 0 0 12px 0;
+  }
+
+  p {
+    font-size: ${theme.fontSize.h5.size};
+    line-height: ${theme.fontSize.body.lineheight};
+    color: ${theme.colors.error};
+    margin: 0;
+  }
+
+  /* [PC 화면 전용 스타일: 배경박스 제거 및 한 줄 가로 배열] */
+  @media (min-width: calc(${theme.layout.breakpoint.tablet} + 1px)) {
+    background-color: transparent;
+    padding: 0;
+    margin-bottom: ${theme.spacing[16]};
+    flex-direction: row;
+    justify-content: flex-start;
+    align-items: center;
+    gap: 8px;
+    order: 2;
+    width: 100%;
+    max-width: 1440px;
+
+    h3 {
+      margin: 0;
+      font-size: ${theme.fontSize.body.size};
+    }
+
+    p {
+      margin: 0;
+      font-size: ${theme.fontSize.body.size};
+    }
+  }
+
+  /* [태블릿 이하 화면 스타일: 기존 박스 형태 유지] */
+  @media (max-width: ${theme.layout.breakpoint.tablet}) {
+    max-width: 816px;
+    order: 1; /* 태블릿에서는 최상단으로 이동 */
+  }
+  @media (max-width: ${theme.layout.breakpoint.mobile}) {
+    max-width: 726px;
+    order: 1;
+  }
+  @media (max-width: ${theme.layout.breakpoint.smallMobile}) {
+    max-width: 343px;
+    order: 1;
+  }
+`;
+
+/* 3. 우대 적용 헤더: PC 그리드 폭에 맞춤 */
+export const SpecialHeader = styled.div`
+  width: 100%;
+  max-width: 1440px;
+  background-color: ${theme.colors.white};
+  border-radius: ${theme.radius.box};
+  padding: ${theme.spacing[24]} ${theme.spacing[24]};
+  text-align: center;
+  margin-bottom: ${theme.spacing[48]};
+  margin-top: ${theme.spacing[140]};
+  box-sizing: border-box;
+  order: 3;
+
+  h2 {
+    font-size: ${theme.fontSize.h3.size};
+    line-height: ${theme.fontSize.h5.lineheight};
+    font-weight: ${theme.fontWeight.bold};
+    color: ${theme.colors.error};
+    margin: 0;
+  }
+
+  @media (max-width: ${theme.layout.breakpoint.tablet}) {
+    max-width: 816px;
+    margin-top: ${theme.spacing[40]};
+    order: 3;
+  }
+  @media (max-width: ${theme.layout.breakpoint.mobile}) {
+    max-width: 726px;
+    margin-top: ${theme.spacing[40]};
+    order: 3;
+  }
+  @media (max-width: ${theme.layout.breakpoint.smallMobile}) {
+    max-width: 343px;
+    order: 3;
+  }
+`;
+
+/* 4. 우대 적용 섹션: PC 최대 너비를 1440px로 확장 */
+export const SpecialSection = styled.section`
+  width: 100%;
+  max-width: 1440px;
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 24px;
+  order: 4;
+
+  @media (max-width: ${theme.layout.breakpoint.tablet}) {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 0 ${theme.spacing[16]};
+    order: 4;
+  }
+  @media (max-width: ${theme.layout.breakpoint.mobile}) {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 0;
+    order: 4;
+  }
+  @media (max-width: ${theme.layout.breakpoint.smallMobile}) {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 0;
+    order: 4;
+  }
+`;
+
 export const PageTitle = styled.h1`
   font-size: ${theme.fontSize.h3.size};
   line-height: ${theme.fontSize.h2.lineheight};
@@ -35,76 +206,6 @@ export const PageTitle = styled.h1`
   }
 `;
 
-export const NoticeBox = styled.div`
-  width: 100%;
-  max-width: 1000px;
-  background-color: ${theme.colors.white};
-  border-radius: ${theme.radius.box};
-
-  /* 시안 기준 패딩 적용: 상하 24px, 좌우 40px */
-  padding: 24px 40px;
-
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  box-sizing: border-box;
-  margin-bottom: ${theme.spacing[24]};
-
-  h3 {
-    font-size: ${theme.fontSize.h3.size};
-    line-height: ${theme.fontSize.h5.lineheight};
-    font-weight: ${theme.fontWeight.bold};
-    color: ${theme.colors.error};
-    margin: 0 0 12px 0; /* 제목과 아래 본문 사이 간격 제어 */
-  }
-
-  p {
-    font-size: ${theme.fontSize.h5.size};
-    line-height: ${theme.fontSize.body.lineheight};
-    color: ${theme.colors.error};
-    margin: 0;
-  }
-
-  @media (max-width: ${theme.layout.breakpoint.tablet}) {
-    max-width: 816px;
-  }
-  @media (max-width: ${theme.layout.breakpoint.mobile}) {
-    max-width: 726px;
-  }
-  @media (max-width: ${theme.layout.breakpoint.smallMobile}) {
-    max-width: 343px;
-  }
-`;
-
-export const DiscountSection = styled.section`
-  width: 100%;
-  max-width: 1000px;
-  min-height: 400px;
-  display: flex;
-  flex-direction: column;
-  gap: ${theme.spacing[16]};
-  margin-bottom: ${theme.spacing[32]};
-
-  @media (max-width: ${theme.layout.breakpoint.tablet}) {
-    max-width: 100%;
-    width: 100%;
-    align-items: center; /* 👈 태블릿에서도 중앙 정렬 유지 */
-    padding: 0 ${theme.spacing[16]};
-  }
-  @media (max-width: ${theme.layout.breakpoint.mobile}) {
-    max-width: 100%;
-    width: 100%;
-    align-items: center; /* 👈 태블릿에서도 중앙 정렬 유지 */
-    padding: 0;
-  }
-  @media (max-width: ${theme.layout.breakpoint.smallMobile}) {
-    max-width: 100%;
-    width: 100%;
-    align-items: center; /* 👈 태블릿에서도 중앙 정렬 유지 */
-    padding: 0;
-  }
-`;
-
 export const DiscountCard = styled.div`
   background-color: ${theme.colors.white};
   border-radius: ${theme.radius.box};
@@ -115,7 +216,7 @@ export const DiscountCard = styled.div`
   gap: ${theme.spacing[32]};
   box-sizing: border-box;
   width: 100%;
-  max-width: 1000px;
+  max-width: 100%;
   height: 400px;
   flex-shrink: 0;
 
@@ -126,7 +227,7 @@ export const DiscountCard = styled.div`
     height: 410px;
     padding: ${theme.spacing[24]};
     gap: ${theme.spacing[32]};
-    margin-left: auto; /* 👈 미디어쿼리 안에서도 중앙 정렬 유지 */
+    margin-left: auto;
     margin-right: auto;
   }
   @media (max-width: ${theme.layout.breakpoint.mobile}) {
@@ -134,7 +235,7 @@ export const DiscountCard = styled.div`
     height: 410px;
     padding: ${theme.spacing[24]};
     gap: ${theme.spacing[8]};
-    margin-left: auto; /* 👈 미디어쿼리 안에서도 중앙 정렬 유지 */
+    margin-left: auto;
     margin-right: auto;
   }
   @media (max-width: ${theme.layout.breakpoint.smallMobile}) {
@@ -148,27 +249,32 @@ export const DiscountCard = styled.div`
       margin-left: 0;
       margin-right: 0;
     }
+  }
 `;
 
 export const CardImageWrap = styled.div`
   width: 200px;
-  height: 140px;
+  height: 200px;
   flex-shrink: 0;
   border-radius: ${theme.radius.image};
   overflow: hidden;
-  margin-left: ${theme.spacing[64]};
-  margin-right: ${theme.spacing[200]};
+  margin-left: ${theme.spacing[20]};
+  margin-right: ${theme.spacing[20]};
   img {
     width: 100%;
     height: 100%;
     object-fit: contain;
+  }
+  @media (max-width: ${theme.layout.breakpoint.tablet}) {
+    margin-left: ${theme.spacing[64]};
+    margin-right: ${theme.spacing[100]};
   }
 `;
 
 export const CardInfoWrap = styled.div`
   display: flex;
   flex-direction: column;
-  gap: ${theme.spacing[14]}; /* 항목들 사이의 간격 미세 조정 */
+  gap: ${theme.spacing[14]};
   flex: 1;
   min-width: 0;
 
@@ -193,22 +299,23 @@ export const CardInfoWrap = styled.div`
       font-weight: ${theme.fontWeight.medium};
     }
   }
-    @media (max-width: ${theme.layout.breakpoint.smallMobile}) {
+
+  @media (max-width: ${theme.layout.breakpoint.smallMobile}) {
     > p {
       font-size: ${theme.fontSize.body.size};
       align-items: center;
-    text-align: center;
-    width: 100%;
+      text-align: center;
+      width: 100%;
     }
+  }
 `;
 
 export const ConditionArea = styled.div`
-  margin-top: ${theme.spacing[12]}; /* 혜택 정보와 '이용 조건' 사이 간격 */
+  margin-top: ${theme.spacing[12]};
   display: flex;
   flex-direction: column;
   gap: ${theme.spacing[4]};
 
-  /* '이용 조건' 타이틀 */
   > strong {
     font-size: ${theme.fontSize.h5.size};
     line-height: ${theme.fontSize.bodylarge.lineheight};
@@ -217,7 +324,6 @@ export const ConditionArea = styled.div`
     display: block;
   }
 
-  /* 조건 본문 텍스트 */
   > p {
     font-weight: ${theme.fontWeight.medium};
     font-size: ${theme.fontSize.bodylarge.size};
@@ -225,6 +331,7 @@ export const ConditionArea = styled.div`
     color: ${theme.colors.textPrimary};
     margin: 0;
   }
+
   @media (max-width: ${theme.layout.breakpoint.smallMobile}) {
     > p {
       font-size: ${theme.fontSize.body.size};
@@ -247,64 +354,6 @@ export const SubCond = styled.span`
   }
 `;
 
-export const SpecialHeader = styled.div`
-  width: 100%;
-  max-width: 1000px;
-  background-color: ${theme.colors.white};
-  border-radius: ${theme.radius.box};
-
-  padding: ${theme.spacing[24]} ${theme.spacing[24]};
-
-  text-align: center;
-  margin-bottom: ${theme.spacing[48]};
-  margin-top: ${theme.spacing[140]};
-  box-sizing: border-box;
-  h2 {
-    font-size: ${theme.fontSize.h3.size};
-    line-height: ${theme.fontSize.h5.lineheight};
-    font-weight: ${theme.fontWeight.bold};
-    color: ${theme.colors.error};
-    margin: 0;
-  }
-
-  @media (max-width: ${theme.layout.breakpoint.tablet}) {
-    max-width: 816px;
-    magin-top: ${theme.spacing[200]};
-  @media (max-width: ${theme.layout.breakpoint.mobile}) {
-    max-width: 726px;
-    magin-top: ${theme.spacing[200]};}
-  @media (max-width: ${theme.layout.breakpoint.smallMobile}) {
-    max-width: 343px;
-  }
-`;
-
-export const SpecialSection = styled.section`
-  width: 100%;
-  max-width: 1000px;
-  display: flex;
-  flex-direction: column;
-  gap: ${theme.spacing[12]};
-
-  @media (max-width: ${theme.layout.breakpoint.tablet}) {
-    max-width: 100%;
-    width: 100%;
-    align-items: center;
-    padding: 0 ${theme.spacing[16]};
-  }
-  @media (max-width: ${theme.layout.breakpoint.mobile}) {
-    max-width: 100%;
-    width: 100%;
-    align-items: center;
-    padding: 0;
-  }
-  @media (max-width: ${theme.layout.breakpoint.smallMobile}) {
-    max-width: 100%;
-    width: 100%;
-    align-items: center; /* 👈 태블릿에서도 중앙 정렬 유지 */
-    padding: 0;
-  }
-`;
-
 export const SpecialCard = styled.div`
   background-color: ${theme.colors.white};
   border-radius: ${theme.radius.box};
@@ -312,91 +361,78 @@ export const SpecialCard = styled.div`
   display: flex;
   flex-direction: row;
   align-items: center;
-  gap: ${theme.spacing[100]};
+  justify-content: space-between; /* 양쪽 끝으로 정렬하여 공간 확보 */
+  gap: ${theme.spacing[24]}; /* 간격을 너무 넓게 잡지 않고 유연하게 조절 */
   box-sizing: border-box;
   width: 100%;
-  max-width: 1000px;
+  max-width: 100%;
   height: 200px;
   margin-bottom: ${theme.spacing[40]};
-
-  p {
-    white-space: pre-line;
-    font-size: ${theme.fontSize.body.size};
-    line-height: ${theme.fontSize.body.lineheight};
-    color: ${theme.colors.textPrimary};
-    margin: 0;
-  }
 
   @media (max-width: ${theme.layout.breakpoint.tablet}) {
     max-width: 816px;
     height: 200px;
-    gap: ${theme.spacing[100]};
     padding: ${theme.spacing[24]} ${theme.spacing[40]};
-    margin-bottom: ${theme.spacing[40]};
     margin-left: auto;
     margin-right: auto;
   }
   @media (max-width: ${theme.layout.breakpoint.mobile}) {
-    max-width: 826px;
+    max-width: 726px;
     height: 200px;
-    gap: ${theme.spacing[64]};
     padding: ${theme.spacing[24]} ${theme.spacing[40]};
-    margin-bottom: ${theme.spacing[40]};
     margin-left: auto;
     margin-right: auto;
   }
-
   @media (max-width: ${theme.layout.breakpoint.smallMobile}) {
     flex-direction: column;
     height: auto;
     align-items: center;
-    text-align: center; /* 👈 카드 전체 텍스트 중앙 정렬 */
+    text-align: center;
     gap: ${theme.spacing[16]};
     padding: ${theme.spacing[24]};
     margin-left: auto;
     margin-right: auto;
-
-    > div:first-of-type {
-      margin-left: 0;
-      margin-right: 0;
-    }
   }
 `;
 
 export const SpecialTextWrap = styled.div`
   display: flex;
   flex-direction: column;
-  gap: ${theme.spacing[24]};
+  gap: ${theme.spacing[12]};
   flex: 1;
   min-width: 0;
 
   p {
-    font-size: ${theme.fontSize.bodylarge.size};
-    line-height: ${theme.fontSize.bodylarge.lineheight};
+    font-size: ${theme.fontSize.body.size};
+    line-height: 1.5;
     color: ${theme.colors.textPrimary};
     margin: 0;
     text-align: left;
     word-break: keep-all;
+    white-space: pre-line; /* 👈 이 코드가 있어야 \n을 인식하여 줄바꿈이 정상 적용됩니다! */
   }
 
   @media (max-width: ${theme.layout.breakpoint.smallMobile}) {
-    align-items: center; /* 👈 375px에서 내부 텍스트 영역도 가운데 정렬 */
+    align-items: center;
 
     p {
       font-size: ${theme.fontSize.body.size};
-      text-align: center; /* 👈 텍스트 문구들도 정가운데로 정렬 */
+      text-align: center;
+      white-space: pre-line; /* 모바일 대응 시에도 유지 */
     }
   }
 `;
+
 export const SpecialImageWrap = styled.div`
-  width: 100px; /* 아이콘 영역 크기를 시안 비율에 맞게 확보 */
-  height: 100px;
+  width: 90px;
+  height: 90px;
   flex-shrink: 0;
   display: flex;
-  margin-left: ${theme.spacing[100]};
-  margin-right: ${theme.spacing[200]};
   align-items: center;
   justify-content: center;
+  margin-left: ${theme.spacing[20]};
+  margin-right: ${theme.spacing[140]};
+
   img {
     width: 100%;
     height: 100%;
