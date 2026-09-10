@@ -40,8 +40,34 @@ export const FilterBox = styled.div`
   .divider {
     width: 1px;
     height: 56px;
-    background-color: ${theme.colors?.background2 || '#e1e4e6'};
+    background-color: ${theme.colors.background2};
     flex-shrink: 0;
+  }
+  @media (max-width: ${theme.layout.breakpoint.tablet}) {
+    flex-direction: row; /* 태블릿에서도 가로 배치 유지 */
+    justify-content: space-between;
+    align-items: center;
+    padding: 16px 20px;
+    gap: 12px;
+
+    .divider {
+      display: block; /* 태블릿에서는 구분선 유지 */
+    }
+  }
+  @media (max-width: ${theme.layout.breakpoint.mobile}) {
+    flex-direction: column;
+    align-items: stretch;
+    gap: ${theme.spacing[16]};
+    padding: ${theme.spacing[20]};
+
+    .divider {
+      width: 100%;
+      height: 1px; /* 모바일에서는 세로선이 아니라 가로 구분선으로 변경 */
+    }
+  }
+  @media (max-width: ${theme.layout.breakpoint.smallMobile}) {
+    padding: ${theme.spacing[4]}
+    box-sizing: border-box;
   }
 `;
 
@@ -58,16 +84,40 @@ export const TabBtn = styled.button`
   transition: all 0.2s ease;
 
   &:hover {
-    color: ${theme.colors?.primary || '#2d6a4f'};
+    color: ${theme.colors.primary};
     background-color: transparent;
   }
 `;
 
 export const ZoneTabs = styled.div`
   display: flex;
-  gap: 24px;
+  gap: ${theme.spacing[24]};
   align-items: center;
-  flex-wrap: wrap;
+  justify-content: space-between;
+  max-width: 650;
+  overflow-x: auto;
+
+  &::-webkit-scrollbar {
+    display: none;
+  }
+  @media (max-width: ${theme.layout.breakpoint.mobile}) {
+    width: 100%;
+    justify-content: flex-start;
+    gap: ${theme.spacing[24]};
+  }
+  @media (max-width: ${theme.layout.breakpoint.smallMobile}) {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 8px 4px;
+    width: 100%;
+
+    button {
+      width: 100%;
+      text-align: left;
+      padding: ${theme.spacing[4]} 0;
+      font-size: ${theme.fontSize.button.size};
+    }
+  }
 `;
 
 export const DropdownWrapper = styled.div`
@@ -76,6 +126,17 @@ export const DropdownWrapper = styled.div`
   flex: 1;
   max-width: 340px;
   text-align: left;
+  @media (max-width: ${theme.layout.breakpoint.mobile}) {
+    width: 100%;
+    max-width: none; /* PC용 최대 너비 제한 해제 */
+    flex: none; /* flex 속성 초기화 */
+
+    > div,
+    button {
+      width: 100%;
+      box-sizing: border-box;
+    }
+  }
 `;
 
 export const DropdownHeader = styled.div`
@@ -143,9 +204,10 @@ export const AnimalGrid = styled.div`
   margin-bottom: 40px;
   box-sizing: border-box;
   align-items: stretch; /* [수정] 행에 있는 카드들의 높이를 똑같이 맞춤 */
-
-  @media (max-width: 900px) {
-    grid-template-columns: 1fr;
+  @media (max-width: ${theme.layout.breakpoint.smallMobile}) {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
   }
 `;
 
@@ -170,6 +232,15 @@ export const InfoRow = styled.div`
     color: ${theme.colors.textPrimary};
     white-space: pre-line;
   }
+  @media (max-width: ${theme.layout.breakpoint.tablet}) {
+    margin-left: ${theme.spacing[20]};
+  }
+  @media (max-width: ${theme.layout.breakpoint.smallMobile}) {
+    margin-left: 0;
+    strong {
+      font-size: ${theme.fontSize.h6.size};
+    }
+  }
 `;
 
 export const AnimalCard = styled.div`
@@ -185,6 +256,20 @@ export const AnimalCard = styled.div`
   box-sizing: border-box;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.03);
   height: 100%; /* [수정] 카드 높이를 그리드 행에 꽉 채움 */
+  @media (max-width: ${theme.layout.breakpoint.tablet}) {
+    padding: 20px;
+    gap: 16px;
+  }
+  @media (max-width: ${theme.layout.breakpoint.mobile}) {
+    flex-direction: column;
+    align-items: center;
+    text-align: left;
+    padding: ${theme.spacing[16]};
+  }
+  @media (max-width: ${theme.layout.breakpoint.smallMobile}) {
+    padding: 12px;
+    align-items: center;
+  }
 `;
 
 export const AnimalImg = styled.img`
@@ -194,14 +279,32 @@ export const AnimalImg = styled.img`
   margin-top: ${theme.spacing[20]};
   border-radius: ${theme.radius.image};
   flex-shrink: 0;
+  @media (max-width: ${theme.layout.breakpoint.tablet}) {
+    width: 116px;
+    height: 116px;
+    margin-top: 50px;
+  }
+  @media (max-width: ${theme.layout.breakpoint.mobile}) {
+    width: 116px;
+    height: 116px;
+    margin-top: 0;
+    margin-bottom: ${theme.spacing[4]};
+    display: block;
+    margin-left: ${theme.spacing[20]};
+    margin-right: ${theme.spacing[200]};
+  }
+  @media (max-width: ${theme.layout.breakpoint.smallMobile}) {
+    width: 116px;
+    height: 116px;
+  }
 `;
 
 export const AnimalInfo = styled.div`
   flex: 1;
   min-width: 0;
-  display: flex; /* [수정] 내부 요소를 세로 방향으로 정렬하기 위해 추가 */
-  flex-direction: column; /* [수정] 세로 플렉스 컨테이너로 설정 */
-  height: 100%; /* [수정] 높이를 꽉 채워 TMI 박스를 아래로 밀어낼 공간 확보 */
+  display: flex;
+  flex-direction: column;
+  height: 100%;
 
   h3 {
     font-size: ${theme.fontSize.h4.size};
@@ -219,6 +322,16 @@ export const AnimalInfo = styled.div`
       color: ${theme.colors.textSecondary};
       font-weight: ${theme.fontWeight.regular};
     }
+
+    @media (max-width: ${theme.layout.breakpoint.tablet}) {
+    margin-left:${theme.spacing[20]};
+    h3 {
+      font-size: ${theme.fontSize.h5.size}
+      margin-bottom: ${theme.spacing[16]}
+    }
+  }
+    @media (max-width: ${theme.layout.breakpoint.smallMobile}) {
+    margin-left: 0;
   }
 `;
 
@@ -245,6 +358,12 @@ export const TmiBox = styled.div`
     line-height: 1.4;
     word-break: keep-all;
     overflow-wrap: break-word;
+  }
+  @media (max-width: ${theme.layout.breakpoint.tablet}) {
+    margin-left: ${theme.spacing[20]};
+  }
+  @media (max-width: ${theme.layout.breakpoint.smallMobile}) {
+    margin-left: 0;
   }
 `;
 
