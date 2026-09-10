@@ -29,7 +29,6 @@ const ProtectedRoute = ({ children }) => {
     return <Navigate to="/login" replace />;
   }
   return children;
-<<<<<<< HEAD
 };
 
 export default function AppRouter() {
