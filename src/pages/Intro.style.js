@@ -39,7 +39,7 @@ export const HeroSection = styled.div`
     .sub-title {
       font-size: ${theme.fontSize.h3.size};
       margin-bottom: ${theme.spacing[12]};
-      font-weight: ${theme.fontWeight.medium};
+      font-weight: ${theme.fontWeight.regular};
     }
 
     h2 {
@@ -56,6 +56,22 @@ export const HeroSection = styled.div`
       url(${introTabletImg});
     max-width: 982px;
     height: 547px;
+    .hero-content {
+      max-width: 1000px;
+      width: 100%;
+
+      .sub-title {
+        font-size: ${theme.fontSize.h3.size};
+        margin-bottom: ${theme.spacing[12]};
+        font-weight: ${theme.fontWeight.regular};
+      }
+
+      h2 {
+        font-size: ${theme.fontSize.h2.size};
+        font-weight: ${theme.fontWeight.bold};
+        margin: 0;
+      }
+    }
   }
 
   @media (max-width: ${theme.layout.breakpoint.mobile}) {
@@ -65,6 +81,22 @@ export const HeroSection = styled.div`
       url(${introMobileImg});
     max-width: 723px;
     height: 555px;
+    .hero-content {
+      max-width: 1000px;
+      width: 100%;
+
+      .sub-title {
+        font-size: ${theme.fontSize.h4.size};
+        margin-bottom: ${theme.spacing[12]};
+        font-weight: ${theme.fontWeight.regular};
+      }
+
+      h2 {
+        font-size: ${theme.fontSize.h3.size};
+        font-weight: ${theme.fontWeight.bold};
+        margin: 0;
+      }
+    }
   }
 
   @media (max-width: ${theme.layout.breakpoint.smallMobile}) {
@@ -75,6 +107,22 @@ export const HeroSection = styled.div`
       url(${introsmallImg});
     max-width: 343px;
     height: 455px;
+    .hero-content {
+      max-width: 1000px;
+      width: 100%;
+
+      .sub-title {
+        font-size: ${theme.fontSize.body.size};
+        margin-bottom: ${theme.spacing[12]};
+        font-weight: ${theme.fontWeight.regular};
+        word-break: keep-all;
+      }
+
+      h2 {
+        font-size: ${theme.fontSize.h5.size};
+        font-weight: ${theme.fontWeight.bold};
+        margin: 0;
+      }
   }
 `;
 
