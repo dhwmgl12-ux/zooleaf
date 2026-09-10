@@ -1,4 +1,4 @@
-const API_BASE_URL = "https://api.mylecture.kr/api/14/team2";
+import { apiClient } from './client';
 
 export async function getProducts(options = {}) {
   const params = new URLSearchParams();
@@ -18,27 +18,15 @@ export async function getProducts(options = {}) {
   params.append("page", options.page ?? 1);
   params.append("limit", options.limit ?? 9);
 
-  const response = await fetch(`${API_BASE_URL}/products?${params.toString()}`);
-
-  if (!response.ok) {
-    throw new Error("상품 목록을 불러오지 못했습니다.");
-  }
-
-  const result = await response.json();
+  const result = await apiClient(`/products?${params.toString()}`);
 
   return result.data;
 }
 
 export async function getProductById(productId, signal) {
-  const response = await fetch(`${API_BASE_URL}/products/${productId}`, {
+  const result = await apiClient(`/products/${productId}`, {
     signal,
   });
-
-  if (!response.ok) {
-    throw new Error("상품 정보를 불러오지 못했습니다.");
-  }
-
-  const result = await response.json();
 
   return result.data;
 }
