@@ -3,12 +3,21 @@ import { useState } from "react";
 import fullStarIcon from "../../assets/icons/full-black.svg";
 import emptyStarIcon from "../../assets/icons/empty-black.svg";
 import halfStarIcon from "../../assets/icons/half-black.svg";
-import { DetailPriceContainer } from "./DetailPrice.styles"; 
-import { DetailPriceInfo } from "./DetailPrice.styles"; 
-import { Rating } from "./DetailPrice.styles"; 
-import { DetailPriceForm } from "./DetailPrice.styles"; 
-import { DeliveryInfo } from "./DetailPrice.styles"; 
-import { OptionSelector } from "./DetailPrice.styles"; 
+import {
+  DetailPriceContainer,
+  DetailPriceInfo,
+  Rating,
+  DetailPriceForm,
+  DeliveryInfo,
+  OptionSelector,
+  SelectedOptionCard,
+  QuantitySelector,
+  QuantityControl,
+  DiscountInfo,
+  PaymentBenefits,
+  TotalPriceRow,
+  CartButton,
+} from "./DetailPrice.styles.js";
 
 export default function DetailPrice({ product, productType, }) {
   const [selectedOptionValue, setSelectedOptionValue] = useState("");
@@ -189,7 +198,7 @@ export default function DetailPrice({ product, productType, }) {
             </OptionSelector>
           
             {selectedOption && (
-              <div className="selected-option">
+              <SelectedOptionCard className="selected-option">
                 <div className="selected-header">
                   <h3>{name}</h3>
                   <button
@@ -229,14 +238,14 @@ export default function DetailPrice({ product, productType, }) {
     
                   <p>{productTotal.toLocaleString()}원</p>
                 </div>
-              </div>
+              </SelectedOptionCard>
             )}
           </>
         ) : (
-          <fieldset className="detail-price__quantity-area">
-            <legend>수량</legend>
+          <QuantitySelector className="detail-price__quantity-area">
+            <h3>수량</h3>
 
-            <div aria-label="상품 수량">
+            <QuantityControl aria-label="상품 수량">
               <button
                 type="button"
                 onClick={handleDecrease}
@@ -257,37 +266,37 @@ export default function DetailPrice({ product, productType, }) {
               >
                 +
               </button>
-            </div>
-          </fieldset>
+            </QuantityControl>
+          </QuantitySelector>
         )}
 
-        <dl>
+        <DiscountInfo>
           <dt>할인 혜택</dt>
           <dd> -{discountAmount.toLocaleString()}원 ({discountPercent}%)</dd>
-        </dl>
+        </DiscountInfo>
 
         {showPaymentBenefits && (
-          <section>
+          <PaymentBenefits>
             <h3>결제 헤택</h3>
             <ul>
               <li>ZooLeaf 제휴카드<span>최대 50%</span></li>
               <li>통신사 멤버십<span>40%</span></li>
               <li>문화가 있는 날<span>30%</span></li>
             </ul>
-          </section>
+          </PaymentBenefits>
         )}
 
-        <dl className="detail-price__total">
+        <TotalPriceRow className="detail-price__total">
           <dt>총 금액</dt>
           <dd>{totalPrice.toLocaleString()}원</dd>
-        </dl>
+        </TotalPriceRow>
 
-        <button
+        <CartButton
           type="submit"
           disabled={isCartDisabled}
         >
           {isCartDisabled ? "상품을 선택해 주세요" : "장바구니"}
-        </button>
+        </CartButton>
       </DetailPriceForm>
 
     </DetailPriceContainer>
