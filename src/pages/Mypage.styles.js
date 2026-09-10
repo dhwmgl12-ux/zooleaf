@@ -1,8 +1,7 @@
-/* 추가예정 */
 import styled from "@emotion/styled";
 import { theme } from "../styles/variables";
 
-// 전체 페이지
+// 페이지 전체 너비와 세로 간격
 export const Container = styled.div`
   display: flex;
   flex-direction: column;
@@ -19,7 +18,7 @@ export const Container = styled.div`
   }
 `;
 
-// 페이지 제목과 설명
+// 마이페이지 제목과 안내 문구
 export const PageHeader = styled.header`
   margin-bottom: 16px;
 
@@ -47,7 +46,7 @@ export const PageHeader = styled.header`
   }
 `;
 
-// PC에서는 두 칸, 태블릿부터 한 칸
+// 회원정보와 배송지 배치: PC 두 칸, 태블릿부터 한 칸
 export const InfoGrid = styled.div`
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
@@ -58,7 +57,7 @@ export const InfoGrid = styled.div`
   }
 `;
 
-// 회원정보·배송지·주문내역에서 공통 사용
+// 회원정보·배송지·주문내역의 공통 카드
 export const Card = styled.section`
   min-width: 0;
   padding: 24px;
@@ -72,7 +71,7 @@ export const Card = styled.section`
   }
 `;
 
-// 카드 제목과 오른쪽 버튼 배치
+// 카드 제목 영역과 버튼을 양쪽에 배치
 export const CardHeader = styled.div`
   display: flex;
   align-items: center;
@@ -83,6 +82,7 @@ export const CardHeader = styled.div`
   margin-bottom: 20px;
 `;
 
+// 아이콘과 제목·설명을 가로로 배치
 export const HeadingGroup = styled.div`
   display: flex;
   align-items: flex-start;
@@ -104,7 +104,7 @@ export const HeadingGroup = styled.div`
   }
 `;
 
-// 제목 옆 원형 아이콘 배경
+// 제목 옆 아이콘의 원형 배경
 export const IconCircle = styled.span`
   display: flex;
   align-items: center;
@@ -124,7 +124,7 @@ export const IconCircle = styled.span`
   }
 `;
 
-// 수정·추가·삭제·상세 보기에서 재사용
+// 수정·추가·삭제 등에 사용하는 공통 테두리 버튼
 export const OutlineButton = styled.button`
   flex-shrink: 0;
   min-height: 40px;
@@ -148,6 +148,7 @@ export const OutlineButton = styled.button`
   }
 `;
 
+// 로그아웃 제목과 버튼을 담는 영역
 export const LogoutBox = styled.section`
   display: flex;
   align-items: center;
@@ -165,6 +166,7 @@ export const LogoutBox = styled.section`
   }
 `;
 
+// 로그아웃 버튼과 처리 중 비활성화 상태
 export const LogoutButton = styled.button`
   min-width: 150px;
   min-height: 44px;
@@ -191,12 +193,14 @@ export const LogoutButton = styled.button`
   }
 `;
 
+// 배송지 카드들을 세로로 배치
 export const AddressList = styled.div`
   display: flex;
   flex-direction: column;
   gap: ${theme.spacing[16]};
 `;
 
+// 배송지 한 개를 표시하는 카드
 export const AddressBox = styled.article`
   padding: ${theme.spacing[20]};
 
@@ -208,6 +212,7 @@ export const AddressBox = styled.article`
   }
 `;
 
+// 기본 배송지 표시 배지
 export const DefaultBadge = styled.span`
   display: inline-block;
   margin-bottom: ${theme.spacing[8]};
@@ -222,6 +227,7 @@ export const DefaultBadge = styled.span`
   font-weight: ${theme.fontWeight.semiBold};
 `;
 
+// 배송지 이름과 수정·삭제 버튼 배치
 export const AddressTop = styled.div`
   display: flex;
   align-items: center;
@@ -232,12 +238,14 @@ export const AddressTop = styled.div`
   margin-bottom: ${theme.spacing[12]};
 `;
 
+// 관련 버튼들을 나란히 배치
 export const ButtonGroup = styled.div`
   display: flex;
   flex-wrap: wrap;
   gap: ${theme.spacing[8]};
 `;
 
+// 수령인·연락처·주소의 항목명과 값을 정렬
 export const AddressDetails = styled.dl`
   display: flex;
   flex-direction: column;
@@ -265,6 +273,7 @@ export const AddressDetails = styled.dl`
   }
 `;
 
+// 카드 제목과 모바일 글자 크기
 export const CardTitle = styled.h2`
   font-size: ${theme.fontSize.h4.size};
   line-height: ${theme.fontSize.h4.lineheight};
@@ -276,10 +285,12 @@ export const CardTitle = styled.h2`
   }
 `;
 
+// 회원정보 목록의 기본 여백 제거
 export const ProfileList = styled.dl`
   margin: 0;
 `;
 
+// 회원정보 한 줄: 항목명과 값 배치
 export const ProfileRow = styled.div`
   display: grid;
   grid-template-columns: minmax(0, 1fr) minmax(0, 3fr);
@@ -308,5 +319,108 @@ export const ProfileRow = styled.div`
     gap: ${theme.spacing[12]};
     font-size: ${theme.fontSize.bodysmall.size};
     line-height: ${theme.fontSize.bodysmall.lineheight};
+  }
+`;
+
+// 회원정보 수정 모달의 입력 폼
+export const ProfileEditForm = styled.form`
+  display: flex;
+  flex-direction: column;
+  gap: ${theme.spacing[20]};
+
+  white-space: normal;
+`;
+
+// 입력 항목의 라벨과 입력창을 세로로 배치
+export const ProfileField = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: ${theme.spacing[8]};
+`;
+
+// 이름·전화번호·생년월일 입력 라벨
+export const ProfileLabel = styled.label`
+  color: ${theme.colors.textPrimary};
+  font-size: ${theme.fontSize.bodysmall.size};
+  line-height: ${theme.fontSize.bodysmall.lineheight};
+  font-weight: ${theme.fontWeight.medium};
+`;
+
+// 수정 입력창과 포커스 스타일
+export const ProfileInput = styled.input`
+  width: 100%;
+  min-width: 0;
+  min-height: ${theme.spacing[48]};
+  padding: ${theme.spacing[12]} ${theme.spacing[16]};
+
+  border: 1px solid ${theme.colors.border};
+  border-radius: ${theme.radius.input};
+
+  background: ${theme.colors.white};
+  color: ${theme.colors.textPrimary};
+
+  font-size: ${theme.fontSize.body.size};
+  line-height: ${theme.fontSize.body.lineheight};
+
+  &::placeholder {
+    color: ${theme.colors.textSecondary};
+  }
+
+  &:focus {
+    border-color: ${theme.colors.primary};
+  }
+
+  &:focus-visible {
+    outline: 2px solid ${theme.colors.primary};
+    outline-offset: 2px;
+  }
+`;
+
+// 입력값 검증 오류 안내
+export const ProfileFormError = styled.p`
+  color: ${theme.colors.error};
+  font-size: ${theme.fontSize.bodysmall.size};
+  line-height: ${theme.fontSize.bodysmall.lineheight};
+`;
+
+// 취소·저장 버튼을 같은 너비로 배치
+export const ProfileModalActions = styled.div`
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: ${theme.spacing[12]};
+
+  margin-top: ${theme.spacing[4]};
+`;
+
+// 수정 취소 버튼
+export const ProfileCancelButton = styled.button`
+  min-height: ${theme.spacing[48]};
+  padding: ${theme.spacing[12]} ${theme.spacing[16]};
+
+  border-radius: ${theme.radius.button};
+  background: ${theme.colors.background2};
+  color: ${theme.colors.textPrimary};
+
+  font-size: ${theme.fontSize.button.size};
+  line-height: ${theme.fontSize.button.lineheight};
+  font-weight: ${theme.fontWeight.semiBold};
+
+  &:hover {
+    background: ${theme.colors.border};
+  }
+
+  &:focus-visible {
+    outline: 3px solid ${theme.colors.primary};
+    outline-offset: 3px;
+  }
+`;
+
+// 취소 버튼 스타일을 재사용하고 저장 버튼 색상 적용
+export const ProfileSaveButton = styled(ProfileCancelButton)`
+  background: ${theme.colors.primary};
+  color: ${theme.colors.white};
+
+  &:hover {
+    background: ${theme.colors.hover};
   }
 `;
