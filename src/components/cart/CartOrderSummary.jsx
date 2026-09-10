@@ -1,4 +1,5 @@
 import { useState } from "react";
+import useToastStore from "../../store/toastStore";
 import { useNavigate } from "react-router-dom";
 import {
   OrderSummary,
@@ -28,6 +29,8 @@ export default function CartOrderSummary({ cartItems, hasShippingAddress }) {
   // 페이지 이동에 사용할 함수
   const navigate = useNavigate();
 
+  const showToast = useToastStore((state) => state.showToast);
+
   // 구매 모달 열림 여부: 처음에는 닫힘
   const [isPurchaseModalOpen, setIsPurchaseModalOpen] = useState(false);
 
@@ -41,10 +44,22 @@ export default function CartOrderSummary({ cartItems, hasShippingAddress }) {
     setIsPurchaseModalOpen(false);
   };
 
-  // 예 클릭 → 마이페이지 이동
   const handleConfirm = () => {
     setIsPurchaseModalOpen(false);
-    navigate("/mypage"); // 실제 마이페이지 경로에 맞춰야 해요.
+
+    // 배송지가 없으면 구매 진행을 막고 등록 화면으로 이동
+    if (!hasShippingAddress) {
+      navigate("/mypage");
+      return;
+    }
+
+    // 배송지가 있어도 빈 장바구니는 구매 불가
+    if (cartItems.length === 0) {
+      return;
+    }
+
+    // 주문 API가 준비되면 이 위치에서 호출
+    showToast("배송지가 확인되었습니다. 결제 기능은 아직 연결 전입니다.");
   };
 
   const productTotal = cartItems.reduce((sum, item) => {
@@ -173,7 +188,7 @@ export default function CartOrderSummary({ cartItems, hasShippingAddress }) {
             <ModalText id="purchase-modal-message">
               {hasShippingAddress
                 ? "결제를 진행하시겠습니까?"
-                : "배송지를 등록해야 합니다."}
+                : "배송지가 없습니다. 마이페이지에서 등록하시겠습니까?"}
             </ModalText>
 
             <ModalButtonArea>
