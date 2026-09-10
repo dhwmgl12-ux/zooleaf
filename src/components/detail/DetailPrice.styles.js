@@ -84,10 +84,171 @@ export const DetailPriceForm = styled.form`
 `
 
 export const DeliveryInfo = styled.dl`
+  width: 100%;
+  padding: ${theme.spacing[32]} 0;
+
+  display: flex;
+  justify-content: space-between;
+
+  dt {
+    font-size: ${theme.fontSize.h5.size};
+    line-height: ${theme.fontSize.h5.lineheight};
+    font-weight: ${theme.fontWeight.bold};
+  }
   
+  dd {
+    font-size: ${theme.fontSize.bodylarge.size};
+    line-height: ${theme.fontSize.bodylarge.lineheight};
+    font-weight: ${theme.fontWeight.regular};
+  }
 `
 
 export const OptionSelector = styled.fieldset`
   display: flex;
+`
+
+export const SelectedOptionCard = styled.div`
+`
+
+export const QuantitySelector = styled.div`
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border: 0;
+  border-bottom: 1px solid ${theme.colors.border};
+  padding-bottom: ${theme.spacing[32]};
+
+  h3 {
+    flex-shrink: 0;
+    font-size: ${theme.fontSize.h5.size};
+    line-height: ${theme.fontSize.h5.lineheight};
+    font-weight: ${theme.fontWeight.bold};
+  }
+`
+
+export const QuantityControl = styled.div`
+  display: grid;
+  grid-template-columns: 32px minmax(32px, 1fr) 32px;
+  align-items: center;
+  width: min(60%, 280px);
+  text-align: center;
+
+  button {
+    width: 32px;
+    height: 32px;
+    border: 1px solid ${theme.colors.primary};
+    border-radius: 8px;
+
+    background-color: ${theme.colors.white};
+    color: ${theme.colors.primary};
+
+    &:disabled {
+      opacity: 0.4;
+      cursor: not-allowed;
+    }
+
+    &:hover {
+      background-color: ${theme.colors.background2};
+    }
+  }
+
+  output {
+    font-size: ${theme.fontSize.h5.size};
+    line-height: ${theme.fontSize.h5.lineheight};
+    font-weight: ${theme.fontWeight.bold};
+  }
+`
+
+export const DiscountInfo = styled.dl`
+  width: 100%;
+  padding: ${theme.spacing[32]} 0;
+  border-bottom: 1px solid ${theme.colors.border};
+
+  display: flex;
+  justify-content: space-between;
+
+  dt {
+    font-size: ${theme.fontSize.h5.size};
+    line-height: ${theme.fontSize.h5.lineheight};
+    font-weight: ${theme.fontWeight.bold};
+  }
   
+  dd {
+    font-size: ${theme.fontSize.bodylarge.size};
+    line-height: ${theme.fontSize.bodylarge.lineheight};
+    font-weight: ${theme.fontWeight.regular};
+  }
+`
+
+export const PaymentBenefits = styled.section`
+  width: 100%;
+  padding: ${theme.spacing[32]} 0;
+  border-bottom: 1px solid ${theme.colors.border};
+
+  h3 {
+    font-size: ${theme.fontSize.h5.size};
+    line-height: ${theme.fontSize.h5.lineheight};
+    font-weight: ${theme.fontWeight.bold};
+  }
+  
+  li {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: ${theme.fontSize.bodylarge.size};
+    line-height: ${theme.fontSize.bodylarge.lineheight};
+    font-weight: ${theme.fontWeight.regular};
+  }
+
+`
+
+export const TotalPriceRow = styled.dl`
+  width: 100%;
+  padding: ${theme.spacing[32]} 0;
+
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+
+  dt {
+    font-size: ${theme.fontSize.h4.size};
+    line-height: ${theme.fontSize.h4.lineheight};
+    font-weight: ${theme.fontWeight.bold};
+    color: ${theme.colors.primary};
+  }
+  
+  dd {
+    font-size: ${theme.fontSize.h3.size};
+    line-height: ${theme.fontSize.h3.lineheight};
+    font-weight: ${theme.fontWeight.bold};
+    color: ${theme.colors.primary};
+  }
+
+`
+
+export const CartButton = styled.button`
+  width: 100%;
+  padding: ${theme.spacing[20]} ${theme.spacing[16]};
+  border: none;
+  border-radius: ${theme.radius.button};
+  color: ${theme.colors.white};
+  background-color: ${theme.colors.primary};
+
+  font-size: ${theme.fontSize.buttonlarge.size};
+  line-height: ${theme.fontSize.buttonlarge.lineheight};
+  font-weight: ${theme.fontWeight.bold};
+
+  cursor: pointer;
+  transition:background-color 0.2s ease, opacity 0.2s ease;
+
+  &:hover:not(:disabled) {
+    background-color: ${theme.colors.hover};
+  }
+
+  &:disabled {
+    background-color: ${theme.colors.border};
+    color: ${theme.colors.textSecondary};
+    cursor: not-allowed;
+  }
 `

@@ -14,10 +14,6 @@ export const ProductDetailPageContainer = styled.article`
   align-items: start;
   gap: ${theme.spacing[40]};
 
-  div {
-    width: 100%
-  }
-
   .detail-image-area {
     grid-area: image;
   }
