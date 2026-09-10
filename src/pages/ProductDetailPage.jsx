@@ -72,19 +72,29 @@ export default function ProductDetailPage() {
   }
 
   return (
-    <ProductDetailPageContainer>
-      <div className="detail-image-area">
-        <DetailImage 
-          imageUrl={product.thumbnailImage || product.imageUrl}
-          name={product.name}
-        />
-      </div>
-      <div className="detail-content-area">
-        <DetailContent product={product} /> 
-      </div>
-      <div className="detail-price-area">
-        <DetailPrice product={product} productType="product" />
-      </div>
-    </ProductDetailPageContainer>
+    <>
+      <Breadcrumb
+        items={[
+          { label: '홈', to: '/' },
+          { label: '입장권 & 패키지', to: '/products' },
+          { label: product.name },
+        ]}
+      />
+      
+      <ProductDetailPageContainer>
+        <div className="detail-image-area">
+          <DetailImage 
+            imageUrl={product.thumbnailImage || product.imageUrl}
+            name={product.name}
+          />
+        </div>
+        <div className="detail-content-area">
+          <DetailContent product={product} /> 
+        </div>
+        <div className="detail-price-area">
+          <DetailPrice product={product} productType="product" />
+        </div>
+      </ProductDetailPageContainer>
+    </>
   )
 }
