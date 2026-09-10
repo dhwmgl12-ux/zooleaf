@@ -1,4 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
+import { fetchAnimalStories } from '../api/AnimalStoryApi';
+
 import {
   Container,
   Title,
@@ -21,7 +23,7 @@ import {
 } from './AnimalStory.style.js';
 
 export default function AnimalStory() {
-  const [allAnimals, setAllAnimals] = useState([]); // 서버에서 받아온 전체 동물 데이터
+  const [allAnimals, setAllAnimals] = useState([]);
   const [currentZone, setCurrentZone] = useState('전체');
   const [currentSort, setCurrentSort] = useState('latest');
   const [currentPage, setCurrentPage] = useState(1);
@@ -29,7 +31,7 @@ export default function AnimalStory() {
   const [isOpen, setIsOpen] = useState(false);
   const dropdownRef = useRef(null);
 
-  const ITEMS_PER_PAGE = 6; // 한 페이지에 보여줄 개수
+  const ITEMS_PER_PAGE = 6;
 
   // 외부 클릭 시 드롭다운 닫기 처리
   useEffect(() => {
@@ -42,32 +44,18 @@ export default function AnimalStory() {
     return () => document.removeEventListener('mousedown', handleClickOutside);
   }, []);
 
-  // 최초 1회 전체 데이터를 넉넉하게(limit=50) 받아와서 상태에 저장
+  // 분리한 API 함수를 호출하여 데이터 가져오기
   useEffect(() => {
-    const fetchAllAnimals = async () => {
+    const loadAnimals = async () => {
       try {
-        const BASE_URL = import.meta.env.VITE_API_BASE_URL;
-        // 전체 데이터(29마리)를 모두 가져오기 위해 limit을 크게 설정
-        const url = `${BASE_URL}/animals?page=1&limit=50`;
-
-        const response = await fetch(url);
-        const contentType = response.headers.get('content-type');
-
-        if (!contentType || !contentType.includes('application/json')) {
-          throw new Error('서버에서 올바른 JSON 응답을 반환하지 않았습니다.');
-        }
-
-        const result = await response.json();
-
-        if (result.success) {
-          setAllAnimals(result.data.animals);
-        }
+        const animals = await fetchAnimalStories();
+        setAllAnimals(animals);
       } catch (error) {
-        console.error('데이터를 불러오지 못했습니다.', error);
+        console.error('동물 데이터를 불러오지 못했습니다.', error);
       }
     };
 
-    fetchAllAnimals();
+    loadAnimals();
   }, []);
 
   const handleTabClick = (zone) => {
@@ -81,24 +69,21 @@ export default function AnimalStory() {
     setCurrentPage(1);
   };
 
-  // 1. 존(Zone) 필터링
-  let filteredAnimals = allAnimals.filter((animal) => {
-    if (currentZone === '전체') return true;
-    return animal.zone === currentZone;
-  });
+  // 1. 존(Zone) 필터링 (원본 배열을 훼손하지 않기 위해 복사 후 정렬)
+  const filteredAnimals = allAnimals
+    .filter((animal) => {
+      if (currentZone === '전체') return true;
+      return animal.zone === currentZone;
+    })
+    .sort((a, b) => {
+      if (currentSort === 'name') {
+        return a.name.localeCompare(b.name, 'ko');
+      }
+      return a.id - b.id; // 최신순
+    });
 
-  // 2. 전체 데이터 기준 정렬 (이름순 또는 최신순)
-  if (currentSort === 'name') {
-    filteredAnimals.sort((a, b) => a.name.localeCompare(b.name, 'ko'));
-  } else {
-    // 최신순 (id 기준 오름차순 또는 내림차순 등 기본 정렬)
-    filteredAnimals.sort((a, b) => a.id - b.id);
-  }
-
-  // 3. 페이지네이션 계산 (6개씩 끊기)
-  const totalItems = filteredAnimals.length;
-  const totalPages = Math.ceil(totalItems / ITEMS_PER_PAGE) || 1;
-
+  // 2. 페이지네이션 계산
+  const totalPages = Math.ceil(filteredAnimals.length / ITEMS_PER_PAGE) || 1;
   const startIndex = (currentPage - 1) * ITEMS_PER_PAGE;
   const currentAnimals = filteredAnimals.slice(
     startIndex,
