@@ -1,6 +1,14 @@
 import { useRef, useState } from 'react';
 import useMarqueeDistance from '../../hooks/useMarqueeDistance';
-import { ErrorText, FakePlaceHolder, FakePlaceHolderText, Input, InputWrapper, Label, ToggleButton } from './auth.styles';
+import {
+  ErrorText,
+  FakePlaceHolder,
+  FakePlaceHolderText,
+  Input,
+  InputWrapper,
+  Label,
+  ToggleButton,
+} from './auth.styles';
 
 export default function PasswordField({
   label,
@@ -28,10 +36,7 @@ export default function PasswordField({
         />
         {!value && (
           <FakePlaceHolder ref={containerRef}>
-            <FakePlaceHolderText
-              ref={textRef}
-              style={{ '--marquee-distance': `${distance}px` }}
-            >
+            <FakePlaceHolderText ref={textRef} style={{ '--marquee-distance': `${distance}px` }}>
               {placeholder}
             </FakePlaceHolderText>
           </FakePlaceHolder>
@@ -103,8 +108,8 @@ export default function PasswordField({
             </svg>
           )}
         </ToggleButton>
-        {error && <ErrorText>{error}</ErrorText>}
       </InputWrapper>
+      {error && <ErrorText>{error}</ErrorText>}
     </div>
   );
 }

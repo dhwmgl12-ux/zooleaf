@@ -1,25 +1,25 @@
-import styled from "@emotion/styled";
-import { theme } from "../../styles/variables";
-import { Link } from "react-router-dom";
-import { keyframes } from "@emotion/react";
+import styled from '@emotion/styled';
+import { theme } from '../../styles/variables';
+import { Link } from 'react-router-dom';
+import { keyframes } from '@emotion/react';
 
 export const FormCard = styled.div`
   width: 550px;
   max-width: 100%;
   background: ${theme.colors.white};
   border-radius: ${theme.radius.box};
-  padding: ${(props) => props.variant === 'signup' ? '32px 40px' : '52px 38px'};
+  padding: ${(props) => (props.variant === 'signup' ? '32px 40px' : '52px 38px')};
   box-shadow: 4px 4px 8px 0 rgba(0, 0, 0, 0.08);
   display: flex;
   flex-direction: column;
   gap: ${theme.spacing[20]};
 
   @media (max-width: ${theme.layout.breakpoint.mobile}) {
-    padding: ${(props) => props.variant === 'signup' ? '24px 20px' : '32px 20px'};
+    padding: ${(props) => (props.variant === 'signup' ? '24px 20px' : '32px 20px')};
   }
 `;
 
-export const Title = styled.h2 `
+export const Title = styled.h2`
   font-size: ${theme.fontSize.h3.size};
   line-height: ${theme.fontSize.h3.lineheight};
   color: ${theme.colors.textPrimary};
@@ -35,7 +35,7 @@ export const Form = styled.form`
   display: flex;
   flex-direction: column;
   gap: ${theme.spacing[20]};
-`
+`;
 
 export const Label = styled.label`
   font-size: ${theme.fontSize.bodylarge.size};
@@ -43,7 +43,7 @@ export const Label = styled.label`
   font-weight: ${theme.fontWeight.medium};
   margin-bottom: ${theme.spacing[8]};
   display: block;
-`
+`;
 
 export const Input = styled.input`
   width: 100%;
@@ -54,19 +54,19 @@ export const Input = styled.input`
   font-size: ${theme.fontSize.body.size};
   color: ${theme.colors.textPrimary};
 
-&::placeholder{
-  color:${theme.colors.textSecondary};
-}
+  &::placeholder {
+    color: ${theme.colors.textSecondary};
+  }
 
-&:focus {
-  outline: none;
-  border-color: ${theme.colors.primary};
-}
+  &:focus {
+    outline: none;
+    border-color: ${theme.colors.primary};
+  }
 
-@media (max-width: ${theme.layout.breakpoint.mobile}) {
-  height: 35px;
-  font-size: ${theme.fontSize.bodysmall.size}
-}
+  @media (max-width: ${theme.layout.breakpoint.mobile}) {
+    height: 35px;
+    font-size: ${theme.fontSize.bodysmall.size};
+  }
 `;
 
 export const InputWrapper = styled.div`
@@ -139,7 +139,6 @@ export const ToggleButton = styled.button`
   }
 `;
 
-
 export const ErrorText = styled.p`
   color: ${theme.colors.error};
   font-size: ${theme.fontSize.caption.size};
@@ -189,14 +188,14 @@ export const ArrowIcon = styled.button`
   flex-shrink: 0;
   color: ${theme.colors.textSecondary};
   font-size: ${theme.fontSize.body.size};
-`
+`;
 
 export const FormErrorText = styled.p`
   color: ${theme.colors.error};
   font-size: ${theme.fontSize.caption.size};
   text-align: center;
   margin: 0 0 ${theme.spacing[8]} 0;
-  `
+`;
 
 export const SubmitButton = styled.button`
   width: 100%;
@@ -237,9 +236,9 @@ export const LinkText = styled.span`
   &:hover {
     color: ${theme.colors.primary};
   }
-`
+`;
 
-export const BottomLinkRow = styled.p `
+export const BottomLinkRow = styled.p`
   text-align: center;
   margin-top: ${theme.spacing[24]};
   font-size: ${theme.fontSize.bodysmall.size};
@@ -251,13 +250,13 @@ export const BottomLink = styled(Link)`
   text-decoration: underline;
   font-weight: ${theme.fontWeight.medium};
   &:hover {
-    color: ${theme.colors.primary}
+    color: ${theme.colors.primary};
   }
-`
+`;
 
 const anime = keyframes`
   0%, 20% {transform: translateX(0);}
-  80%, 100% {transform: translateX(-60%);}
+  80%, 100% {transform: translateX(calc(-1 * var(--marquee-distance, 0px)));}
 `;
 
 export const FakePlaceHolder = styled.span`

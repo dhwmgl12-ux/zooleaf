@@ -27,7 +27,6 @@ export const ModalHeader = styled.div`
   justify-content: space-between;
   align-items: center;
   padding: ${theme.spacing[24]};
-  border-bottom: 1px solid ${theme.colors.textSecondary};
 `;
 
 export const ModalTitle = styled.h3`
@@ -49,6 +48,7 @@ export const CloseButton = styled.button`
 `;
 
 export const ModalBody = styled.div`
+  margin: ${theme.spacing[24]} 0 ${theme.spacing[24]} 0;
   padding: ${theme.spacing[24]};
   overflow-y: auto;
   flex: 1;
