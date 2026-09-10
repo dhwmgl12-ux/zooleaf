@@ -6,6 +6,7 @@ import DetailImage from "../components/detail/DetailImage";
 import DetailContent from "../components/detail/DetailContent";
 import DetailPrice from "../components/detail/DetailPrice";
 import { ProductDetailPageContainer } from "./ProductDetailPage.styles";
+import Breadcrumb from '../components/common/Breadcrumb';
 
 export default function ProductDetailPage() {
   const { productId } = useParams();
@@ -80,7 +81,7 @@ export default function ProductDetailPage() {
           { label: product.name },
         ]}
       />
-      
+
       <ProductDetailPageContainer>
         <div className="detail-image-area">
           <DetailImage 
