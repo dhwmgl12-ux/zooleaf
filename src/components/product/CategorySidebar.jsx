@@ -43,7 +43,7 @@ export default function CategorySidebar({
               onClick={() => toggleFilter('target')}
               aria-expanded={openFilter === 'target'}
             >
-              관람 대상 <span aria-hidden="true">⌄</span>
+              관람 대상 <span className="filter-arrow" aria-hidden="true" />
             </button>
 
             {openFilter === 'target' && (
@@ -72,7 +72,7 @@ export default function CategorySidebar({
               onClick={() => toggleFilter('time')}
               aria-expanded={openFilter === 'time'}
             >
-              이용 시간 <span aria-hidden="true">⌄</span>
+              이용 시간 <span className="filter-arrow" aria-hidden="true" />
             </button>
 
             {openFilter === 'time' && (
