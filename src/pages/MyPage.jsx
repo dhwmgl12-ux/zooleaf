@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { useLogout } from "../hooks/useAuth";
+import Modal from "../components/common/Modal";
 import ProfileCard from "../components/mypage/ProfileCard";
 import AddressSection from "../components/mypage/AddressSection";
 import OrderSection from "../components/mypage/OrderSection";
@@ -9,14 +10,26 @@ import {
   InfoGrid,
   LogoutBox,
   LogoutButton,
+  ProfileModalActions,
+  ProfileCancelButton,
+  ProfileSaveButton,
+  LogoutMessage,
 } from "./Mypage.styles";
 
-export default function Mypage() {
+export default function MyPage() {
   const { handleLogout } = useLogout();
+
+  // 확인 모달과 로그아웃 처리 상태
+  const [isLogoutModalOpen, setIsLogoutModalOpen] = useState(false);
   const [isLoggingOut, setIsLoggingOut] = useState(false);
 
-  // 기존 로그아웃 기능 실행
-  const onLogout = async () => {
+  const closeLogoutModal = () => {
+    if (isLoggingOut) return;
+    setIsLogoutModalOpen(false);
+  };
+
+  // 모달에서 확인했을 때만 실제 로그아웃
+  const confirmLogout = async () => {
     if (isLoggingOut) return;
 
     setIsLoggingOut(true);
@@ -25,6 +38,7 @@ export default function Mypage() {
       await handleLogout();
     } finally {
       setIsLoggingOut(false);
+      setIsLogoutModalOpen(false);
     }
   };
 
@@ -37,23 +51,50 @@ export default function Mypage() {
         </p>
       </PageHeader>
 
-      {/* 위쪽: 회원정보와 배송지 */}
       <InfoGrid>
         <ProfileCard />
         <AddressSection />
       </InfoGrid>
 
-      {/* 가운데: 주문내역 */}
       <OrderSection />
 
-      {/* 아래쪽: 로그아웃 */}
       <LogoutBox>
         <h2>로그아웃</h2>
 
-        <LogoutButton type="button" onClick={onLogout} disabled={isLoggingOut}>
-          {isLoggingOut ? "로그아웃 중..." : "로그아웃"}
+        <LogoutButton
+          type="button"
+          onClick={() => setIsLogoutModalOpen(true)}
+          disabled={isLoggingOut}
+        >
+          로그아웃
         </LogoutButton>
       </LogoutBox>
+
+      <Modal
+        isOpen={isLogoutModalOpen}
+        onClose={closeLogoutModal}
+        title="로그아웃 확인"
+      >
+        <LogoutMessage>정말 로그아웃하시겠습니까?</LogoutMessage>
+
+        <ProfileModalActions>
+          <ProfileCancelButton
+            type="button"
+            onClick={closeLogoutModal}
+            disabled={isLoggingOut}
+          >
+            취소
+          </ProfileCancelButton>
+
+          <ProfileSaveButton
+            type="button"
+            onClick={confirmLogout}
+            disabled={isLoggingOut}
+          >
+            {isLoggingOut ? "로그아웃 중..." : "로그아웃"}
+          </ProfileSaveButton>
+        </ProfileModalActions>
+      </Modal>
     </Container>
   );
 }

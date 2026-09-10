@@ -476,3 +476,13 @@ export const DefaultAddressLabel = styled.label`
     outline-offset: 3px;
   }
 `;
+
+// 로그아웃 확인 문구
+export const LogoutMessage = styled.p`
+  margin: 0;
+  padding: ${theme.spacing[20]} 0;
+  text-align: center;
+
+  font-size: ${theme.fontSize.body.size};
+  line-height: ${theme.fontSize.body.lineheight};
+`;
