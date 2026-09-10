@@ -486,3 +486,248 @@ export const LogoutMessage = styled.p`
   font-size: ${theme.fontSize.body.size};
   line-height: ${theme.fontSize.body.lineheight};
 `;
+
+// 주문이 없을 때 안내
+export const OrderEmpty = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: ${theme.spacing[20]};
+
+  min-height: 280px;
+  padding: ${theme.spacing[40]} ${theme.spacing[16]};
+  border-top: 1px solid ${theme.colors.border};
+
+  color: ${theme.colors.textSecondary};
+  text-align: center;
+
+  > p {
+    font-size: ${theme.fontSize.body.size};
+    line-height: ${theme.fontSize.body.lineheight};
+  }
+`;
+
+// 주문 목록
+export const OrderList = styled.ul`
+  display: flex;
+  flex-direction: column;
+  gap: ${theme.spacing[12]};
+
+  margin: 0;
+  padding: 0;
+  list-style: none;
+`;
+
+// 주문 본문과 상태·버튼 영역 배치
+export const OrderCard = styled.li`
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: ${theme.spacing[20]};
+
+  padding: ${theme.spacing[16]};
+  border-radius: ${theme.radius.box};
+  background: ${theme.colors.background};
+
+  @media (max-width: ${theme.layout.breakpoint.mobile}) {
+    grid-template-columns: minmax(0, 1fr);
+  }
+`;
+
+// 상세 모달을 여는 주문 본문
+export const OrderBodyButton = styled.button`
+  display: flex;
+  align-items: center;
+  gap: ${theme.spacing[16]};
+
+  min-width: 0;
+  text-align: left;
+  border-radius: ${theme.radius.input};
+
+  &:hover strong {
+    text-decoration: underline;
+  }
+
+  &:focus-visible {
+    outline: 3px solid ${theme.colors.primary};
+    outline-offset: 3px;
+  }
+`;
+
+// 목록과 상세에서 공통 사용
+export const OrderThumbnail = styled.img`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+
+  width: ${theme.spacing[80]};
+  height: ${theme.spacing[80]};
+  object-fit: cover;
+  border-radius: ${theme.radius.image};
+  background: ${theme.colors.background2};
+
+  @media (max-width: ${theme.layout.breakpoint.mobile}) {
+    width: ${theme.spacing[64]};
+    height: ${theme.spacing[64]};
+  }
+`;
+
+export const OrderText = styled.span`
+  display: flex;
+  flex-direction: column;
+  gap: ${theme.spacing[8]};
+  min-width: 0;
+  overflow-wrap: anywhere;
+
+  > small,
+  > span {
+    color: ${theme.colors.textSecondary};
+    font-size: ${theme.fontSize.caption.size};
+    line-height: ${theme.fontSize.caption.lineheight};
+  }
+
+  > strong {
+    font-size: ${theme.fontSize.body.size};
+    line-height: ${theme.fontSize.body.lineheight};
+  }
+`;
+
+export const OrderSide = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: ${theme.spacing[16]};
+`;
+
+export const OrderStatus = styled.p`
+  color: ${theme.colors.primary};
+  font-size: ${theme.fontSize.bodysmall.size};
+  line-height: ${theme.fontSize.bodysmall.lineheight};
+
+  &::before {
+    content: "•";
+    margin-right: ${theme.spacing[8]};
+  }
+`;
+
+export const OrderActions = styled.div`
+  display: flex;
+  justify-content: flex-end;
+  flex-wrap: wrap;
+  gap: ${theme.spacing[8]};
+`;
+
+// 모달 내부 공통 간격
+export const OrderModalContent = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: ${theme.spacing[16]};
+  white-space: normal;
+  overflow-wrap: anywhere;
+`;
+
+export const OrderInfoGrid = styled.div`
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: ${theme.spacing[12]};
+
+  @media (max-width: ${theme.layout.breakpoint.smallMobile}) {
+    grid-template-columns: minmax(0, 1fr);
+  }
+`;
+
+export const OrderInfoBox = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: ${theme.spacing[8]};
+
+  padding: ${theme.spacing[16]};
+  border: 1px solid ${theme.colors.border};
+  border-radius: ${theme.radius.box};
+
+  > span {
+    color: ${theme.colors.textSecondary};
+  }
+`;
+
+export const OrderProduct = styled.article`
+  display: flex;
+  align-items: center;
+  gap: ${theme.spacing[16]};
+
+  padding: ${theme.spacing[16]};
+  border: 1px solid ${theme.colors.border};
+  border-radius: ${theme.radius.box};
+
+  > div {
+    min-width: 0;
+  }
+
+  > div > p {
+    color: ${theme.colors.textSecondary};
+  }
+
+  > div > strong {
+    color: ${theme.colors.primary};
+  }
+`;
+
+export const OrderProductTitle = styled.h3`
+  font-size: ${theme.fontSize.body.size};
+  line-height: ${theme.fontSize.body.lineheight};
+  font-weight: ${theme.fontWeight.bold};
+`;
+
+export const OrderAmountBox = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: ${theme.spacing[12]};
+
+  padding: ${theme.spacing[20]};
+  border-radius: ${theme.radius.box};
+  background: ${theme.colors.background2};
+`;
+
+export const OrderAmountRow = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: ${theme.spacing[8]};
+`;
+
+export const OrderGrandTotal = styled(OrderAmountRow)`
+  padding-top: ${theme.spacing[16]};
+  border-top: 1px solid ${theme.colors.border};
+  color: ${theme.colors.primary};
+`;
+
+// 배송 조회: 사이트의 초록색 테마 사용
+export const DeliveryPanel = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: ${theme.spacing[8]};
+
+  padding: ${theme.spacing[20]};
+  border: 1px solid ${theme.colors.border};
+  border-radius: ${theme.radius.box};
+  background: ${theme.colors.background};
+
+  > p,
+  > small {
+    color: ${theme.colors.textSecondary};
+  }
+`;
+
+export const DeliveryTitle = styled.h3`
+  color: ${theme.colors.primary};
+  font-size: ${theme.fontSize.h6.size};
+  line-height: ${theme.fontSize.h6.lineheight};
+`;
+
+export const DeliveryEvent = styled(DeliveryPanel)`
+  border-left: 4px solid ${theme.colors.primary};
+  background: ${theme.colors.background2};
+`;
