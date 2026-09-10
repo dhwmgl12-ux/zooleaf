@@ -25,9 +25,10 @@ export default function PasswordField({
   const distance = useMarqueeDistance(containerRef, textRef);
   return (
     <div>
-      <Label>{label}</Label>
+      <Label htmlFor={name}>{label}</Label>
       <InputWrapper>
         <Input
+          id={name}
           type={showPassword ? 'text' : 'password'}
           name={name}
           autoComplete={autoComplete}

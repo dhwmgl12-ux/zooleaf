@@ -22,8 +22,9 @@ export default function LoginForm() {
       <Title>로그인</Title>
       <Form onSubmit={handleSubmit}>
         <div>
-          <Label>이메일 아이디</Label>
+          <Label htmlFor="id">이메일 아이디</Label>
           <Input
+            id="id"
             type="email"
             name="id"
             autoComplete="username"
