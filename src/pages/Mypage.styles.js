@@ -52,7 +52,7 @@ export const InfoGrid = styled.div`
   grid-template-columns: repeat(2, minmax(0, 1fr));
   gap: 24px;
 
-  @media (max-width: 1023px) {
+  @media (max-width: ${theme.layout.breakpoint.tablet}) {
     grid-template-columns: 1fr;
   }
 `;
@@ -66,7 +66,7 @@ export const Card = styled.section`
   border-radius: 18px;
   box-shadow: 0 2px 5px rgba(44, 62, 53, 0.1);
 
-  @media (max-width: 767px) {
+  @media (max-width: ${theme.layout.breakpoint.mobile}) {
     padding: 20px;
   }
 `;
@@ -89,11 +89,6 @@ export const HeadingGroup = styled.div`
   gap: 12px;
 
   min-width: 0;
-
-  h2 {
-    font-size: 22px;
-    line-height: 1.4;
-  }
 
   p {
     margin-top: 4px;
@@ -423,4 +418,12 @@ export const ProfileSaveButton = styled(ProfileCancelButton)`
   &:hover {
     background: ${theme.colors.hover};
   }
+`;
+
+// 배송지 이름과 주문 상품명
+export const ItemTitle = styled.h3`
+  font-size: ${theme.fontSize.body.size};
+  line-height: ${theme.fontSize.body.lineheight};
+  font-weight: ${theme.fontWeight.bold};
+  overflow-wrap: anywhere;
 `;
