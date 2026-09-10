@@ -1,10 +1,11 @@
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import CategorySidebar from '../components/product/CategorySidebar';
 import ProductCard from '../components/product/ProductCard';
 import Pagination from '../components/product/Pagination';
 import { getProducts } from '../api/productApi';
 import bannerImage from '../assets/images/banner.webp';
+import { ProductPageContainer } from './ProductPage.styles';
 
 const PRODUCTS_PER_PAGE = 12;
 const GRID_COLUMNS = 3;
@@ -24,7 +25,7 @@ export default function ProductPage() {
   const [totalPages, setTotalPages] = useState(1);
   const [filters, setFilters] = useState({
     category: '전체상품',
-    targets: [],
+    target: '전체',
     time: '전체',
     page: 1,
   });
@@ -37,18 +38,16 @@ export default function ProductPage() {
   const handleSelectCategory = (category) => {
     setFilters({
       category,
-      targets: [],
+      target: '전체',
       time: '전체',
       page: 1,
     });
   };
 
-  const handleToggleTarget = (target) => {
+  const handleSelectTarget = (target) => {
     setFilters((prev) => ({
       ...prev,
-      targets: prev.targets.includes(target)
-        ? prev.targets.filter((item) => item !== target)
-        : [...prev.targets, target],
+      target,
       page: 1,
     }));
   };
@@ -68,7 +67,7 @@ export default function ProductPage() {
           page: filters.page,
           limit: PRODUCTS_PER_PAGE,
           visitorType: isTicketCategory
-            ? filters.targets[0]
+            ? filters.target
             : undefined,
           availableTimeType: isTicketCategory
             ? filters.time
@@ -92,32 +91,32 @@ export default function ProductPage() {
   ]);
 
   return (
-    <main>
+    <ProductPageContainer>
       <Link
         to="/discount"
         aria-label="ZOOLEAF 제휴 및 할인 혜택 보기"
-        style={{ display: 'block', marginBottom: '48px' }}
+        className="product-page__banner"
       >
         <img
           src={bannerImage}
           alt="ZOOLEAF 할인 혜택을 확인해 보세요"
-          style={{ display: 'block', width: '100%', height: 'auto' }}
         />
       </Link>
 
-      <CategorySidebar
-        selectedCategory={filters.category}
-        onSelectCategory={handleSelectCategory}
-        selectedTargets={filters.targets}
-        onToggleTarget={handleToggleTarget}
-        selectedTime={filters.time}
-        onSelectTime={handleSelectTime}
-      />
+      <div className="product-page__layout">
+        <CategorySidebar
+          selectedCategory={filters.category}
+          onSelectCategory={handleSelectCategory}
+          selectedTarget={filters.target}
+          onSelectTarget={handleSelectTarget}
+          selectedTime={filters.time}
+          onSelectTime={handleSelectTime}
+        />
 
-      <section aria-label="상품 목록">
+      <section className="product-page__content" aria-label="상품 목록">
         <h1>
           {filters.category === '전체상품'
-            ? '입장권 · 패키지'
+            ? '입장권 & 패키지'
             : filters.category}
         </h1>
 
@@ -128,7 +127,7 @@ export default function ProductPage() {
         ) : products.length === 0 ? (
           <p>상품이 없습니다.</p>
         ) : (
-          <div>
+          <div className="product-page__grid">
             {products.map((product) => (
               <ProductCard
                 key={product.id}
@@ -152,6 +151,7 @@ export default function ProductPage() {
           }}
         />
       </section>
-    </main>
+      </div>
+    </ProductPageContainer>
   );
 }

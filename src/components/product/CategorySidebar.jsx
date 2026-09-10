@@ -1,20 +1,25 @@
+import { useState } from 'react';
+import { Sidebar } from './CategorySidebar.styles';
+
 export default function CategorySidebar({
   selectedCategory,
   onSelectCategory,
-  selectedTargets,
-  onToggleTarget,
+  selectedTarget,
+  onSelectTarget,
   selectedTime,
   onSelectTime,
 }) {
   const categories = ['전체상품', '입장권', '패키지', 'Membership'];
-  const targets = ['대인', '소인', '우대'];
+  const targets = ['전체', '대인', '소인', '우대'];
   const times = ['전체', '종일', '오후'];
+  const [openFilter, setOpenFilter] = useState(null);
 
-  const isTicketCategory = selectedCategory === '입장권';
+  const toggleFilter = (filterName) => {
+    setOpenFilter((current) => (current === filterName ? null : filterName));
+  };
 
   return (
-    <aside aria-label="상품 카테고리 및 필터">
-      {/* 카테고리 */}
+    <Sidebar aria-label="상품 카테고리 및 필터">
       <nav aria-label="상품 카테고리">
         <ul>
           {categories.map((category) => (
@@ -31,39 +36,55 @@ export default function CategorySidebar({
         </ul>
       </nav>
 
-      {/* 입장권 전용 필터 */}
-      {isTicketCategory && (
-        <>
-          {/* 관람 대상 */}
-          <section aria-labelledby="target-filter-title">
-            <h3 id="target-filter-title">관람 대상</h3>
+      <div className="filter-options">
+          <section className="filter-dropdown">
+            <button
+              type="button"
+              onClick={() => toggleFilter('target')}
+              aria-expanded={openFilter === 'target'}
+            >
+              관람 대상 <span className="filter-arrow" aria-hidden="true" />
+            </button>
 
-            <ul>
+            {openFilter === 'target' && (
+              <ul aria-label="관람 대상 선택">
               {targets.map((target) => (
                 <li key={target}>
-                  <label>
-                    <input
-                      type="checkbox"
-                      checked={selectedTargets.includes(target)}
-                      onChange={() => onToggleTarget(target)}
-                    />
-                    <span>{target}</span>
-                  </label>
+                  <button
+                    type="button"
+                    onClick={() => {
+                      onSelectTarget(target);
+                      setOpenFilter(null);
+                    }}
+                    aria-pressed={selectedTarget === target}
+                  >
+                    {target}
+                  </button>
                 </li>
               ))}
             </ul>
+            )}
           </section>
 
-          {/* 이용 시간 */}
-          <section aria-labelledby="time-filter-title">
-            <h3 id="time-filter-title">이용 시간</h3>
+          <section className="filter-dropdown">
+            <button
+              type="button"
+              onClick={() => toggleFilter('time')}
+              aria-expanded={openFilter === 'time'}
+            >
+              이용 시간 <span className="filter-arrow" aria-hidden="true" />
+            </button>
 
-            <ul>
+            {openFilter === 'time' && (
+              <ul aria-label="이용 시간 선택">
               {times.map((time) => (
                 <li key={time}>
                   <button
                     type="button"
-                    onClick={() => onSelectTime(time)}
+                    onClick={() => {
+                      onSelectTime(time);
+                      setOpenFilter(null);
+                    }}
                     aria-pressed={selectedTime === time}
                   >
                     {time}
@@ -71,9 +92,9 @@ export default function CategorySidebar({
                 </li>
               ))}
             </ul>
+            )}
           </section>
-        </>
-      )}
-    </aside>
+      </div>
+    </Sidebar>
   );
 }
