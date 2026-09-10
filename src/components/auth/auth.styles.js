@@ -1,6 +1,7 @@
 import styled from "@emotion/styled";
 import { theme } from "../../styles/variables";
 import { Link } from "react-router-dom";
+import { keyframes } from "@emotion/react";
 
 export const FormCard = styled.div`
   width: 550px;
@@ -61,16 +62,30 @@ export const Input = styled.input`
   outline: none;
   border-color: ${theme.colors.primary};
 }
+
+@media (max-width: ${theme.layout.breakpoint.mobile}) {
+  height: 35px;
+  font-size: ${theme.fontSize.bodysmall.size}
+}
 `;
 
 export const InputWrapper = styled.div`
   position: relative;
   width: 100%;
+  overflow: hidden;
+
+  input {
+    padding-right: 48px;
+  }
 `;
 
 export const CheckIdRow = styled.div`
   display: flex;
   gap: ${theme.spacing[8]};
+
+  @media (max-width: ${theme.layout.breakpoint.mobile}) {
+    flex-wrap: wrap;
+  }
 `;
 
 export const CheckIdButton = styled.button`
@@ -79,6 +94,7 @@ export const CheckIdButton = styled.button`
   border: 2px solid ${theme.colors.primary};
   border-radius: ${theme.radius.input};
   background: ${theme.colors.white};
+  color: ${theme.colors.textPrimary};
   font-size: ${theme.fontSize.bodysmall.size};
   font-weight: ${theme.fontWeight.medium};
   cursor: pointer;
@@ -92,6 +108,11 @@ export const CheckIdButton = styled.button`
   &:disabled {
     opacity: 0.5;
     cursor: not-allowed;
+  }
+
+  @media (max-width: ${theme.layout.breakpoint.mobile}) {
+    height: 35px;
+    flex: 1 1 100%;
   }
 `;
 
@@ -145,6 +166,7 @@ export const AgreeRow = styled.div`
   display: flex;
   align-items: center;
   justify-content: space-between;
+  gap: ${theme.spacing[8]};
   align-self: stretch;
 `;
 
@@ -155,6 +177,7 @@ export const AgreeLeftGroup = styled.label`
   font-size: ${theme.fontSize.bodysmall.size};
   color: ${theme.colors.textPrimary};
   cursor: pointer;
+  min-width: 0;
 `;
 
 export const InlineErrorText = styled.span`
@@ -163,6 +186,7 @@ export const InlineErrorText = styled.span`
 `;
 
 export const ArrowIcon = styled.button`
+  flex-shrink: 0;
   color: ${theme.colors.textSecondary};
   font-size: ${theme.fontSize.body.size};
 `
@@ -231,4 +255,28 @@ export const BottomLink = styled(Link)`
   }
 `
 
+const anime = keyframes`
+  0%, 20% {transform: translateX(0);}
+  80%, 100% {transform: translateX(-60%);}
+`;
 
+export const FakePlaceHolder = styled.span`
+  position: absolute;
+  inset: 0 48px 0 ${theme.spacing[16]};
+  display: flex;
+  align-items: center;
+  overflow: hidden;
+  pointer-events: none;
+`;
+
+export const FakePlaceHolderText = styled.span`
+  display: inline-block;
+  white-space: nowrap;
+  color: ${theme.colors.textSecondary};
+  font-size: ${theme.fontSize.body.size};
+
+  @media (max-width: ${theme.layout.breakpoint.mobile}) {
+    font-size: ${theme.fontSize.bodysmall.size};
+    animation: ${anime} 6s ease infinite;
+  }
+`;
