@@ -1,7 +1,7 @@
 import { data, useNavigate, useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
 
-import { getExperienceById } from "../api/experienceApi";
+import { getExperienceDetail } from "../api/experienceApi";
 import DetailImage from "../components/detail/DetailImage";
 import DetailContent from "../components/detail/DetailContent";
 import DetailPrice from "../components/detail/DetailPrice";
@@ -32,7 +32,7 @@ export default function ExperienceDetailPage() {
         setIsLoading(true);
         setError(null);
 
-        const data = await getExperienceById(
+        const data = await getExperienceDetail(
           experienceId,
           controller.signal
         );
