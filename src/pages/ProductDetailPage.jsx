@@ -1,12 +1,16 @@
 import { useEffect, useState } from "react"
-import { Link, useParams } from "react-router-dom"
+import { useNavigate, useParams } from "react-router-dom"
 
 import { getProductById } from "../api/productApi"
 import DetailImage from "../components/detail/DetailImage";
 import DetailContent from "../components/detail/DetailContent";
 import DetailPrice from "../components/detail/DetailPrice";
-import Breadcrumb from '../components/common/Breadcrumb';
-import { ProductDetailPageContainer } from "./ProductDetailPage.styles";
+import Breadcrumb from "../components/common/Breadcrumb";
+import { DetailPageContainer } from "./DetailPage.styles";
+import LoadingSpinner from "../components/common/LoadingSpinner"
+import ErrorState from "../components/common/ErrorState"
+import EmptyState from "../components/common/EmptyState"
+import NotFoundPage from "./NotFoundPage";
 
 export default function ProductDetailPage() {
   const { productId } = useParams();
@@ -14,6 +18,8 @@ export default function ProductDetailPage() {
   const [product, setProduct] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState (null);
+
+  const navigate = useNavigate();
 
   useEffect(() => {
     const controller = new AbortController();
@@ -48,27 +54,36 @@ export default function ProductDetailPage() {
   }, [productId]);
 
   if (isLoading) {
-    return <p>상품 정보를 불러오는 중입니다.</p>;
+    return <LoadingSpinner />;
+  }
+
+  const isNotFound =
+    error?.status === 404 ||
+    error?.code === "PRODUCT_NOT_FOUND";
+  
+  if (isNotFound) {
+    return <NotFoundPage />;
   }
 
   if (error) {
     return (
-      <div>
-        <p>상품 정보를 불러오지 못했습니다.</p>
-        <p>일시적인 오류가 발생했습니다.</p>
-        <p>잠시 후 다시 시도해주세요.</p>
-        <Link to={`/products/${productId}`} reloadDocument>다시 시도</Link>
-      </div>
+      <ErrorState 
+        title="상품 정보를 불러오지 못했습니다."
+        description="잠시 후 다시 시도해주세요."
+        buttonText="다시 시도"
+        onButtonClick={() => window.location.reload()}
+      />
     )
   }
 
   if (!product) {
     return (
-      <div>
-        <p>상품을 찾을 수 없습니다.</p>
-        <p>요청하신 상품이 존재하지 않거나 삭제된 상품입니다.</p>
-        <Link to="/products">상품 목록을 돌아가기</Link>
-      </div>
+      <EmptyState 
+        title="상품을 찾을 수 없습니다."
+        description="요청하신 상품이 존재하지 않거나 삭제된 상품입니다."
+        buttonText="상품 목록으로 돌아가기"
+        onButtonClick={() => navigate("/products")}
+      />
     )
   }
 
@@ -82,7 +97,7 @@ export default function ProductDetailPage() {
         ]}
       />
 
-      <ProductDetailPageContainer>
+      <DetailPageContainer>
         <div className="detail-image-area">
           <DetailImage 
             imageUrl={product.imageUrl ?? product.thumbnailImage}
@@ -95,7 +110,7 @@ export default function ProductDetailPage() {
         <div className="detail-price-area">
           <DetailPrice product={product} productType="product" />
         </div>
-      </ProductDetailPageContainer>
+      </DetailPageContainer>
     </>
   )
 }

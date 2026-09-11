@@ -70,7 +70,7 @@ export default function ExperiencePage() {
                       <strong>{experience.price.toLocaleString()}원</strong>
                     </CardOverlayText>
                   </CardImageContainer>
-                  <ReserveButton as={Link} to={`/experience/${experience.id}`}>
+                  <ReserveButton as={Link} to={`/experiences/${experience.id}`}>
                     예매하기
                   </ReserveButton>
                 </ExperienceCard>
