@@ -73,6 +73,7 @@ const resetStyles = css`
 
   html {
     scroll-behavior: smooth;
+    scrollbar-gutter: stable;
   }
 
   body {
