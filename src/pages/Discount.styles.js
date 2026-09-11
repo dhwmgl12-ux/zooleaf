@@ -111,6 +111,15 @@ export const NoticeBox = styled.div`
   @media (max-width: ${theme.layout.breakpoint.smallMobile}) {
     max-width: 343px;
     order: 1;
+    h3 {
+      margin: 0;
+      font-size: ${theme.fontSize.h4.size};
+    }
+
+    p {
+      margin: 0;
+      font-size: ${theme.fontSize.bodysmall.size};
+    }
   }
 `;
 
@@ -148,6 +157,9 @@ export const SpecialHeader = styled.div`
   @media (max-width: ${theme.layout.breakpoint.smallMobile}) {
     max-width: 343px;
     order: 3;
+    h2 {
+      font-size: ${theme.fontSize.h4.size};
+    }
   }
 `;
 
@@ -203,6 +215,7 @@ export const PageTitle = styled.h1`
   @media (max-width: ${theme.layout.breakpoint.smallMobile}) {
     font-size: ${theme.fontSize.h3.size};
     line-height: ${theme.fontSize.h3.lineheight};
+    margin-top: ${theme.spacing[10]};
   }
 `;
 
@@ -243,8 +256,10 @@ export const DiscountCard = styled.div`
     height: auto;
     align-items: center;
     text-align: center;
-    gap: ${theme.spacing[16]};
-    padding: ${theme.spacing[24]};
+
+    margin-bottom: ${theme.spacing[40]};
+    gap: 0;
+    padding: ${theme.spacing[12]};
     > div:first-of-type {
       margin-left: 0;
       margin-right: 0;
@@ -268,6 +283,11 @@ export const CardImageWrap = styled.div`
   @media (max-width: ${theme.layout.breakpoint.tablet}) {
     margin-left: ${theme.spacing[64]};
     margin-right: ${theme.spacing[100]};
+  }
+  @media (max-width: ${theme.layout.breakpoint.smallMobile}) {
+    width: 150px;
+    margin-bottom: 0;
+    height: 126px;
   }
 `;
 
@@ -301,8 +321,11 @@ export const CardInfoWrap = styled.div`
   }
 
   @media (max-width: ${theme.layout.breakpoint.smallMobile}) {
+    h2 {
+      font-size: ${theme.fontSize.h5.size};
+    }
     > p {
-      font-size: ${theme.fontSize.body.size};
+      font-size: ${theme.fontSize.bodysmall.size};
       align-items: center;
       text-align: center;
       width: 100%;
@@ -333,8 +356,11 @@ export const ConditionArea = styled.div`
   }
 
   @media (max-width: ${theme.layout.breakpoint.smallMobile}) {
+    > strong {
+      font-size: ${theme.fontSize.h6.size};
+    }
     > p {
-      font-size: ${theme.fontSize.body.size};
+      font-size: ${theme.fontSize.bodysmall.size};
     }
     padding: 0;
     gap: 0;
@@ -350,7 +376,7 @@ export const SubCond = styled.span`
   margin-bottom: ${theme.spacing[32]};
 
   @media (max-width: ${theme.layout.breakpoint.smallMobile}) {
-    font-size: ${theme.fontSize.body.size};
+    font-size: ${theme.fontSize.bodysmall.size};
   }
 `;
 
@@ -416,7 +442,7 @@ export const SpecialTextWrap = styled.div`
     align-items: center;
 
     p {
-      font-size: ${theme.fontSize.body.size};
+      font-size: ${theme.fontSize.bodysmall.size};
       text-align: center;
       white-space: pre-line; /* 모바일 대응 시에도 유지 */
     }
@@ -437,5 +463,10 @@ export const SpecialImageWrap = styled.div`
     width: 100%;
     height: 100%;
     object-fit: contain;
+  }
+  @media (max-width: ${theme.layout.breakpoint.smallMobile}) {
+    heigth: 95px;
+    margin-left: ${theme.spacing[100]};
+    margin-right: ${theme.spacing[100]};
   }
 `;

@@ -1,5 +1,10 @@
 import { zooIntroData } from '../constants/IntroData';
-import { PageContainer, HeroSection, ContentSection, InfoBlock } from './Intro.style';
+import {
+  PageContainer,
+  HeroSection,
+  ContentSection,
+  InfoBlock,
+} from './Intro.style';
 import MapImage from '../assets/images/Directions-map.webp';
 import BusImage from '../assets/images/directions.png';
 import Breadcrumb from '../components/common/Breadcrumb';
@@ -7,10 +12,11 @@ import Breadcrumb from '../components/common/Breadcrumb';
 export function IntroPage() {
   return (
     <>
-      <Breadcrumb items={[{ label: '홈', to: '/' }, { label: '동물원 소개' }]} />
+      <Breadcrumb
+        items={[{ label: '홈', to: '/' }, { label: '동물원 소개' }]}
+      />
 
       <PageContainer>
-        {/* 인라인 style을 제거하여 스타일 파일의 right center 설정이 정상 적용되도록 함 */}
         <HeroSection>
           <div className="hero-content">
             <p className="sub-title">{zooIntroData.hero.subtitle}</p>
@@ -26,11 +32,26 @@ export function IntroPage() {
                 <p>{section.content}</p>
               ) : (
                 <ul>
-                  {section.items.map((item, i) => (
-                    <li key={i}>
-                      <strong>{item.strong}</strong> {item.text}
-                    </li>
-                  ))}
+                  {section.items.map((item, i) => {
+                    // \n이 포함되어 있으면 분리하여 smallMobile 전용 줄바꿈 적용
+                    const textParts = item.text.includes('\n')
+                      ? item.text.split('\n')
+                      : [item.text];
+
+                    return (
+                      <li key={i}>
+                        <strong>{item.strong}</strong>{' '}
+                        {textParts.map((part, pIdx) => (
+                          <span key={pIdx}>
+                            {part}
+                            {pIdx < textParts.length - 1 && (
+                              <br className="mobile-br" />
+                            )}
+                          </span>
+                        ))}
+                      </li>
+                    );
+                  })}
                 </ul>
               )}
             </InfoBlock>

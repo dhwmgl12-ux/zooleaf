@@ -17,19 +17,21 @@ export const PageContainer = styled.div`
 export const HeroSection = styled.div`
   width: 100%;
   max-width: 1440px;
-  height: 500px;
+  min-height: 450px;
+
   background-image:
     linear-gradient(rgba(0, 0, 0, 0.3), rgba(0, 0, 0, 0.3)), url(${introPCImg});
   background-size: cover;
-  background-position: right center; /* 오른쪽 끝에 딱 붙도록 설정 */
+  background-position: center;
   background-repeat: no-repeat;
   background-color: #f4f6f0;
+
   display: flex;
   justify-content: center;
   align-items: center;
   text-align: center;
   color: #ffffff;
-  padding: 0 ${theme.spacing[24]};
+  padding: 40px ${theme.spacing[24]};
   box-sizing: border-box;
 
   .hero-content {
@@ -40,12 +42,14 @@ export const HeroSection = styled.div`
       font-size: ${theme.fontSize.h3.size};
       margin-bottom: ${theme.spacing[12]};
       font-weight: ${theme.fontWeight.regular};
+      word-break: keep-all;
     }
 
     h2 {
       font-size: ${theme.fontSize.h2.size};
       font-weight: ${theme.fontWeight.bold};
       margin: 0;
+      word-break: keep-all;
     }
   }
 
@@ -54,11 +58,12 @@ export const HeroSection = styled.div`
     background-image:
       linear-gradient(rgba(0, 0, 0, 0.3), rgba(0, 0, 0, 0.3)),
       url(${introTabletImg});
-    max-width: 982px;
+    max-width: 100%;
     height: 547px;
     .hero-content {
-      max-width: 1000px;
+      max-width: 100%;
       width: 100%;
+      padding: 0 16px;
 
       .sub-title {
         font-size: ${theme.fontSize.h3.size};
@@ -79,11 +84,12 @@ export const HeroSection = styled.div`
     background-image:
       linear-gradient(rgba(0, 0, 0, 0.3), rgba(0, 0, 0, 0.3)),
       url(${introMobileImg});
-    max-width: 723px;
+    max-width: 100%;
     height: 555px;
     .hero-content {
-      max-width: 1000px;
+      max-width: 100%;
       width: 100%;
+      padding: 0 16px;
 
       .sub-title {
         font-size: ${theme.fontSize.h4.size};
@@ -100,29 +106,33 @@ export const HeroSection = styled.div`
   }
 
   @media (max-width: ${theme.layout.breakpoint.smallMobile}) {
-    /* 오타 교정 포함 */
-    background-position: right center;
+    background-position: center;
     background-image:
       linear-gradient(rgba(0, 0, 0, 0.3), rgba(0, 0, 0, 0.3)),
       url(${introsmallImg});
-    max-width: 343px;
-    height: 455px;
+    width: 100%;
+    max-width: 100%;
+    min-height: 375px;
+    height: auto;
+    margin-bottom: ${theme.spacing[100]};
     .hero-content {
-      max-width: 1000px;
+      max-width: 100%;
       width: 100%;
+      padding: 0;
 
       .sub-title {
-        font-size: ${theme.fontSize.body.size};
-        margin-bottom: ${theme.spacing[12]};
-        font-weight: ${theme.fontWeight.regular};
+        font-size: ${theme.fontSize.bodysmall.size};
+        margin-bottom: 8px;
         word-break: keep-all;
       }
 
       h2 {
-        font-size: ${theme.fontSize.h5.size};
+        font-size: ${theme.fontSize.h6.size};
         font-weight: ${theme.fontWeight.bold};
         margin: 0;
+        word-break: keep-all;
       }
+    }
   }
 `;
 
@@ -132,13 +142,18 @@ export const ContentSection = styled.div`
   display: flex;
   flex-direction: column;
   gap: ${theme.spacing[32]};
-  padding: ${theme.spacing[40]} ${theme.spacing[24]};
+  /* 모바일에서 양옆 여백이 과도하지 않도록 패딩 조정 */
+  padding: ${theme.spacing[40]} 16px;
   box-sizing: border-box;
+
+  @media (max-width: ${theme.layout.breakpoint.smallMobile}) {
+    padding: ${theme.spacing[4]};
+  }
 `;
 
 export const InfoBlock = styled.div`
   background-color: transparent;
-  padding: ${theme.spacing[32]};
+  padding: 0;
   box-sizing: border-box;
   width: 100%;
 
@@ -146,7 +161,7 @@ export const InfoBlock = styled.div`
     font-size: ${theme.fontSize.h3.size};
     color: ${theme.colors.primary};
     font-weight: ${theme.fontWeight.bold};
-    margin-bottom: ${theme.spacing[24]};
+    margin-bottom: ${theme.spacing[16]};
   }
 
   p {
@@ -169,6 +184,11 @@ export const InfoBlock = styled.div`
       line-height: 1.5;
       color: ${theme.colors.textPrimary};
 
+      /* 기본 상태(PC/태블릿)에서는 모바일용 줄바꿈을 숨김 */
+      .mobile-br {
+        display: none;
+      }
+
       strong {
         color: ${theme.colors.textPrimary};
         font-weight: ${theme.fontWeight.regular};
@@ -176,7 +196,26 @@ export const InfoBlock = styled.div`
     }
   }
 
+  @media (max-width: ${theme.layout.breakpoint.smallMobile}) {
+    h2 {
+      font-size: ${theme.fontSize.h4.size};
+      margin-bottom: ${theme.spacing[24]};
+    }
+
+    p,
+    ul li {
+      font-size: ${theme.fontSize.bodysmall.size};
+      word-break: keep-all;
+
+      /* smallMobile 화면에서만 줄바꿈 표시 */
+      .mobile-br {
+        display: inline;
+      }
+    }
+  }
+
   &.map-block {
+    /* ... 기존 오시는 길 스타일 유지 ... */
     display: flex;
     flex-direction: column;
     gap: ${theme.spacing[20]};

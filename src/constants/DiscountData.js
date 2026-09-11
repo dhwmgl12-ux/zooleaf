@@ -64,7 +64,7 @@ export const PARTNERSHIP_DISCOUNTS = [
     conditions: [
       { text: '해당 행사일', highlight: true },
       { text: ' 방문 시 적용, ', highlight: false },
-      { text: '지정된 날짜', highlight: true },
+      { text: '\n지정된 날짜', highlight: true },
       { text: '에만 이용 가능', highlight: false },
     ],
     image: dayImg,
@@ -76,22 +76,22 @@ export const SPECIAL_DISCOUNTS = [
     id: 1,
     image: disabledImg,
     descriptions: [
-      '장애인 1~3급: 본인 및 동반 1인 50% 할인\n(복지카드 소지자)',
-      '장애인 4~6급: 본인 50% 할인\n(복지카드 소지자)',
+      '장애인 1~3급: \n본인 및 동반 1인 50% 할인\n(복지카드 소지자)',
+      '장애인 4~6급: \n본인 50% 할인\n(복지카드 소지자)',
     ],
   },
   {
     id: 2,
     image: soldierImg,
     descriptions: [
-      '군인/군무원: 할인 또는 현역병 우대 혜택 적용\n(휴가증, 외출증등 신분 증빙 서류 지참)',
-      '국군 장병 특별 우대: 휴가자 본인 할인 적용\n(휴가증 및 군인 신분증 제시)',
+      '군인/군무원: \n할인 또는 현역병 우대 혜택 적용\n(휴가증, 외출증등 신분 증빙 서류 지참)',
+      '국군 장병 특별 우대: \n휴가자 본인 할인 적용\n(휴가증 및 군인 신분증 제시)',
     ],
   },
   {
     id: 3,
     image: oldsterImg,
-    descriptions: ['만 65세 이상 본인 50% 할인 (신분증 지참)'],
+    descriptions: ['만 65세 이상 본인 50% 할인 \n(신분증 지참)'],
   },
   {
     id: 4,

@@ -21,6 +21,8 @@ export const ExperienceTitle = styled.h2`
   margin-top: ${theme.spacing[32]};
   @media (max-width: ${theme.layout.breakpoint.smallMobile}) {
     margin-bottom: ${theme.spacing[64]};
+    font-size: ${theme.fontSize.h4.size};
+    margin-top: -${theme.spacing[40]};
   }
 `;
 
@@ -42,7 +44,7 @@ export const ExperienceGrid = styled.div`
   }
   @media (max-width: ${theme.layout.breakpoint.smallMobile}) {
     grid-template-columns: 300px;
-    margin-left: -${theme.spacing[8]};
+    margin-left: 0;
   }
 `;
 
@@ -57,19 +59,23 @@ export const ExperienceCard = styled.article`
   flex-direction: column;
   /* overflow를 여기에 주어 카드 전체의 모서리를 깔끔하게 마스킹합니다 */
   overflow: hidden;
+
   justify-self: center;
   @media (max-width: ${theme.layout.breakpoint.tablet}) {
     width: 310px;
     height: 300px;
+    margin-bottom: ${theme.spacing[24]};
   }
 
   @media (max-width: ${theme.layout.breakpoint.mobile}) {
     width: 352px;
     height: 300px;
+    margin-bottom: ${theme.spacing[4]};
   }
   @media (max-width: ${theme.layout.breakpoint.smallMobile}) {
-    width: 343px;
-    height: 300px;
+    width: 300px;
+    height: 262px;
+    margin-bottom: ${theme.spacing[24]};
   }
 `;
 
@@ -110,7 +116,7 @@ export const CardOverlayText = styled.div`
     margin: 0;
     line-height: 1.4;
     word-break: keep-all;
-    width: 55%;
+    width: 100%;
     @media (max-width: 480px) {
       max-width: none;
       white-space: nowrap;
@@ -160,7 +166,7 @@ export const ReserveButton = styled.a`
     height: 41px;
   }
   @media (max-width: ${theme.layout.breakpoint.smallMobile}) {
-    width: 301px;
+    width: 258px;
     height: 41px;
   }
 `;
