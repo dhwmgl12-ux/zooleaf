@@ -5,8 +5,8 @@ import { getProductById } from "../api/productApi"
 import DetailImage from "../components/detail/DetailImage";
 import DetailContent from "../components/detail/DetailContent";
 import DetailPrice from "../components/detail/DetailPrice";
-import { ProductDetailPageContainer } from "./ProductDetailPage.styles";
 import Breadcrumb from '../components/common/Breadcrumb';
+import { ProductDetailPageContainer } from "./ProductDetailPage.styles";
 
 export default function ProductDetailPage() {
   const { productId } = useParams();
@@ -85,7 +85,7 @@ export default function ProductDetailPage() {
       <ProductDetailPageContainer>
         <div className="detail-image-area">
           <DetailImage 
-            imageUrl={product.thumbnailImage || product.imageUrl}
+            imageUrl={product.imageUrl ?? product.thumbnailImage}
             name={product.name}
           />
         </div>
