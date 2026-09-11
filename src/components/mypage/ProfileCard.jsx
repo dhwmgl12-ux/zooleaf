@@ -1,6 +1,8 @@
 import useToastStore from "../../store/toastStore";
 import { useState } from "react";
 import Modal from "../common/Modal";
+import { formatPhoneNumber } from "../../utils/validation";
+import { validateProfile } from "../../utils/profileValidation";
 import {
   Card,
   CardHeader,
@@ -37,12 +39,12 @@ export default function ProfileCard() {
   // 모달 열림 여부와 수정 중인 입력값
   const [isEditOpen, setIsEditOpen] = useState(false);
   const [form, setForm] = useState(previewProfile);
-  const [formError, setFormError] = useState("");
+  const [errors, setErrors] = useState({});
 
   // 현재 정보를 입력창에 넣고 모달 열기
   const openEditModal = () => {
     setForm({ ...profile });
-    setFormError("");
+    setErrors({});
     setIsEditOpen(true);
   };
 
@@ -56,27 +58,34 @@ export default function ProfileCard() {
 
     setForm((prev) => ({
       ...prev,
-      [name]: value,
+      [name]: name === "phone" ? formatPhoneNumber(value) : value,
     }));
 
-    setFormError("");
+    setErrors((prev) => ({
+      ...prev,
+      [name]: "",
+    }));
   };
 
   const handleSave = (event) => {
     event.preventDefault();
 
-    if (!form.name.trim()) {
-      setFormError("이름을 입력해주세요.");
+    const result = validateProfile(form);
+
+    setForm(result.values);
+    setErrors(result.errors);
+
+    const firstError = Object.keys(result.errors)[0];
+
+    if (firstError) {
+      event.currentTarget.elements.namedItem(firstError)?.focus();
       return;
     }
 
-    // API 연결 전: 현재 화면의 회원정보만 변경
-    setProfile({
-      ...form,
-      name: form.name.trim(),
-    });
+    // 서버 연결 전: 화면에만 반영
+    setProfile(result.values);
+    closeEditModal();
 
-    setIsEditOpen(false);
     showToast("화면에 반영했습니다. 서버 저장은 아직 연결 전입니다.");
   };
 
@@ -137,7 +146,11 @@ export default function ProfileCard() {
         ))}
       </ProfileList>
       <Modal isOpen={isEditOpen} onClose={closeEditModal} title="회원정보 수정">
-        <ProfileEditForm onSubmit={handleSave} aria-label="회원정보 수정">
+        <ProfileEditForm
+          onSubmit={handleSave}
+          aria-label="회원정보 수정"
+          noValidate
+        >
           <ProfileField>
             <ProfileLabel htmlFor="profile-name">이름</ProfileLabel>
 
@@ -152,6 +165,9 @@ export default function ProfileCard() {
               maxLength={50}
               required
             />
+            {errors.name && (
+              <ProfileFormError role="alert">{errors.name}</ProfileFormError>
+            )}
           </ProfileField>
 
           <ProfileField>
@@ -170,6 +186,9 @@ export default function ProfileCard() {
               maxLength={13}
               required
             />
+            {errors.phone && (
+              <ProfileFormError role="alert">{errors.phone}</ProfileFormError>
+            )}
           </ProfileField>
 
           <ProfileField>
@@ -189,11 +208,12 @@ export default function ProfileCard() {
               ].join("-")}
               required
             />
+            {errors.birthDate && (
+              <ProfileFormError role="alert">
+                {errors.birthDate}
+              </ProfileFormError>
+            )}
           </ProfileField>
-
-          {formError && (
-            <ProfileFormError role="alert">{formError}</ProfileFormError>
-          )}
 
           <ProfileModalActions>
             <ProfileCancelButton type="button" onClick={closeEditModal}>
