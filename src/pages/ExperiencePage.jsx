@@ -1,7 +1,18 @@
 import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
-import { getExperiences } from '../api/experienceApi';
 import Breadcrumb from '../components/common/Breadcrumb';
+import { getExperiences } from '../api/experienceApi';
+import {
+  ExperiencePageWrapper,
+  ExperienceMain,
+  ExperienceTitle,
+  ExperienceGrid,
+  ExperienceCard,
+  CardImageContainer,
+  CardOverlayText,
+  ReserveButton,
+  StatusText,
+} from './ExperiencePage.style';
 
 export default function ExperiencePage() {
   const [experiences, setExperiences] = useState([]);
@@ -16,7 +27,6 @@ export default function ExperiencePage() {
         setLoading(true);
         setError('');
         const data = await getExperiences(controller.signal);
-
         setExperiences(data);
       } catch (err) {
         if (err.name !== 'AbortError') {
@@ -35,32 +45,40 @@ export default function ExperiencePage() {
   }, []);
 
   return (
-    <>
-    <Breadcrumb items={[{ label: '홈', to: '/'}, {label: '체험 프로그램'}]} />
-      <main>
+    <ExperiencePageWrapper>
+      <Breadcrumb items={[{ label: '홈', to: '/' }, { label: '프로그램' }]} />
+      <ExperienceMain>
         <section aria-label="체험 프로그램 목록">
-          <h1>체험 프로그램</h1>
+          <ExperienceTitle>체험 프로그램</ExperienceTitle>
 
           {loading ? (
-            <p>체험 프로그램을 불러오는 중입니다.</p>
+            <StatusText>체험 프로그램을 불러오는 중입니다.</StatusText>
           ) : error ? (
-            <p role="alert">{error}</p>
+            <StatusText role="alert" style={{ color: 'red' }}>
+              {error}
+            </StatusText>
           ) : experiences.length === 0 ? (
-            <p>등록된 체험 프로그램이 없습니다.</p>
+            <StatusText>등록된 체험 프로그램이 없습니다.</StatusText>
           ) : (
-            <div>
+            <ExperienceGrid>
               {experiences.map((experience) => (
-                <article key={experience.id}>
-                  <img src={experience.imageUrl} alt={experience.name} />
-                  <h2>{experience.name}</h2>
-                  <strong>{experience.price.toLocaleString()}원</strong>
-                  <Link to={`/experience/${experience.id}`}>예매하기</Link>
-                </article>
+                <ExperienceCard key={experience.id}>
+                  <CardImageContainer>
+                    <img src={experience.imageUrl} alt={experience.name} />
+                    <CardOverlayText>
+                      <h2>{experience.name}</h2>
+                      <strong>{experience.price.toLocaleString()}원</strong>
+                    </CardOverlayText>
+                  </CardImageContainer>
+                  <ReserveButton as={Link} to={`/experience/${experience.id}`}>
+                    예매하기
+                  </ReserveButton>
+                </ExperienceCard>
               ))}
-            </div>
+            </ExperienceGrid>
           )}
         </section>
-      </main>
-    </>
+      </ExperienceMain>
+    </ExperiencePageWrapper>
   );
 }
