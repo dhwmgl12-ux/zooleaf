@@ -28,6 +28,11 @@ import {
   ProfileSaveButton,
 } from "../../pages/Mypage.styles";
 
+import {
+  formatAddressPhone,
+  validateAddress,
+} from "../../utils/addressValidation";
+
 const emptyAddresses = [];
 
 const initialForm = {
@@ -74,6 +79,7 @@ const fields = [
 export default function AddressSection() {
   const userId = useAuthStore((state) => state.user?.id);
   const showToast = useToastStore((state) => state.showToast);
+  const [errors, setErrors] = useState({});
 
   const addresses = useAddressStore(
     (state) => state.addressesByUser[userId] ?? emptyAddresses,
@@ -103,6 +109,7 @@ export default function AddressSection() {
       ...initialForm,
       isDefault: addresses.length === 0,
     });
+    setErrors({});
     setIsModalOpen(true);
   };
 
@@ -110,6 +117,7 @@ export default function AddressSection() {
   const openEditModal = (address) => {
     setEditingId(address.addressId);
     setForm({ ...address });
+    setErrors({});
     setIsModalOpen(true);
   };
 
@@ -120,9 +128,21 @@ export default function AddressSection() {
   const handleChange = (event) => {
     const { name, value, type, checked } = event.target;
 
+    const nextValue =
+      type === "checkbox"
+        ? checked
+        : name === "phone"
+          ? formatAddressPhone(value)
+          : value;
+
     setForm((prev) => ({
       ...prev,
-      [name]: type === "checkbox" ? checked : value,
+      [name]: nextValue,
+    }));
+
+    setErrors((prev) => ({
+      ...prev,
+      [name]: "",
     }));
   };
 
@@ -134,26 +154,21 @@ export default function AddressSection() {
       return;
     }
 
-    const trimmedForm = {
-      ...form,
-      label: form.label.trim(),
-      recipientName: form.recipientName.trim(),
-      phone: form.phone.trim(),
-      address: form.address.trim(),
-    };
+    const result = validateAddress(form);
 
-    if (
-      !trimmedForm.label ||
-      !trimmedForm.recipientName ||
-      !trimmedForm.phone ||
-      !trimmedForm.address
-    ) {
-      showToast("모든 항목을 입력해주세요.");
+    setForm(result.values);
+    setErrors(result.errors);
+
+    const firstError = Object.keys(result.errors)[0];
+
+    if (firstError) {
+      event.currentTarget.elements.namedItem(firstError)?.focus();
       return;
     }
 
-    saveAddress(userId, trimmedForm, editingId);
+    saveAddress(userId, result.values, editingId);
     closeModal();
+
     showToast(isEditing ? "배송지를 수정했습니다." : "배송지를 추가했습니다.");
   };
 
@@ -263,13 +278,12 @@ export default function AddressSection() {
         onClose={closeModal}
         title={isEditing ? "배송지 수정" : "배송지 추가"}
       >
-        <ProfileEditForm onSubmit={handleSave}>
+        <ProfileEditForm onSubmit={handleSave} noValidate>
           {fields.map((field) => (
             <ProfileField key={field.name}>
               <ProfileLabel htmlFor={`address-${field.name}`}>
                 {field.label}
               </ProfileLabel>
-
               <ProfileInput
                 id={`address-${field.name}`}
                 name={field.name}
@@ -279,14 +293,22 @@ export default function AddressSection() {
                 placeholder={field.placeholder}
                 autoComplete={field.autoComplete}
                 maxLength={field.maxLength}
-                pattern={field.pattern}
-                title={
-                  field.name === "phone"
-                    ? "010-1234-5678 형식으로 입력해주세요."
-                    : undefined
+                inputMode={field.name === "phone" ? "tel" : undefined}
+                aria-invalid={Boolean(errors[field.name])}
+                aria-describedby={
+                  errors[field.name] ? `address-${field.name}-error` : undefined
                 }
                 required
               />
+              {errors[field.name] && (
+                <p
+                  id={`address-${field.name}-error`}
+                  role="alert"
+                  style={{ color: "#b42318", fontSize: "13px" }}
+                >
+                  {errors[field.name]}
+                </p>
+              )}
             </ProfileField>
           ))}
 
