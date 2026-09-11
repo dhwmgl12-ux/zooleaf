@@ -161,8 +161,9 @@ export default function ProfileCard() {
               autoComplete="name"
               value={form.name}
               onChange={handleChange}
-              placeholder="이름을 입력해주세요"
-              maxLength={50}
+              placeholder="이름을 2~8자로 입력해주세요"
+              minLength={2}
+              maxLength={8}
               required
             />
             {errors.name && (

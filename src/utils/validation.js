@@ -6,7 +6,7 @@ const NAME_MAX_LENGTH = 8;
 const EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 const PASSWORD_REGEX =
   /^(?=.*[A-Za-z])(?=.*\d)(?=.*[!@#$%^&*])[A-Za-z\d!@#$%^&*]+$/;
-const PHONE_REGEX = /^01[016789]-\d{3,4}-\d{4}$/;
+const PHONE_REGEX = /^(?:010-\d{4}-\d{4}|01[16789]-\d{3,4}-\d{4})$/;
 const BIRTH_DATE_REGEX = /^\d{4}\.\d{2}\.\d{2}$/;
 
 export function getEmailError(email) {
@@ -34,18 +34,39 @@ export function getPasswordConfirmError(password, passwordConfirm) {
 }
 
 export function getNameError(name) {
-  if (!name) return "이름을 입력해주세요!";
-  if (name.length < NAME_MIN_LENGTH || name.length > NAME_MAX_LENGTH) {
+  const value = name.trim();
+
+  if (!value) return "이름을 입력해주세요!";
+
+  if (value.length < NAME_MIN_LENGTH || value.length > NAME_MAX_LENGTH) {
     return `이름은 ${NAME_MIN_LENGTH} ~ ${NAME_MAX_LENGTH}자로 입력해주세요.`;
   }
+
+  if (/[ㄱ-ㅎㅏ-ㅣ\u1100-\u11FF]/u.test(value)) {
+    return "자음·모음만 입력하지 말고 이름을 완성해주세요.";
+  }
+
   return "";
 }
 
 export function formatPhoneNumber(value) {
   const digits = value.replace(/\D/g, "").slice(0, 11);
-  if (digits.length < 4) return digits;
-  if (digits.length < 8) return `${digits.slice(0, 3)}-${digits.slice(3)}`;
-  return `${digits.slice(0, 3)}-${digits.slice(3, 7)}-${digits.slice(7, 11)}`;
+
+  if (digits.length <= 3) return digits;
+
+  if (digits.length <= 7) {
+    return `${digits.slice(0, 3)}-${digits.slice(3)}`;
+  }
+
+  // 010은 3-4-4 형식
+  // 그 외 기존 휴대폰 번호는 10자리일 때 3-3-4 형식
+  const middleEnd = !digits.startsWith("010") && digits.length === 10 ? 6 : 7;
+
+  return [
+    digits.slice(0, 3),
+    digits.slice(3, middleEnd),
+    digits.slice(middleEnd),
+  ].join("-");
 }
 
 export function getPhoneError(phone) {
