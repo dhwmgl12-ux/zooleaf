@@ -45,7 +45,7 @@ export const zooIntroData = {
       items: [
         {
           strong: '• 운영 시간:',
-          text: '09:00 ~ 18:00 (야간프로그램은 18시 이후)',
+          text: '09:00 ~ 18:00 \n(야간프로그램은 18시 이후)',
         },
         { strong: '• 문의 전화:', text: '02-0000-0000' },
       ],

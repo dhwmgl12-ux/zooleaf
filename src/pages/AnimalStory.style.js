@@ -2,14 +2,13 @@ import styled from '@emotion/styled';
 import { theme } from '../styles/variables';
 
 export const Container = styled.div`
-  max-width: 1200px;
   margin: 0 auto;
-  padding: 40px 20px;
+  padding: ${theme.spacing[4]};
   text-align: center;
   box-sizing: border-box;
   display: flex;
   flex-direction: column;
-  align-items: stretch;
+  align-items: center;
 `;
 
 export const Title = styled.h2`
@@ -17,6 +16,9 @@ export const Title = styled.h2`
   color: ${theme.colors?.textPrimary};
   margin-bottom: ${theme.spacing[16]};
   margin-top: ${theme.spacing[100]};
+  @media (max-width: ${theme.layout.breakpoint.smallMobile}) {
+    margin-top: ${theme.spacing[56]};
+  }
 `;
 
 export const SubTitle = styled.p`
@@ -67,8 +69,9 @@ export const FilterBox = styled.div`
     }
   }
   @media (max-width: ${theme.layout.breakpoint.smallMobile}) {
-    padding: ${theme.spacing[4]}
-    box-sizing: border-box;
+    width: 300px;
+    height: 200px;
+    gap: ${theme.spacing[4]};
   }
 `;
 
@@ -113,6 +116,7 @@ export const ZoneTabs = styled.div`
     width: 100%;
 
     button {
+      margin-top: ${theme.spacing[12]};
       width: 100%;
       text-align: left;
       padding: ${theme.spacing[4]} 0;
@@ -209,6 +213,7 @@ export const AnimalGrid = styled.div`
     display: flex;
     flex-direction: column;
     gap: 16px;
+    width: 300px;
   }
 `;
 
@@ -297,6 +302,8 @@ export const AnimalImg = styled.img`
   @media (max-width: ${theme.layout.breakpoint.smallMobile}) {
     width: 116px;
     height: 116px;
+    margin-left: ${theme.spacing[20]};
+    margin-right: ${theme.spacing[200]};
   }
 `;
 

@@ -20,6 +20,7 @@ import {
   SpecialImageWrap,
   SpecialTextWrap,
 } from './Discount.styles';
+
 export default function Discount() {
   return (
     <DiscountPage>
@@ -47,14 +48,26 @@ export default function Discount() {
               <ConditionArea>
                 <strong>이용 조건</strong>
                 <p>
-                  {item.conditions.map((cond, idx) => (
-                    <span
-                      key={idx}
-                      style={{ color: cond.highlight ? '#D90429' : 'inherit' }}
-                    >
-                      {cond.text}
-                    </span>
-                  ))}
+                  {item.conditions.map((cond, idx) => {
+                    // \n을 <br />로 바꾸어 렌더링
+                    const parts = cond.text.split('\n');
+                    return (
+                      <span
+                        key={idx}
+                        style={{
+                          color: cond.highlight ? '#D90429' : 'inherit',
+                          whiteSpace: 'pre-line',
+                        }}
+                      >
+                        {parts.map((p, pIdx) => (
+                          <React.Fragment key={pIdx}>
+                            {pIdx > 0 && <br />}
+                            {p}
+                          </React.Fragment>
+                        ))}
+                      </span>
+                    );
+                  })}
                 </p>
                 {item.subCondition && <SubCond>{item.subCondition}</SubCond>}
               </ConditionArea>
@@ -74,9 +87,24 @@ export default function Discount() {
               <img src={special.image} alt="우대 아이콘" />
             </SpecialImageWrap>
             <SpecialTextWrap>
-              {special.descriptions.map((desc, idx) => (
-                <p key={idx}>{desc}</p>
-              ))}
+              {special.descriptions.map((desc, idx) => {
+                const textParts = desc.includes('\n')
+                  ? desc.split('\n')
+                  : [desc];
+
+                return (
+                  <p key={idx}>
+                    {textParts.map((part, pIdx) => (
+                      <span key={pIdx}>
+                        {part}
+                        {pIdx < textParts.length - 1 && (
+                          <br className="mobile-br" />
+                        )}
+                      </span>
+                    ))}
+                  </p>
+                );
+              })}
             </SpecialTextWrap>
           </SpecialCard>
         ))}
