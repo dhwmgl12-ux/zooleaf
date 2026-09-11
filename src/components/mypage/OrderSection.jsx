@@ -1,8 +1,9 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Modal from "../common/Modal";
 import useAuthStore from "../../store/authStore";
 import useOrderStore from "../../store/orderStore";
 import useToastStore from "../../store/toastStore";
+import { getOrderStatus, statusLabels } from "../../utils/orderStatus";
 import {
   Card,
   CardHeader,
@@ -37,12 +38,6 @@ import {
 
 const emptyOrders = [];
 
-const statusLabels = {
-  paid: "결제 완료",
-  delivered: "배송 완료",
-  cancelled: "주문 취소",
-};
-
 const formatMoney = (amount) => `${amount.toLocaleString("ko-KR")}원`;
 
 const formatDate = (value) =>
@@ -63,16 +58,32 @@ export default function OrderSection() {
     (state) => state.ordersByUser[userId] ?? emptyOrders,
   );
   const cancelOrder = useOrderStore((state) => state.cancelOrder);
-  const completeTestDelivery = useOrderStore(
-    (state) => state.completeTestDelivery,
-  );
 
   // type: detail / cancel / delivery / returns
   const [modal, setModal] = useState(null);
 
+  const [now, setNow] = useState(Date.now);
+
+  useEffect(() => {
+    const refresh = () => setNow(Date.now());
+
+    // 화면을 켜둔 상태에서도 날짜 변경 반영
+    const timer = window.setInterval(refresh, 1000);
+
+    // 다른 탭에서 돌아오면 즉시 갱신
+    window.addEventListener("focus", refresh);
+
+    return () => {
+      window.clearInterval(timer);
+      window.removeEventListener("focus", refresh);
+    };
+  }, []);
+
   const selectedOrder = orders.find(
     (order) => order.orderId === modal?.orderId,
   );
+
+  const selectedStatus = getOrderStatus(selectedOrder, now);
 
   const closeModal = () => setModal(null);
 
@@ -137,9 +148,13 @@ export default function OrderSection() {
           {orders.map((order) => {
             const firstItem = order.items[0];
             const otherCount = order.items.length - 1;
+
             const hasGoods = order.items.some(
               (item) => item.itemType === "goods",
             );
+
+            // 추가
+            const status = getOrderStatus(order, now);
 
             return (
               <OrderCard key={order.orderId}>
@@ -173,47 +188,35 @@ export default function OrderSection() {
                 </OrderBodyButton>
 
                 <OrderSide>
-                  <OrderStatus>{statusLabels[order.status]}</OrderStatus>
+                  <OrderStatus>{statusLabels[status]}</OrderStatus>
 
                   <OrderActions>
-                    {order.status === "paid" && (
-                      <>
-                        <OutlineButton
-                          type="button"
-                          onClick={() => openModal("cancel", order.orderId)}
-                        >
-                          주문 취소
-                        </OutlineButton>
-
-                        {import.meta.env.DEV && hasGoods && (
-                          <OutlineButton
-                            type="button"
-                            onClick={() =>
-                              completeTestDelivery(userId, order.orderId)
-                            }
-                          >
-                            테스트: 배송 완료
-                          </OutlineButton>
-                        )}
-                      </>
+                    {status === "paid" && (
+                      <OutlineButton
+                        type="button"
+                        onClick={() => openModal("cancel", order.orderId)}
+                      >
+                        주문 취소
+                      </OutlineButton>
                     )}
 
-                    {order.status === "delivered" && (
-                      <>
+                    {hasGoods &&
+                      (status === "shipping" || status === "delivered") && (
                         <OutlineButton
                           type="button"
                           onClick={() => openModal("delivery", order.orderId)}
                         >
                           배송 조회
                         </OutlineButton>
+                      )}
 
-                        <OutlineButton
-                          type="button"
-                          onClick={() => openModal("returns", order.orderId)}
-                        >
-                          교환/반품
-                        </OutlineButton>
-                      </>
+                    {hasGoods && status === "delivered" && (
+                      <OutlineButton
+                        type="button"
+                        onClick={() => openModal("returns", order.orderId)}
+                      >
+                        교환/반품
+                      </OutlineButton>
                     )}
                   </OrderActions>
                 </OrderSide>
@@ -243,7 +246,7 @@ export default function OrderSection() {
 
                   <OrderInfoBox>
                     <span>주문 상태</span>
-                    <strong>{statusLabels[selectedOrder.status]}</strong>
+                    <strong>{statusLabels[selectedStatus]}</strong>
                   </OrderInfoBox>
                 </OrderInfoGrid>
 
@@ -315,25 +318,36 @@ export default function OrderSection() {
             {/* 초록색 테마 배송 조회 */}
             {modal?.type === "delivery" && (
               <>
-                <p>{selectedOrder.orderNumber}</p>
+                <p>주문번호: {selectedOrder.orderNumber}</p>
 
                 <DeliveryPanel>
                   <p>현재 배송 상태</p>
-                  <DeliveryTitle>배송 완료</DeliveryTitle>
-                  <p>
-                    {selectedOrder.tracking?.carrier}
-                    {" · "}
-                    {selectedOrder.tracking?.trackingNumber}
-                  </p>
-                  <small>실제 운송장이 아닌 테스트 배송 정보입니다.</small>
+
+                  <DeliveryTitle>{statusLabels[selectedStatus]}</DeliveryTitle>
+
+                  {selectedOrder.tracking?.trackingNumber ? (
+                    <p>
+                      {selectedOrder.tracking.carrier}
+                      {" · "}
+                      {selectedOrder.tracking.trackingNumber}
+                    </p>
+                  ) : (
+                    <p>등록된 운송장 정보가 없습니다.</p>
+                  )}
+
+                  <small>
+                    구매 날짜 기준으로 표시하는 테스트 배송 상태입니다.
+                  </small>
                 </DeliveryPanel>
 
                 <DeliveryEvent>
-                  <DeliveryTitle>배송 완료</DeliveryTitle>
-                  {selectedOrder.tracking?.deliveredAt && (
-                    <p>{formatDateTime(selectedOrder.tracking.deliveredAt)}</p>
-                  )}
-                  <p>상품이 안전하게 배송 완료되었습니다.</p>
+                  <DeliveryTitle>{statusLabels[selectedStatus]}</DeliveryTitle>
+
+                  <p>
+                    {selectedStatus === "delivered"
+                      ? "테스트 주문이 배송 완료 상태입니다."
+                      : "테스트 주문이 배송 중 상태입니다."}
+                  </p>
                 </DeliveryEvent>
               </>
             )}
