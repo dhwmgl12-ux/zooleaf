@@ -137,51 +137,22 @@ export default function ProductPage() {
             : filters.category}
         </h1>
 
-<<<<<<< Updated upstream
         {loading ? (
           <p>불러오는 중...</p>
         ) : error ? (
           <p>{error}</p>
-        ) : products.length === 0 ? (
+        ) : displayedProducts.length === 0 ? (
           <p>상품이 없습니다.</p>
         ) : (
           <div className="product-page__grid">
-            {products.map((product) => (
-              <ProductCard
-                key={product.id}
-                product={product}
-              />
+            {displayedProducts.map((product) => (
+              <ProductCard key={product.id} product={product} />
             ))}
             {Array.from(
               {
-                length: (GRID_COLUMNS - (products.length % GRID_COLUMNS)) % GRID_COLUMNS,
+                length: (GRID_COLUMNS - (displayedProducts.length % GRID_COLUMNS)) % GRID_COLUMNS,
               },
               (_, index) => <EmptyCell key={`empty-${index}`} />
-=======
-          <section className="product-page__content" aria-label="상품 목록">
-            <h1>{filters.category === '전체상품' ? '입장권 & 패키지' : filters.category}</h1>
-
-            {loading ? (
-              <p>불러오는 중...</p>
-            ) : error ? (
-              <p>{error}</p>
-            ) : displayedProducts.length === 0 ? (
-              <p>상품이 없습니다.</p>
-            ) : (
-              <div className="product-page__grid">
-                {displayedProducts.map((product) => (
-                  <ProductCard key={product.id} product={product} />
-                ))}
-                {Array.from(
-                  {
-                    length: (GRID_COLUMNS - (displayedProducts.length % GRID_COLUMNS)) % GRID_COLUMNS,
-                  },
-                  (_, index) => (
-                    <EmptyCell key={`empty-${index}`} />
-                  )
-                )}
-              </div>
->>>>>>> Stashed changes
             )}
           </div>
         )}
