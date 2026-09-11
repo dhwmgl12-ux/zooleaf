@@ -37,7 +37,6 @@ export default function AppRouter() {
       <Routes>
         <Route element={<Layout />}>
           <Route path="/" element={<MainPage />} />
-          <Route path="/products" element={<ProductPage />} />
           <Route path="/login" element={<LoginPage />} />
           <Route path="/signup" element={<SignupPage />} />
           <Route
@@ -49,10 +48,11 @@ export default function AppRouter() {
             }
           />
           <Route path="/cart" element={<CartPage />} />
+          <Route path="/products" element={<ProductPage />} />
           <Route path="/products/:productId" element={<ProductDetailPage />} />
           <Route path="/experiences" element={<ExperiencePage />} />
           <Route
-            path="/experience/:experienceId"
+            path="/experiences/:experienceId"
             element={<ExperienceDetailPage />}
           />
           <Route path="/goods" element={<GoodsPage />} />
