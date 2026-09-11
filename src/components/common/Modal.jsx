@@ -1,4 +1,4 @@
-import { useEffect } from 'react';
+import { useLayoutEffect, useId, useRef } from "react";
 import {
   CloseButton,
   ModalBody,
@@ -6,36 +6,75 @@ import {
   ModalHeader,
   ModalOverlay,
   ModalTitle,
-} from './Modal.styles';
+} from "./Modal.styles";
 
-export default function Modal({ isOpen, onClose, title, children }) {
-  useEffect(() => {
+export default function Modal({
+  isOpen,
+  onClose,
+  title,
+  children,
+  returnFocusRef,
+}) {
+  const dialogRef = useRef(null);
+  const titleId = useId();
+
+  useLayoutEffect(() => {
     if (!isOpen) return;
-    
-    document.body.style.overflow = "hidden"
-    
-    const handleEsc = (e) => {
-      if (e.key === 'Escape') onClose();
-    };
-    window.addEventListener('keydown', handleEsc);
-    
+
+    const dialog = dialogRef.current;
+    const previousFocus = document.activeElement;
+    const previousOverflow = document.body.style.overflow;
+
+    dialog.showModal();
+    document.body.style.overflow = "hidden";
+
     return () => {
-      window.removeEventListener('keydown', handleEsc);
-      document.body.style.overflow = "";
+      dialog.close();
+      document.body.style.overflow = previousOverflow;
+
+      // 모달을 연 버튼이 남아 있으면 그 버튼으로 복귀
+      if (previousFocus instanceof HTMLElement && previousFocus.isConnected) {
+        previousFocus.focus();
+      } else {
+        // 삭제로 원래 버튼이 사라졌다면 지정한 버튼으로 복귀
+        returnFocusRef?.current?.focus();
+      }
     };
-  }, [isOpen, onClose]);
+  }, [isOpen, returnFocusRef]);
 
   if (!isOpen) return null;
 
   return (
-    <ModalOverlay onClick={onClose}>
-      <ModalBox onClick={(e) => e.stopPropagation()}>
+    <ModalOverlay
+      as="dialog"
+      ref={dialogRef}
+      aria-labelledby={titleId}
+      aria-modal="true"
+      onCancel={(event) => {
+        // Escape로 닫을 때 React 상태도 함께 변경
+        event.preventDefault();
+        onClose();
+      }}
+      onClick={(event) => {
+        if (event.target === event.currentTarget) {
+          onClose();
+        }
+      }}
+    >
+      <ModalBox>
         <ModalHeader>
-          <ModalTitle>{title}</ModalTitle>
-          <CloseButton type="button" onClick={onClose} aria-label="닫기">
+          <ModalTitle id={titleId}>{title}</ModalTitle>
+
+          <CloseButton
+            type="button"
+            onClick={onClose}
+            aria-label="닫기"
+            autoFocus
+          >
             ✕
           </CloseButton>
         </ModalHeader>
+
         <ModalBody>{children}</ModalBody>
       </ModalBox>
     </ModalOverlay>

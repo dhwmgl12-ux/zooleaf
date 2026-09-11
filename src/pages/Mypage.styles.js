@@ -368,6 +368,14 @@ export const ProfileInput = styled.input`
   &:focus-visible {
     outline: 2px solid ${theme.colors.primary};
     outline-offset: 2px;
+
+    &[aria-invalid="true"] {
+      border-color: #b42318;
+    }
+
+    &[aria-invalid="true"]:focus-visible {
+      outline-color: #b42318;
+    }
   }
 `;
 

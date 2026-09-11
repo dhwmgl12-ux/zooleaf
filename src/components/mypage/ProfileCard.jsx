@@ -165,9 +165,13 @@ export default function ProfileCard() {
               minLength={2}
               maxLength={8}
               required
+              aria-invalid={Boolean(errors.name)}
+              aria-describedby={errors.name ? "profile-name-error" : undefined}
             />
             {errors.name && (
-              <ProfileFormError role="alert">{errors.name}</ProfileFormError>
+              <ProfileFormError id="profile-name-error" role="alert">
+                {errors.name}
+              </ProfileFormError>
             )}
           </ProfileField>
 
@@ -186,9 +190,15 @@ export default function ProfileCard() {
               title="010-1234-5678 형식으로 입력해주세요."
               maxLength={13}
               required
+              aria-invalid={Boolean(errors.phone)}
+              aria-describedby={
+                errors.phone ? "profile-phone-error" : undefined
+              }
             />
             {errors.phone && (
-              <ProfileFormError role="alert">{errors.phone}</ProfileFormError>
+              <ProfileFormError id="profile-phone-error" role="alert">
+                {errors.phone}
+              </ProfileFormError>
             )}
           </ProfileField>
 
@@ -208,9 +218,13 @@ export default function ProfileCard() {
                 String(new Date().getDate()).padStart(2, "0"),
               ].join("-")}
               required
+              aria-invalid={Boolean(errors.birthDate)}
+              aria-describedby={
+                errors.birthDate ? "profile-birth-date-error" : undefined
+              }
             />
             {errors.birthDate && (
-              <ProfileFormError role="alert">
+              <ProfileFormError id="profile-birth-date-error" role="alert">
                 {errors.birthDate}
               </ProfileFormError>
             )}
