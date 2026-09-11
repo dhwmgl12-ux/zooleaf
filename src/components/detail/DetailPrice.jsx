@@ -17,11 +17,18 @@ import {
   PaymentBenefits,
   TotalPriceRow,
   CartButton,
+  OptionDropdown,
+  OptionButton,
+  OptionList,
+  SelectedOptionCardTop,
+  SelectedOptionCardBottom,
 } from "./DetailPrice.styles.js";
 
 export default function DetailPrice({ product, productType, }) {
-  const [selectedOptionValue, setSelectedOptionValue] = useState("");
   const [quantity, setQuantity] = useState(0);
+  const [selectedOptionValue, setSelectedOptionValue] = useState("");
+  const [selectedOptions, setSelectedOptions] = useState([]);
+  const [isOptionOpen, setIsOptionOpen] = useState(false);
 
   const {
     name,
@@ -60,24 +67,6 @@ export default function DetailPrice({ product, productType, }) {
 
   const isGoods = productType === "goods";
 
-  const hasOptions = Array.isArray(product.options);
-  
-  const selectedOption = hasOptions ? product.options.find(
-    (option) => option.value === selectedOptionValue,
-  ) : null;
-  
-  const handleOptionChange = (event) => {
-    const nextOptionValue = event.target.value;
-    
-    setSelectedOptionValue(nextOptionValue);
-    setQuantity(nextOptionValue ? 1 : 0);
-  };
-  
-  const handleRemoveOption = () => {
-    setSelectedOptionValue("");
-    setQuantity(0);
-  };
-  
   const handleDecrease = () => {
     setQuantity((current) => Math.max(0, current - 1));
   };
@@ -85,12 +74,76 @@ export default function DetailPrice({ product, productType, }) {
   const handleIncrease = () => {
     setQuantity((current) => current + 1);
   };
+
+  const hasOptions = Array.isArray(product.options);
   
-  const salePrice =
-  discountPrice ?? price;
+  const selectedOption = hasOptions ? product.options.find(
+    (option) => option.value === selectedOptionValue,
+  ) : null;
   
-  const originalTotal = price * quantity;
-  const productTotal = salePrice * quantity;
+  const handleOptionSelect = (optionValue) => {
+    const clickedOption = product.options.find(
+      (option) => option.value === optionValue,
+    )
+
+    if (!clickedOption) { return }
+
+    setSelectedOptions((currentOptions) => {
+      const alreadySeleted = currentOptions.some(
+        (option) => option.value === optionValue,
+      );
+
+      if (alreadySeleted) {
+        return currentOptions.map((option) => 
+          option.value === optionValue ? {...option, quantity: option.quantity + 1} : option,
+        );
+      }
+      
+      return [
+        ...currentOptions,
+        {...clickedOption, quantity: 1,},
+      ]
+    })
+
+    setSelectedOptionValue(optionValue);
+    setIsOptionOpen(false);
+  };
+
+  const handleOptionDecrease = (optionValue) => {
+    setSelectedOptions((currentOptions) => 
+      currentOptions.map((option) => 
+        option.value === optionValue ? {...option, quantity: Math.max(1, option.quantity - 1,),} : option,
+      ),
+    )
+  };
+
+  const handleOptionIncrease = (optionValue) => {
+    setSelectedOptions((currentOptions) => 
+      currentOptions.map((option) => 
+        option.value === optionValue ? {...option, quantity: option.quantity + 1} : option,
+      ),
+    )
+  };
+  
+  const handleRemoveOption = (optionValue) => {
+    setSelectedOptions((currentOptions) =>
+      currentOptions.filter(
+        (option) => option.value !== optionValue,
+      ),
+    );
+  };
+  
+  const selectedOptionQuantity =
+    selectedOptions.reduce(
+      (total, option) => total + option.quantity, 0,
+    );
+
+  const totalQuantity = hasOptions ? selectedOptionQuantity : quantity;
+  
+  const salePrice = discountPrice ?? price;
+  
+  const originalTotal = price * totalQuantity;
+  const productTotal = salePrice * totalQuantity;
 
   const discountAmount = Math.max(0, originalTotal - productTotal);
   
@@ -121,7 +174,7 @@ export default function DetailPrice({ product, productType, }) {
   const isAdultOrChild = visitorType === "대인" || visitorType === "소인";
   const showPaymentBenefits = isDayTicket && isAdultOrChild;
   
-  const isCartDisabled = quantity === 0 || (hasOptions && !selectedOption);
+  const isCartDisabled = hasOptions ? selectedOptions.length === 0 : quantity === 0;
   
   const handleSubmit = (event) => {
     event.preventDefault();
@@ -131,9 +184,14 @@ export default function DetailPrice({ product, productType, }) {
     const carItem = {
       id: product.id,
       name,
-      price: unitPrice,
-      quantity,
-      ...(selectedOption ? { option: selectedOption.name } : {}),
+      price: salePrice,
+      quantity: totalQuantity,
+      ...(hasOptions ? {
+            options: selectedOptions.map((option) => ({
+              value: option.value,
+              quantity: option.quantity,
+            })),
+          } : {}),
     }
 
     console.log(carItem);
@@ -186,60 +244,82 @@ export default function DetailPrice({ product, productType, }) {
         {hasOptions ? (
           <>
             <OptionSelector>
-              <legend>옵션</legend>
-              <select name="goodsOption" value={selectedOptionId} onChange={handleOptionChange} aria-label="상품 옵션">
-                <option value="">옵션을 선택해 주세요</option>
-                {product.options.map((option) => (
-                  <option key={option.id} value={option.id}>
-                    {option.name}
-                  </option>
-                ))}
-              </select>
+              <h3 htmlFor="goods-option" >옵션</h3>
+              <OptionDropdown>
+                <OptionButton 
+                  type="button"
+                  aria-expanded={isOptionOpen}
+                  aria-controls="goods-option-list"
+                  onClick={() => {setIsOptionOpen((current) => !current)}}
+                >
+                  옵션을 선택해 주세요
+                  <svg width="13" height="6" viewBox="0 0 13 6" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M0.5 0.5L6.83345 5.5L12.5 0.5" stroke="#687C73" stroke-linecap="round" stroke-linejoin="round"/>
+                  </svg>
+                </OptionButton>
+                {isOptionOpen && (
+                  <OptionList>
+                    {product.options.map((option) => (
+                      <li key={option.value}>
+                        <button
+                          type="button"
+                          data-selected={selectedOptionValue === option.value}
+                          onClick={() => {handleOptionSelect(option.value)}}
+                        >
+                          {option.value}
+                        </button>
+                      </li>
+                    ))}
+                  </OptionList>
+                )}
+              </OptionDropdown>
             </OptionSelector>
           
-            {selectedOption && (
-              <SelectedOptionCard className="selected-option">
-                <div className="selected-header">
+            {selectedOptions.map((option) => (
+              <SelectedOptionCard className="selected-option" key={option.value}>
+                <SelectedOptionCardTop>
                   <h3>{name}</h3>
                   <button
                     type="button"
-                    onClick={handleRemoveOption}
-                    aria-label={`${selectedOption.name} 옵션 삭제`}
+                    onClick={()=> handleRemoveOption(option.value)}
+                    aria-label={`${selectedOption.value} 옵션 삭제`}
                   >
-                    ×
+                    <svg width="12" height="12" viewBox="0 0 12 12" fill="none" xmlns="http://www.w3.org/2000/svg">
+                      <path d="M0.75 0.75L10.75 10.75M0.75 10.75L10.75 0.75" stroke="#2C3E35" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
                   </button>
-                </div>
+                </SelectedOptionCardTop>
     
-                <p>{selectedOption.name}</p>
+                <p>{option.value}</p>
     
-                <div>
-                  <div aria-label="상품 수량">
+                <SelectedOptionCardBottom>
+                  <QuantityControl $compact aria-label={`${option.value} 수량`}>
                     <button
                       type="button"
-                      onClick={handleDecrease}
-                      disabled={quantity === 0}
-                      aria-label="수량 줄이기"
+                      onClick={() => handleOptionDecrease(option.value)}
+                      disabled={option.quantity === 1}
+                      aria-label={`${option.value} 수량 줄이기`}
                     >
                       −
                     </button>
     
                     <output aria-live="polite">
-                      {quantity}
+                      {option.quantity}
                     </output>
     
                     <button
                       type="button"
-                      onClick={handleIncrease}
-                      aria-label="수량 늘리기"
+                      onClick={() => handleOptionIncrease(option.value)}
+                      aria-label={`${option.value} 수량 늘리기`}
                     >
                       +
                     </button>
-                  </div>
+                  </QuantityControl>
     
-                  <p>{productTotal.toLocaleString()}원</p>
-                </div>
+                  <p>{(salePrice * option.quantity).toLocaleString()}원</p>
+                </SelectedOptionCardBottom>
               </SelectedOptionCard>
-            )}
+            ))}
           </>
         ) : (
           <QuantitySelector className="detail-price__quantity-area">

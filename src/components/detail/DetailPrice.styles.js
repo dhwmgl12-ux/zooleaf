@@ -6,6 +6,7 @@ export const DetailPriceContainer = styled.section`
   background-color: ${theme.colors.white};
   padding: ${theme.spacing[32]};
   border-radius: ${theme.radius.box};
+  box-shadow: 4px 4px 8px rgb(0 0 0 / 8%);
 `
 
 export const DetailPriceInfo = styled.div`
@@ -103,12 +104,137 @@ export const DeliveryInfo = styled.dl`
   }
 `
 
-export const OptionSelector = styled.fieldset`
+export const OptionSelector = styled.div`
   display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border: 0;
+
+  h3 {
+    flex-shrink: 0;
+    font-size: ${theme.fontSize.h5.size};
+    line-height: ${theme.fontSize.h5.lineheight};
+    font-weight: ${theme.fontWeight.bold};
+  }
 `
 
-export const SelectedOptionCard = styled.div`
+export const OptionDropdown = styled.div`
+  position: relative;
+  width: min(70%, 300px);
+  margin-bottom: ${theme.spacing[32]};
+
+  font-size: ${theme.fontSize.bodylarge.size};
+  line-height: ${theme.fontSize.bodylarge.lineheight};
+  font-weight: ${theme.fontWeight.regular};
+  
+  option {
+    border-radius: ${theme.radius.box};
+    background-color: ${theme.colors.white};
+    color: ${theme.colors.textPrimary};
+  }
 `
+
+export const OptionButton = styled.button`
+  width: 100%;
+  min-height: 48px;
+  padding: ${theme.spacing[4]} ${theme.spacing[16]};
+  border: 1px solid ${theme.colors.background2};
+  border-radius: ${theme.radius.button};
+  cursor: pointer;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+
+  &:hover {
+    background-color: ${theme.colors.background2};
+  }
+  `
+
+export const OptionList = styled.ul`
+  position: absolute;
+  top: calc(100% + ${theme.spacing[4]});
+  left: 0;
+  z-index: 10;
+  
+  width: 100%;
+  
+  border: 1px solid ${theme.colors.border};
+  border-radius: ${theme.radius.input};
+  background-color: ${theme.colors.white};
+  box-shadow: 4px 4px 8px rgb(0 0 0 / 12%);
+  
+  li {
+    width: 100%;
+    border-bottom: 1px solid ${theme.colors.border};
+    
+    &:hover {
+      background-color: ${theme.colors.background2};
+    }
+  }
+  
+  button {
+    width: 100%;
+    text-align: left;
+    padding: ${theme.spacing[8]} ${theme.spacing[16]};
+  }
+  
+  `
+
+export const SelectedOptionCard = styled.div`
+  width: 100%;
+  padding: ${theme.spacing[16]};
+  background-color: ${theme.colors.background2};
+  margin-bottom: ${theme.spacing[16]};
+
+  display: flex;
+  flex-direction: column;
+  gap: ${theme.spacing[16]};
+
+  p {
+    font-size: ${theme.fontSize.bodylarge.size};
+    line-height: ${theme.fontSize.bodylarge.lineheight};
+    font-weight: ${theme.fontWeight.regular};
+  }
+`
+
+export const SelectedOptionCardTop = styled.div`
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+
+  h3 {
+    font-size: ${theme.fontSize.h5.size};
+    line-height: ${theme.fontSize.h5.lineheight};
+    font-weight: ${theme.fontWeight.bold};
+  }
+
+  button {
+    padding: ${theme.spacing[8]};
+  }
+
+  button:hover {
+    background-color: ${theme.colors.border};
+  }
+`
+
+export const SelectedOptionCardBottom = styled.div`
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+
+  h3 {
+    font-size: ${theme.fontSize.h5.size};
+    line-height: ${theme.fontSize.h5.lineheight};
+    font-weight: ${theme.fontWeight.bold};
+  }
+  
+  p {
+    font-size: ${theme.fontSize.h5.size};
+    line-height: ${theme.fontSize.h5.lineheight};
+    font-weight: ${theme.fontWeight.bold};
+  }
+`
+
 
 export const QuantitySelector = styled.div`
   width: 100%;
@@ -129,7 +255,8 @@ export const QuantitySelector = styled.div`
 
 export const QuantityControl = styled.div`
   display: grid;
-  grid-template-columns: 32px minmax(32px, 1fr) 32px;
+  grid-template-columns: ${({ $compact }) =>
+    $compact ? "32px 60px 32px" : "32px minmax(32px, 1fr) 32px"};
   align-items: center;
   width: min(60%, 280px);
   text-align: center;
@@ -140,7 +267,6 @@ export const QuantityControl = styled.div`
     border: 1px solid ${theme.colors.primary};
     border-radius: 8px;
 
-    background-color: ${theme.colors.white};
     color: ${theme.colors.primary};
 
     &:disabled {
@@ -149,7 +275,10 @@ export const QuantityControl = styled.div`
     }
 
     &:hover {
-      background-color: ${theme.colors.background2};
+      background-color: ${({ $compact }) =>
+        $compact
+          ? theme.colors.border
+          : theme.colors.background2};
     }
   }
 

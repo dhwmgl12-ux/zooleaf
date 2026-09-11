@@ -11,9 +11,7 @@ import ErrorState from "../components/common/ErrorState"
 import EmptyState from "../components/common/EmptyState"
 import NotFoundPage from "./NotFoundPage";
 
-import {
-  DetailPageContainer,
-} from "./DetailPage.styles";
+import { DetailPageContainer } from "../components/detail/DetailPage.styles";
 
 export default function ExperienceDetailPage() {
   const { experienceId } = useParams();

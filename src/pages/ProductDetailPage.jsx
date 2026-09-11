@@ -6,7 +6,7 @@ import DetailImage from "../components/detail/DetailImage";
 import DetailContent from "../components/detail/DetailContent";
 import DetailPrice from "../components/detail/DetailPrice";
 import Breadcrumb from "../components/common/Breadcrumb";
-import { DetailPageContainer } from "./DetailPage.styles";
+import { DetailPageContainer } from "../components/detail/DetailPage.styles";
 import LoadingSpinner from "../components/common/LoadingSpinner"
 import ErrorState from "../components/common/ErrorState"
 import EmptyState from "../components/common/EmptyState"
