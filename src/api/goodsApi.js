@@ -20,3 +20,11 @@ export async function getGoods(options = {}) {
 
   return result.data;
 }
+
+export async function getGoodsById(goodsId, signal) {
+  const result = await apiClient(`/goods/${goodsId}`, {
+    signal,
+  });
+
+  return result.data;
+}

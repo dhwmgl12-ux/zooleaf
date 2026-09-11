@@ -1,4 +1,4 @@
-import { data, useNavigate, useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
 
 import { getExperienceDetail } from "../api/experienceApi";
@@ -49,7 +49,6 @@ export default function ExperienceDetailPage() {
       }
     }
 
-    setExperience(data);
     fetchExperience();
 
     return () => {

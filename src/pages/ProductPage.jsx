@@ -131,17 +131,17 @@ export default function ProductPage() {
             <p>불러오는 중...</p>
           ) : error ? (
             <p>{error}</p>
-          ) : products.length === 0 ? (
+          ) : displayedProducts.length === 0 ? (
             <p>상품이 없습니다.</p>
           ) : (
             <div className="product-page__grid">
-              {products.map((product) => (
+              {displayedProducts.map((product) => (
                 <ProductCard key={product.id} product={product} />
               ))}
               {Array.from(
                 {
                   length:
-                    (GRID_COLUMNS - (products.length % GRID_COLUMNS)) %
+                    (GRID_COLUMNS - (displayedProducts.length % GRID_COLUMNS)) %
                     GRID_COLUMNS,
                 },
                 (_, index) => (
