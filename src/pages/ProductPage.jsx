@@ -15,9 +15,23 @@ const CATEGORY_MAP = {
   패키지: 'package',
   Membership: 'membership',
 };
+const TICKET_ORDER = [
+  '대인 종일권',
+  '소인 종일권',
+  '우대 종일권',
+  '대인 오후권',
+  '소인 오후권',
+  '우대 오후권',
+];
 
 function EmptyCell() {
   return <div aria-hidden="true" />;
+}
+
+function getTicketOrder(name = '') {
+  const normalizedName = name.replace('ZOOLEAF ', '');
+  const order = TICKET_ORDER.indexOf(normalizedName);
+  return order === -1 ? TICKET_ORDER.length : order;
 }
 
 export default function ProductPage() {
@@ -34,6 +48,9 @@ export default function ProductPage() {
   const [error, setError] = useState('');
 
   const isTicketCategory = filters.category === '입장권';
+  const displayedProducts = [...products].sort(
+    (first, second) => getTicketOrder(first.name) - getTicketOrder(second.name)
+  );
 
   const handleSelectCategory = (category) => {
     setFilters({
@@ -120,6 +137,7 @@ export default function ProductPage() {
             : filters.category}
         </h1>
 
+<<<<<<< Updated upstream
         {loading ? (
           <p>불러오는 중...</p>
         ) : error ? (
@@ -139,6 +157,31 @@ export default function ProductPage() {
                 length: (GRID_COLUMNS - (products.length % GRID_COLUMNS)) % GRID_COLUMNS,
               },
               (_, index) => <EmptyCell key={`empty-${index}`} />
+=======
+          <section className="product-page__content" aria-label="상품 목록">
+            <h1>{filters.category === '전체상품' ? '입장권 & 패키지' : filters.category}</h1>
+
+            {loading ? (
+              <p>불러오는 중...</p>
+            ) : error ? (
+              <p>{error}</p>
+            ) : displayedProducts.length === 0 ? (
+              <p>상품이 없습니다.</p>
+            ) : (
+              <div className="product-page__grid">
+                {displayedProducts.map((product) => (
+                  <ProductCard key={product.id} product={product} />
+                ))}
+                {Array.from(
+                  {
+                    length: (GRID_COLUMNS - (displayedProducts.length % GRID_COLUMNS)) % GRID_COLUMNS,
+                  },
+                  (_, index) => (
+                    <EmptyCell key={`empty-${index}`} />
+                  )
+                )}
+              </div>
+>>>>>>> Stashed changes
             )}
           </div>
         )}

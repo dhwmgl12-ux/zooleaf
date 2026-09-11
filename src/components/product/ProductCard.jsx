@@ -36,6 +36,11 @@ function getProductName(name) {
 
 export default function ProductCard({ product }) {
   const name = product?.name || '상품명';
+  const displayName = getProductName(name);
+  const nameParts = displayName.split(' ');
+  const hasEmphasizedLastWord =
+    /^(종일권|오후권) (대인|소인|우대)$/.test(displayName) ||
+    displayName === '연간 멤버십';
 
   const {
     price,
@@ -65,7 +70,15 @@ export default function ProductCard({ product }) {
           </ul>
         )}
 
-        <h3>{getProductName(name)}</h3>
+        <h3>
+          {hasEmphasizedLastWord ? (
+            <>
+              {nameParts.slice(0, -1).join(' ')} <span>{nameParts.at(-1)}</span>
+            </>
+          ) : (
+            displayName
+          )}
+        </h3>
 
         {hasDiscount ? (
           <strong>{discountPrice.toLocaleString()}원</strong>
