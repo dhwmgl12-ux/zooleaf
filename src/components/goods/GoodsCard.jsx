@@ -17,6 +17,32 @@ export default function GoodsCard({ goods }) {
   const discountPercent = Math.round(discountRate * 100);
   const isUnitPrice = name.includes("미러") || name.includes("키링");
 
+  //
+  // 기존 장바구니 추가 함수와 요청 상태 가져오기
+  const addToCart = useCartStore((state) => state.addToCart);
+  const isUpdating = useCartStore((state) => state.isUpdating);
+  const isLoading = useCartStore((state) => state.isLoading);
+
+  // 현재 카드의 굿즈를 1개 담기
+  const handleTestAdd = async () => {
+    const success = await addToCart({
+      itemType: "goods",
+      productId: id,
+      quantity: 1,
+      option: null,
+    });
+
+    if (success) {
+      window.alert("장바구니에 담았습니다! /cart에서 확인해 주세요.");
+    } else {
+      window.alert(
+        useCartStore.getState().error ||
+          "처리 중입니다. 잠시 후 다시 시도해 주세요.",
+      );
+    }
+  };
+  //
+
   return (
     <GoodsCardContainer>
       <Link className="goods-card__link" to={`/goods/${id}`}>

@@ -73,9 +73,7 @@ const useOrderStore = create((set, get) => ({
     set({
       ordersByUser: {
         ...get().ordersByUser,
-        [userId]: current.map((order) =>
-          order.orderId === orderId ? { ...order, status: "cancelled" } : order,
-        ),
+        [userId]: current.filter((order) => order.orderId !== orderId),
       },
     });
 
