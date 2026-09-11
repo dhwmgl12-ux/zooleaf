@@ -3,18 +3,9 @@ import { theme } from '../styles/variables';
 
 export const PageWrapper = styled.div`
   display: flex;
-  flex: 1;
-  min-height: 732px;
-  padding: ${(props) => (props.variant === 'signup' ? theme.spacing[40] : theme.spacing[80])} 0;
-
-  @media (max-width: ${theme.layout.breakpoint.tablet}) {
-    min-height: auto;
-    padding: ${theme.spacing[48]} ${theme.spacing[20]};
-  }
 `;
 
 export const PageContainer = styled.div`
-  max-width: ${theme.layout.maxWidth};
   margin: 0 auto;
   display: grid;
   grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
@@ -144,10 +135,4 @@ export const FormSide = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
-  padding: ${theme.spacing[40]} 0;
-
-  @media (max-width: ${theme.layout.breakpoint.tablet}) {
-    padding: 0;
-    width: 100%;
-  }
 `;

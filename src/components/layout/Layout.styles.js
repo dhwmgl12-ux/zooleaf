@@ -28,6 +28,6 @@ export const LayoutContainer = styled.main`
   }};
 
 
-  padding-bottom: ${({ $noBottomPadding }) => ($noBottomPadding ? "0" : theme.spacing[200])};
+  padding-bottom: 200px;
   background-color: ${({ $isMainPage }) => $isMainPage ? theme.colors.background : theme.colors.background2 };
 `
