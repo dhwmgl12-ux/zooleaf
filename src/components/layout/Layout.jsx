@@ -10,7 +10,6 @@ export default function Layout() {
   const { pathname } = useLocation();
   const isMainPage = pathname === "/";
   const isAboutPage = pathname === "/about"
-  const isAuthPage = pathname === "/login" || pathname === "/signup";
   const hasBreadcrumb = pathname.startsWith("/products") ||
                         pathname.startsWith("/goods") ||
                         pathname.startsWith("/animals") ||
@@ -20,7 +19,7 @@ export default function Layout() {
     <>
       <Header />
 
-      <LayoutContainer $isMainPage={isMainPage} $isAboutPage={isAboutPage} $hasBreadcrumb={hasBreadcrumb} $noBottomPadding={isAuthPage}>
+      <LayoutContainer $isMainPage={isMainPage} $isAboutPage={isAboutPage} $hasBreadcrumb={hasBreadcrumb}>
         <ContentContainer>
           <Outlet />
         </ContentContainer>
