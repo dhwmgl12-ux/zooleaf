@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useRef, useState } from "react";
 import Modal from "../common/Modal";
 import useAddressStore from "../../store/addressStore";
 import useAuthStore from "../../store/authStore";
@@ -80,6 +80,8 @@ export default function AddressSection() {
   const userId = useAuthStore((state) => state.user?.id);
   const showToast = useToastStore((state) => state.showToast);
   const [errors, setErrors] = useState({});
+  const [deleteTarget, setDeleteTarget] = useState(null);
+  const addAddressButtonRef = useRef(null);
 
   const addresses = useAddressStore(
     (state) => state.addressesByUser[userId] ?? emptyAddresses,
@@ -172,12 +174,28 @@ export default function AddressSection() {
     showToast(isEditing ? "배송지를 수정했습니다." : "배송지를 추가했습니다.");
   };
 
+  // 삭제 버튼 클릭: 확인 모달만 열기
   const handleDelete = (address) => {
-    if (!window.confirm(`${address.label} 배송지를 삭제하시겠습니까?`)) {
+    setDeleteTarget(address);
+  };
+
+  const closeDeleteModal = () => {
+    setDeleteTarget(null);
+  };
+
+  // 확인 모달에서 삭제를 눌렀을 때 실제 삭제
+  const confirmDelete = () => {
+    if (!userId) {
+      showToast("로그인 후 이용해주세요.");
+      closeDeleteModal();
       return;
     }
 
-    removeAddress(userId, address.addressId);
+    if (!deleteTarget) return;
+
+    removeAddress(userId, deleteTarget.addressId);
+    closeDeleteModal();
+
     showToast("배송지를 삭제했습니다.");
   };
 
@@ -204,7 +222,11 @@ export default function AddressSection() {
           </div>
         </HeadingGroup>
 
-        <OutlineButton type="button" onClick={openAddModal}>
+        <OutlineButton
+          ref={addAddressButtonRef}
+          type="button"
+          onClick={openAddModal}
+        >
           + 새 배송지 추가
         </OutlineButton>
       </CardHeader>
@@ -331,6 +353,34 @@ export default function AddressSection() {
             <ProfileSaveButton type="submit">저장하기</ProfileSaveButton>
           </ProfileModalActions>
         </ProfileEditForm>
+      </Modal>
+      <Modal
+        isOpen={Boolean(deleteTarget)}
+        onClose={closeDeleteModal}
+        title="배송지 삭제"
+        returnFocusRef={addAddressButtonRef}
+      >
+        <p>
+          <strong>{deleteTarget?.label}</strong>
+          {" 배송지를 삭제하시겠습니까?"}
+        </p>
+
+        {deleteTarget?.isDefault && (
+          <p>
+            기본 배송지입니다. 다른 배송지가 남아 있다면 첫 번째 배송지가 기본
+            배송지로 지정됩니다.
+          </p>
+        )}
+
+        <ProfileModalActions>
+          <ProfileCancelButton type="button" onClick={closeDeleteModal}>
+            취소
+          </ProfileCancelButton>
+
+          <ProfileSaveButton type="button" onClick={confirmDelete}>
+            삭제
+          </ProfileSaveButton>
+        </ProfileModalActions>
       </Modal>
     </Card>
   );
