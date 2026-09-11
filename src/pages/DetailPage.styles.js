@@ -1,7 +1,7 @@
 import styled from '@emotion/styled';
 import { theme } from '../styles/variables';
 
-export const ProductDetailPageContainer = styled.article`
+export const DetailPageContainer = styled.article`
   display: grid;
   grid-template-columns:
     minmax(320px, 828px)
