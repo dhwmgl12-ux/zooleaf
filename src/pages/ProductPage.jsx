@@ -49,7 +49,7 @@ export default function ProductPage() {
 
   const isTicketCategory = filters.category === '입장권';
   const displayedProducts = [...products].sort(
-    (first, second) => getTicketOrder(first.name) - getTicketOrder(second.name)
+    (first, second) => getTicketOrder(first.name) - getTicketOrder(second.name),
   );
 
   const handleSelectCategory = (category) => {
@@ -83,12 +83,8 @@ export default function ProductPage() {
           category: CATEGORY_MAP[filters.category],
           page: filters.page,
           limit: PRODUCTS_PER_PAGE,
-          visitorType: isTicketCategory
-            ? filters.target
-            : undefined,
-          availableTimeType: isTicketCategory
-            ? filters.time
-            : undefined,
+          visitorType: isTicketCategory ? filters.target : undefined,
+          availableTimeType: isTicketCategory ? filters.time : undefined,
         });
 
         setProducts(data?.products ?? []);
@@ -102,10 +98,7 @@ export default function ProductPage() {
     };
 
     fetchProducts();
-  }, [
-    filters,
-    isTicketCategory,
-  ]);
+  }, [filters, isTicketCategory]);
 
   return (
     <ProductPageContainer>
@@ -114,10 +107,7 @@ export default function ProductPage() {
         aria-label="ZOOLEAF 제휴 및 할인 혜택 보기"
         className="product-page__banner"
       >
-        <img
-          src={bannerImage}
-          alt="ZOOLEAF 할인 혜택을 확인해 보세요"
-        />
+        <img src={bannerImage} alt="ZOOLEAF 할인 혜택을 확인해 보세요" />
       </Link>
 
       <div className="product-page__layout">
@@ -130,41 +120,45 @@ export default function ProductPage() {
           onSelectTime={handleSelectTime}
         />
 
-      <section className="product-page__content" aria-label="상품 목록">
-        <h1>
-          {filters.category === '전체상품'
-            ? '입장권 & 패키지'
-            : filters.category}
-        </h1>
+        <section className="product-page__content" aria-label="상품 목록">
+          <h1>
+            {filters.category === '전체상품'
+              ? '입장권 & 패키지'
+              : filters.category}
+          </h1>
 
-        {loading ? (
-          <p>불러오는 중...</p>
-        ) : error ? (
-          <p>{error}</p>
-        ) : displayedProducts.length === 0 ? (
-          <p>상품이 없습니다.</p>
-        ) : (
-          <div className="product-page__grid">
-            {displayedProducts.map((product) => (
-              <ProductCard key={product.id} product={product} />
-            ))}
-            {Array.from(
-              {
-                length: (GRID_COLUMNS - (displayedProducts.length % GRID_COLUMNS)) % GRID_COLUMNS,
-              },
-              (_, index) => <EmptyCell key={`empty-${index}`} />
-            )}
-          </div>
-        )}
+          {loading ? (
+            <p>불러오는 중...</p>
+          ) : error ? (
+            <p>{error}</p>
+          ) : displayedProducts.length === 0 ? (
+            <p>상품이 없습니다.</p>
+          ) : (
+            <div className="product-page__grid">
+              {displayedProducts.map((product) => (
+                <ProductCard key={product.id} product={product} />
+              ))}
+              {Array.from(
+                {
+                  length:
+                    (GRID_COLUMNS - (displayedProducts.length % GRID_COLUMNS)) %
+                    GRID_COLUMNS,
+                },
+                (_, index) => (
+                  <EmptyCell key={`empty-${index}`} />
+                ),
+              )}
+            </div>
+          )}
 
-        <Pagination
-          currentPage={filters.page}
-          totalPages={totalPages}
-          onPageChange={(page) => {
-            setFilters((prev) => ({ ...prev, page }));
-          }}
-        />
-      </section>
+          <Pagination
+            currentPage={filters.page}
+            totalPages={totalPages}
+            onPageChange={(page) => {
+              setFilters((prev) => ({ ...prev, page }));
+            }}
+          />
+        </section>
       </div>
     </ProductPageContainer>
   );
