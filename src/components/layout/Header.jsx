@@ -51,14 +51,19 @@ export default function Header() {
   const showToast = useToastStore((state) => state.showToast);
   
   useEffect(() => {
+    if (!headerRef.current) return;
+
     const updateHeaderHeight = () => {
       const headerHeight = headerRef.current.offsetHeight ?? 0;
       document.documentElement.style.setProperty('--header-height', `${headerHeight}px`)
     }
     
     updateHeaderHeight();
-    window.addEventListener('resize', updateHeaderHeight);
-    return () => window.removeEventListener('resize', updateHeaderHeight);
+
+    const resizeObserver = new ResizeObserver(updateHeaderHeight);
+    resizeObserver.observe(headerRef.current);
+
+    return () => resizeObserver.disconnect()
   }, []);
 
   useEffect(() => {
