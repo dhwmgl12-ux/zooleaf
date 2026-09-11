@@ -22,8 +22,13 @@ export const Sidebar = styled.aside`
     text-align: center;
   }
 
-  nav button[aria-pressed='true'] {
-    color: ${theme.colors.primary};
+  nav {
+    padding: ${theme.spacing[8]} 0;
+  }
+
+  nav button {
+    padding-top: ${theme.spacing[16]};
+    padding-bottom: ${theme.spacing[16]};
   }
 
   nav button:hover {
@@ -32,7 +37,7 @@ export const Sidebar = styled.aside`
   }
 
   nav button[aria-pressed='true']:hover {
-    color: ${theme.colors.primary};
+    color: ${theme.colors.textSecondary};
   }
 
   section button:hover {
@@ -86,10 +91,6 @@ export const Sidebar = styled.aside`
 
   .filter-dropdown li + li {
     border-top: 1px solid ${theme.colors.background2};
-  }
-
-  section button[aria-pressed='true'] {
-    color: ${theme.colors.primary};
   }
 
   @media (max-width: ${theme.layout.breakpoint.tablet}) {

@@ -7,6 +7,10 @@ export async function getGoods(options = {}) {
     params.append('subCategory', options.subCategory);
   }
 
+  if (options.sort) {
+    params.append('sort', options.sort);
+  }
+
   params.append('page', options.page ?? 1);
   params.append('limit', options.limit ?? 9);
 
