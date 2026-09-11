@@ -23,6 +23,10 @@ export const GoodsPageContainer = styled.main`
   .goods-page__sort li button:hover { background-color: ${theme.colors.background2}; color: ${theme.colors.primary}; }
   .goods-page__grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: ${theme.spacing[24]}; }
 
+  @media (max-width: ${theme.layout.breakpoint.tablet}) {
+    .goods-page__grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  }
+
   @media (max-width: ${theme.layout.breakpoint.mobile}) {
     padding-top: ${theme.spacing[40]};
     .goods-page__filters { width: 100%; grid-template-columns: 1fr; gap: ${theme.spacing[8]}; margin-left: 0; }
@@ -30,6 +34,6 @@ export const GoodsPageContainer = styled.main`
     nav ul { display: flex; justify-content: flex-start; gap: ${theme.spacing[16]}; overflow-x: auto; }
     nav button { white-space: nowrap; }
     .goods-page__sort { width: 100%; }
-    .goods-page__grid { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: ${theme.spacing[16]}; }
+    .goods-page__grid { grid-template-columns: 1fr; gap: ${theme.spacing[16]}; }
   }
 `;

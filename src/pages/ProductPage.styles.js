@@ -13,10 +13,10 @@ export const ProductPageContainer = styled.main`
 
   @media (max-width: ${theme.layout.breakpoint.tablet}) {
     .product-page__layout { flex-direction: column; }
-    .product-page__grid { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+    .product-page__grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
   }
 
   @media (max-width: ${theme.layout.breakpoint.mobile}) {
-    .product-page__grid { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: ${theme.spacing[16]}; }
+    .product-page__grid { grid-template-columns: 1fr; gap: ${theme.spacing[16]}; }
   }
 `;

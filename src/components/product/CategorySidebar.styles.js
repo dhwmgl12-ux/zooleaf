@@ -100,4 +100,11 @@ export const Sidebar = styled.aside`
     .filter-options { display: flex; gap: ${theme.spacing[16]}; justify-content: center; margin: 0; border-top: 0; padding: 0 ${theme.spacing[16]} ${theme.spacing[16]}; }
     .filter-dropdown { width: min(220px, 50%); }
   }
+
+  @media (max-width: ${theme.layout.breakpoint.mobile}) {
+    nav ul { justify-content: center; }
+    nav button { padding: ${theme.spacing[12]} ${theme.spacing[8]}; font-size: ${theme.fontSize.caption.size}; }
+    .filter-options { display: block; margin: 0 ${theme.spacing[16]} ${theme.spacing[16]}; border-top: 1px solid ${theme.colors.background2}; padding: ${theme.spacing[12]} 0 0; }
+    .filter-dropdown { width: 100%; }
+  }
 `;
