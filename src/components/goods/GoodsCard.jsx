@@ -1,4 +1,5 @@
 import { Link } from 'react-router-dom';
+import { GoodsCardContainer } from './GoodsCard.styles';
 
 export default function GoodsCard({ goods }) {
   const name = goods?.name || '상품명';
@@ -16,40 +17,45 @@ export default function GoodsCard({ goods }) {
     discountPrice !== null &&
     discountPrice !== undefined;
   const discountPercent = Math.round(discountRate * 100);
+  const isUnitPrice = name.includes('미러') || name.includes('키링');
 
   return (
-    <article>
-      <div>
+    <GoodsCardContainer>
+      <Link className="goods-card__link" to={`/goods/${id}`}>
+        <div className="goods-card__image">
         {imageUrl ? (
           <img src={imageUrl} alt={name} />
         ) : (
           <span aria-hidden="true">상품 이미지</span>
         )}
-      </div>
+          {badge.length > 0 && (
+            <ul className="goods-card__badges" aria-label="상품 혜택">
+              {badge.map((item) => (
+                <li key={item}>{item}</li>
+              ))}
+            </ul>
+          )}
+        </div>
 
-      <div>
-        {badge.length > 0 && (
-          <ul aria-label="상품 혜택">
-            {badge.map((item) => (
-              <li key={item}>{item}</li>
-            ))}
-          </ul>
-        )}
+        <div className="goods-card__content">
 
         <h3>{name}</h3>
 
         {hasDiscount ? (
-          <div>
-            <span>{discountPercent}%</span>
-            <strong>{discountPrice.toLocaleString()}원</strong>
-            <del>{price.toLocaleString()}원</del>
+          <div className="goods-card__price">
+            <div>
+              <del>₩ {price.toLocaleString()}</del>
+              <span>-{discountPercent}%</span>
+            </div>
+            <strong>{isUnitPrice && '(개당) '}₩ {discountPrice.toLocaleString()}</strong>
           </div>
         ) : (
-          <strong>{price.toLocaleString()}원</strong>
+          <strong className="goods-card__single-price">
+            {isUnitPrice && '(개당) '}₩ {price.toLocaleString()}
+          </strong>
         )}
-
-        <Link to={`/goods/${id}`}>상품 보기</Link>
-      </div>
-    </article>
+        </div>
+      </Link>
+    </GoodsCardContainer>
   );
 }
