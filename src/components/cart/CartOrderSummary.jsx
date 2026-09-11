@@ -1,4 +1,8 @@
-import { useState } from "react";
+import { useRef, useState } from "react";
+import useOrderStore from "../../store/orderStore";
+import useCartStore from "../../store/cartStore";
+import useAuthStore from "../../store/authStore";
+import useAddressStore from "../../store/addressStore";
 import useToastStore from "../../store/toastStore";
 import { useNavigate } from "react-router-dom";
 import {
@@ -29,6 +33,12 @@ export default function CartOrderSummary({ cartItems, hasShippingAddress }) {
   // 페이지 이동에 사용할 함수
   const navigate = useNavigate();
 
+  // 구매 모달을 열 때마다 주문 요청 ID 발급
+  const orderRequestId = useRef(null);
+  const purchaseInProgress = useRef(false);
+  const [isPurchasing, setIsPurchasing] = useState(false);
+  const isCartBusy = useCartStore((state) => state.isLoading || state.isUpdating);
+
   const showToast = useToastStore((state) => state.showToast);
 
   // 구매 모달 열림 여부: 처음에는 닫힘
@@ -36,30 +46,75 @@ export default function CartOrderSummary({ cartItems, hasShippingAddress }) {
 
   // 구매하기 클릭 → 모달 열기
   const handlePurchase = () => {
+    orderRequestId.current = crypto.randomUUID();
     setIsPurchaseModalOpen(true);
   };
 
   // 아니오 클릭 → 모달 닫기
   const handleCloseModal = () => {
+    if (purchaseInProgress.current) return;
     setIsPurchaseModalOpen(false);
   };
 
-  const handleConfirm = () => {
-    setIsPurchaseModalOpen(false);
+  const handleConfirm = async () => {
+    if (purchaseInProgress.current || isCartBusy) return;
+    const userId = useAuthStore.getState().user?.id;
 
-    // 배송지가 없으면 구매 진행을 막고 등록 화면으로 이동
-    if (!hasShippingAddress) {
+    if (!userId) {
+      setIsPurchaseModalOpen(false);
+      navigate("/login");
+      return;
+    }
+
+    // 확인 시점의 최신 기본 배송지 확인
+    const address = useAddressStore
+      .getState()
+      .addressesByUser[userId]?.find((item) => item.isDefault);
+
+    if (!address) {
+      setIsPurchaseModalOpen(false);
+      showToast("배송지를 먼저 등록해주세요.");
       navigate("/mypage");
       return;
     }
 
-    // 배송지가 있어도 빈 장바구니는 구매 불가
-    if (cartItems.length === 0) {
+    if (cartItems.length === 0 || !orderRequestId.current) {
       return;
     }
 
-    // 주문 API가 준비되면 이 위치에서 호출
-    showToast("배송지가 확인되었습니다. 결제 기능은 아직 연결 전입니다.");
+    purchaseInProgress.current = true;
+    setIsPurchasing(true);
+    try {
+      useOrderStore.getState().createTestOrder(
+        userId,
+        orderRequestId.current,
+        cartItems,
+        {
+          shippingFee,
+          discountAmount: discountTotal,
+        },
+        address,
+      );
+
+      const removed = await useCartStore.getState().removeSelected(
+        cartItems.map((item) => item.cartItemId),
+      );
+
+      orderRequestId.current = null;
+      setIsPurchaseModalOpen(false);
+
+      showToast(
+        removed
+          ? "테스트 주문을 생성했습니다. 실제 결제는 발생하지 않습니다."
+          : "주문은 생성되었지만 장바구니 갱신에 실패했습니다. 주문내역을 확인한 후 구매한 상품을 장바구니에서 삭제해주세요.",
+      );
+      navigate("/mypage");
+    } catch (error) {
+      showToast(error.message);
+    } finally {
+      purchaseInProgress.current = false;
+      setIsPurchasing(false);
+    }
   };
 
   const productTotal = cartItems.reduce((sum, item) => {
@@ -172,7 +227,7 @@ export default function CartOrderSummary({ cartItems, hasShippingAddress }) {
 
       <PurchaseButton
         type="button"
-        disabled={cartItems.length === 0}
+        disabled={cartItems.length === 0 || isPurchasing || isCartBusy}
         onClick={handlePurchase}
       >
         구매하기
@@ -186,18 +241,20 @@ export default function CartOrderSummary({ cartItems, hasShippingAddress }) {
             aria-labelledby="purchase-modal-message"
           >
             <ModalText id="purchase-modal-message">
-              {hasShippingAddress
-                ? "결제를 진행하시겠습니까?"
-                : "배송지가 없습니다. 마이페이지에서 등록하시겠습니까?"}
+              {!hasShippingAddress
+                ? "배송지가 없습니다. 마이페이지에서 등록하시겠습니까?"
+                : import.meta.env.DEV
+                  ? "주문 내역에 저장됩니다. 계속 진행하시겠어요?"
+                  : "결제 기능은 아직 준비 중입니다."}
             </ModalText>
 
             <ModalButtonArea>
-              <ModalCancelButton type="button" onClick={handleCloseModal}>
+              <ModalCancelButton type="button" disabled={isPurchasing} onClick={handleCloseModal}>
                 아니오
               </ModalCancelButton>
 
-              <ModalDeleteButton type="button" onClick={handleConfirm}>
-                예
+              <ModalDeleteButton type="button" disabled={isPurchasing || isCartBusy} onClick={handleConfirm}>
+                {isPurchasing ? "처리 중..." : "예"}
               </ModalDeleteButton>
             </ModalButtonArea>
           </ModalBox>

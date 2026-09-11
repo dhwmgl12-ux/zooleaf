@@ -4,96 +4,105 @@ const NAME_MIN_LENGTH = 2;
 const NAME_MAX_LENGTH = 8;
 
 const EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-const PASSWORD_REGEX = /^(?=.*[A-Za-z])(?=.*\d)(?=.*[!@#$%^&*])[A-Za-z\d!@#$%^&*]+$/;
+const PASSWORD_REGEX =
+  /^(?=.*[A-Za-z])(?=.*\d)(?=.*[!@#$%^&*])[A-Za-z\d!@#$%^&*]+$/;
 const PHONE_REGEX = /^01[016789]-\d{3,4}-\d{4}$/;
 const BIRTH_DATE_REGEX = /^\d{4}\.\d{2}\.\d{2}$/;
 
 export function getEmailError(email) {
-  if (!email) return '이메일을 입력해주세요!';
-  if (!EMAIL_REGEX.test(email)) return '올바른 이메일 형식이 아닙니다.';
-  return '';
+  if (!email) return "이메일을 입력해주세요!";
+  if (!EMAIL_REGEX.test(email)) return "올바른 이메일 형식이 아닙니다.";
+  return "";
 }
 
 export function getPasswordError(password) {
-  if (!password) return '비밀번호를 입력해주세요!';
+  if (!password) return "비밀번호를 입력해주세요!";
   if (
     password.length < PASSWORD_MIN_LENGTH ||
     password.length > PASSWORD_MAX_LENGTH ||
     !PASSWORD_REGEX.test(password)
   ) {
-    return '비밀번호를 확인해주세요.';
+    return "비밀번호를 확인해주세요.";
   }
-  return '';
+  return "";
 }
 
 export function getPasswordConfirmError(password, passwordConfirm) {
-  if (!passwordConfirm) return '비밀번호 확인을 입력해주세요!';
-  if (password !== passwordConfirm) return '비밀번호가 일치하지 않습니다.';
-  return '';
+  if (!passwordConfirm) return "비밀번호 확인을 입력해주세요!";
+  if (password !== passwordConfirm) return "비밀번호가 일치하지 않습니다.";
+  return "";
 }
 
 export function getNameError(name) {
-  if (!name) return '이름을 입력해주세요!';
+  if (!name) return "이름을 입력해주세요!";
   if (name.length < NAME_MIN_LENGTH || name.length > NAME_MAX_LENGTH) {
     return `이름은 ${NAME_MIN_LENGTH} ~ ${NAME_MAX_LENGTH}자로 입력해주세요.`;
   }
-  return '';
+  return "";
 }
 
 export function formatPhoneNumber(value) {
-  const digits = value.replace(/\D/g, '').slice(0, 11);
+  const digits = value.replace(/\D/g, "").slice(0, 11);
   if (digits.length < 4) return digits;
   if (digits.length < 8) return `${digits.slice(0, 3)}-${digits.slice(3)}`;
   return `${digits.slice(0, 3)}-${digits.slice(3, 7)}-${digits.slice(7, 11)}`;
 }
 
 export function getPhoneError(phone) {
-  if (!phone) return '휴대폰 번호를 입력해주세요!';
-  if (!PHONE_REGEX.test(phone)) return '올바른 전화번호 형식이 아닙니다.';
-  return '';
+  if (!phone) return "휴대폰 번호를 입력해주세요!";
+  if (!PHONE_REGEX.test(phone)) return "올바른 전화번호 형식이 아닙니다.";
+  return "";
 }
 
 export function formatBirthDate(value) {
-  const digits = value.replace(/\D/g, '').slice(0, 8);
+  const digits = value.replace(/\D/g, "").slice(0, 8);
   if (digits.length < 5) return digits;
   if (digits.length < 7) return `${digits.slice(0, 4)}.${digits.slice(4)}`;
   return `${digits.slice(0, 4)}.${digits.slice(4, 6)}.${digits.slice(6, 8)}`;
 }
 
 export function getBirthDateError(birthDate) {
-  if (!birthDate) return '생년월일을 입력해주세요!';
+  if (!birthDate) return "생년월일을 입력해주세요!";
   if (!BIRTH_DATE_REGEX.test(birthDate)) {
-    return '올바른 생년월일 형식이 아닙니다. (yyyy.mm.dd)';
+    return "올바른 생년월일 형식이 아닙니다. (yyyy.mm.dd)";
   }
 
-  const [year, month, day] = birthDate.split('.').map(Number);
+  const [year, month, day] = birthDate.split(".").map(Number);
   const date = new Date(year, month - 1, day);
 
   const isRealDate =
-    date.getFullYear() === year && date.getMonth() === month -1 && date.getDate() === day;
+    date.getFullYear() === year &&
+    date.getMonth() === month - 1 &&
+    date.getDate() === day;
 
-  if (!isRealDate) return '존재하지 않는 날짜입니다.';
+  if (!isRealDate) return "존재하지 않는 날짜입니다.";
 
   const today = new Date();
   const MIN_AGE = 14;
-  const ageLimitDate = new Date(today.getFullYear() - MIN_AGE, today.getMonth(), today.getDate());
+  const ageLimitDate = new Date(
+    today.getFullYear() - MIN_AGE,
+    today.getMonth(),
+    today.getDate(),
+  );
   if (date > ageLimitDate) return `만 ${MIN_AGE}세 이상만 가입 할 수 있습니다.`;
 
   const MIN_YEAR = 1900;
   if (year < MIN_YEAR) return `생년월일은 ${MIN_YEAR}년 이후여야 합니다.`;
 
-  return '';
+  return "";
 }
 
 export function mapServerErrorToField(message) {
-  if (message.includes('아이디')) return 'id';
-  if (message.includes('비밀번호 확인') || message.includes('일치')) return 'passwordConfirm';
-  if (message.includes('비밀번호')) return 'password';
-  if (message.includes('이름')) return 'name';
-  if (message.includes('전화번호') || message.includes('휴대폰')) return 'phone';
-  if (message.includes('생년월일')) return 'birthDate';
-  if (message.includes('약관')) return 'agreeTerms';
-  if (message.includes('개인정보')) return 'agreePrivacy';
+  if (message.includes("아이디")) return "id";
+  if (message.includes("비밀번호 확인") || message.includes("일치"))
+    return "passwordConfirm";
+  if (message.includes("비밀번호")) return "password";
+  if (message.includes("이름")) return "name";
+  if (message.includes("전화번호") || message.includes("휴대폰"))
+    return "phone";
+  if (message.includes("생년월일")) return "birthDate";
+  if (message.includes("약관")) return "agreeTerms";
+  if (message.includes("개인정보")) return "agreePrivacy";
 
-  return 'form';
+  return "form";
 }

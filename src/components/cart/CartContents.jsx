@@ -126,7 +126,7 @@ export default function CartContents() {
         </CartContent>
         {/* 결제 금액 요약 영역 */}
         <CartOrderSummary
-          cartItems={cart.cartItems}
+          cartItems={cart.selectedItems}
           hasShippingAddress={hasShippingAddress}
         />
       </CartLayout>

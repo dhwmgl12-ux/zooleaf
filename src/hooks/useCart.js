@@ -82,6 +82,7 @@ export default function useCart() {
   // CartPage에서 사용할 상태와 함수 반환
   return {
     ...cart,
+    selectedItems,
     selectedCount: selectedItems.length,
     isAllSelected,
     getItemKey,
