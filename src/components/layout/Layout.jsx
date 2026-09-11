@@ -9,16 +9,18 @@ import ScrollTopButton from "../common/ScrollTopButton.jsx";
 export default function Layout() {
   const { pathname } = useLocation();
   const isMainPage = pathname === "/";
+  const isAboutPage = pathname === "/about"
   const isAuthPage = pathname === "/login" || pathname === "/signup";
-  const hasBreadcrumb = pathname.startsWith("/products/") ||
-                        pathname.startsWith("/goods/") ||
-                        pathname.startsWith("/experience/");
+  const hasBreadcrumb = pathname.startsWith("/products") ||
+                        pathname.startsWith("/goods") ||
+                        pathname.startsWith("/animals") ||
+                        pathname.startsWith("/experience");
 
   return (
     <>
       <Header />
 
-      <LayoutContainer $isMainPage={isMainPage} $hasBreadcrumb={hasBreadcrumb} $noBottomPadding={isAuthPage}>
+      <LayoutContainer $isMainPage={isMainPage} $isAboutPage={isAboutPage} $hasBreadcrumb={hasBreadcrumb} $noBottomPadding={isAuthPage}>
         <ContentContainer>
           <Outlet />
         </ContentContainer>
