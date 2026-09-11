@@ -18,7 +18,7 @@ export const ExperienceTitle = styled.h2`
   font-weight: ${theme.fontWeight.bold};
   color: ${theme.colors.textPrimary};
   margin-bottom: ${theme.spacing[100]};
-  margin-top: ${theme.spacing[100]};
+  margin-top: ${theme.spacing[32]};
   @media (max-width: ${theme.layout.breakpoint.smallMobile}) {
     margin-bottom: ${theme.spacing[64]};
   }
