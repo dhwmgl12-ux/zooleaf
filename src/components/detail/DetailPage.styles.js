@@ -1,5 +1,5 @@
 import styled from '@emotion/styled';
-import { theme } from '../styles/variables';
+import { theme } from '../../styles/variables';
 
 export const DetailPageContainer = styled.article`
   display: grid;
@@ -20,8 +20,6 @@ export const DetailPageContainer = styled.article`
 
   .detail-price-area {
     grid-area: price;
-    position: sticky;
-    top: calc(96px + ${theme.spacing[100]});
   }
 
   .detail-content-area {
