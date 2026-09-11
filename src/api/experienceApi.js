@@ -34,8 +34,15 @@ export async function getExperienceDetail(id, signal) {
 
   const data = await response.json();
 
-  if (!data.success) {
-    throw new Error(data.message || '상세 정보를 불러오지 못했습니다.');
+  if (!response.ok || !data.success) {
+    const error = new Error(
+      data.message || "상세 정보를 불러오지 못했습니다.",
+    );
+  
+    error.status = response.status;
+    error.code = data.code;
+  
+    throw error;
   }
 
   return data.data;
