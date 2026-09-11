@@ -1,4 +1,5 @@
 import { create } from "zustand";
+import { getOrderStatus } from "../utils/orderStatus";
 
 const useOrderStore = create((set, get) => ({
   ordersByUser: {},
@@ -68,7 +69,10 @@ const useOrderStore = create((set, get) => ({
     const current = get().ordersByUser[userId] ?? [];
     const target = current.find((order) => order.orderId === orderId);
 
-    if (!target || target.status !== "paid") return false;
+    // 날짜 기준으로 결제 완료인 주문만 취소 가능
+    if (!target || getOrderStatus(target) !== "paid") {
+      return false;
+    }
 
     set({
       ordersByUser: {
