@@ -15,9 +15,6 @@ export const BreadcrumbWrapper = styled.nav`
   z-index: 999;
 `;
 
-export const BreadcrumbSpacer = styled.div`
-  height: 46px;
-`;
 
 export const BreadcrumbList = styled.ol`
   display: flex;

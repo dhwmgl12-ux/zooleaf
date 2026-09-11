@@ -5,7 +5,6 @@ import {
   BreadcrumbLink,
   BreadcrumbList,
   BreadcrumbSeparator,
-  BreadcrumbSpacer,
   BreadcrumbWrapper,
 } from './Breadcrumb.style';
 
@@ -31,7 +30,6 @@ export default function Breadcrumb({ items }) {
           </BreadcrumbList>
         </ContentContainer>
       </BreadcrumbWrapper>
-      <BreadcrumbSpacer />
     </>
   );
 }
