@@ -10,7 +10,6 @@ export const PageContainer = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
-  box-sizing: border-box;
   padding-bottom: ${theme.spacing[64]};
 `;
 
@@ -32,7 +31,6 @@ export const HeroSection = styled.div`
   text-align: center;
   color: #ffffff;
   padding: 40px ${theme.spacing[24]};
-  box-sizing: border-box;
 
   .hero-content {
     max-width: 1000px;
@@ -144,7 +142,6 @@ export const ContentSection = styled.div`
   gap: ${theme.spacing[32]};
   /* 모바일에서 양옆 여백이 과도하지 않도록 패딩 조정 */
   padding: ${theme.spacing[40]} 16px;
-  box-sizing: border-box;
 
   @media (max-width: ${theme.layout.breakpoint.smallMobile}) {
     padding: ${theme.spacing[4]};
@@ -154,7 +151,6 @@ export const ContentSection = styled.div`
 export const InfoBlock = styled.div`
   background-color: transparent;
   padding: 0;
-  box-sizing: border-box;
   width: 100%;
 
   h2 {

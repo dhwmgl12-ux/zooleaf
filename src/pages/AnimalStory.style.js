@@ -5,7 +5,6 @@ export const Container = styled.div`
   margin: 0 auto;
   padding: ${theme.spacing[4]};
   text-align: center;
-  box-sizing: border-box;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -37,7 +36,6 @@ export const FilterBox = styled.div`
   justify-content: space-between;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.04);
   margin-bottom: ${theme.spacing[64]};
-  box-sizing: border-box;
   gap: ${theme.spacing[100]};
 
   .divider {
@@ -69,9 +67,8 @@ export const FilterBox = styled.div`
     }
   }
   @media (max-width: ${theme.layout.breakpoint.smallMobile}) {
-    width: 300px;
+    width: 100%;
     height: 200px;
-    gap: ${theme.spacing[4]};
   }
 `;
 
@@ -116,11 +113,11 @@ export const ZoneTabs = styled.div`
     width: 100%;
 
     button {
-      margin-top: ${theme.spacing[12]};
+      margin-top: ${theme.spacing[10]};
       width: 100%;
       text-align: left;
-      padding: ${theme.spacing[4]} 0;
-      font-size: ${theme.fontSize.button.size};
+      padding: ${theme.spacing[8]} 0;
+      font-size: ${theme.fontSize.label.size};
     }
   }
 `;
@@ -139,7 +136,6 @@ export const DropdownWrapper = styled.div`
     > div,
     button {
       width: 100%;
-      box-sizing: border-box;
     }
   }
 `;
@@ -157,7 +153,6 @@ export const DropdownHeader = styled.div`
   align-items: center;
   gap: 12px;
   width: 100%;
-  box-sizing: border-box;
   transition: all 0.2s ease;
 
   &:hover {
@@ -185,7 +180,6 @@ export const DropdownList = styled.ul`
   margin: 0;
   z-index: 10;
   overflow: hidden;
-  box-sizing: border-box;
 `;
 
 export const DropdownItem = styled.li`
@@ -207,13 +201,10 @@ export const AnimalGrid = styled.div`
   grid-template-columns: repeat(2, 1fr);
   gap: 24px;
   margin-bottom: 40px;
-  box-sizing: border-box;
-  align-items: stretch; /* [수정] 행에 있는 카드들의 높이를 똑같이 맞춤 */
+  align-items: stretch;
   @media (max-width: ${theme.layout.breakpoint.smallMobile}) {
     display: flex;
     flex-direction: column;
-    gap: 16px;
-    width: 300px;
   }
 `;
 
@@ -259,7 +250,6 @@ export const AnimalCard = styled.div`
   padding: 30px;
   gap: 24px;
   text-align: left;
-  box-sizing: border-box;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.03);
   height: 100%; /* [수정] 카드 높이를 그리드 행에 꽉 채움 */
   @media (max-width: ${theme.layout.breakpoint.tablet}) {

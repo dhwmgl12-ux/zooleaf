@@ -8,7 +8,6 @@ export const DiscountPage = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
-  box-sizing: border-box;
   width: 100%;
 `;
 
@@ -56,7 +55,6 @@ export const NoticeBox = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
-  box-sizing: border-box;
   margin-bottom: ${theme.spacing[24]};
   order: 2;
 
@@ -133,7 +131,6 @@ export const SpecialHeader = styled.div`
   text-align: center;
   margin-bottom: ${theme.spacing[48]};
   margin-top: ${theme.spacing[140]};
-  box-sizing: border-box;
   order: 3;
 
   h2 {
@@ -227,7 +224,6 @@ export const DiscountCard = styled.div`
   flex-direction: row;
   align-items: center;
   gap: ${theme.spacing[32]};
-  box-sizing: border-box;
   width: 100%;
   max-width: 100%;
   height: 400px;
@@ -389,7 +385,6 @@ export const SpecialCard = styled.div`
   align-items: center;
   justify-content: space-between; /* 양쪽 끝으로 정렬하여 공간 확보 */
   gap: ${theme.spacing[24]}; /* 간격을 너무 넓게 잡지 않고 유연하게 조절 */
-  box-sizing: border-box;
   width: 100%;
   max-width: 100%;
   height: 200px;
