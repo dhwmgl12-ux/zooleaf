@@ -21,7 +21,12 @@ export const HeaderContainer = styled.header`
     background-color 0.25s ease,
     backdrop-filter 0.25s ease,
     box-shadow 0.25s ease;
+
+  @media (max-width: ${theme.layout.breakpoint.mobile}) {
+    min-width: 320px
+  }
 `;
+
 export const HeaderInner = styled(ContentContainer)`
   display: flex;
   justify-content: space-between;
@@ -52,6 +57,10 @@ export const NavList = styled.ul`
   display: flex;
   gap: ${theme.spacing[56]};
 
+  @media (max-width: ${theme.layout.breakpoint.desktop}) {
+    gap: ${theme.spacing[48]};
+  }
+
   @media (max-width: ${theme.layout.breakpoint.tablet}) {
     display: none;
   }
@@ -81,6 +90,11 @@ export const NavLink = styled(Link)`
   &:hover,
   &:focus-visible {
     color: ${theme.colors.primary};
+  }
+
+  @media (max-width: ${theme.layout.breakpoint.desktop}) {
+    font-size: ${theme.fontSize.h6.size};
+    line-height: ${theme.fontSize.h6.lineheight};
   }
 
   @media (max-width: ${theme.layout.breakpoint.tablet}) {
