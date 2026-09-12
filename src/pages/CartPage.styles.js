@@ -738,6 +738,28 @@ export const ModalDeleteButton = styled.button`
   cursor: pointer;
 `;
 
+export const ModalAddButton = styled.button`
+  height: 40px;
+  padding: 0 ${theme.spacing[20]};
+
+  border: 0;
+  border-radius: 6px;
+
+  background-color: ${theme.colors.primary};
+  color: ${theme.colors.white};
+
+  cursor: pointer;
+
+  &:hover {
+    background-color: ${theme.colors.hover};
+  }
+
+  &:focus-visible {
+    outline: 2px solid ${theme.colors.primary};
+    outline-offset: 2px;
+  }
+`;
+
 export const EmptyCartImage = styled.img`
   display: block;
   width: 420px;
