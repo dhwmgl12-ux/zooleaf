@@ -7,12 +7,45 @@ export const DetailContentContainer = styled.section`
 
 export const DetailTabs = styled.ul`
   display: flex;
-  justify-content: space-evenly;
+  gap: 2px;
   margin-bottom: ${theme.spacing[100]};
-
+  text-align: center;
+  
   li {
-    padding: ${theme.spacing[20]} ${theme.spacing[100]};
+    flex: 1;
+    padding: ${theme.spacing[16]} ${theme.spacing[40]};
     border-bottom: 1px solid ${theme.colors.textPrimary};
+    font-size: ${theme.fontSize.h5.size};
+    line-height: ${theme.fontSize.h5.lineheight};
+    font-weight: ${theme.fontWeight.semiBold};
+    
+    &:hover a {
+      color: ${theme.colors.primary};
+    }
+
+    &:hover {
+      border-bottom: 1px solid ${theme.colors.primary};
+    }
+    
+    @media (max-width: ${theme.layout.breakpoint.desktop}) {
+      padding: ${theme.spacing[16]} ${theme.spacing[40]};
+    }
+    
+    @media (max-width: ${theme.layout.breakpoint.tablet}) {
+      font-size: ${theme.fontSize.h6.size};
+      line-height: ${theme.fontSize.h6.lineheight};
+      font-weight: ${theme.fontWeight.medium};
+    }
+    
+    @media (max-width: 500px) {
+      padding: ${theme.spacing[8]} ${theme.spacing[16]};
+      font-size: ${theme.fontSize.body.size};
+      line-height: ${theme.fontSize.body.lineheight};
+    }
+  }
+  
+  @media (max-width: ${theme.layout.breakpoint.desktop}) {
+    margin-bottom: ${theme.spacing[48]};
   }
 `
 
@@ -110,6 +143,11 @@ export const DetailInfoSection = styled.section`
     line-height: ${theme.fontSize.h4.lineheight};
     font-weight: ${theme.fontWeight.bold};
     margin-bottom: ${theme.spacing[24]};
+
+    @media (max-width: ${theme.layout.breakpoint.tablet}) {
+      font-size: ${theme.fontSize.h5.size};
+      line-height: ${theme.fontSize.h5.lineheight};
+    }
   }
 
   ul > li {
