@@ -2,6 +2,9 @@ import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import Breadcrumb from '../components/common/Breadcrumb';
 import { getExperiences } from '../api/experienceApi';
+import LoadingSpinner from '../components/common/LoadingSpinner';
+import ErrorState from '../components/common/ErrorState';
+import EmptyState from '../components/common/EmptyState';
 import {
   ExperiencePageWrapper,
   ExperienceMain,
@@ -52,13 +55,11 @@ export default function ExperiencePage() {
           <ExperienceTitle>체험 프로그램</ExperienceTitle>
 
           {loading ? (
-            <StatusText>체험 프로그램을 불러오는 중입니다.</StatusText>
+            <LoadingSpinner />
           ) : error ? (
-            <StatusText role="alert" style={{ color: 'red' }}>
-              {error}
-            </StatusText>
+            <ErrorState message={error} />
           ) : experiences.length === 0 ? (
-            <StatusText>등록된 체험 프로그램이 없습니다.</StatusText>
+            <EmptyState message="등록된 체험 프로그램이 없습니다." />
           ) : (
             <ExperienceGrid>
               {experiences.map((experience) => (

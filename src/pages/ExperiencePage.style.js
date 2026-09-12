@@ -29,7 +29,7 @@ export const ExperienceTitle = styled.h2`
 export const ExperienceGrid = styled.div`
   display: grid;
   grid-template-columns: repeat(4, 1fr);
-  gap: 24px;
+  gap: ${theme.spacing[24]};
   justify-content: center;
   align-items: center;
   max-width: 1440px;
@@ -43,8 +43,8 @@ export const ExperienceGrid = styled.div`
     grid-template-columns: repeat(2, 1fr);
   }
   @media (max-width: ${theme.layout.breakpoint.smallMobile}) {
-    grid-template-columns: 300px;
-    margin-left: 0;
+    grid-template-columns: 100%;
+    margin: 0;
   }
 `;
 
@@ -73,7 +73,7 @@ export const ExperienceCard = styled.article`
     margin-bottom: ${theme.spacing[4]};
   }
   @media (max-width: ${theme.layout.breakpoint.smallMobile}) {
-    width: 300px;
+    width: 100%;
     height: 262px;
     margin-bottom: ${theme.spacing[24]};
   }
@@ -106,7 +106,6 @@ export const CardOverlayText = styled.div`
   flex-direction: column;
   align-items: flex-end;
   color: white;
-  box-sizing: border-box;
   text-align: right;
   z-index: 2;
 
