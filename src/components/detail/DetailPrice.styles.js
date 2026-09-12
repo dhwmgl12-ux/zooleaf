@@ -7,6 +7,11 @@ export const DetailPriceContainer = styled.section`
   padding: ${theme.spacing[32]};
   border-radius: ${theme.radius.box};
   box-shadow: 4px 4px 8px rgb(0 0 0 / 8%);
+  
+  @media (max-width: ${theme.layout.breakpoint.mobile}) {
+    padding: ${theme.spacing[24]};
+    
+  }
 `
 
 export const DetailPriceInfo = styled.div`
@@ -42,6 +47,12 @@ export const DetailPriceInfo = styled.div`
     line-height: ${theme.fontSize.h3.lineheight};
     letter-spacing: ${theme.fontSize.h3.letterspacing};
     font-weight: ${theme.fontWeight.bold};
+
+    @media (max-width: 430px) {
+      font-size: ${theme.fontSize.h4.size};
+      line-height: ${theme.fontSize.h4.lineheight};
+      letter-spacing: ${theme.fontSize.h4.letterspacing};
+    }
   }
   
   p {
@@ -57,6 +68,12 @@ export const DetailPriceInfo = styled.div`
     font-size: ${theme.fontSize.h3.size};
     line-height: ${theme.fontSize.h3.lineheight};
     font-weight: ${theme.fontWeight.bold};
+
+    @media (max-width: 430px) {
+      font-size: ${theme.fontSize.h4.size};
+      line-height: ${theme.fontSize.h4.lineheight};
+      letter-spacing: ${theme.fontSize.h4.letterspacing};
+    }
   }
   `
 
@@ -95,12 +112,28 @@ export const DeliveryInfo = styled.dl`
     font-size: ${theme.fontSize.h5.size};
     line-height: ${theme.fontSize.h5.lineheight};
     font-weight: ${theme.fontWeight.bold};
+
+    @media (max-width: ${theme.layout.breakpoint.mobile}) {
+      font-size: ${theme.fontSize.h6.size};
+      line-height: ${theme.fontSize.h6.lineheight};
+    }
   }
   
   dd {
     font-size: ${theme.fontSize.bodylarge.size};
     line-height: ${theme.fontSize.bodylarge.lineheight};
     font-weight: ${theme.fontWeight.regular};
+
+    @media (max-width: 430px) {
+      font-size: ${theme.fontSize.body.size};
+      line-height: ${theme.fontSize.body.lineheight};
+    }
+
+    @media (max-width: ${theme.layout.breakpoint.mobile}) {
+      max-width: 70%;
+      font-size: ${theme.fontSize.bodysmall.size};
+      line-height: ${theme.fontSize.bodysmall.lineheight};
+    }
   }
 `
 
@@ -109,19 +142,24 @@ export const OptionSelector = styled.div`
   justify-content: space-between;
   align-items: center;
   border: 0;
+  margin-bottom: ${theme.spacing[32]};
 
   h3 {
     flex-shrink: 0;
     font-size: ${theme.fontSize.h5.size};
     line-height: ${theme.fontSize.h5.lineheight};
     font-weight: ${theme.fontWeight.bold};
+
+    @media (max-width: ${theme.layout.breakpoint.mobile}) {
+      font-size: ${theme.fontSize.h6.size};
+      line-height: ${theme.fontSize.h6.lineheight};
+    }
   }
 `
 
 export const OptionDropdown = styled.div`
   position: relative;
   width: min(70%, 300px);
-  margin-bottom: ${theme.spacing[32]};
 
   font-size: ${theme.fontSize.bodylarge.size};
   line-height: ${theme.fontSize.bodylarge.lineheight};
@@ -131,6 +169,11 @@ export const OptionDropdown = styled.div`
     border-radius: ${theme.radius.box};
     background-color: ${theme.colors.white};
     color: ${theme.colors.textPrimary};
+  }
+
+  @media (max-width: 430px) {
+    font-size: ${theme.fontSize.bodysmall.size};
+    line-height: ${theme.fontSize.bodysmall.lineheight};
   }
 `
 
@@ -148,7 +191,7 @@ export const OptionButton = styled.button`
   &:hover {
     background-color: ${theme.colors.background2};
   }
-  `
+`
 
 export const OptionList = styled.ul`
   position: absolute;
@@ -190,10 +233,26 @@ export const SelectedOptionCard = styled.div`
   flex-direction: column;
   gap: ${theme.spacing[16]};
 
-  p {
+  .selected-option-value {
     font-size: ${theme.fontSize.bodylarge.size};
     line-height: ${theme.fontSize.bodylarge.lineheight};
     font-weight: ${theme.fontWeight.regular};
+
+    @media (max-width: 430px) {
+      font-size: ${theme.fontSize.body.size};
+      line-height: ${theme.fontSize.body.lineheight};
+    }
+  }
+
+  .selected-option-price {
+    font-size: ${theme.fontSize.h5.size};
+    line-height: ${theme.fontSize.h5.lineheight};
+    font-weight: ${theme.fontWeight.semiBold};
+
+    @media (max-width: 430px) {
+      font-size: ${theme.fontSize.h6.size};
+      line-height: ${theme.fontSize.h6.lineheight};
+    }
   }
 `
 
@@ -206,6 +265,16 @@ export const SelectedOptionCardTop = styled.div`
     font-size: ${theme.fontSize.h5.size};
     line-height: ${theme.fontSize.h5.lineheight};
     font-weight: ${theme.fontWeight.bold};
+
+    @media (max-width: 430px) {
+      font-size: ${theme.fontSize.h6.size};
+      line-height: ${theme.fontSize.h6.lineheight};
+    }
+
+    @media (max-width: ${theme.layout.breakpoint.mobile}) {
+      font-size: ${theme.fontSize.body.size};
+      line-height: ${theme.fontSize.body.lineheight};
+    }
   }
 
   button {
@@ -226,12 +295,22 @@ export const SelectedOptionCardBottom = styled.div`
     font-size: ${theme.fontSize.h5.size};
     line-height: ${theme.fontSize.h5.lineheight};
     font-weight: ${theme.fontWeight.bold};
+
+    @media (max-width: ${theme.layout.breakpoint.mobile}) {
+      font-size: ${theme.fontSize.h6.size};
+      line-height: ${theme.fontSize.h6.lineheight};
+    }
   }
   
   p {
     font-size: ${theme.fontSize.h5.size};
     line-height: ${theme.fontSize.h5.lineheight};
     font-weight: ${theme.fontWeight.bold};
+
+    @media (max-width: ${theme.layout.breakpoint.mobile}) {
+      font-size: ${theme.fontSize.h6.size};
+      line-height: ${theme.fontSize.h6.lineheight};
+    }
   }
 `
 
@@ -250,6 +329,11 @@ export const QuantitySelector = styled.div`
     font-size: ${theme.fontSize.h5.size};
     line-height: ${theme.fontSize.h5.lineheight};
     font-weight: ${theme.fontWeight.bold};
+
+    @media (max-width: ${theme.layout.breakpoint.mobile}) {
+      font-size: ${theme.fontSize.h6.size};
+      line-height: ${theme.fontSize.h6.lineheight};
+    }
   }
 `
 
@@ -286,6 +370,14 @@ export const QuantityControl = styled.div`
     font-size: ${theme.fontSize.h5.size};
     line-height: ${theme.fontSize.h5.lineheight};
     font-weight: ${theme.fontWeight.bold};
+
+    @media (max-width: ${theme.layout.breakpoint.mobile}) {
+      font-size: ${theme.fontSize.h6.size};
+      line-height: ${theme.fontSize.h6.lineheight};
+    }
+  }
+
+  @media (max-width: ${theme.layout.breakpoint.mobile}) {
   }
 `
 
@@ -301,12 +393,22 @@ export const DiscountInfo = styled.dl`
     font-size: ${theme.fontSize.h5.size};
     line-height: ${theme.fontSize.h5.lineheight};
     font-weight: ${theme.fontWeight.bold};
+
+    @media (max-width: ${theme.layout.breakpoint.mobile}) {
+      font-size: ${theme.fontSize.h6.size};
+      line-height: ${theme.fontSize.h6.lineheight};
+    }
   }
   
   dd {
     font-size: ${theme.fontSize.bodylarge.size};
     line-height: ${theme.fontSize.bodylarge.lineheight};
     font-weight: ${theme.fontWeight.regular};
+
+    @media (max-width: ${theme.layout.breakpoint.mobile}) {
+      font-size: ${theme.fontSize.body.size};
+      line-height: ${theme.fontSize.body.lineheight};
+    }
   }
 `
 
@@ -319,6 +421,11 @@ export const PaymentBenefits = styled.section`
     font-size: ${theme.fontSize.h5.size};
     line-height: ${theme.fontSize.h5.lineheight};
     font-weight: ${theme.fontWeight.bold};
+
+    @media (max-width: ${theme.layout.breakpoint.mobile}) {
+      font-size: ${theme.fontSize.h6.size};
+      line-height: ${theme.fontSize.h6.lineheight};
+    }
   }
   
   li {
@@ -328,6 +435,11 @@ export const PaymentBenefits = styled.section`
     font-size: ${theme.fontSize.bodylarge.size};
     line-height: ${theme.fontSize.bodylarge.lineheight};
     font-weight: ${theme.fontWeight.regular};
+
+    @media (max-width: ${theme.layout.breakpoint.mobile}) {
+      font-size: ${theme.fontSize.body.size};
+      line-height: ${theme.fontSize.body.lineheight};
+    }
   }
 
 `
@@ -345,6 +457,11 @@ export const TotalPriceRow = styled.dl`
     line-height: ${theme.fontSize.h4.lineheight};
     font-weight: ${theme.fontWeight.bold};
     color: ${theme.colors.primary};
+
+    @media (max-width: ${theme.layout.breakpoint.mobile}) {
+      font-size: ${theme.fontSize.h5.size};
+      line-height: ${theme.fontSize.h5.lineheight};
+    }
   }
   
   dd {
@@ -352,13 +469,23 @@ export const TotalPriceRow = styled.dl`
     line-height: ${theme.fontSize.h3.lineheight};
     font-weight: ${theme.fontWeight.bold};
     color: ${theme.colors.primary};
+
+    @media (max-width: 430px) {
+      font-size: ${theme.fontSize.h4.size};
+      line-height: ${theme.fontSize.h4.lineheight};
+    }
+
+    @media (max-width: ${theme.layout.breakpoint.mobile}) {
+      font-size: ${theme.fontSize.h5.size};
+      line-height: ${theme.fontSize.h5.lineheight};
+    }
   }
 
 `
 
 export const CartButton = styled.button`
   width: 100%;
-  padding: ${theme.spacing[20]} ${theme.spacing[16]};
+  padding: ${theme.spacing[16]} ${theme.spacing[20]};
   border: none;
   border-radius: ${theme.radius.button};
   color: ${theme.colors.white};
@@ -379,5 +506,10 @@ export const CartButton = styled.button`
     background-color: ${theme.colors.border};
     color: ${theme.colors.textSecondary};
     cursor: not-allowed;
+  }
+
+  @media (max-width: ${theme.layout.breakpoint.mobile}) {
+    font-size: ${theme.fontSize.button.size};
+    line-height: ${theme.fontSize.button.lineheight};
   }
 `

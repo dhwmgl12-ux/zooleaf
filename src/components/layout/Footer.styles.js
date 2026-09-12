@@ -12,6 +12,7 @@ export const FooterContainer = styled.footer`
   text-align: center;
 
   @media (max-width: ${theme.layout.breakpoint.mobile}) {
+    min-width: 320px;
     padding: ${theme.spacing[24]} 0 ${theme.spacing[16]} 0;
   }
 `;
@@ -56,6 +57,9 @@ export const FooterColumnDetails = styled.div`
 
 export const FooterTitle = styled.h2`
   margin-bottom: ${theme.spacing[12]};
+  font-size: ${theme.fontSize.body.size};
+  line-height: ${theme.fontSize.body.lineheight};
+  font-weight: ${theme.fontWeight.medium};
 
   @media (max-width: ${theme.layout.breakpoint.mobile}) {
     margin: 0;
