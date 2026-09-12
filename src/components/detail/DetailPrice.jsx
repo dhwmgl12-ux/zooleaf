@@ -254,7 +254,7 @@ export default function DetailPrice({ product, productType, }) {
                 >
                   옵션을 선택해 주세요
                   <svg width="13" height="6" viewBox="0 0 13 6" fill="none" xmlns="http://www.w3.org/2000/svg">
-                    <path d="M0.5 0.5L6.83345 5.5L12.5 0.5" stroke="#687C73" stroke-linecap="round" stroke-linejoin="round"/>
+                    <path d="M0.5 0.5L6.83345 5.5L12.5 0.5" stroke="#687C73" strokeLinecap="round" strokeLinejoin="round"/>
                   </svg>
                 </OptionButton>
                 {isOptionOpen && (
@@ -285,7 +285,7 @@ export default function DetailPrice({ product, productType, }) {
                     aria-label={`${selectedOption.value} 옵션 삭제`}
                   >
                     <svg width="12" height="12" viewBox="0 0 12 12" fill="none" xmlns="http://www.w3.org/2000/svg">
-                      <path d="M0.75 0.75L10.75 10.75M0.75 10.75L10.75 0.75" stroke="#2C3E35" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                      <path d="M0.75 0.75L10.75 10.75M0.75 10.75L10.75 0.75" stroke="#2C3E35" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
                     </svg>
                   </button>
                 </SelectedOptionCardTop>
