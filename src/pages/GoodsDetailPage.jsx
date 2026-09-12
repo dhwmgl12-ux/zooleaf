@@ -101,7 +101,8 @@ export default function GoodsDetailPage() {
       <DetailPageContainer>
         <div className="detail-image-area">
           <DetailImage 
-            imageUrl={goods.imageUrl ?? goods.thumbnailImage}
+            imageUrl={goods.imageUrl}
+            images={goods.options ?? []}
             name={goods.name}
           />
         </div>
