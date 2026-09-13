@@ -20,9 +20,13 @@ export default function Layout() {
       <Header />
 
       <LayoutContainer $isMainPage={isMainPage} $isAboutPage={isAboutPage} $hasBreadcrumb={hasBreadcrumb}>
-        <ContentContainer>
+        {isMainPage ? (
           <Outlet />
-        </ContentContainer>
+        ) : (
+          <ContentContainer>
+            <Outlet />
+          </ContentContainer>
+        )}
       </LayoutContainer>
 
       <Footer />
