@@ -8,7 +8,6 @@ export const MainSectionHeaderContainer = styled.div`
   align-items: center;
   justify-content: center;
   gap: ${theme.spacing[24]};
-  margin-bottom: ${theme.spacing[64]};
 
   h2 {
     font-size: ${theme.fontSize.h5.size};
