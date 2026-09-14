@@ -97,9 +97,6 @@ const useCartStore = create((set, get) => {
       if (get().isLoading || get().isUpdating) return;
       set({ isLoading: true, error: "" });
 
-      // 로딩 화면 확인용
-      await new Promise((resolve) => setTimeout(resolve, 2000));
-
       try {
         const items = await readItems();
         set({ cartItems: items });
