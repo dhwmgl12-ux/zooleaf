@@ -1,8 +1,9 @@
-import { useLocation } from 'react-router-dom';
-import zooleafLogo from '../../assets/images/zooleaf-logo-2.webp';
-import { useEffect, useRef, useState } from 'react';
-import useAuthStore from '../../store/authStore';
-import { useLogout } from '../../hooks/useAuth';
+import { useLocation } from "react-router-dom";
+import zooleafLogo from "../../assets/images/zooleaf-logo-2.webp";
+import { useEffect, useRef, useState } from "react";
+import useAuthStore from "../../store/authStore";
+import { useLogout } from "../../hooks/useAuth";
+import useCartStore from "../../store/cartStore";
 import {
   AccountAvatar,
   AccountCard,
@@ -35,8 +36,9 @@ import {
   NavList,
   Tooltip,
   UtilsList,
-} from './Header.styles.js';
-import useToastStore from '../../store/toastStore.js';
+  CartBadge,
+} from "./Header.styles.js";
+import useToastStore from "../../store/toastStore.js";
 
 export default function Header() {
   const { pathname } = useLocation();
@@ -49,56 +51,56 @@ export default function Header() {
   const user = useAuthStore((state) => state.user);
   const { handleLogout } = useLogout();
   const showToast = useToastStore((state) => state.showToast);
-  
+
   useEffect(() => {
     if (!headerRef.current) return;
 
     const updateHeaderHeight = () => {
       const headerHeight = headerRef.current?.offsetHeight ?? 0;
-      document.documentElement.style.setProperty('--header-height', `${headerHeight}px`)
-    }
-    
+      document.documentElement.style.setProperty(
+        "--header-height",
+        `${headerHeight}px`,
+      );
+    };
+
     updateHeaderHeight();
 
     const resizeObserver = new ResizeObserver(updateHeaderHeight);
     resizeObserver.observe(headerRef.current);
 
-    return () => resizeObserver.disconnect()
+    return () => resizeObserver.disconnect();
   }, []);
 
   useEffect(() => {
-    if (pathname !== '/') {
-        // eslint-disable-next-line react-hooks/set-state-in-effect
-        setIsOverHero(false);
-        return;
-      }
-      
-      const hero = document.querySelector('[data-header-hero]');
+    if (pathname !== "/") {
+      // eslint-disable-next-line react-hooks/set-state-in-effect
+      setIsOverHero(false);
+      return;
+    }
 
-      if (!hero) {
-        setIsOverHero(false);
-        return;
-      }
-    
-      const updateHeader = () => {
-        const headerHeight = headerRef.current?.offsetHeight ?? 0;
-        const heroBottom = hero.getBoundingClientRect().bottom;
-    
-        setIsOverHero(heroBottom > headerHeight);
-      };
-      updateHeader();
-    
-      window.addEventListener('scroll', updateHeader, { passive: true });
-      window.addEventListener('resize', updateHeader);
-    
-      return () => {
-        window.removeEventListener('scroll', updateHeader);
-        window.removeEventListener('resize', updateHeader);
-      };
-  }, [pathname])
+    const hero = document.querySelector("[data-header-hero]");
 
+    if (!hero) {
+      setIsOverHero(false);
+      return;
+    }
 
+    const updateHeader = () => {
+      const headerHeight = headerRef.current?.offsetHeight ?? 0;
+      const heroBottom = hero.getBoundingClientRect().bottom;
 
+      setIsOverHero(heroBottom > headerHeight);
+    };
+    updateHeader();
+
+    window.addEventListener("scroll", updateHeader, { passive: true });
+    window.addEventListener("resize", updateHeader);
+
+    return () => {
+      window.removeEventListener("scroll", updateHeader);
+      window.removeEventListener("resize", updateHeader);
+    };
+  }, [pathname]);
 
   useEffect(() => {
     // eslint-disable-next-line react-hooks/set-state-in-effect
@@ -109,14 +111,17 @@ export default function Header() {
     if (!isMenuOpen) return;
 
     const handleClickOutside = (e) => {
-      if (menuButtonRef.current?.contains(e.target) || menuPanelRef.current?.contains(e.target)) {
+      if (
+        menuButtonRef.current?.contains(e.target) ||
+        menuPanelRef.current?.contains(e.target)
+      ) {
         return;
       }
       setIsMenuOpen(false);
     };
 
-    document.addEventListener('mousedown', handleClickOutside);
-    return () => document.removeEventListener('mousedown', handleClickOutside);
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
   }, [isMenuOpen]);
 
   useEffect(() => {
@@ -124,14 +129,25 @@ export default function Header() {
 
     const originalBodyOverflow = document.body.style.overflow;
     const originalHtmlOverflow = document.documentElement.style.overflow;
-    document.body.style.overflow = 'hidden';
-    document.documentElement.style.overflow = 'hidden';
+    document.body.style.overflow = "hidden";
+    document.documentElement.style.overflow = "hidden";
 
     return () => {
       document.body.style.overflow = originalBodyOverflow;
       document.documentElement.style.overflow = originalHtmlOverflow;
     };
   }, [isMenuOpen]);
+
+  const cartQuantity = useCartStore((state) =>
+    state.cartItems.reduce((sum, item) => sum + item.quantity, 0),
+  );
+  const fetchCart = useCartStore((state) => state.fetchCart);
+
+  // 로그인한 사용자의 장바구니 수량 조회
+  useEffect(() => {
+    if (!isLoggedIn || !user?.id) return;
+    fetchCart();
+  }, [isLoggedIn, user?.id, fetchCart]);
 
   return (
     <HeaderContainer ref={headerRef} $isOverHero={isOverHero && !isMenuOpen}>
@@ -167,7 +183,10 @@ export default function Header() {
 
         <UtilsList>
           <li>
-            <IconLink to="/cart" aria-label="장바구니">
+            <IconLink
+              to="/cart"
+              aria-label={`장바구니, 상품 ${isLoggedIn ? cartQuantity : 0}개`}
+            >
               <svg
                 width="32"
                 height="32"
@@ -197,10 +216,18 @@ export default function Header() {
                   fill="currentColor"
                 />
               </svg>
+              {isLoggedIn && cartQuantity > 0 && (
+                <CartBadge aria-hidden="true">
+                  {cartQuantity > 99 ? "99+" : cartQuantity}
+                </CartBadge>
+              )}
             </IconLink>
           </li>
           {isLoggedIn ? (
-            <AccountMenuTrigger tabIndex={0} onClick={(e) => e.currentTarget.blur()}>
+            <AccountMenuTrigger
+              tabIndex={0}
+              onClick={(e) => e.currentTarget.blur()}
+            >
               <IconLink
                 to="/mypage"
                 aria-label="마이페이지"
@@ -239,8 +266,8 @@ export default function Header() {
 
                   <AccountInfoList>
                     <span>{user?.id}</span>
-                    <span>{user?.phone ?? '-'}</span>
-                    <span>{user?.birthDate ?? '-'}</span>
+                    <span>{user?.phone ?? "-"}</span>
+                    <span>{user?.birthDate ?? "-"}</span>
                   </AccountInfoList>
 
                   <AccountDivider />
@@ -258,7 +285,7 @@ export default function Header() {
                 aria-label="로그인"
                 onClick={(e) => {
                   e.currentTarget.blur();
-                  showToast('로그인이 필요합니다.');
+                  showToast("로그인이 필요합니다.");
                 }}
               >
                 <svg
@@ -295,7 +322,7 @@ export default function Header() {
             <IconButton
               ref={menuButtonRef}
               type="button"
-              aria-label={isMenuOpen ? '메뉴 닫기' : '메뉴 열기'}
+              aria-label={isMenuOpen ? "메뉴 닫기" : "메뉴 열기"}
               aria-expanded={isMenuOpen}
               onClick={() => setIsMenuOpen((prev) => !prev)}
             >
@@ -336,12 +363,18 @@ export default function Header() {
             {isLoggedIn ? (
               <>
                 <MobileNavGreeting>{user?.name}님, 반가워요!</MobileNavGreeting>
-                <MobileAccountLink to="/mypage" onClick={() => setIsMenuOpen(false)}>
+                <MobileAccountLink
+                  to="/mypage"
+                  onClick={() => setIsMenuOpen(false)}
+                >
                   마이페이지
                 </MobileAccountLink>
               </>
             ) : (
-              <MobileAccountLink to="/login" onClick={() => setIsMenuOpen(false)}>
+              <MobileAccountLink
+                to="/login"
+                onClick={() => setIsMenuOpen(false)}
+              >
                 로그인
               </MobileAccountLink>
             )}
@@ -356,12 +389,18 @@ export default function Header() {
               </MobileNavLink>
             </li>
             <li>
-              <MobileNavLink to="/products" onClick={() => setIsMenuOpen(false)}>
+              <MobileNavLink
+                to="/products"
+                onClick={() => setIsMenuOpen(false)}
+              >
                 입장권 & 패키지
               </MobileNavLink>
             </li>
             <li>
-              <MobileNavLink to="/experiences" onClick={() => setIsMenuOpen(false)}>
+              <MobileNavLink
+                to="/experiences"
+                onClick={() => setIsMenuOpen(false)}
+              >
                 프로그램
               </MobileNavLink>
             </li>
@@ -376,7 +415,10 @@ export default function Header() {
               </MobileNavLink>
             </li>
             <li>
-              <MobileNavLink to="/community" onClick={() => setIsMenuOpen(false)}>
+              <MobileNavLink
+                to="/community"
+                onClick={() => setIsMenuOpen(false)}
+              >
                 커뮤니티
               </MobileNavLink>
             </li>
