@@ -1,47 +1,68 @@
-import { Link } from "react-router-dom";
 import { useEffect, useState } from "react";
 
-import { MainHeroContainer } from "./MainHero.styles";
+import { MainHeroContainer, MainHeroTitle, MainHeroContent, MainHeroMoreLink } from "./MainHero.styles";
 import zooleafLogo from '../../assets/images/zooleaf-logo-2.webp'
+import heroDesktop from "../../assets/videos/zooleaf-banner-wide.mp4"
+import heroMobile from "../../assets/videos/zooleaf-mobile-banner.mp4"
 import {theme} from '../../styles/variables'
 
+const MOBILE_QUERY = `(max-width: ${theme.layout.breakpoint.mobile})`;
+
 export default function MainHero() {
-  const [isMobile, setIsMobile] = useState(() => 
-    window.matchMedia("(max-width: ${theme.layout.tablet})").matches
+  const [isMobile, setIsMobile] = useState(() =>
+    window.matchMedia(MOBILE_QUERY).matches,
   );
 
   useEffect(() => {
-    const media = window.matchMedia("(max-width: ${theme.layout.tablet})");
-    const hanleChange = (event) => setIsMobile(event.matches);
+    const mediaQuery =
+      window.matchMedia(MOBILE_QUERY);
 
-    media.addEventListener("change", hanleChange);
-    return () => media.removeEventListener("change", hanleChange);
+    const handleChange = (event) => {
+      setIsMobile(event.matches);
+    };
+
+    mediaQuery.addEventListener(
+      "change",
+      handleChange,
+    );
+
+    return () => {
+      mediaQuery.removeEventListener(
+        "change",
+        handleChange,
+      );
+    };
   }, []);
 
-  const videoId = isMobile ? "Wsy--WXw7ZI" : "joy7jWQkBE4";
+  const heroVideo = isMobile ? heroMobile : heroDesktop;
 
   return (
     <MainHeroContainer data-header-hero>
-      {/* <iframe
-        key={videoId}
+      <video
+        key={heroVideo}
         className="hero-video"
-        src={`https://www.youtube.com/embed/${videoId}?autoplay=1&mute=1&loop=1&playlist=${videoId}&playsinline=1`}
-        title="ZOOLEAF 소개 영상"
-        allow="autoplay; encrypted-media; picture-in-picture"
-        allowFullScreen
-        
-      /> */}
-      <div>
-        <h2>
-          <span><img src={zooleafLogo} alt="ZOOLEAF" /></span>에서
-          <br />
-          동물 친구들이 기다리고 있어요.
-        </h2>
+        src={heroVideo}
+        autoPlay
+        muted
+        loop
+        playsInline
+        preload="metadata"
+        aria-hidden="true"
+      />
 
-        <Link to="/products">
+      <MainHeroContent className="main-hero__content">
+        <MainHeroTitle>
+          <div>
+            <img src={zooleafLogo} alt="ZOOLEAF" />
+            <span>에서</span>
+          </div>
+          <p>동물 친구들이 기다리고 있어요.</p>
+        </MainHeroTitle>
+
+        <MainHeroMoreLink to="/products">
           티켓 예매하러 가기
-        </Link>
-      </div>
+        </MainHeroMoreLink>
+      </MainHeroContent>
     </MainHeroContainer>
   );
 }
