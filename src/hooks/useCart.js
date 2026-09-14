@@ -1,8 +1,8 @@
 ﻿import { useEffect, useState } from "react";
 import useCartStore from "../store/cartStore";
 
-// 장바구니 상품의 고유 식별값 반환
-const getItemKey = (item) => item.cartItemId;
+// 원본 항목 하나가 삭제돼도 그룹의 선택 상태 유지
+const getItemKey = (item) => item.groupKey ?? item.cartItemId;
 
 export default function useCart() {
   const cart = useCartStore();
@@ -60,21 +60,26 @@ export default function useCart() {
   const confirmDelete = async () => {
     if (!deleteModal || cart.isUpdating) return;
 
-    const ids = (
-      deleteModal.mode === "single" ? [deleteModal.item] : selectedItems
-    ).map(getItemKey);
+    const targets =
+      deleteModal.mode === "single" ? [deleteModal.item] : selectedItems;
+
+    const groupIds = targets.map((item) => item.cartItemId);
+    const selectionKeys = new Set(
+      targets.map((item) => String(getItemKey(item))),
+    );
+
     const success =
       deleteModal.mode === "single"
-        ? await cart.removeFromCart(ids[0])
-        : await cart.removeSelected(ids);
+        ? await cart.removeFromCart(groupIds[0])
+        : await cart.removeSelected(groupIds);
+
     if (success) {
       setSelection((prev) =>
         Object.fromEntries(
-          Object.entries(prev).filter(
-            ([key]) => !ids.some((id) => String(id) === key),
-          ),
+          Object.entries(prev).filter(([key]) => !selectionKeys.has(key)),
         ),
       );
+
       setDeleteModal(null);
     }
   };
