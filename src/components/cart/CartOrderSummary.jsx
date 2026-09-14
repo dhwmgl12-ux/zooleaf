@@ -1,5 +1,7 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import Modal from "../common/Modal";
+import useCartStore from "../../store/cartStore";
 import {
   OrderSummary,
   SummaryTitle,
@@ -16,8 +18,6 @@ import {
   NoticeButton,
   NoticeContent,
   PurchaseButton,
-  ModalOverlay,
-  ModalBox,
   ModalText,
   ModalButtonArea,
   ModalCancelButton,
@@ -27,6 +27,9 @@ import {
 export default function CartOrderSummary({ cartItems, hasShippingAddress }) {
   // 페이지 이동에 사용할 함수
   const navigate = useNavigate();
+  const isCartBusy = useCartStore(
+    (state) => state.isLoading || state.isUpdating,
+  );
 
   // 구매 모달 열림 여부: 처음에는 닫힘
   const [isPurchaseModalOpen, setIsPurchaseModalOpen] = useState(false);
@@ -157,20 +160,19 @@ export default function CartOrderSummary({ cartItems, hasShippingAddress }) {
 
       <PurchaseButton
         type="button"
-        disabled={cartItems.length === 0}
+        disabled={cartItems.length === 0 || isCartBusy}
         onClick={handlePurchase}
       >
         구매하기
       </PurchaseButton>
 
       {isPurchaseModalOpen && (
-        <ModalOverlay>
-          <ModalBox
-            role="dialog"
-            aria-modal="true"
-            aria-labelledby="purchase-modal-message"
-          >
-            <ModalText id="purchase-modal-message">
+        <Modal
+          isOpen={isPurchaseModalOpen}
+          onClose={handleCloseModal}
+          title="구매 확인"
+        >
+            <ModalText>
               {hasShippingAddress
                 ? "결제를 진행하시겠습니까?"
                 : "배송지를 등록해야 합니다."}
@@ -181,12 +183,11 @@ export default function CartOrderSummary({ cartItems, hasShippingAddress }) {
                 아니오
               </ModalCancelButton>
 
-              <ModalDeleteButton type="button" onClick={handleConfirm}>
+              <ModalDeleteButton type="button" disabled={isCartBusy} onClick={handleConfirm}>
                 예
               </ModalDeleteButton>
             </ModalButtonArea>
-          </ModalBox>
-        </ModalOverlay>
+        </Modal>
       )}
     </OrderSummary>
   );

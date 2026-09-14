@@ -4,11 +4,31 @@ import { theme } from "../../styles/variables";
 export const ModalOverlay = styled.div`
   position: fixed;
   inset: 0;
+
+  width: 100%;
+  height: 100%;
+  max-width: none;
+  max-height: none;
+
+  margin: 0;
+  padding: 16px;
+  border: 0;
+
   background: rgba(0, 0, 0, 0.5);
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  z-index: 100;
+
+  &:not([open]) {
+    display: none;
+  }
+
+  &[open] {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+
+  &::backdrop {
+    background: transparent;
+  }
 `;
 
 export const ModalBox = styled.div`
