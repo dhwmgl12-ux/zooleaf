@@ -97,3 +97,22 @@ export function mapServerErrorToField(message) {
 
   return 'form';
 }
+
+
+export function validateForm(form, validators) {
+  return validators.reduce((errors, {field, validate}) => {
+    errors[field] = validate(form);
+    return errors;
+  }, {});
+}
+
+export function getAgreeTermsError(agreeTerms) {
+  if (!agreeTerms) return '약관에 동의하여 주세요.';
+  return '';
+}
+
+export function getAgreePrivacyError(agreePrivacy) {
+  if (!agreePrivacy) return '수집 및 이용에 동의하여 주세요.';
+  return '';
+}
+

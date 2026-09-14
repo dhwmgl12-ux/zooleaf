@@ -1,57 +1,37 @@
-import { apiClient } from "./client";
-
+import { apiClient } from './client';
+import { AUTH_ENDPOINTS } from './endpoints';
 
 export function checkId(id) {
-  return apiClient('/auth/check-id', {
+  return apiClient(AUTH_ENDPOINTS.CHECK_ID, {
     method: 'POST',
     body: JSON.stringify({ id }),
   });
 }
 
-export function signup({
-  id,
-  password,
-  passwordConfirm,
-  name,
-  phone,
-  birthDate,
-  agreeTerms,
-  agreePrivacy,
-  agreeMarketing,
-}) {
-  return apiClient('/auth/signup', {
+export function signup(payload) {
+  return apiClient(AUTH_ENDPOINTS.SIGNUP, {
     method: 'POST',
-    body: JSON.stringify({
-      id,
-      password,
-      passwordConfirm,
-      name,
-      phone,
-      birthDate,
-      agreeTerms,
-      agreePrivacy,
-      agreeMarketing,
-    }),
+    body: JSON.stringify(payload),
   });
 }
 
 // 로그인
 
-export function login({id, password}) {
-  return apiClient('/auth/login', {
+export function login({ id, password }) {
+  return apiClient(AUTH_ENDPOINTS.LOGIN, {
     method: 'POST',
-    body: JSON.stringify({id, password}),
+    body: JSON.stringify({ id, password }),
   });
 }
 
 export function logout() {
-  return apiClient('/auth/logout', {
+  return apiClient(AUTH_ENDPOINTS.LOGOUT, {
     method: 'POST',
-  })
+  });
 }
 
 export function getMe() {
-  return apiClient('/auth/me', {
+  return apiClient(AUTH_ENDPOINTS.ME, {
     method: 'GET',
-  })
+  });
 }

@@ -87,7 +87,7 @@ export default function SignupForm() {
         />
 
         <PasswordField
-          label='비밀번호'
+          label='비밀번호 확인'
           name='passwordConfirm'
           value={passwordConfirm}
           onChange={handleChange}

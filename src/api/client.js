@@ -1,6 +1,8 @@
+import { AUTH_ENDPOINTS } from "./endpoints";
+
 const BASE_URL = import.meta.env.VITE_API_BASE_URL;
 
-const PUBLIC_ENDPOINTS = ["/auth/login", "/auth/signup", "/auth/check-id"];
+const PUBLIC_ENDPOINTS = [AUTH_ENDPOINTS.LOGIN, AUTH_ENDPOINTS.SIGNUP, AUTH_ENDPOINTS.CHECK_ID];
 
 export async function apiClient(endpoint, options = {}) {
   const isPublic = PUBLIC_ENDPOINTS.includes(endpoint);

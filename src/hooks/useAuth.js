@@ -6,14 +6,36 @@ import {
   getNameError,
   getPhoneError,
   getBirthDateError,
+  getAgreeTermsError,
+  getAgreePrivacyError,
   formatPhoneNumber,
   formatBirthDate,
   mapServerErrorToField,
+  validateForm,
 } from '../utils/validation';
 import { useNavigate } from 'react-router-dom';
 import { login, signup, checkId, logout, getMe } from '../api/authApi';
 import useAuthStore from '../store/authStore';
 import useToastStore from '../store/toastStore';
+
+const LOGIN_VALIDATORS = [
+  { field: 'id', validate: (form) => getEmailError(form.id) },
+  { field: 'password', validate: (form) => getPasswordError(form.password) },
+];
+
+const SIGNUP_VALIDATORS = [
+  { field: 'id', validate: (form) => getEmailError(form.id) },
+  { field: 'password', validate: (form) => getPasswordError(form.password) },
+  {
+    field: 'passwordConfirm',
+    validate: (form) => getPasswordConfirmError(form.password, form.passwordConfirm),
+  },
+  { field: 'name', validate: (form) => getNameError(form.name) },
+  { field: 'phone', validate: (form) => getPhoneError(form.phone) },
+  { field: 'birthDate', validate: (form) => getBirthDateError(form.birthDate) },
+  { field: 'agreeTerms', validate: (form) => getAgreeTermsError(form.agreeTerms) },
+  { field: 'agreePrivacy', validate: (form) => getAgreePrivacyError(form.agreePrivacy) },
+];
 
 const initialSignupForm = {
   id: '',
@@ -60,12 +82,10 @@ export function useLogin() {
 
     const { id, password } = form;
 
-    const idError = getEmailError(id);
-    const passwordError = getPasswordError(password);
+    const nextErrors = validateForm(form, LOGIN_VALIDATORS);
+    setErrors(nextErrors);
 
-    setErrors({ id: idError, password: passwordError });
-
-    if (idError || passwordError) {
+    if (Object.values(nextErrors).some(Boolean)) {
       return;
     }
 
@@ -161,26 +181,7 @@ export function useSignup() {
       agreeMarketing,
     } = form;
 
-    const idError = getEmailError(id);
-    const passwordError = getPasswordError(password);
-    const passwordConfirmError = getPasswordConfirmError(password, passwordConfirm);
-    const nameError = getNameError(name);
-    const phoneError = getPhoneError(phone);
-    const birthDateError = getBirthDateError(birthDate);
-    const agreeTermsError = agreeTerms ? '' : '약관에 동의하여 주세요.';
-    const agreePrivacyError = agreePrivacy ? '' : '수집 및 이용에 동의하여 주세요.';
-
-    const nextErrors = {
-      id: idError,
-      password: passwordError,
-      passwordConfirm: passwordConfirmError,
-      name: nameError,
-      phone: phoneError,
-      birthDate: birthDateError,
-      agreeTerms: agreeTermsError,
-      agreePrivacy: agreePrivacyError,
-    };
-
+    const nextErrors = validateForm(form, SIGNUP_VALIDATORS);
     setErrors(nextErrors);
 
     if (Object.values(nextErrors).some(Boolean)) {
