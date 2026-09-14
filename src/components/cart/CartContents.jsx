@@ -4,6 +4,8 @@ import emptyCartImage from "../../assets/images/cart-empty.webp";
 import CartItemRow from "./CartItemRow";
 import CartOrderSummary from "./CartOrderSummary";
 import CartDeleteModal from "./CartDeleteModal";
+import useAddressStore from "../../store/addressStore";
+import useAuthStore from "../../store/authStore";
 
 import {
   CartTopBar,
@@ -30,8 +32,15 @@ export default function CartContents() {
   const cart = useCart();
   const navigate = useNavigate();
 
-  // 테스트용: 배송지가 없는 상태
-  const hasShippingAddress = false;
+  const userId = useAuthStore((state) => state.user?.id);
+
+  // 마이페이지에서 등록한 기본 배송지가 있는지 확인
+  const hasShippingAddress = useAddressStore((state) =>
+    Boolean(
+      userId &&
+      state.addressesByUser[userId]?.some((address) => address.isDefault),
+    ),
+  );
 
   // 장바구니 데이터를 불러오는 중일 때 표시
   if (cart.isLoading) return <p role="status">장바구니를 불러오는 중입니다.</p>;

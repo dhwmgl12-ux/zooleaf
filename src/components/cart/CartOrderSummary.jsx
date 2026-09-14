@@ -1,9 +1,17 @@
-import { useState } from "react";
+import { useRef, useState } from "react";
+import useOrderStore from "../../store/orderStore";
+import useCartStore from "../../store/cartStore";
+import useAuthStore from "../../store/authStore";
+import useAddressStore from "../../store/addressStore";
+import useToastStore from "../../store/toastStore";
 import { useNavigate } from "react-router-dom";
 import Modal from "../common/Modal";
+<<<<<<< HEAD
 import useCartStore from "../../store/cartStore";
 import { CART_BENEFITS, getBenefitDetails } from "../../utils/cartBenefits";
 import BenefitVerifyModal from "./BenefitVerifyModal";
+=======
+>>>>>>> 1720224 (feat:장바구니 공통모달)
 import {
   OrderSummary,
   SummaryTitle,
@@ -36,23 +44,90 @@ export default function CartOrderSummary({ cartItems, hasShippingAddress }) {
     (state) => state.isLoading || state.isUpdating,
   );
 
+  // 구매 모달을 열 때마다 주문 요청 ID 발급
+  const orderRequestId = useRef(null);
+  const purchaseInProgress = useRef(false);
+  const [isPurchasing, setIsPurchasing] = useState(false);
+  const isCartBusy = useCartStore(
+    (state) => state.isLoading || state.isUpdating,
+  );
+
+  const showToast = useToastStore((state) => state.showToast);
+
   // 구매 모달 열림 여부: 처음에는 닫힘
   const [isPurchaseModalOpen, setIsPurchaseModalOpen] = useState(false);
 
   // 구매하기 클릭 → 모달 열기
   const handlePurchase = () => {
+    orderRequestId.current = crypto.randomUUID();
     setIsPurchaseModalOpen(true);
   };
 
   // 아니오 클릭 → 모달 닫기
   const handleCloseModal = () => {
+    if (purchaseInProgress.current) return;
     setIsPurchaseModalOpen(false);
   };
 
-  // 예 클릭 → 마이페이지 이동
-  const handleConfirm = () => {
-    setIsPurchaseModalOpen(false);
-    navigate("/mypage"); // 실제 마이페이지 경로에 맞춰야 해요.
+  const handleConfirm = async () => {
+    if (purchaseInProgress.current || isCartBusy) return;
+    const userId = useAuthStore.getState().user?.id;
+
+    if (!userId) {
+      setIsPurchaseModalOpen(false);
+      navigate("/login");
+      return;
+    }
+
+    // 확인 시점의 최신 기본 배송지 확인
+    const address = useAddressStore
+      .getState()
+      .addressesByUser[userId]?.find((item) => item.isDefault);
+
+    if (!address) {
+      setIsPurchaseModalOpen(false);
+      showToast("배송지를 먼저 등록해주세요.");
+      navigate("/mypage");
+      return;
+    }
+
+    if (cartItems.length === 0 || !orderRequestId.current) {
+      return;
+    }
+
+    purchaseInProgress.current = true;
+    setIsPurchasing(true);
+    try {
+      useOrderStore.getState().createTestOrder(
+        userId,
+        orderRequestId.current,
+        cartItems,
+        {
+          shippingFee,
+          discountAmount: discountTotal,
+        },
+        address,
+      );
+
+      const removed = await useCartStore
+        .getState()
+        .removeSelected(cartItems.map((item) => item.cartItemId));
+
+      orderRequestId.current = null;
+      setIsPurchaseModalOpen(false);
+
+      showToast(
+        removed
+          ? "테스트 주문을 생성했습니다. 실제 결제는 발생하지 않습니다."
+          : "주문은 생성되었지만 장바구니 갱신에 실패했습니다. 주문내역을 확인한 후 구매한 상품을 장바구니에서 삭제해주세요.",
+      );
+      navigate("/mypage");
+    } catch (error) {
+      showToast(error.message);
+    } finally {
+      purchaseInProgress.current = false;
+      setIsPurchasing(false);
+    }
   };
 
   const productTotal = cartItems.reduce((sum, item) => {
@@ -268,25 +343,51 @@ export default function CartOrderSummary({ cartItems, hasShippingAddress }) {
 
       <PurchaseButton
         type="button"
+<<<<<<< HEAD
         disabled={cartItems.length === 0 || isCartBusy}
+=======
+        disabled={cartItems.length === 0 || isPurchasing || isCartBusy}
+>>>>>>> 504b235 (장바구니에서 구매한 물품제거 및 주문 취소시 주문내역에서 제거)
         onClick={handlePurchase}
       >
         구매하기
       </PurchaseButton>
 
       {isPurchaseModalOpen && (
+<<<<<<< HEAD
+<<<<<<< HEAD
         <Modal
           variant="cart"
+=======
+        <Modal
+>>>>>>> 1720224 (feat:장바구니 공통모달)
           isOpen={isPurchaseModalOpen}
           onClose={handleCloseModal}
           title="구매 확인"
         >
           <ModalText>
+<<<<<<< HEAD
             {hasShippingAddress
               ? "결제를 진행하시겠습니까?"
               : "배송지를 등록해야 합니다."}
           </ModalText>
+=======
+        <ModalOverlay>
+          <ModalBox
+            role="dialog"
+            aria-modal="true"
+            aria-labelledby="purchase-modal-message"
+          >
+            <ModalText id="purchase-modal-message">
+              {!hasShippingAddress
+                ? "배송지가 없습니다. 마이페이지에서 등록하시겠습니까?"
+                : import.meta.env.DEV
+                  ? "주문 내역에 저장됩니다. 계속 진행하시겠어요?"
+                  : "결제 기능은 아직 준비 중입니다."}
+            </ModalText>
+>>>>>>> 2c5d97f (feat:장바구니 구매 확인 분기 수정)
 
+<<<<<<< HEAD
           <ModalButtonArea data-modal-actions>
             <ModalCancelButton
               data-modal-cancel
@@ -306,6 +407,46 @@ export default function CartOrderSummary({ cartItems, hasShippingAddress }) {
             </ModalDeleteButton>
           </ModalButtonArea>
         </Modal>
+=======
+            <ModalButtonArea>
+              <ModalCancelButton type="button" disabled={isPurchasing} onClick={handleCloseModal}>
+                아니오
+              </ModalCancelButton>
+
+              <ModalDeleteButton type="button" disabled={isPurchasing || isCartBusy} onClick={handleConfirm}>
+                {isPurchasing ? "처리 중..." : "예"}
+              </ModalDeleteButton>
+            </ModalButtonArea>
+          </ModalBox>
+        </ModalOverlay>
+>>>>>>> 504b235 (장바구니에서 구매한 물품제거 및 주문 취소시 주문내역에서 제거)
+=======
+            {!hasShippingAddress
+              ? "배송지가 없습니다. 마이페이지에서 등록하시겠습니까?"
+              : import.meta.env.DEV
+                ? "주문 내역에 저장됩니다. 계속 진행하시겠어요?"
+                : "결제 기능은 아직 준비 중입니다."}
+          </ModalText>
+
+          <ModalButtonArea>
+            <ModalCancelButton
+              type="button"
+              disabled={isPurchasing}
+              onClick={handleCloseModal}
+            >
+              아니오
+            </ModalCancelButton>
+
+            <ModalDeleteButton
+              type="button"
+              disabled={isPurchasing || isCartBusy}
+              onClick={handleConfirm}
+            >
+              {isPurchasing ? "처리 중..." : "예"}
+            </ModalDeleteButton>
+          </ModalButtonArea>
+        </Modal>
+>>>>>>> 1720224 (feat:장바구니 공통모달)
       )}
     </OrderSummary>
   );
