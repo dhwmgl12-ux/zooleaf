@@ -1,95 +1,37 @@
-/*const BASE_URL = "https://api.mylecture.kr/api/14/team2";
+﻿import { apiClient } from "./client";
 
-// 로그인 토큰 가져오기
-const getToken = () => {
-  return localStorage.getItem("token");
-};
+// 장바구니 목록 조회
+export const getCart = () => apiClient("/cart");
 
-// 공통 Header
-const getHeaders = () => {
-  const token = getToken();
-
-  return {
-    "Content-Type": "application/json",
-    Authorization: `Bearer ${token}`,
-  };
-};
-
-// 장바구니 조회
-export const getCart = async () => {
-  const response = await fetch(`${BASE_URL}/cart`, {
-    method: "GET",
-    headers: getHeaders(),
-  });
-
-  const data = await response.json();
-
-  return data;
-};
-
-// 장바구니 담기
-export const addCart = async (cartItem) => {
-  const response = await fetch(`${BASE_URL}/cart`, {
+// 장바구니에 상품 추가
+export const addCart = (item) =>
+  apiClient("/cart", {
     method: "POST",
-    headers: getHeaders(),
-    body: JSON.stringify(cartItem),
+    body: JSON.stringify(item),
   });
 
-  const data = await response.json();
-
-  return data;
-};
-
-// 장바구니 수량 변경
-export const updateCartQuantity = async (cartItemId, quantity) => {
-  const response = await fetch(`${BASE_URL}/cart/${cartItemId}`, {
+// 특정 장바구니 상품의 수량 수정
+export const updateCartQuantity = (id, quantity) =>
+  apiClient(`/cart/${encodeURIComponent(id)}`, {
     method: "PATCH",
-    headers: getHeaders(),
-    body: JSON.stringify({
-      quantity,
-    }),
+    body: JSON.stringify({ quantity }),
   });
 
-  const data = await response.json();
-
-  return data;
-};
-
-// 장바구니 개별 삭제
-export const deleteCartItem = async (cartItemId) => {
-  const response = await fetch(`${BASE_URL}/cart/${cartItemId}`, {
+// 특정 장바구니 상품 삭제
+export const deleteCartItem = (id) =>
+  apiClient(`/cart/${encodeURIComponent(id)}`, {
     method: "DELETE",
-    headers: getHeaders(),
   });
 
-  const data = await response.json();
-
-  return data;
-};
-
-// 장바구니 선택 삭제
-export const deleteSelectedCartItems = async (cartItemIds) => {
-  const response = await fetch(`${BASE_URL}/cart`, {
+// 선택한 장바구니 상품들 삭제
+export const deleteSelectedCartItems = (cartItemIds) =>
+  apiClient("/cart", {
     method: "DELETE",
-    headers: getHeaders(),
-    body: JSON.stringify({
-      cartItemIds,
-    }),
+    body: JSON.stringify({ cartItemIds }),
   });
 
-  const data = await response.json();
-
-  return data;
-};
-
-// 장바구니 전체 삭제
-export const deleteAllCartItems = async () => {
-  const response = await fetch(`${BASE_URL}/cart`, {
+// 장바구니 전체 상품 삭제
+export const deleteAllCartItems = () =>
+  apiClient("/cart", {
     method: "DELETE",
-    headers: getHeaders(),
   });
-
-  const data = await response.json();
-
-  return data;
-};*/

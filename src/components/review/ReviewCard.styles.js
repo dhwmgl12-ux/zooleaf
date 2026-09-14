@@ -2,9 +2,10 @@ import styled from "@emotion/styled";
 import { theme } from "../../styles/variables";
 
 export const ReviewCardContainer = styled.section`
+  width: 100%;
   position: relative;
   overflow: hidden;
-  aspect-ratio: 343px / 300px;
+  aspect-ratio: 343 / 300;
   border-radius: ${theme.radius.box};
   color: ${theme.colors.white};
   background-color: ${theme.colors.background};
@@ -14,10 +15,11 @@ export const ReviewCardContainer = styled.section`
     height: 100%;
     object-fit: cover;
   }
-
+  
   &:hover > .review-card__content {
     opacity: 1;
   }
+
 `
 
 export const ReviewCardContent = styled.div`
@@ -39,6 +41,15 @@ export const ReviewCardContent = styled.div`
   @media (max-width: ${theme.layout.breakpoint.tablet}) {
     opacity: 1;
     transition: none;
+  }
+
+  @media screen and (max-width: ${theme.layout.breakpoint.mobile}) {
+    .review-card__text {
+      width: 100%;
+      overflow: hidden;
+      white-space: nowrap;
+      text-overflow: ellipsis;
+    }
   }
 `
 

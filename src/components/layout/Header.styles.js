@@ -1,7 +1,7 @@
-import styled from '@emotion/styled';
-import { theme } from '../../styles/variables';
-import { ContentContainer } from './ContentContainer.styles';
-import { Link } from 'react-router-dom';
+import styled from "@emotion/styled";
+import { theme } from "../../styles/variables";
+import { ContentContainer } from "./ContentContainer.styles";
+import { Link } from "react-router-dom";
 
 export const HeaderContainer = styled.header`
   width: 100%;
@@ -13,9 +13,10 @@ export const HeaderContainer = styled.header`
   z-index: 1000;
 
   background-color: ${({ $isOverHero }) =>
-    $isOverHero ? 'rgba(255, 255, 252, 0.35)' : theme.colors.background};
+    $isOverHero ? "rgba(255, 255, 252, 0.35)" : theme.colors.background};
 
-  backdrop-filter: ${({ $isOverHero }) => ($isOverHero ? 'blur(10px)' : 'none')};
+  backdrop-filter: ${({ $isOverHero }) =>
+    $isOverHero ? "blur(10px)" : "none"};
 
   transition:
     background-color 0.25s ease,
@@ -23,7 +24,7 @@ export const HeaderContainer = styled.header`
     box-shadow 0.25s ease;
 
   @media (max-width: ${theme.layout.breakpoint.mobile}) {
-    min-width: 320px
+    min-width: 320px;
   }
 `;
 
@@ -37,19 +38,18 @@ export const HeaderInner = styled(ContentContainer)`
 export const LogoHeading = styled.h1`
   width: 180px;
   flex-shrink: 0;
-
-  `;
+`;
 
 export const LogoLink = styled(Link)`
   display: block;
-  `;
+`;
 
 export const LogoImage = styled.img`
   width: 100%;
   height: auto;
 
   @media (max-width: ${theme.layout.breakpoint.tablet}) {
-    width: ${(prop) => prop.variant === 'menu' ? '164px' : '134px' }; 
+    width: ${(prop) => (prop.variant === "menu" ? "164px" : "134px")};
   }
 `;
 
@@ -80,7 +80,6 @@ export const MenuTriggerItem = styled.li`
   }
 `;
 
-
 export const NavLink = styled(Link)`
   font-size: ${theme.fontSize.h5.size};
   line-height: ${theme.fontSize.h5.lineheight};
@@ -109,7 +108,7 @@ export const UtilsList = styled.ul`
   flex-shrink: 0;
 
   @media (max-width: ${theme.layout.breakpoint.tablet}) {
-    gap: ${theme.spacing[16]}
+    gap: ${theme.spacing[16]};
   }
 `;
 
@@ -152,7 +151,10 @@ export const Tooltip = styled.span`
   visibility: hidden;
   pointer-events: none;
   transform: translateY(-4px);
-  transition: opacity 0.15s ease, transform 0.15s ease, visibility 0.15s ease;
+  transition:
+    opacity 0.15s ease,
+    transform 0.15s ease,
+    visibility 0.15s ease;
 `;
 
 export const IconButton = styled.button`
@@ -172,12 +174,12 @@ export const IconButton = styled.button`
 
 export const AccountMenuTrigger = styled.li`
   position: relative;
-  
+
   &:hover [data-account-dropdown],
   &:focus-within [data-account-dropdown] {
     opacity: 1;
     visibility: visible;
-    transform: translateY(0)
+    transform: translateY(0);
   }
 
   @media (max-width: ${theme.layout.breakpoint.tablet}) {
@@ -190,13 +192,15 @@ export const AccountDropdown = styled.div`
   top: 100%;
   right: 0;
   padding: ${theme.spacing[16]};
-  
-  
+
   opacity: 0;
   visibility: hidden;
   transform: translateY(-8px);
-  transition: opacity 0.2s ease, transform 0.2s ease, visibility 0.2s ease;
-  `;
+  transition:
+    opacity 0.2s ease,
+    transform 0.2s ease,
+    visibility 0.2s ease;
+`;
 
 export const AccountCard = styled.div`
   width: 280px;
@@ -347,4 +351,26 @@ export const MobileNavLogoutButton = styled.button`
   background: none;
   border: none;
   cursor: pointer;
+`;
+
+export const CartBadge = styled.span`
+  position: absolute;
+  right: -5px;
+  bottom: -3px;
+
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+
+  min-width: 19px;
+  height: 19px;
+  padding: 0 4px;
+  border-radius: 999px;
+
+  background: ${theme.colors.primary};
+  color: ${theme.colors.white};
+  font-size: 11px;
+  font-weight: 700;
+  line-height: 1;
+  pointer-events: none;
 `;

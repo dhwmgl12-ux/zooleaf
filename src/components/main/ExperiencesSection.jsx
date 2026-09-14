@@ -11,7 +11,7 @@ export default function ExperiencesSection({ experiences = [], }) {
         description="보고 즐기는 것을 넘어 동물들과 특별한 순간을 만들어보세요."
       />
 
-      <MainCardList>
+      <MainCardList $showOnlyTwo>
         {experiences.map((experience) => (
           <li key={experience.id}>
             <ExperienceCard experience={experience} />

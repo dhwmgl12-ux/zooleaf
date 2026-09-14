@@ -11,7 +11,7 @@ export default function ProductsSection({products = [],}) {
         description="나에게 딱 맞는 이용권으로 ZOOLEAF를 만나보세요."
       />
 
-      <MainCardList>
+      <MainCardList $showOnlyTwo>
         {products.map((product) => (
           <li key={product.id}>
             <ProductCard product={product} />

@@ -134,7 +134,7 @@ export const theme = {
       desktop: '1439px',
       tablet: '1023px',
       mobile: '767px',
-      smallMobile: '320px',
+      smallMobile: '375px',
     },
   },
 };
