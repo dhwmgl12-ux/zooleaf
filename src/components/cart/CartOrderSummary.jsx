@@ -67,8 +67,9 @@ export default function CartOrderSummary({ cartItems, hasShippingAddress }) {
   }, 0);
 
   // 결제 혜택
-
   const [benefitId, setBenefitId] = useState("");
+  // 문화가 있는 날 확인 날짜 — 서버 저장 없이 화면에서만 사용
+  const [benefitDate, setBenefitDate] = useState("");
 
   //  결제 혜택 모달 , 입력 검증
   const [pendingBenefitId, setPendingBenefitId] = useState("");
@@ -82,16 +83,18 @@ export default function CartOrderSummary({ cartItems, hasShippingAddress }) {
 
     if (!nextId) {
       setBenefitId("");
+      setBenefitDate("");
       setPendingBenefitId("");
       return;
     }
 
-    // 입력 확인 전에는 기존 할인 선택을 유지
+    // 모달을 취소하면 기존에 적용한 혜택을 유지
     setPendingBenefitId(nextId);
   };
 
-  const handleBenefitApply = (verifiedId) => {
+  const handleBenefitApply = (verifiedId, verifiedDate = "") => {
     setBenefitId(verifiedId);
+    setBenefitDate(verifiedId === "cultureDay" ? verifiedDate : "");
     setPendingBenefitId("");
   };
 
@@ -104,7 +107,7 @@ export default function CartOrderSummary({ cartItems, hasShippingAddress }) {
 
   // 표시할 내역과 실제 할인액을 같은 계산 결과로 사용
   const { totalDiscount: benefitDiscount, details: benefitDetails } =
-    getBenefitDetails(cartItems, benefitId);
+    getBenefitDetails(cartItems, benefitId, benefitDate);
 
   const discountTotal = itemDiscountTotal + benefitDiscount;
 
@@ -161,6 +164,7 @@ export default function CartOrderSummary({ cartItems, hasShippingAddress }) {
             </option>
           ))}
         </BenefitSelect>
+
         {pendingBenefit && (
           <BenefitVerifyModal
             key={pendingBenefit.id}
@@ -168,6 +172,13 @@ export default function CartOrderSummary({ cartItems, hasShippingAddress }) {
             onClose={() => setPendingBenefitId("")}
             onApply={handleBenefitApply}
           />
+        )}
+        {benefitId === "cultureDay" && benefitDate && (
+          <p>
+            할인 확인용 날짜: {benefitDate}
+            <br />
+            실제 입장권의 방문일은 변경되지 않습니다.
+          </p>
         )}
 
         {benefitId && benefitDiscount === 0 && (

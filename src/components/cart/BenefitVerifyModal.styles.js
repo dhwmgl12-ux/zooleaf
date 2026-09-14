@@ -1,12 +1,12 @@
 import { theme } from "../../styles/variables";
 import styled from "@emotion/styled";
 
-const Form = styled.form`
+export const Form = styled.form`
   display: grid;
   gap: 16px;
 `;
 
-const Field = styled.div`
+export const Field = styled.div`
   display: grid;
   gap: 8px;
 
@@ -29,12 +29,12 @@ const Field = styled.div`
   }
 `;
 
-const ErrorMessage = styled.p`
+export const ErrorMessage = styled.p`
   color: ${theme.colors.error};
   font-size: 13px;
 `;
 
-const ApplyButton = styled.button`
+export const ApplyButton = styled.button`
   min-height: 40px;
   padding: 0 20px;
   border: 0;
@@ -42,6 +42,38 @@ const ApplyButton = styled.button`
   background: ${theme.colors.primary};
   color: ${theme.colors.white};
   cursor: pointer;
+
+  &:disabled {
+    opacity: 0.45;
+    cursor: not-allowed;
+  }
 `;
 
-export { Form, Field, ErrorMessage, ApplyButton };
+export const TicketList = styled.ul`
+  display: grid;
+  gap: 12px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+
+  li {
+    padding: 12px;
+    border: 1px solid ${theme.colors.border};
+    border-radius: 8px;
+  }
+
+  p {
+    margin: 4px 0 0;
+  }
+`;
+
+export const TicketStatus = styled.p`
+  color: ${({ $eligible }) =>
+    $eligible ? theme.colors.primary : theme.colors.textSecondary};
+  font-weight: 600;
+`;
+
+export const HighlightText = styled.strong`
+  color: ${theme.colors.primary};
+  font-weight: 700;
+`;

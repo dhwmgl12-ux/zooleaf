@@ -55,7 +55,7 @@ export function isLastWednesday(value) {
 }
 
 // 할인 총액과 상품별 적용 내역 계산
-export function getBenefitDetails(items, benefitId) {
+export function getBenefitDetails(items, benefitId, benefitDate = "") {
   const benefit = CART_BENEFITS.find((entry) => entry.id === benefitId);
 
   if (!benefit) {
@@ -90,7 +90,8 @@ export function getBenefitDetails(items, benefitId) {
       continue;
     }
 
-    if (benefit.id === "cultureDay" && !isLastWednesday(item.visitDate)) {
+    // 상품 방문일 대신 모달에서 확인한 날짜로 혜택 계산
+    if (benefit.id === "cultureDay" && !isLastWednesday(benefitDate)) {
       continue;
     }
 
@@ -122,6 +123,6 @@ export function getBenefitDetails(items, benefitId) {
 }
 
 // 기존 함수를 사용하는 곳도 계속 동작하도록 유지
-export function getBenefitDiscount(items, benefitId) {
-  return getBenefitDetails(items, benefitId).totalDiscount;
+export function getBenefitDiscount(items, benefitId, benefitDate = "") {
+  return getBenefitDetails(items, benefitId, benefitDate).totalDiscount;
 }
