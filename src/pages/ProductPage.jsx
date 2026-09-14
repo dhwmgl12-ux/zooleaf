@@ -5,6 +5,7 @@ import ProductCard from '../components/product/ProductCard';
 import Pagination from '../components/product/Pagination';
 import { getProducts } from '../api/productApi';
 import bannerImage from '../assets/images/banner.webp';
+import mobileBannerImage from '../assets/images/banner-mobile.webp';
 import { ProductPageContainer } from './ProductPage.styles';
 
 const PRODUCTS_PER_PAGE = 12;
@@ -15,23 +16,9 @@ const CATEGORY_MAP = {
   패키지: 'package',
   Membership: 'membership',
 };
-const TICKET_ORDER = [
-  '대인 종일권',
-  '소인 종일권',
-  '우대 종일권',
-  '대인 오후권',
-  '소인 오후권',
-  '우대 오후권',
-];
 
 function EmptyCell() {
   return <div aria-hidden="true" />;
-}
-
-function getTicketOrder(name = '') {
-  const normalizedName = name.replace('ZOOLEAF ', '');
-  const order = TICKET_ORDER.indexOf(normalizedName);
-  return order === -1 ? TICKET_ORDER.length : order;
 }
 
 export default function ProductPage() {
@@ -48,9 +35,7 @@ export default function ProductPage() {
   const [error, setError] = useState('');
 
   const isTicketCategory = filters.category === '입장권';
-  const displayedProducts = [...products].sort(
-    (first, second) => getTicketOrder(first.name) - getTicketOrder(second.name),
-  );
+  const displayedProducts = products;
 
   const handleSelectCategory = (category) => {
     setFilters({
@@ -107,7 +92,10 @@ export default function ProductPage() {
         aria-label="ZOOLEAF 제휴 및 할인 혜택 보기"
         className="product-page__banner"
       >
-        <img src={bannerImage} alt="ZOOLEAF 할인 혜택을 확인해 보세요" />
+        <picture>
+          <source media="(max-width: 320px)" srcSet={mobileBannerImage} />
+          <img src={bannerImage} alt="ZOOLEAF 할인 혜택을 확인해 보세요" />
+        </picture>
       </Link>
 
       <div className="product-page__layout">
