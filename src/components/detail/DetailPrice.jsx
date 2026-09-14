@@ -27,7 +27,7 @@ import {
 } from "./DetailPrice.styles.js";
 import { useNavigate } from "react-router-dom";
 
-export default function DetailPrice({ product, productType, }) {
+export default function DetailPrice({ product, productType }) {
   const [quantity, setQuantity] = useState(0);
   const [selectedOptionValue, setSelectedOptionValue] = useState("");
   const [selectedOptions, setSelectedOptions] = useState([]);
@@ -48,187 +48,233 @@ export default function DetailPrice({ product, productType, }) {
     visitorType,
     availableTimeType,
   } = product;
-  
+
   const CATEGORY_LABELS = {
     goods: "ZOOLEAF GOODS",
     product: "입장권 & 패키지",
     experience: "프로그램",
   };
-  
+
   const categoryLabel = CATEGORY_LABELS[productType] ?? "";
-  
+
   const CATEGORY_ID_LABELS = {
     ticket: "입장권",
     package: "패키지",
   };
   // TODO(API): goods가 categoryId를 제공하면 subCategory fallback 제거
   const detailCategoryKey = categoryId ?? subCategory;
-  
+
   const detailCategoryLabel =
-  CATEGORY_ID_LABELS[detailCategoryKey] ??
-  detailCategoryKey ??
-  "";
-  
+    CATEGORY_ID_LABELS[detailCategoryKey] ?? detailCategoryKey ?? "";
+
   const isGoods = productType === "goods";
-  
+
   const handleDecrease = () => {
     setQuantity((current) => Math.max(0, current - 1));
   };
-  
+
   const handleIncrease = () => {
     setQuantity((current) => current + 1);
   };
-  
+
   const hasOptions = Array.isArray(product.options);
-  
-  const selectedOption = hasOptions ? product.options.find(
-    (option) => option.value === selectedOptionValue,
-  ) : null;
-  
+
+  const selectedOption = hasOptions
+    ? product.options.find((option) => option.value === selectedOptionValue)
+    : null;
+
   const handleOptionSelect = (optionValue) => {
     const clickedOption = product.options.find(
       (option) => option.value === optionValue,
-    )
-    
-    if (!clickedOption) { return }
-    
+    );
+
+    if (!clickedOption) {
+      return;
+    }
+
     setSelectedOptions((currentOptions) => {
       const alreadySeleted = currentOptions.some(
         (option) => option.value === optionValue,
       );
-      
+
       if (alreadySeleted) {
-        return currentOptions.map((option) => 
-          option.value === optionValue ? {...option, quantity: option.quantity + 1} : option,
-      );
-    }
-    
-    return [
-      ...currentOptions,
-      {...clickedOption, quantity: 1,},
-    ]
-  })
-  
-  setSelectedOptionValue(optionValue);
-  setIsOptionOpen(false);
-};
+        return currentOptions.map((option) =>
+          option.value === optionValue
+            ? { ...option, quantity: option.quantity + 1 }
+            : option,
+        );
+      }
 
-const handleOptionDecrease = (optionValue) => {
-  setSelectedOptions((currentOptions) => 
-    currentOptions.map((option) => 
-      option.value === optionValue ? {...option, quantity: Math.max(1, option.quantity - 1,),} : option,
-),
-)
-};
-
-const handleOptionIncrease = (optionValue) => {
-  setSelectedOptions((currentOptions) => 
-    currentOptions.map((option) => 
-      option.value === optionValue ? {...option, quantity: option.quantity + 1} : option,
-),
-)
-};
-
-const handleRemoveOption = (optionValue) => {
-  setSelectedOptions((currentOptions) =>
-    currentOptions.filter(
-      (option) => option.value !== optionValue,
-    ),
-  );
-};
-
-const selectedOptionQuantity =
-selectedOptions.reduce(
-  (total, option) => total + option.quantity, 0,
-);
-
-const totalQuantity = hasOptions ? selectedOptionQuantity : quantity;
-
-const salePrice = discountPrice ?? price;
-
-const originalTotal = price * totalQuantity;
-const productTotal = salePrice * totalQuantity;
-
-const discountAmount = Math.max(0, originalTotal - productTotal);
-
-const discountPercent =
-discountRate !== null && discountRate !== undefined ? Math.round(discountRate * 100) : 0;
-
-const totalPrice = productTotal;
-
-
-const starPositions = [1, 2, 3, 4, 5];
-const reviewRating = Math.min(5, Math.max(0, Number(rating) || 0),);
-const roundedRating = Math.round(reviewRating * 2) / 2;
-
-const starIcons = starPositions.map((starPosition) => {
-  if (roundedRating >= starPosition) {
-    return fullStarIcon;
-  }
-  
-  if (roundedRating >= starPosition - 0.5) {
-    return halfStarIcon;
-  }
-  
-  return emptyStarIcon;
-});
-
-const isDayTicket = categoryId === "ticket" && availableTimeType === "종일";
-const isAdultOrChild = visitorType === "대인" || visitorType === "소인";
-const showPaymentBenefits = isDayTicket && isAdultOrChild;
-
-const navigate = useNavigate();
-const addToCart = useCartStore((state) => state.addToCart,);
-const cartItemType = productType === "product" ? "ticket" : productType;
-const isCartDisabled = hasOptions ? selectedOptions.length === 0 : quantity === 0;
-
-
-const addSelectedItemsToCart = () => {
-  const commonItem = {
-    id: product.id,
-    type: cartItemType,
-    name,
-    imageUrl:
-    product.cartImage ??
-    product.imageUrl ??
-    product.thumbnailImage ??
-    "",
-    price,
-    discountRate: discountRate ?? 0,
-  };
-  
-  if (hasOptions) {
-    selectedOptions.forEach((option) => {
-      addToCart({
-        ...commonItem,
-        option: option.value,
-        quantity: option.quantity,
-      });
+      return [...currentOptions, { ...clickedOption, quantity: 1 }];
     });
-    
-    return;
-  } else {
-    addToCart({
-      ...commonItem,
-      option: null,
-      quantity,
-      ...(product.time
-        ? { time: product.time }
-        : {}),
-      });
-    }
-    
-    setIsCartModalOpen(false);
+
+    setSelectedOptionValue(optionValue);
+    setIsOptionOpen(false);
   };
-  
-  const handleSubmit = (event) => {
+
+  const handleOptionDecrease = (optionValue) => {
+    setSelectedOptions((currentOptions) =>
+      currentOptions.map((option) =>
+        option.value === optionValue
+          ? { ...option, quantity: Math.max(1, option.quantity - 1) }
+          : option,
+      ),
+    );
+  };
+
+  const handleOptionIncrease = (optionValue) => {
+    setSelectedOptions((currentOptions) =>
+      currentOptions.map((option) =>
+        option.value === optionValue
+          ? { ...option, quantity: option.quantity + 1 }
+          : option,
+      ),
+    );
+  };
+
+  const handleRemoveOption = (optionValue) => {
+    setSelectedOptions((currentOptions) =>
+      currentOptions.filter((option) => option.value !== optionValue),
+    );
+  };
+
+  const selectedOptionQuantity = selectedOptions.reduce(
+    (total, option) => total + option.quantity,
+    0,
+  );
+
+  const totalQuantity = hasOptions ? selectedOptionQuantity : quantity;
+
+  const salePrice = discountPrice ?? price;
+
+  const originalTotal = price * totalQuantity;
+  const productTotal = salePrice * totalQuantity;
+
+  const discountAmount = Math.max(0, originalTotal - productTotal);
+
+  const discountPercent =
+    discountRate !== null && discountRate !== undefined
+      ? Math.round(discountRate * 100)
+      : 0;
+
+  const totalPrice = productTotal;
+
+  const starPositions = [1, 2, 3, 4, 5];
+  const reviewRating = Math.min(5, Math.max(0, Number(rating) || 0));
+  const roundedRating = Math.round(reviewRating * 2) / 2;
+
+  const starIcons = starPositions.map((starPosition) => {
+    if (roundedRating >= starPosition) {
+      return fullStarIcon;
+    }
+
+    if (roundedRating >= starPosition - 0.5) {
+      return halfStarIcon;
+    }
+
+    return emptyStarIcon;
+  });
+
+  const isDayTicket = categoryId === "ticket" && availableTimeType === "종일";
+  const isAdultOrChild = visitorType === "대인" || visitorType === "소인";
+  const showPaymentBenefits = isDayTicket && isAdultOrChild;
+
+  const navigate = useNavigate();
+
+  const addToCart = useCartStore((state) => state.addToCart);
+  const isCartBusy = useCartStore(
+    (state) => state.isLoading || state.isUpdating,
+  );
+
+  const [isAdding, setIsAdding] = useState(false);
+  const [cartError, setCartError] = useState("");
+
+  // 상세페이지의 product를 장바구니의 ticket으로 변환
+  const cartItemType = productType === "product" ? "ticket" : productType;
+
+  const hasSelectedItems = hasOptions
+    ? selectedOptions.length > 0
+    : quantity > 0;
+
+  const isCartDisabled = !hasSelectedItems || isAdding || isCartBusy;
+
+  const handleSubmit = async (event) => {
     event.preventDefault();
-    
-    if (isCartDisabled) { return; }
-    
-    addSelectedItemsToCart();
-    setIsCartModalOpen(true);
-  }
+
+    // 같은 순간에 들어오는 중복 요청도 차단
+    const cartState = useCartStore.getState();
+    if (
+      !hasSelectedItems ||
+      isAdding ||
+      cartState.isLoading ||
+      cartState.isUpdating
+    ) {
+      return;
+    }
+
+    setIsAdding(true);
+    setCartError("");
+
+    const commonItem = {
+      productId: product.id,
+      itemType: cartItemType,
+      ...(product.visitDate && { visitDate: product.visitDate }),
+    };
+
+    const itemsToAdd = hasOptions
+      ? selectedOptions.map((option) => ({
+          ...commonItem,
+          option: option.value,
+          quantity: option.quantity,
+        }))
+      : [
+          {
+            ...commonItem,
+            option: null,
+            quantity,
+          },
+        ];
+
+    let addedCount = 0;
+
+    try {
+      // 스토어가 동시에 여러 요청을 받지 못하므로 순차 처리
+      for (const item of itemsToAdd) {
+        const success = await addToCart(item);
+
+        if (!success) {
+          throw new Error(
+            useCartStore.getState().error ||
+              "장바구니에 담지 못했습니다. 다시 시도해주세요.",
+          );
+        }
+
+        addedCount += 1;
+
+        // 성공한 항목은 선택에서 제거해 재시도 시 중복 담기 방지
+        if (hasOptions) {
+          setSelectedOptions((prev) =>
+            prev.filter((option) => option.value !== item.option),
+          );
+        } else {
+          setQuantity(0);
+        }
+      }
+
+      setSelectedOptionValue("");
+
+      // 모든 항목을 담은 후에만 성공 모달 표시
+      setIsCartModalOpen(true);
+    } catch (error) {
+      setCartError(
+        addedCount > 0
+          ? `${addedCount}개 옵션은 담겼습니다. 남은 옵션: ${error.message}`
+          : error.message,
+      );
+    } finally {
+      setIsAdding(false);
+    }
+  };
 
   const handleGoToCart = () => {
     setIsCartModalOpen(false);
@@ -237,14 +283,12 @@ const addSelectedItemsToCart = () => {
 
   return (
     <>
-      <DetailPriceContainer >
+      <DetailPriceContainer>
         <DetailPriceInfo>
           <nav>
             <ol>
               <li>{categoryLabel}</li>
-              {detailCategoryLabel && (
-                <li>{detailCategoryLabel}</li>
-              )}
+              {detailCategoryLabel && <li>{detailCategoryLabel}</li>}
             </ol>
           </nav>
           <h2>{name}</h2>
@@ -252,7 +296,7 @@ const addSelectedItemsToCart = () => {
 
           <Rating aria-label={`평점 ${rating}점, 후기 ${reviewCount}개`}>
             <div aria-hidden="true">
-              {starIcons.map((icon, index) => ( 
+              {starIcons.map((icon, index) => (
                 <img key={index} src={icon} alt="" />
               ))}
             </div>
@@ -261,9 +305,7 @@ const addSelectedItemsToCart = () => {
             </span>
           </Rating>
 
-          <p>
-            {price.toLocaleString()}원
-          </p>
+          <p>{price.toLocaleString()}원</p>
         </DetailPriceInfo>
 
         <DetailPriceForm onSubmit={handleSubmit}>
@@ -275,25 +317,39 @@ const addSelectedItemsToCart = () => {
                   <span>3000원</span>
                   <p>50,000원 이상 구매 시 무료 배송</p>
                 </>
-              ) : <span>0원</span>
-              }
+              ) : (
+                <span>0원</span>
+              )}
             </dd>
           </DeliveryInfo>
 
           {hasOptions ? (
             <>
               <OptionSelector>
-                <h3 htmlFor="goods-option" >옵션</h3>
+                <h3 htmlFor="goods-option">옵션</h3>
                 <OptionDropdown>
-                  <OptionButton 
+                  <OptionButton
                     type="button"
                     aria-expanded={isOptionOpen}
                     aria-controls="goods-option-list"
-                    onClick={() => {setIsOptionOpen((current) => !current)}}
+                    onClick={() => {
+                      setIsOptionOpen((current) => !current);
+                    }}
                   >
                     옵션을 선택해 주세요
-                    <svg width="13" height="6" viewBox="0 0 13 6" fill="none" xmlns="http://www.w3.org/2000/svg">
-                      <path d="M0.5 0.5L6.83345 5.5L12.5 0.5" stroke="#687C73" strokeLinecap="round" strokeLinejoin="round"/>
+                    <svg
+                      width="13"
+                      height="6"
+                      viewBox="0 0 13 6"
+                      fill="none"
+                      xmlns="http://www.w3.org/2000/svg"
+                    >
+                      <path
+                        d="M0.5 0.5L6.83345 5.5L12.5 0.5"
+                        stroke="#687C73"
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                      />
                     </svg>
                   </OptionButton>
                   {isOptionOpen && (
@@ -303,7 +359,9 @@ const addSelectedItemsToCart = () => {
                           <button
                             type="button"
                             data-selected={selectedOptionValue === option.value}
-                            onClick={() => {handleOptionSelect(option.value)}}
+                            onClick={() => {
+                              handleOptionSelect(option.value);
+                            }}
                           >
                             {option.value}
                           </button>
@@ -313,26 +371,44 @@ const addSelectedItemsToCart = () => {
                   )}
                 </OptionDropdown>
               </OptionSelector>
-            
+
               {selectedOptions.map((option) => (
-                <SelectedOptionCard className="selected-option" key={option.value}>
+                <SelectedOptionCard
+                  className="selected-option"
+                  key={option.value}
+                >
                   <SelectedOptionCardTop>
                     <h3>{name}</h3>
                     <button
                       type="button"
-                      onClick={()=> handleRemoveOption(option.value)}
+                      onClick={() => handleRemoveOption(option.value)}
                       aria-label={`${option.value} 옵션 삭제`}
                     >
-                      <svg width="12" height="12" viewBox="0 0 12 12" fill="none" xmlns="http://www.w3.org/2000/svg">
-                        <path d="M0.75 0.75L10.75 10.75M0.75 10.75L10.75 0.75" stroke="#2C3E35" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+                      <svg
+                        width="12"
+                        height="12"
+                        viewBox="0 0 12 12"
+                        fill="none"
+                        xmlns="http://www.w3.org/2000/svg"
+                      >
+                        <path
+                          d="M0.75 0.75L10.75 10.75M0.75 10.75L10.75 0.75"
+                          stroke="#2C3E35"
+                          strokeWidth="1.5"
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                        />
                       </svg>
                     </button>
                   </SelectedOptionCardTop>
-      
+
                   <p className="selected-option-value">{option.value}</p>
-      
+
                   <SelectedOptionCardBottom>
-                    <QuantityControl $compact aria-label={`${option.value} 수량`}>
+                    <QuantityControl
+                      $compact
+                      aria-label={`${option.value} 수량`}
+                    >
                       <button
                         type="button"
                         onClick={() => handleOptionDecrease(option.value)}
@@ -341,11 +417,9 @@ const addSelectedItemsToCart = () => {
                       >
                         −
                       </button>
-      
-                      <output aria-live="polite">
-                        {option.quantity}
-                      </output>
-      
+
+                      <output aria-live="polite">{option.quantity}</output>
+
                       <button
                         type="button"
                         onClick={() => handleOptionIncrease(option.value)}
@@ -354,8 +428,10 @@ const addSelectedItemsToCart = () => {
                         +
                       </button>
                     </QuantityControl>
-      
-                    <p className="selected-option-price">{(salePrice * option.quantity).toLocaleString()}원</p>
+
+                    <p className="selected-option-price">
+                      {(salePrice * option.quantity).toLocaleString()}원
+                    </p>
                   </SelectedOptionCardBottom>
                 </SelectedOptionCard>
               ))}
@@ -374,9 +450,7 @@ const addSelectedItemsToCart = () => {
                   −
                 </button>
 
-                <output aria-live="polite">
-                  {quantity}
-                </output>
+                <output aria-live="polite">{quantity}</output>
 
                 <button
                   type="button"
@@ -391,16 +465,25 @@ const addSelectedItemsToCart = () => {
 
           <DiscountInfo>
             <dt>할인 혜택</dt>
-            <dd> -{discountAmount.toLocaleString()}원 ({discountPercent}%)</dd>
+            <dd>
+              {" "}
+              -{discountAmount.toLocaleString()}원 ({discountPercent}%)
+            </dd>
           </DiscountInfo>
 
           {showPaymentBenefits && (
             <PaymentBenefits>
               <h3>결제 헤택</h3>
               <ul>
-                <li>ZooLeaf 제휴카드<span>최대 50%</span></li>
-                <li>통신사 멤버십<span>40%</span></li>
-                <li>문화가 있는 날<span>30%</span></li>
+                <li>
+                  ZooLeaf 제휴카드<span>최대 50%</span>
+                </li>
+                <li>
+                  통신사 멤버십<span>40%</span>
+                </li>
+                <li>
+                  문화가 있는 날<span>30%</span>
+                </li>
               </ul>
             </PaymentBenefits>
           )}
@@ -410,22 +493,30 @@ const addSelectedItemsToCart = () => {
             <dd>{totalPrice.toLocaleString()}원</dd>
           </TotalPriceRow>
 
-          <CartButton
-            type="submit"
-            disabled={isCartDisabled}
-          >
-            {isCartDisabled ? "상품을 선택해 주세요" : "장바구니"}
+          {cartError && (
+            <p role="alert" style={{ color: "#b42318", marginBottom: "12px" }}>
+              {cartError}
+            </p>
+          )}
+
+          <CartButton type="submit" disabled={isCartDisabled}>
+            {isAdding
+              ? "장바구니에 담는 중..."
+              : isCartBusy
+                ? "장바구니 확인 중..."
+                : !hasSelectedItems
+                  ? "상품을 선택해 주세요"
+                  : "장바구니"}
           </CartButton>
         </DetailPriceForm>
-
       </DetailPriceContainer>
 
       {isCartModalOpen && (
         <CartAddModal
           onClose={() => setIsCartModalOpen(false)}
-          onConfirm={handleGoToCart}
+          onGoToCart={handleGoToCart}
         />
       )}
     </>
-  )
+  );
 }
