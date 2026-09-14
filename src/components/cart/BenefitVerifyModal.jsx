@@ -11,6 +11,8 @@ import {
   ErrorMessage,
   ApplyButton,
   HighlightText,
+  BenefitHeading,
+  BenefitDescription,
 } from "./BenefitVerifyModal.styles";
 
 export default function BenefitVerifyModal({ benefit, onClose, onApply }) {
@@ -52,18 +54,19 @@ export default function BenefitVerifyModal({ benefit, onClose, onApply }) {
   return (
     <Modal variant="cart" isOpen onClose={onClose} title="결제 혜택 확인">
       <Form onSubmit={handleSubmit} noValidate>
-        <p>{benefit.label}</p>
+        <BenefitHeading>{benefit.label}</BenefitHeading>
 
         {isDateBenefit ? (
-          <p>
-            <HighlightText>매월 마지막 수요일</HighlightText>을 선택하면 대상
-            입장권에 30% 할인이 적용됩니다. 이 날짜 선택은 할인 화면 확인용이며
-            방문일 예약은 아닙니다.
-          </p>
+          <BenefitDescription id="benefit-description">
+            <span><HighlightText>매월 마지막 수요일</HighlightText>을 선택해주세요.</span>
+            <span>대상 입장권에 30% 할인이 적용됩니다.</span>
+            <small>할인 확인용 날짜이며 방문일 예약은 아닙니다.</small>
+          </BenefitDescription>
         ) : (
-          <p>
-            화면 확인용 절차입니다. 실제 번호 대신 테스트 숫자를 입력해주세요.
-          </p>
+          <BenefitDescription id="benefit-description">
+            <span>테스트 숫자 {benefit.digits}자리를 입력해주세요.</span>
+            <small>화면 확인용 절차로, 실제 번호는 입력하지 마세요.</small>
+          </BenefitDescription>
         )}
 
         <Field>
@@ -77,13 +80,14 @@ export default function BenefitVerifyModal({ benefit, onClose, onApply }) {
             type={isDateBenefit ? "date" : "text"}
             inputMode={isDateBenefit ? undefined : "numeric"}
             autoComplete="off"
+            placeholder={isDateBenefit ? undefined : "예: 1234"}
             value={value}
             onChange={(event) => {
               setValue(event.target.value);
               setError("");
             }}
             aria-invalid={Boolean(error)}
-            aria-describedby={error ? "benefit-error" : undefined}
+            aria-describedby={error ? "benefit-description benefit-error" : "benefit-description"}
           />
 
           {error && (

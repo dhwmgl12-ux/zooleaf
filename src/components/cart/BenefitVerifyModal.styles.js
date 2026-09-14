@@ -3,12 +3,51 @@ import styled from "@emotion/styled";
 
 export const Form = styled.form`
   display: grid;
-  gap: 16px;
+  grid-template-columns: minmax(0, 1fr);
+  gap: 20px;
+  text-align: left;
+
+  /* 공통 모달의 버튼 여백과 폼 간격이 중복되지 않도록 조정 */
+  && [data-modal-actions] {
+    margin-top: 4px;
+  }
+`;
+
+export const BenefitHeading = styled.div`
+  padding: 12px 14px;
+  border-radius: 10px;
+  background: ${theme.colors.background2};
+  color: ${theme.colors.primary};
+  font-size: 15px;
+  font-weight: 700;
+  line-height: 1.5;
+  word-break: keep-all;
+  overflow-wrap: anywhere;
+`;
+
+export const BenefitDescription = styled.div`
+  display: grid;
+  gap: 6px;
+  font-size: 14px;
+  line-height: 1.6;
+  word-break: keep-all;
+  overflow-wrap: anywhere;
+
+  small {
+    color: ${theme.colors.textSecondary};
+    font-size: 12px;
+    line-height: 1.6;
+  }
 `;
 
 export const Field = styled.div`
   display: grid;
   gap: 8px;
+
+  label {
+    font-weight: 600;
+    line-height: 1.5;
+  }
 
   input {
     width: 100%;
@@ -17,6 +56,11 @@ export const Field = styled.div`
     padding: 10px 12px;
     border: 1px solid ${theme.colors.border};
     border-radius: 6px;
+    background: ${theme.colors.white};
+    color: ${theme.colors.textPrimary};
+    font: inherit;
+    font-size: 16px;
+    text-align: left;
   }
 
   input:focus-visible {
