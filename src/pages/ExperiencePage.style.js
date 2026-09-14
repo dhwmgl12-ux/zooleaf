@@ -3,7 +3,7 @@ import { theme } from '../styles/variables';
 
 export const ExperiencePageWrapper = styled.div`
   background-color: ${theme.colors.background2};
-  padding-bottom: 60px;
+  padding-bottom: ${theme.spacing[64]};
 `;
 
 export const ExperienceMain = styled.main`
@@ -22,7 +22,6 @@ export const ExperienceTitle = styled.h2`
   @media (max-width: ${theme.layout.breakpoint.smallMobile}) {
     margin-bottom: ${theme.spacing[64]};
     font-size: ${theme.fontSize.h4.size};
-    margin-top: -${theme.spacing[40]};
   }
 `;
 
@@ -101,7 +100,7 @@ export const CardOverlayText = styled.div`
   width: 100%;
   height: 100%;
   background-color: rgba(0, 0, 0, 0.4);
-  padding: 20px;
+  padding: ${theme.spacing[20]};
   display: flex;
   flex-direction: column;
   align-items: flex-end;
@@ -150,7 +149,7 @@ export const ReserveButton = styled.a`
   color: ${theme.colors.white};
   border-radius: ${theme.radius.button};
   font-size: ${theme.fontSize.bodylarge.size};
-  font-weight: 500;
+  font-weight: ${theme.fontWeight.medium};
   display: flex;
   align-items: center;
   justify-content: center;
@@ -175,12 +174,3 @@ export const ReserveButton = styled.a`
     height: 41px;
   }
 `;
-
-export const StatusText = styled.p`
-  text-align: center;
-  font-size: 16px;
-  color: #555;
-  margin-top: 50px;
-`;
-
-export { theme };

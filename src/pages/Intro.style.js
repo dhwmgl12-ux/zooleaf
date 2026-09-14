@@ -23,14 +23,13 @@ export const HeroSection = styled.div`
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;
-  background-color: #f4f6f0;
 
   display: flex;
   justify-content: center;
   align-items: center;
   text-align: center;
-  color: #ffffff;
-  padding: 40px ${theme.spacing[24]};
+  color: ${theme.colors.white};
+  padding: ${theme.spacing[40]} ${theme.spacing[24]};
 
   .hero-content {
     max-width: 1000px;
@@ -225,11 +224,6 @@ export const InfoBlock = styled.div`
         strong {
           font-size: ${theme.fontSize.body.size};
           font-weight: ${theme.fontWeight.bold};
-          color: #222222;
-        }
-
-        p {
-          color: #555555;
         }
       }
 
