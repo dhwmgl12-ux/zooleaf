@@ -1,4 +1,5 @@
 import Modal from "../common/Modal";
+
 import {
   ModalText,
   ModalButtonArea,
