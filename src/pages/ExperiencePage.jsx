@@ -14,7 +14,6 @@ import {
   CardImageContainer,
   CardOverlayText,
   ReserveButton,
-  StatusText,
 } from './ExperiencePage.style';
 
 export default function ExperiencePage() {
