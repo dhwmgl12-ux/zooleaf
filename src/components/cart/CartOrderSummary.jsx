@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import Modal from "../common/Modal";
 import useCartStore from "../../store/cartStore";
 import { CART_BENEFITS, getBenefitDiscount } from "../../utils/cartBenefits";
+import BenefitVerifyModal from "./BenefitVerifyModal";
 import {
   OrderSummary,
   SummaryTitle,
@@ -66,6 +67,32 @@ export default function CartOrderSummary({ cartItems, hasShippingAddress }) {
 
   const [benefitId, setBenefitId] = useState("");
 
+  //  결제 혜택 모달 , 입력 검증
+  const [pendingBenefitId, setPendingBenefitId] = useState("");
+
+  const pendingBenefit = CART_BENEFITS.find(
+    (benefit) => benefit.id === pendingBenefitId,
+  );
+
+  const handleBenefitChange = (event) => {
+    const nextId = event.target.value;
+
+    if (!nextId) {
+      setBenefitId("");
+      setPendingBenefitId("");
+      return;
+    }
+
+    // 입력 확인 전에는 기존 할인 선택을 유지
+    setPendingBenefitId(nextId);
+  };
+
+  const handleBenefitApply = (verifiedId) => {
+    setBenefitId(verifiedId);
+    setPendingBenefitId("");
+  };
+
+  //
   const selectedBenefit = CART_BENEFITS.find(
     (benefit) => benefit.id === benefitId,
   );
@@ -120,7 +147,7 @@ export default function CartOrderSummary({ cartItems, hasShippingAddress }) {
         <BenefitSelect
           aria-label="결제 혜택"
           value={benefitId}
-          onChange={(event) => setBenefitId(event.target.value)}
+          onChange={handleBenefitChange}
         >
           <option value="">할인 혜택을 선택해주세요.</option>
 
@@ -130,6 +157,20 @@ export default function CartOrderSummary({ cartItems, hasShippingAddress }) {
             </option>
           ))}
         </BenefitSelect>
+        {pendingBenefit && (
+          <BenefitVerifyModal
+            key={pendingBenefit.id}
+            benefit={pendingBenefit}
+            onClose={() => setPendingBenefitId("")}
+            onApply={handleBenefitApply}
+          />
+        )}
+
+        {benefitId && benefitDiscount === 0 && (
+          <p role="status">
+            선택한 상품 중 해당 혜택을 적용할 수 있는 입장권이 없습니다.
+          </p>
+        )}
       </BenefitArea>
 
       <Divider />
