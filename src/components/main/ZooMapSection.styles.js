@@ -94,11 +94,13 @@ export const ZoneCard = styled.article`
     color: ${theme.colors.textPrimary};
     font-size: ${theme.fontSize.h3.size};
     line-height: ${theme.fontSize.h3.lineheight};
+    
   }
-
+  
   h3 span {
-    font-size: ${theme.fontSize.body.size};
-    font-weight: ${theme.fontWeight.regular};
+    font-size: ${theme.fontSize.h6.size};
+    line-height: ${theme.fontSize.h6.lineheight};
+    font-weight: ${theme.fontWeight.semiBold};
   }
 `
 
@@ -147,8 +149,9 @@ export const MobilePopularAnimals = styled.div`
 
   h3 span {
     margin-left: ${theme.spacing[8]};
-    font-size: ${theme.fontSize.body.size};
-    font-weight: ${theme.fontWeight.regular};
+    font-size: ${theme.fontSize.h6.size};
+    line-height: ${theme.fontSize.h6.lineheight};
+    font-weight: ${theme.fontWeight.semiBold};
   }
 
   > ul {
@@ -158,15 +161,24 @@ export const MobilePopularAnimals = styled.div`
     row-gap: ${theme.spacing[32]};
   }
 
+  span {
+    font-size: ${theme.fontSize.body.size};
+    line-height: ${theme.fontSize.body.lineheight};
+  }
+
   @media screen and (max-width: ${theme.layout.breakpoint.mobile}) {
     h3 {
-      font-size: ${theme.fontSize.h5.size};
-      line-height: ${theme.fontSize.h5.lineheight};
+      font-size: ${theme.fontSize.h4.size};
+      line-height: ${theme.fontSize.h4.lineheight};
     }
 
     > ul {
       grid-template-columns: repeat(4, minmax(0, 1fr));
       gap: ${theme.spacing[12]};
+    }
+
+    > ul > li:nth-of-type(n + 5) {
+      display: none;
     }
   }
 

@@ -51,7 +51,7 @@ export default function ReviewCard({
           </span>
         </Rating>
         
-        <p>{review.content}</p>
+        <p className="review-card__text">{review.content}</p>
       </ReviewCardContent>
     </ReviewCardContainer>
   )

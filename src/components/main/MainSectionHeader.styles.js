@@ -28,11 +28,21 @@ export const MainSectionHeaderContainer = styled.div`
 
       background-color: ${theme.colors.border};
     }
+
+    @media (max-width: ${theme.layout.breakpoint.tablet}) {
+      font-size: ${theme.fontSize.h6.size};
+      line-height: ${theme.fontSize.h6.lineheight};
+    }
   }
 
   p {
     font-size: ${theme.fontSize.h3.size};
     line-height: ${theme.fontSize.h3.lineheight};
     font-weight: ${theme.fontWeight.bold};
+
+    @media (max-width: ${theme.layout.breakpoint.tablet}) {
+      font-size: ${theme.fontSize.h4.size};
+      line-height: ${theme.fontSize.h4.lineheight};
+    }
   }
 `
