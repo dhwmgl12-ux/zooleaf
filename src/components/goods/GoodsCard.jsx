@@ -1,5 +1,6 @@
 import { Link } from "react-router-dom";
 import { GoodsCardContainer } from "./GoodsCard.styles";
+import useCartStore from "../../store/cartStore";
 
 export default function GoodsCard({ goods }) {
   const name = goods?.name || "상품명";

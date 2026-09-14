@@ -1,8 +1,5 @@
-<<<<<<< HEAD
 import Modal from "../common/Modal";
-=======
-﻿import Modal from "../common/Modal";
->>>>>>> 1720224 (feat:장바구니 공통모달)
+
 import {
   ModalText,
   ModalButtonArea,
@@ -24,10 +21,7 @@ export default function CartDeleteModal({
 
   return (
     <Modal
-<<<<<<< HEAD
       variant="cart"
-=======
->>>>>>> 1720224 (feat:장바구니 공통모달)
       isOpen
       onClose={handleClose}
       title={mode === "selected" ? "선택 상품 삭제" : "상품 삭제"}
@@ -40,14 +34,9 @@ export default function CartDeleteModal({
 
       {error && <ModalText role="alert">{error}</ModalText>}
 
-<<<<<<< HEAD
       <ModalButtonArea data-modal-actions>
         <ModalCancelButton
           data-modal-cancel
-=======
-      <ModalButtonArea>
-        <ModalCancelButton
->>>>>>> 1720224 (feat:장바구니 공통모달)
           type="button"
           disabled={disabled}
           onClick={handleClose}
@@ -56,10 +45,7 @@ export default function CartDeleteModal({
         </ModalCancelButton>
 
         <ModalDeleteButton
-<<<<<<< HEAD
           data-modal-confirm
-=======
->>>>>>> 1720224 (feat:장바구니 공통모달)
           type="button"
           disabled={disabled}
           onClick={onConfirm}
