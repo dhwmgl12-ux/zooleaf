@@ -292,7 +292,7 @@ export const AnimalImg = styled.img`
   @media (max-width: ${theme.layout.breakpoint.smallMobile}) {
     width: 116px;
     height: 116px;
-    margin-left: ${theme.spacing[20]};
+    margin-left: ${theme.spacing[32]};
     margin-right: ${theme.spacing[200]};
   }
 `;
