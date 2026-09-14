@@ -56,7 +56,6 @@ export default function MainPage () {
 
   const {
     recommendedProducts = [],
-    zoneMapImageUrl = "",
     zones = [],
     recommendedGoods = [],
     visitorReviews = [],
@@ -80,7 +79,7 @@ export default function MainPage () {
           <>
             <ProductsSection products={recommendedProducts} />
             <ExperiencesSection experiences={experiences} />
-            <ZooMapSection zoneMapImageUrl={zoneMapImageUrl} zones={zones} />
+            <ZooMapSection zones={zones} />
             <GoodsSection goods={recommendedGoods} />
             <ReviewsSection reviews={visitorReviews} />
           </>

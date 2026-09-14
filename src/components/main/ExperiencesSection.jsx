@@ -1,7 +1,7 @@
 
 import MainSectionHeader from './MainSectionHeader'
 import { MainSectionContainer, MainSectionMoreLink, MainCardList,} from './MainSection.styles.js'
-
+import ExperienceCard from "../experience/ExperienceCard.jsx"
 
 export default function ExperiencesSection({ experiences = [], }) {
   return (
@@ -12,7 +12,11 @@ export default function ExperiencesSection({ experiences = [], }) {
       />
 
       <MainCardList>
-        <li></li>
+        {experiences.map((experience) => (
+          <li key={experience.id}>
+            <ExperienceCard experience={experience} />
+          </li>
+        ))}
       </MainCardList>
 
       <MainSectionMoreLink to="/experiences">더 둘러보기</MainSectionMoreLink>

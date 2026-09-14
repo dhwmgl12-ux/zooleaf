@@ -54,7 +54,7 @@ export default function Header() {
     if (!headerRef.current) return;
 
     const updateHeaderHeight = () => {
-      const headerHeight = headerRef.current.offsetHeight ?? 0;
+      const headerHeight = headerRef.current?.offsetHeight ?? 0;
       document.documentElement.style.setProperty('--header-height', `${headerHeight}px`)
     }
     
