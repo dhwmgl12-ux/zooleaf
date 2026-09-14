@@ -6,6 +6,10 @@ export const Container = styled.main`
   padding: ${theme.spacing[32]} ${theme.spacing[24]};
   background: ${theme.colors.background2};
   color: ${theme.colors.textPrimary};
+
+  @media (max-width: ${theme.layout.breakpoint.mobile}) {
+    padding-inline: 0;
+  }
 `;
 
 export const Title = styled.h2`
