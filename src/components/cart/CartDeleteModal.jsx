@@ -20,6 +20,7 @@ export default function CartDeleteModal({
 
   return (
     <Modal
+      variant="cart"
       isOpen
       onClose={handleClose}
       title={mode === "selected" ? "선택 상품 삭제" : "상품 삭제"}
@@ -32,8 +33,9 @@ export default function CartDeleteModal({
 
       {error && <ModalText role="alert">{error}</ModalText>}
 
-      <ModalButtonArea>
+      <ModalButtonArea data-modal-actions>
         <ModalCancelButton
+          data-modal-cancel
           type="button"
           disabled={disabled}
           onClick={handleClose}
@@ -42,6 +44,7 @@ export default function CartDeleteModal({
         </ModalCancelButton>
 
         <ModalDeleteButton
+          data-modal-confirm
           type="button"
           disabled={disabled}
           onClick={onConfirm}

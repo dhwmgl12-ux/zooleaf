@@ -1,5 +1,6 @@
 import styled from "@emotion/styled";
 import { theme } from "../../styles/variables";
+import { css } from "@emotion/react";
 
 export const ModalOverlay = styled.div`
   position: fixed;
@@ -40,6 +41,16 @@ export const ModalBox = styled.div`
   max-height: 70%;
   display: flex;
   flex-direction: column;
+
+  ${({ $variant }) =>
+    $variant === "cart" &&
+    css`
+      width: 100%;
+      max-width: 380px;
+      max-height: 85dvh;
+      border-radius: 18px;
+      box-shadow: 0 8px 28px rgba(0, 0, 0, 0.12);
+    `}
 `;
 
 export const ModalHeader = styled.div`
@@ -47,6 +58,21 @@ export const ModalHeader = styled.div`
   justify-content: space-between;
   align-items: center;
   padding: ${theme.spacing[24]};
+
+  ${({ $variant }) =>
+    $variant === "cart" &&
+    css`
+      padding: 24px 24px 16px;
+      gap: 12px;
+
+      h3 {
+        margin: 0;
+        font-size: 20px;
+        line-height: 1.4;
+        font-weight: 700;
+        text-align: left;
+      }
+    `}
 `;
 
 export const ModalTitle = styled.h3`
@@ -98,4 +124,86 @@ export const ModalBody = styled.div`
   &::-webkit-scrollbar-thumb:hover {
     background-color: ${theme.colors.textPrimary};
   }
+
+  ${({ $variant }) =>
+    $variant === "cart" &&
+    css`
+      margin: 0;
+      padding: 0 24px 24px;
+      flex: 0 1 auto;
+      min-height: 0;
+      font-size: 14px;
+      line-height: 1.7;
+      white-space: normal;
+      overflow-wrap: anywhere;
+
+      p {
+        margin: 0;
+      }
+
+      p + p {
+        margin-top: 8px;
+      }
+
+      /* 모든 장바구니 모달의 하단 버튼 영역 */
+      [data-modal-actions] {
+        display: grid;
+        grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+        gap: 14px;
+        width: 100%;
+        margin-top: 24px;
+      }
+
+      [data-modal-actions] > button {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        width: 100%;
+        min-width: 0;
+        height: auto;
+        min-height: 40px;
+        padding: 8px 12px;
+        border: 0;
+        border-radius: 999px;
+        font-size: 14px;
+        font-weight: 700;
+        line-height: 1.4;
+        cursor: pointer;
+      }
+
+      /* 취소 버튼 */
+      [data-modal-actions] > [data-modal-cancel] {
+        background: #c6c9c7;
+        color: ${theme.colors.textPrimary};
+      }
+
+      /* 확인·삭제·적용 버튼 */
+      [data-modal-actions] > [data-modal-confirm] {
+        background: ${theme.colors.primary};
+        color: ${theme.colors.white};
+      }
+
+      [data-modal-actions] > button:hover:not(:disabled) {
+        filter: brightness(0.95);
+      }
+
+      [data-modal-actions] > button:focus-visible {
+        outline: 2px solid ${theme.colors.primary};
+        outline-offset: 3px;
+      }
+
+      [data-modal-actions] > button:disabled {
+        opacity: 0.45;
+        cursor: not-allowed;
+      }
+
+      /* 혜택 입력창도 같은 디자인으로 적용 */
+      input {
+        box-sizing: border-box;
+        width: 100%;
+        min-width: 0;
+        min-height: 44px;
+        border-radius: 8px;
+      }
+    `}
 `;

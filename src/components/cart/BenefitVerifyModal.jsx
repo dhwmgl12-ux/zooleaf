@@ -50,7 +50,7 @@ export default function BenefitVerifyModal({ benefit, onClose, onApply }) {
   };
 
   return (
-    <Modal isOpen onClose={onClose} title="결제 혜택 확인">
+    <Modal variant="cart" isOpen onClose={onClose} title="결제 혜택 확인">
       <Form onSubmit={handleSubmit} noValidate>
         <p>{benefit.label}</p>
 
@@ -93,12 +93,14 @@ export default function BenefitVerifyModal({ benefit, onClose, onApply }) {
           )}
         </Field>
 
-        <ModalButtonArea>
-          <ModalCancelButton type="button" onClick={onClose}>
+        <ModalButtonArea data-modal-actions>
+          <ModalCancelButton data-modal-cancel type="button" onClick={onClose}>
             취소
           </ModalCancelButton>
 
-          <ApplyButton type="submit">적용</ApplyButton>
+          <ApplyButton data-modal-confirm type="submit">
+            적용
+          </ApplyButton>
         </ModalButtonArea>
       </Form>
     </Modal>

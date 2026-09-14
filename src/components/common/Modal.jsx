@@ -14,6 +14,7 @@ export default function Modal({
   title,
   children,
   returnFocusRef,
+  variant,
 }) {
   const dialogRef = useRef(null);
   const titleId = useId();
@@ -61,8 +62,8 @@ export default function Modal({
         }
       }}
     >
-      <ModalBox>
-        <ModalHeader>
+      <ModalBox $variant={variant}>
+        <ModalHeader $variant={variant}>
           <ModalTitle id={titleId}>{title}</ModalTitle>
 
           <CloseButton
@@ -75,7 +76,7 @@ export default function Modal({
           </CloseButton>
         </ModalHeader>
 
-        <ModalBody>{children}</ModalBody>
+        <ModalBody $variant={variant}>{children}</ModalBody>
       </ModalBox>
     </ModalOverlay>
   );

@@ -276,6 +276,7 @@ export default function CartOrderSummary({ cartItems, hasShippingAddress }) {
 
       {isPurchaseModalOpen && (
         <Modal
+          variant="cart"
           isOpen={isPurchaseModalOpen}
           onClose={handleCloseModal}
           title="구매 확인"
@@ -286,17 +287,22 @@ export default function CartOrderSummary({ cartItems, hasShippingAddress }) {
               : "배송지를 등록해야 합니다."}
           </ModalText>
 
-          <ModalButtonArea>
-            <ModalCancelButton type="button" onClick={handleCloseModal}>
-              아니오
+          <ModalButtonArea data-modal-actions>
+            <ModalCancelButton
+              data-modal-cancel
+              type="button"
+              onClick={handleCloseModal}
+            >
+              취소
             </ModalCancelButton>
 
             <ModalDeleteButton
+              data-modal-confirm
               type="button"
               disabled={isCartBusy}
               onClick={handleConfirm}
             >
-              예
+              확인
             </ModalDeleteButton>
           </ModalButtonArea>
         </Modal>
