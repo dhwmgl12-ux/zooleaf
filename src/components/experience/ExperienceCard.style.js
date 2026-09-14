@@ -53,7 +53,7 @@ export const CardOverlayText = styled.div`
   width: 100%;
   height: 100%;
   background-color: rgba(0, 0, 0, 0.4);
-  padding: 20px;
+  padding: ${theme.spacing[20]};
   display: flex;
   flex-direction: column;
   align-items: flex-end;
@@ -93,7 +93,7 @@ export const ReserveButton = styled.a`
   color: ${theme.colors.white};
   border-radius: ${theme.radius.button};
   font-size: ${theme.fontSize.bodylarge.size};
-  font-weight: 500;
+  font-weight: ${theme.fontWeight.medium};
   display: flex;
   align-items: center;
   justify-content: center;

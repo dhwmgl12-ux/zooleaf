@@ -12,7 +12,7 @@ export const Container = styled.div`
 
 export const Title = styled.h2`
   font-size: ${theme.fontSize.h3.size};
-  color: ${theme.colors?.textPrimary};
+  color: ${theme.colors.textPrimary};
   margin-bottom: ${theme.spacing[16]};
   margin-top: ${theme.spacing[100]};
   @media (max-width: ${theme.layout.breakpoint.smallMobile}) {
@@ -22,13 +22,13 @@ export const Title = styled.h2`
 
 export const SubTitle = styled.p`
   font-size: ${theme.fontSize.bodylarge.size};
-  color: ${theme.colors?.textPrimary};
+  color: ${theme.colors.textPrimary};
   margin-bottom: ${theme.spacing[80]};
 `;
 
 export const FilterBox = styled.div`
   width: 100%;
-  background: ${theme.colors?.white || '#ffffff'};
+  background: ${theme.colors.white || '#ffffff'};
   border-radius: ${theme.radius.box};
   padding: 16px 24px;
   display: flex;
@@ -49,7 +49,7 @@ export const FilterBox = styled.div`
     justify-content: space-between;
     align-items: center;
     padding: 16px 20px;
-    gap: 12px;
+    gap: ${theme.spacing[12]};
 
     .divider {
       display: block;
@@ -68,13 +68,11 @@ export const FilterBox = styled.div`
   }
   @media (max-width: ${theme.layout.breakpoint.smallMobile}) {
     width: 100%;
-    /* 고정 height 제거하여 내부 컨텐츠에 맞춰 유연하게 늘어나도록 변경 */
   }
 `;
 
 export const TabBtn = styled.button`
   padding: 8px 12px;
-  border-radius: 0;
   border: none;
   background-color: transparent;
   color: ${(props) =>
@@ -152,7 +150,7 @@ export const DropdownHeader = styled.div`
   display: flex;
   justify-content: space-between;
   align-items: center;
-  gap: 12px;
+  gap: ${theme.spacing[12]};
   width: 100%;
   transition: all 0.2s ease;
 
@@ -174,7 +172,7 @@ export const DropdownList = styled.ul`
   width: 100%;
   background: ${theme.colors?.white || '#fff'};
   border: 1px solid ${theme.colors.background2};
-  border-radius: 12px;
+  border-radius: ${theme.radius.input};
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
   list-style: none;
   padding: 4px 0;
@@ -200,8 +198,8 @@ export const AnimalGrid = styled.div`
   width: 100%;
   display: grid;
   grid-template-columns: repeat(2, 1fr);
-  gap: 24px;
-  margin-bottom: 40px;
+  gap: ${theme.spacing[32]};
+  margin-bottom: ${theme.spacing[40]};
   align-items: stretch;
   @media (max-width: ${theme.layout.breakpoint.smallMobile}) {
     display: flex;
@@ -231,7 +229,7 @@ export const InfoRow = styled.div`
     white-space: pre-line;
   }
   @media (max-width: ${theme.layout.breakpoint.tablet}) {
-    margin-left: 0; /* 모바일/태블릿에서 불필요한 고정 좌측 마진 제거로 찌그러짐 방지 */
+    margin-left: 0;
   }
   @media (max-width: ${theme.layout.breakpoint.smallMobile}) {
     margin-left: 0;
@@ -243,19 +241,19 @@ export const InfoRow = styled.div`
 
 export const AnimalCard = styled.div`
   width: 100%;
-  background: ${theme.colors?.white || '#fff'};
+  background: ${theme.colors.white || '#fff'};
   border-radius: ${theme.radius.box};
   overflow: hidden;
   display: flex;
   align-items: flex-start;
-  padding: 30px;
-  gap: 24px;
+  padding: ${theme.spacing[32]};
+  gap: ${theme.spacing[24]};
   text-align: left;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.03);
   height: 100%;
   @media (max-width: ${theme.layout.breakpoint.tablet}) {
-    padding: 20px;
-    gap: 16px;
+    padding: ${theme.spacing[24]};
+    gap: ${theme.spacing[20]};
   }
   @media (max-width: ${theme.layout.breakpoint.mobile}) {
     flex-direction: column;
@@ -264,7 +262,7 @@ export const AnimalCard = styled.div`
     padding: ${theme.spacing[16]};
   }
   @media (max-width: ${theme.layout.breakpoint.smallMobile}) {
-    padding: 12px;
+    padding: ${theme.spacing[16]};
     align-items: stretch;
   }
 `;
@@ -279,7 +277,7 @@ export const AnimalImg = styled.img`
   @media (max-width: ${theme.layout.breakpoint.tablet}) {
     width: 116px;
     height: 116px;
-    margin-top: 50px;
+    margin-top: ${theme.spacing[56]};
   }
   @media (max-width: ${theme.layout.breakpoint.mobile}) {
     width: 116px;
@@ -304,13 +302,13 @@ export const AnimalInfo = styled.div`
   h3 {
     font-size: ${theme.fontSize.h4.size};
     margin-top: 0;
-    margin-bottom: 12px;
+    margin-bottom: ${theme.spacing[12]};
     color: ${theme.colors.primary};
     font-weight: ${theme.fontWeight.bold};
     display: flex;
     align-items: baseline;
     flex-wrap: wrap;
-    gap: 8px;
+    gap: ${theme.spacing[8]};
 
     span {
       font-size: ${theme.fontSize.body.size};
@@ -332,8 +330,8 @@ export const AnimalInfo = styled.div`
 `;
 
 export const TmiBox = styled.div`
-  background-color: ${theme.colors?.backgroundSub || '#f4f6f5'};
-  border-radius: 8px;
+  background-color: ${theme.colors.background2};
+  border-radius: ${theme.radius.box};
   padding: 10px 14px;
   margin-top: auto;
   margin-bottom: 0;
@@ -343,7 +341,7 @@ export const TmiBox = styled.div`
     font-weight: ${theme.fontWeight.bold};
     color: ${theme.colors.primary};
     display: block;
-    margin-bottom: 4px;
+    margin-bottom: ${theme.spacing[8]};
   }
 
   .tmi-text {
@@ -366,7 +364,7 @@ export const TmiBox = styled.div`
 export const Pagination = styled.div`
   display: flex;
   justify-content: center;
-  gap: 8px;
+  gap: ${theme.spacing[8]};
 `;
 
 export const PageBtn = styled.button`
@@ -374,11 +372,11 @@ export const PageBtn = styled.button`
   height: 36px;
   border-radius: 50%;
   border: 1px solid
-    ${(props) => (props.active ? theme.colors?.primary || '#27ae60' : '#ddd')};
+    ${(props) => (props.active ? theme.colors.primary || '#27ae60' : '#ddd')};
   background-color: ${(props) =>
-    props.active ? theme.colors?.primary || '#27ae60' : '#fff'};
+    props.active ? theme.colors.primary || '#27ae60' : '#fff'};
   color: ${(props) => (props.active ? '#fff' : '#333')};
-  font-weight: 600;
+  font-weight: ${theme.fontWeight.semiBold};
   cursor: pointer;
   display: flex;
   align-items: center;
@@ -391,6 +389,6 @@ export const PageBtn = styled.button`
 
   &:hover:not(:disabled) {
     background-color: ${(props) =>
-      props.active ? theme.colors?.primary || '#27ae60' : '#f1f2f6'};
+      props.active ? theme.colors.primary || '#27ae60' : '#f1f2f6'};
   }
 `;
