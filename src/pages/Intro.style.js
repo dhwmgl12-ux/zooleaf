@@ -140,7 +140,6 @@ export const ContentSection = styled.div`
   display: flex;
   flex-direction: column;
   gap: ${theme.spacing[32]};
-  /* 모바일에서 양옆 여백이 과도하지 않도록 패딩 조정 */
   padding: ${theme.spacing[40]} 16px;
 
   @media (max-width: ${theme.layout.breakpoint.smallMobile}) {
@@ -180,7 +179,6 @@ export const InfoBlock = styled.div`
       line-height: 1.5;
       color: ${theme.colors.textPrimary};
 
-      /* 기본 상태(PC/태블릿)에서는 모바일용 줄바꿈을 숨김 */
       .mobile-br {
         display: none;
       }
@@ -203,7 +201,6 @@ export const InfoBlock = styled.div`
       font-size: ${theme.fontSize.bodysmall.size};
       word-break: keep-all;
 
-      /* smallMobile 화면에서만 줄바꿈 표시 */
       .mobile-br {
         display: inline;
       }
@@ -211,7 +208,6 @@ export const InfoBlock = styled.div`
   }
 
   &.map-block {
-    /* ... 기존 오시는 길 스타일 유지 ... */
     display: flex;
     flex-direction: column;
     gap: ${theme.spacing[20]};
@@ -273,7 +269,9 @@ export const InfoBlock = styled.div`
         .map-img,
         .bus-img {
           width: 100%;
+          max-width: none;
           height: auto;
+          object-fit: contain;
         }
       }
     }
