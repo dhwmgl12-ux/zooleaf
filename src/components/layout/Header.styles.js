@@ -265,7 +265,7 @@ export const MobileNavPanel = styled.nav`
   bottom: 0;
   overflow-y: auto;
   background: ${theme.colors.background2};
-  padding: ${theme.spacing[20]};
+  padding: ${theme.spacing[20]} ${theme.spacing[16]};
   display: flex;
   flex-direction: column;
   gap: ${theme.spacing[24]};
