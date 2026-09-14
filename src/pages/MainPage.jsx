@@ -1,46 +1,91 @@
+import { useEffect, useState } from "react";
+
+import { getMainData } from "../api/mainApi";
+import { getExperiences } from "../api/experienceApi"
+import MainHero from "../components/main/MainHero";
+import { ContentContainer } from "../components/layout/ContentContainer.styles"
+import ProductsSection from "../components/main/ProductsSection";
+import ExperiencesSection from "../components/main/ExperiencesSection";
+import ZooMapSection from "../components/main/ZooMapSection";
+import GoodsSection from "../components/main/GoodsSection";
+import ReviewsSection from "../components/main/ReviewsSection";
+import LoadingSpinner from "../components/common/LoadingSpinner";
+import ErrorState from "../components/common/ErrorState";
 
 
 export default function MainPage () {
+  const [mainData, setMainData] = useState(null);
+  const [experiences, setExperiences] = useState([]);
+
+  const [isLoading, setIsLoading] = useState(true);
+  const [error, setError] = useState(null);
+
+  useEffect(() => {
+    const controller = new AbortController();
+
+    const fetchMainPageData = async () => {
+      try {
+        setIsLoading(true);
+        setError(null);
+
+        const [mainResult, experienceResult] =
+          await Promise.all([
+            getMainData(controller.signal),
+            getExperiences(controller.signal),
+          ]);
+
+        setMainData(mainResult);
+        setExperiences(experienceResult);
+      } catch (error) {
+        if (error.name !== "AbortError") {
+          setError(error);
+        }
+      } finally {
+        if (!controller.signal.aborted) {
+          setIsLoading(false);
+        }
+      }
+    };
+
+    fetchMainPageData();
+
+    return () => {
+      controller.abort();
+    };
+  }, []);
+
+  const {
+    recommendedProducts = [],
+    zoneMapImageUrl = "",
+    zones = [],
+    recommendedGoods = [],
+    visitorReviews = [],
+  } = mainData ?? {};
+
   return (
     <>
-      <section data-header-hero style={{minHeight:"900px", backgroundColor:"#dddddd"}}>
-        <h2>hero</h2>
-      </section>
+      <MainHero />
 
-      <section>
-        <div>
-          <h2>추천 티켓 & 패키지</h2>
-          <p>나에게 딱 맞는 이용권으로 ZOOLEAF를 만나보세요.</p>
-        </div>
-      </section>
-
-      <section>
-        <div>
-          <h2>인기 체험 프로그램</h2>
-          <p>나에게 딱 맞는 이용권으로 ZOOLEAF를 만나보세요.</p>
-        </div>
-      </section>
-
-      <section>
-        <div>
-          <h2>ZOOLEAF 동물원 탐험하기</h2>
-          <p>나에게 딱 맞는 이용권으로 ZOOLEAF를 만나보세요.</p>
-        </div>
-      </section>
-
-      <section>
-        <div>
-          <h2>ZOOLEAF Shop</h2>
-          <p>나에게 딱 맞는 이용권으로 ZOOLEAF를 만나보세요.</p>
-        </div>
-      </section>
-
-      <section>
-        <div>
-          <h2>리뷰</h2>
-          <p>나에게 딱 맞는 이용권으로 ZOOLEAF를 만나보세요.</p>
-        </div>
-      </section>
+      <ContentContainer>
+        {isLoading ? (
+          <LoadingSpinner />
+        ) : error ? (
+          <ErrorState 
+            title=""
+            description=""
+            buttonText=""
+            onButtonClick={() => window.location.reload()}
+          />
+        ) : (
+          <>
+            <ProductsSection products={recommendedProducts} />
+            <ExperiencesSection experiences={experiences} />
+            <ZooMapSection zoneMapImageUrl={zoneMapImageUrl} zones={zones} />
+            <GoodsSection goods={recommendedGoods} />
+            <ReviewsSection reviews={visitorReviews} />
+          </>
+        )}
+      </ContentContainer>
     </>
   )
 }
