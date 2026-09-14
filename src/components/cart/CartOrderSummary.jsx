@@ -6,9 +6,12 @@ import useAddressStore from "../../store/addressStore";
 import useToastStore from "../../store/toastStore";
 import { useNavigate } from "react-router-dom";
 import Modal from "../common/Modal";
+<<<<<<< HEAD
 import useCartStore from "../../store/cartStore";
 import { CART_BENEFITS, getBenefitDetails } from "../../utils/cartBenefits";
 import BenefitVerifyModal from "./BenefitVerifyModal";
+=======
+>>>>>>> 1720224 (feat:장바구니 공통모달)
 import {
   OrderSummary,
   SummaryTitle,
@@ -45,7 +48,9 @@ export default function CartOrderSummary({ cartItems, hasShippingAddress }) {
   const orderRequestId = useRef(null);
   const purchaseInProgress = useRef(false);
   const [isPurchasing, setIsPurchasing] = useState(false);
-  const isCartBusy = useCartStore((state) => state.isLoading || state.isUpdating);
+  const isCartBusy = useCartStore(
+    (state) => state.isLoading || state.isUpdating,
+  );
 
   const showToast = useToastStore((state) => state.showToast);
 
@@ -104,9 +109,9 @@ export default function CartOrderSummary({ cartItems, hasShippingAddress }) {
         address,
       );
 
-      const removed = await useCartStore.getState().removeSelected(
-        cartItems.map((item) => item.cartItemId),
-      );
+      const removed = await useCartStore
+        .getState()
+        .removeSelected(cartItems.map((item) => item.cartItemId));
 
       orderRequestId.current = null;
       setIsPurchaseModalOpen(false);
@@ -350,13 +355,18 @@ export default function CartOrderSummary({ cartItems, hasShippingAddress }) {
 
       {isPurchaseModalOpen && (
 <<<<<<< HEAD
+<<<<<<< HEAD
         <Modal
           variant="cart"
+=======
+        <Modal
+>>>>>>> 1720224 (feat:장바구니 공통모달)
           isOpen={isPurchaseModalOpen}
           onClose={handleCloseModal}
           title="구매 확인"
         >
           <ModalText>
+<<<<<<< HEAD
             {hasShippingAddress
               ? "결제를 진행하시겠습니까?"
               : "배송지를 등록해야 합니다."}
@@ -410,6 +420,33 @@ export default function CartOrderSummary({ cartItems, hasShippingAddress }) {
           </ModalBox>
         </ModalOverlay>
 >>>>>>> 504b235 (장바구니에서 구매한 물품제거 및 주문 취소시 주문내역에서 제거)
+=======
+            {!hasShippingAddress
+              ? "배송지가 없습니다. 마이페이지에서 등록하시겠습니까?"
+              : import.meta.env.DEV
+                ? "주문 내역에 저장됩니다. 계속 진행하시겠어요?"
+                : "결제 기능은 아직 준비 중입니다."}
+          </ModalText>
+
+          <ModalButtonArea>
+            <ModalCancelButton
+              type="button"
+              disabled={isPurchasing}
+              onClick={handleCloseModal}
+            >
+              아니오
+            </ModalCancelButton>
+
+            <ModalDeleteButton
+              type="button"
+              disabled={isPurchasing || isCartBusy}
+              onClick={handleConfirm}
+            >
+              {isPurchasing ? "처리 중..." : "예"}
+            </ModalDeleteButton>
+          </ModalButtonArea>
+        </Modal>
+>>>>>>> 1720224 (feat:장바구니 공통모달)
       )}
     </OrderSummary>
   );
