@@ -54,13 +54,18 @@ export function isLastWednesday(value) {
   return date.getDay() === 3 && nextWeek.getMonth() !== month - 1;
 }
 
-export function getBenefitDiscount(items, benefitId) {
+// 할인 총액과 상품별 적용 내역 계산
+export function getBenefitDetails(items, benefitId) {
   const benefit = CART_BENEFITS.find((entry) => entry.id === benefitId);
-  if (!benefit) return 0;
+
+  if (!benefit) {
+    return { totalDiscount: 0, details: [] };
+  }
 
   let remaining = benefit.maxQuantity;
+  const details = [];
 
-  // 상품 ID: 대인 종일권 1 → 소인 종일권 3 → 나머지
+  // 대인 종일권 → 소인 종일권 순서로 적용
   const getPriority = (item) => {
     const productId = Number(item.productId ?? item.id);
 
@@ -69,12 +74,11 @@ export function getBenefitDiscount(items, benefitId) {
     return 2;
   };
 
-  // 복사본만 정렬해서 화면의 상품 순서는 유지
   const sortedItems = [...items].sort(
     (a, b) => getPriority(a) - getPriority(b),
   );
 
-  return sortedItems.reduce((sum, item) => {
+  for (const item of sortedItems) {
     const type = item.itemType ?? item.type;
     const productId = Number(item.productId ?? item.id);
 
@@ -83,17 +87,41 @@ export function getBenefitDiscount(items, benefitId) {
       !benefit.productIds.includes(productId) ||
       remaining <= 0
     ) {
-      return sum;
+      continue;
     }
 
-    // 문화가 있는 날은 상품의 이용일을 기준으로 확인
     if (benefit.id === "cultureDay" && !isLastWednesday(item.visitDate)) {
-      return sum;
+      continue;
     }
 
-    const quantity = Math.min(item.quantity, remaining);
-    remaining -= quantity;
+    const appliedQuantity = Math.min(item.quantity, remaining);
+    const unitDiscount = Math.floor(item.price * benefit.rate);
 
-    return sum + Math.floor(item.price * benefit.rate) * quantity;
-  }, 0);
+    remaining -= appliedQuantity;
+
+    details.push({
+      key: item.groupKey ?? item.cartItemId,
+      name: item.name,
+      option: item.option,
+      visitDate: item.visitDate,
+      unitPrice: item.price,
+      rate: benefit.rate,
+      appliedQuantity,
+      unappliedQuantity: item.quantity - appliedQuantity,
+      discountAmount: unitDiscount * appliedQuantity,
+    });
+  }
+
+  return {
+    totalDiscount: details.reduce(
+      (sum, detail) => sum + detail.discountAmount,
+      0,
+    ),
+    details,
+  };
+}
+
+// 기존 함수를 사용하는 곳도 계속 동작하도록 유지
+export function getBenefitDiscount(items, benefitId) {
+  return getBenefitDetails(items, benefitId).totalDiscount;
 }

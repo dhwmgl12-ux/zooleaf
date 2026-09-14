@@ -2,7 +2,7 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import Modal from "../common/Modal";
 import useCartStore from "../../store/cartStore";
-import { CART_BENEFITS, getBenefitDiscount } from "../../utils/cartBenefits";
+import { CART_BENEFITS, getBenefitDetails } from "../../utils/cartBenefits";
 import BenefitVerifyModal from "./BenefitVerifyModal";
 import {
   OrderSummary,
@@ -24,6 +24,9 @@ import {
   ModalButtonArea,
   ModalCancelButton,
   ModalDeleteButton,
+  BenefitDetails,
+  BenefitDetailAmount,
+  BenefitDetailNote,
 } from "../../pages/CartPage.styles";
 
 export default function CartOrderSummary({ cartItems, hasShippingAddress }) {
@@ -99,8 +102,9 @@ export default function CartOrderSummary({ cartItems, hasShippingAddress }) {
 
   const benefitRate = selectedBenefit?.rate ?? 0;
 
-  // cartItems에는 체크한 상품만 전달됨
-  const benefitDiscount = getBenefitDiscount(cartItems, benefitId);
+  // 표시할 내역과 실제 할인액을 같은 계산 결과로 사용
+  const { totalDiscount: benefitDiscount, details: benefitDetails } =
+    getBenefitDetails(cartItems, benefitId);
 
   const discountTotal = itemDiscountTotal + benefitDiscount;
 
@@ -170,6 +174,47 @@ export default function CartOrderSummary({ cartItems, hasShippingAddress }) {
           <p role="status">
             선택한 상품 중 해당 혜택을 적용할 수 있는 입장권이 없습니다.
           </p>
+        )}
+        {benefitDiscount > 0 && (
+          <BenefitDetails aria-live="polite" aria-atomic="true">
+            <strong>결제 혜택 적용 내역</strong>
+
+            <ul>
+              {benefitDetails.map((detail) => (
+                <li key={detail.key}>
+                  <p>
+                    <strong>{detail.name}</strong>
+                  </p>
+
+                  {detail.option && <p>옵션: {detail.option}</p>}
+                  {detail.visitDate && <p>이용일: {detail.visitDate}</p>}
+
+                  <p>
+                    {detail.unitPrice.toLocaleString()}원 ×{" "}
+                    {detail.appliedQuantity}장 × {Math.round(detail.rate * 100)}
+                    %
+                  </p>
+
+                  <BenefitDetailAmount>
+                    {detail.discountAmount.toLocaleString()}원 할인
+                  </BenefitDetailAmount>
+
+                  {detail.unappliedQuantity > 0 && (
+                    <p>
+                      이 상품의 나머지 {detail.unappliedQuantity}장은 결제 혜택
+                      미적용
+                    </p>
+                  )}
+                </li>
+              ))}
+            </ul>
+
+            <BenefitDetailNote>
+              결제 혜택 할인 합계: {benefitDiscount.toLocaleString()}원
+              <br />위 내역에 없는 상품에는 결제 혜택이 적용되지 않습니다. 상품
+              자체 할인은 별도입니다.
+            </BenefitDetailNote>
+          </BenefitDetails>
         )}
       </BenefitArea>
 
