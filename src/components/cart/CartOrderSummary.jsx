@@ -2,6 +2,7 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import Modal from "../common/Modal";
 import useCartStore from "../../store/cartStore";
+import { CART_BENEFITS, getBenefitDiscount } from "../../utils/cartBenefits";
 import {
   OrderSummary,
   SummaryTitle,
@@ -63,9 +64,16 @@ export default function CartOrderSummary({ cartItems, hasShippingAddress }) {
 
   // 결제 혜택
 
-  const [benefitRate, setBenefitRate] = useState(0);
+  const [benefitId, setBenefitId] = useState("");
 
-  const benefitDiscount = productTotal * benefitRate;
+  const selectedBenefit = CART_BENEFITS.find(
+    (benefit) => benefit.id === benefitId,
+  );
+
+  const benefitRate = selectedBenefit?.rate ?? 0;
+
+  // cartItems에는 체크한 상품만 전달됨
+  const benefitDiscount = getBenefitDiscount(cartItems, benefitId);
 
   const discountTotal = itemDiscountTotal + benefitDiscount;
 
@@ -110,14 +118,17 @@ export default function CartOrderSummary({ cartItems, hasShippingAddress }) {
         <BenefitTitle>결제 혜택</BenefitTitle>
 
         <BenefitSelect
-          value={benefitRate}
-          onChange={(e) => setBenefitRate(Number(e.target.value))}
+          aria-label="결제 혜택"
+          value={benefitId}
+          onChange={(event) => setBenefitId(event.target.value)}
         >
-          <option value={0}>할인 혜택을 선택해주세요.</option>
-          <option value={0.5}>ZooLeaf 제휴카드 - 최대 50%</option>
-          <option value={0.4}>통신사 멤버십 - 40%</option>
-          <option value={0.3}>문화 누리 카드 - 30%</option>
-          <option value={0.3}>문화가 있는 날 - 30%</option>
+          <option value="">할인 혜택을 선택해주세요.</option>
+
+          {CART_BENEFITS.map((benefit) => (
+            <option key={benefit.id} value={benefit.id}>
+              {benefit.label}
+            </option>
+          ))}
         </BenefitSelect>
       </BenefitArea>
 
@@ -127,10 +138,10 @@ export default function CartOrderSummary({ cartItems, hasShippingAddress }) {
         <TotalLabel>총 금액</TotalLabel>
 
         <div>
-          {benefitRate > 0 && (
+          {benefitDiscount > 0 && (
             <DiscountInfo>
               -{Math.round(benefitRate * 100)}% (
-              {benefitDiscount.toLocaleString()}원 할인 )
+              {benefitDiscount.toLocaleString()}원 할인)
             </DiscountInfo>
           )}
 
@@ -172,21 +183,25 @@ export default function CartOrderSummary({ cartItems, hasShippingAddress }) {
           onClose={handleCloseModal}
           title="구매 확인"
         >
-            <ModalText>
-              {hasShippingAddress
-                ? "결제를 진행하시겠습니까?"
-                : "배송지를 등록해야 합니다."}
-            </ModalText>
+          <ModalText>
+            {hasShippingAddress
+              ? "결제를 진행하시겠습니까?"
+              : "배송지를 등록해야 합니다."}
+          </ModalText>
 
-            <ModalButtonArea>
-              <ModalCancelButton type="button" onClick={handleCloseModal}>
-                아니오
-              </ModalCancelButton>
+          <ModalButtonArea>
+            <ModalCancelButton type="button" onClick={handleCloseModal}>
+              아니오
+            </ModalCancelButton>
 
-              <ModalDeleteButton type="button" disabled={isCartBusy} onClick={handleConfirm}>
-                예
-              </ModalDeleteButton>
-            </ModalButtonArea>
+            <ModalDeleteButton
+              type="button"
+              disabled={isCartBusy}
+              onClick={handleConfirm}
+            >
+              예
+            </ModalDeleteButton>
+          </ModalButtonArea>
         </Modal>
       )}
     </OrderSummary>
