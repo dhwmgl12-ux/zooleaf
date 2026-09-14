@@ -15,6 +15,13 @@ export const theme = {
     background2: '#E1E8E1',
     backgroundFooter: '#91A995',
     border: '#C8C9C9',
+    productCardNight: '#2C3E35',
+    productCardFamily: '#F1EEE2',
+    productCardCouple: '#FEEBF8',
+    productCardDream: '#E2EDF1',
+    productCardMembership: '#FFF891',
+    buttonMuted: '#D9D9D9',
+    buttonMutedHover: '#C8C9C9',
   },
 
   fontSize: {
@@ -113,6 +120,11 @@ export const theme = {
     box: '20px',
     image: '20px',
     input: '10px',
+  },
+
+  shadow: {
+    card: '0 4px 10px rgba(44, 62, 53, 0.1)',
+    cardHover: '0 7px 16px rgba(44, 62, 53, 0.18)',
   },
 
   layout: {
