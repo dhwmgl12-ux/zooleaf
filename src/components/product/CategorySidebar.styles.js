@@ -95,15 +95,21 @@ export const Sidebar = styled.aside`
 
   @media (max-width: ${theme.layout.breakpoint.tablet}) {
     width: 100%;
-    nav ul { display: flex; justify-content: space-around; }
-    nav button { width: auto; padding: ${theme.spacing[16]}; }
-    .filter-options { display: flex; gap: ${theme.spacing[16]}; justify-content: center; margin: 0; border-top: 0; padding: 0 ${theme.spacing[16]} ${theme.spacing[16]}; }
-    .filter-dropdown { width: min(220px, 50%); }
+    display: flex;
+    align-items: center;
+    padding: ${theme.spacing[8]} ${theme.spacing[16]};
+    nav { flex: 1; padding: 0; }
+    nav ul { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); }
+    nav button { width: 100%; padding: ${theme.spacing[16]} ${theme.spacing[8]}; }
+    .filter-options { display: flex; flex: 0 0 310px; gap: ${theme.spacing[12]}; margin: 0; border-top: 0; border-left: 1px solid ${theme.colors.background2}; padding: 0 0 0 ${theme.spacing[16]}; }
+    .filter-dropdown { width: 50%; margin-top: 0; }
   }
 
   @media (max-width: ${theme.layout.breakpoint.mobile}) {
-    nav ul { justify-content: center; }
-    nav button { padding: ${theme.spacing[12]} ${theme.spacing[8]}; font-size: ${theme.fontSize.caption.size}; }
+    display: block;
+    padding: 0;
+    nav ul { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); }
+    nav button { width: 100%; padding: ${theme.spacing[12]} ${theme.spacing[4]}; font-size: ${theme.fontSize.caption.size}; }
     .filter-options { display: block; margin: 0 ${theme.spacing[16]} ${theme.spacing[16]}; border-top: 1px solid ${theme.colors.background2}; padding: ${theme.spacing[12]} 0 0; }
     .filter-dropdown { width: 100%; }
   }

@@ -3,6 +3,9 @@ import GoodsCard from '../components/goods/GoodsCard';
 import Pagination from '../components/product/Pagination';
 import { getGoods } from '../api/goodsApi';
 import { GoodsPageContainer } from './GoodsPage.styles';
+import LoadingSpinner from '../components/common/LoadingSpinner';
+import ErrorState from '../components/common/ErrorState';
+import EmptyState from '../components/common/EmptyState';
 
 const GOODS_PER_PAGE = 9;
 const GRID_COLUMNS = 3;
@@ -200,11 +203,15 @@ export default function GoodsPage() {
         </div>
 
         {loading ? (
-          <p>불러오는 중...</p>
+          <LoadingSpinner />
         ) : error ? (
-          <p>{error}</p>
+          <ErrorState
+            title="굿즈를 불러올 수 없습니다."
+            description={error}
+            onButtonClick={() => window.location.reload()}
+          />
         ) : displayedGoods.length === 0 ? (
-          <p>굿즈가 없습니다.</p>
+          <EmptyState title="등록된 굿즈가 없습니다." />
         ) : (
           <div className="goods-page__grid">
             {displayedGoods.map((item) => (

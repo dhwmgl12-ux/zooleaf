@@ -4,9 +4,9 @@ import { theme } from '../styles/variables';
 export const GoodsPageContainer = styled.main`
   padding: ${theme.spacing[64]} 0 ${theme.spacing[140]};
 
-  section { width: min(760px, calc(100% - ${theme.spacing[32]})); margin: 0 auto; }
+  section { width: min(760px, 100%); margin: 0 auto; }
   h1 { margin: 0 0 ${theme.spacing[32]}; color: ${theme.colors.textPrimary}; font-size: ${theme.fontSize.h4.size}; text-align: center; }
-  .goods-page__filters { display: grid; width: calc(100% + ${theme.spacing[80]}); box-sizing: border-box; grid-template-columns: 2fr 1fr; align-items: center; margin-bottom: ${theme.spacing[32]}; margin-left: -${theme.spacing[40]}; padding: ${theme.spacing[8]} ${theme.spacing[16]}; border-radius: ${theme.radius.box}; background-color: ${theme.colors.white}; box-shadow: 0 3px 10px rgba(44, 62, 53, 0.08); }
+  .goods-page__filters { display: grid; width: calc(100% + ${theme.spacing[80]}); grid-template-columns: 2fr 1fr; align-items: center; margin-bottom: ${theme.spacing[32]}; margin-left: -${theme.spacing[40]}; padding: ${theme.spacing[8]} ${theme.spacing[16]}; border-radius: ${theme.radius.box}; background-color: ${theme.colors.white}; box-shadow: 0 3px 10px rgba(44, 62, 53, 0.08); }
   nav { min-width: 0; border-right: 1px solid ${theme.colors.background2}; padding: 0 ${theme.spacing[32]}; }
   nav ul { display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); align-items: center; }
   nav button { width: 100%; padding: ${theme.spacing[20]} ${theme.spacing[4]}; color: ${theme.colors.textPrimary}; font-size: ${theme.fontSize.body.size}; font-weight: ${theme.fontWeight.medium}; white-space: nowrap; }
@@ -28,12 +28,15 @@ export const GoodsPageContainer = styled.main`
   }
 
   @media (max-width: ${theme.layout.breakpoint.mobile}) {
-    padding-top: ${theme.spacing[40]};
+    padding-top: ${theme.spacing[24]};
+    padding-bottom: ${theme.spacing[80]};
+    h1 { margin-bottom: ${theme.spacing[20]}; }
     .goods-page__filters { width: 100%; grid-template-columns: 1fr; gap: ${theme.spacing[8]}; margin-left: 0; }
     nav { border-right: 0; padding: 0; }
-    nav ul { display: flex; justify-content: flex-start; gap: ${theme.spacing[16]}; overflow-x: auto; }
-    nav button { white-space: nowrap; }
+    nav ul { display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); }
+    nav button { padding: ${theme.spacing[12]} 0; font-size: ${theme.fontSize.caption.size}; white-space: nowrap; }
     .goods-page__sort { width: 100%; }
     .goods-page__grid { grid-template-columns: 1fr; gap: ${theme.spacing[16]}; }
+    .goods-page__grid > article { width: min(320px, 100%); justify-self: center; }
   }
 `;

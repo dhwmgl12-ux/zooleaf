@@ -12,11 +12,17 @@ export const ProductPageContainer = styled.main`
   .product-page__grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: ${theme.spacing[24]}; }
 
   @media (max-width: ${theme.layout.breakpoint.tablet}) {
+    padding-top: ${theme.spacing[32]};
     .product-page__layout { flex-direction: column; }
-    .product-page__grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    .product-page__content { width: 100%; }
+    .product-page__grid { grid-template-columns: repeat(2, minmax(0, 300px)); justify-content: center; }
   }
 
   @media (max-width: ${theme.layout.breakpoint.mobile}) {
-    .product-page__grid { grid-template-columns: 1fr; gap: ${theme.spacing[16]}; }
+    padding-top: ${theme.spacing[24]};
+    .product-page__banner { margin-bottom: ${theme.spacing[24]}; }
+    h1 { margin-bottom: ${theme.spacing[20]}; font-size: ${theme.fontSize.h4.size}; }
+    .product-page__grid { grid-template-columns: minmax(0, 300px); justify-content: center; gap: ${theme.spacing[16]}; }
+    .product-page__grid > article { width: min(300px, 100%); justify-self: center; }
   }
 `;
