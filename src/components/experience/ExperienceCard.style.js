@@ -7,24 +7,25 @@ export const ExperienceCardContainer = styled.article`
   border-radius: ${theme.radius.image};
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
   height: 302px;
-  width: 330px;
+  width: 100%;
+  max-width: 330px;
   display: flex;
   flex-direction: column;
   overflow: hidden;
   justify-self: center;
 
   @media (max-width: ${theme.layout.breakpoint.tablet}) {
-    width: 310px;
+    max-width: 310px;
     height: 300px;
     margin-bottom: ${theme.spacing[24]};
   }
   @media (max-width: ${theme.layout.breakpoint.mobile}) {
-    width: 352px;
+    max-width: 352px;
     height: 300px;
     margin-bottom: ${theme.spacing[4]};
   }
   @media (max-width: ${theme.layout.breakpoint.smallMobile}) {
-    width: 100%;
+    max-width: 100%;
     height: 262px;
     margin-bottom: ${theme.spacing[24]};
   }
@@ -84,7 +85,7 @@ export const ReserveButton = styled.a`
   bottom: ${theme.spacing[20]};
   left: 50%;
   transform: translateX(-50%);
-  width: 100%;
+  width: 86%;
   max-width: 286px;
   height: 41px;
   text-align: center;
@@ -102,15 +103,18 @@ export const ReserveButton = styled.a`
     background-color: ${theme.colors.hover};
   }
   @media (max-width: ${theme.layout.breakpoint.tablet}) {
-    width: 268px;
+    width: 86%;
+    max-width: 268px;
     height: 41px;
   }
   @media (max-width: ${theme.layout.breakpoint.mobile}) {
-    width: 310px;
+    width: 88%;
+    max-width: 310px;
     height: 41px;
   }
   @media (max-width: ${theme.layout.breakpoint.smallMobile}) {
-    width: 222px;
+    width: 84%;
+    max-width: 222px;
     height: 41px;
   }
 `;

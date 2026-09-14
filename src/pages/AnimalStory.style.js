@@ -27,7 +27,7 @@ export const SubTitle = styled.p`
 `;
 
 export const FilterBox = styled.div`
-  width: 100%; /* 고정 px 제거 후 컨테이너에 맞춤 */
+  width: 100%;
   background: ${theme.colors?.white || '#ffffff'};
   border-radius: ${theme.radius.box};
   padding: 16px 24px;
@@ -45,14 +45,14 @@ export const FilterBox = styled.div`
     flex-shrink: 0;
   }
   @media (max-width: ${theme.layout.breakpoint.tablet}) {
-    flex-direction: row; /* 태블릿에서도 가로 배치 유지 */
+    flex-direction: row;
     justify-content: space-between;
     align-items: center;
     padding: 16px 20px;
     gap: 12px;
 
     .divider {
-      display: block; /* 태블릿에서는 구분선 유지 */
+      display: block;
     }
   }
   @media (max-width: ${theme.layout.breakpoint.mobile}) {
@@ -63,12 +63,12 @@ export const FilterBox = styled.div`
 
     .divider {
       width: 100%;
-      height: 1px; /* 모바일에서는 세로선이 아니라 가로 구분선으로 변경 */
+      height: 1px;
     }
   }
   @media (max-width: ${theme.layout.breakpoint.smallMobile}) {
     width: 100%;
-    height: 200px;
+    /* 고정 height 제거하여 내부 컨텐츠에 맞춰 유연하게 늘어나도록 변경 */
   }
 `;
 
@@ -95,7 +95,8 @@ export const ZoneTabs = styled.div`
   gap: ${theme.spacing[24]};
   align-items: center;
   justify-content: space-between;
-  max-width: 650;
+  max-width: 650px; /* 누락된 단위 추가 */
+  width: 100%; /* 고정 크기 대신 유연하게 줄어들도록 추가 */
   overflow-x: auto;
 
   &::-webkit-scrollbar {
@@ -130,8 +131,8 @@ export const DropdownWrapper = styled.div`
   text-align: left;
   @media (max-width: ${theme.layout.breakpoint.mobile}) {
     width: 100%;
-    max-width: none; /* PC용 최대 너비 제한 해제 */
-    flex: none; /* flex 속성 초기화 */
+    max-width: none;
+    flex: none;
 
     > div,
     button {
@@ -230,7 +231,7 @@ export const InfoRow = styled.div`
     white-space: pre-line;
   }
   @media (max-width: ${theme.layout.breakpoint.tablet}) {
-    margin-left: ${theme.spacing[20]};
+    margin-left: 0; /* 모바일/태블릿에서 불필요한 고정 좌측 마진 제거로 찌그러짐 방지 */
   }
   @media (max-width: ${theme.layout.breakpoint.smallMobile}) {
     margin-left: 0;
@@ -251,20 +252,20 @@ export const AnimalCard = styled.div`
   gap: 24px;
   text-align: left;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.03);
-  height: 100%; /* [수정] 카드 높이를 그리드 행에 꽉 채움 */
+  height: 100%;
   @media (max-width: ${theme.layout.breakpoint.tablet}) {
     padding: 20px;
     gap: 16px;
   }
   @media (max-width: ${theme.layout.breakpoint.mobile}) {
     flex-direction: column;
-    align-items: center;
+    align-items: stretch; /* 아이템들을 가로로 꽉 채워 유연하게 정렬 */
     text-align: left;
     padding: ${theme.spacing[16]};
   }
   @media (max-width: ${theme.layout.breakpoint.smallMobile}) {
     padding: 12px;
-    align-items: center;
+    align-items: stretch;
   }
 `;
 
@@ -283,17 +284,13 @@ export const AnimalImg = styled.img`
   @media (max-width: ${theme.layout.breakpoint.mobile}) {
     width: 116px;
     height: 116px;
-    margin-top: 0;
-    margin-bottom: ${theme.spacing[4]};
+    margin: 0 0 16px 0;
     display: block;
-    margin-left: ${theme.spacing[20]};
-    margin-right: ${theme.spacing[200]};
   }
   @media (max-width: ${theme.layout.breakpoint.smallMobile}) {
     width: 116px;
     height: 116px;
-    margin-left: ${theme.spacing[32]};
-    margin-right: ${theme.spacing[200]};
+    margin: 0 0 12px 10px;
   }
 `;
 
@@ -320,16 +317,17 @@ export const AnimalInfo = styled.div`
       color: ${theme.colors.textSecondary};
       font-weight: ${theme.fontWeight.regular};
     }
+  }
 
-    @media (max-width: ${theme.layout.breakpoint.tablet}) {
-    margin-left:${theme.spacing[20]};
+  @media (max-width: ${theme.layout.breakpoint.tablet}) {
+    margin-left: 0;
     h3 {
-      font-size: ${theme.fontSize.h5.size}
-      margin-bottom: ${theme.spacing[16]}
+      font-size: ${theme.fontSize.h5.size};
+      margin-bottom: ${theme.spacing[16]};
     }
   }
-    @media (max-width: ${theme.layout.breakpoint.smallMobile}) {
-    margin-left: 0;
+  @media (max-width: ${theme.layout.breakpoint.smallMobile}) {
+    margin: 0 0 12px 10px;
   }
 `;
 
@@ -337,7 +335,7 @@ export const TmiBox = styled.div`
   background-color: ${theme.colors?.backgroundSub || '#f4f6f5'};
   border-radius: 8px;
   padding: 10px 14px;
-  margin-top: auto; /* [수정] 위쪽 남은 공간을 자동으로 채워 TMI 박스를 항상 카드 하단에 고정 */
+  margin-top: auto;
   margin-bottom: 0;
 
   .tmi-label {
@@ -358,10 +356,10 @@ export const TmiBox = styled.div`
     overflow-wrap: break-word;
   }
   @media (max-width: ${theme.layout.breakpoint.tablet}) {
-    margin-left: ${theme.spacing[20]};
+    margin-left: 0;
   }
   @media (max-width: ${theme.layout.breakpoint.smallMobile}) {
-    margin-left: 0;
+    margin: 0 4px 0 0;
   }
 `;
 
