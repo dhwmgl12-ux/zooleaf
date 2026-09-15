@@ -57,14 +57,15 @@ export default function MainHero() {
         />
       )}
 
-      <MainHeroContent className="main-hero__content">
-        <MainHeroTitle>
-          <div>
-            <img src={zooleafLogo} alt="ZOOLEAF" />
-            <span>에서</span>
-          </div>
-          <p>동물 친구들이 기다리고 있어요.</p>
-        </MainHeroTitle>
+      <MainHeroInner>
+        <MainHeroContent className="main-hero__content">
+          <MainHeroTitle>
+            <div>
+              <img src={zooleafLogo} alt="ZOOLEAF" />
+              <span>에서</span>
+            </div>
+            <p>동물 친구들이 기다리고 있어요.</p>
+          </MainHeroTitle>
 
         <MainHeroMoreLink to="/products">티켓 예매하러 가기</MainHeroMoreLink>
       </MainHeroContent>
