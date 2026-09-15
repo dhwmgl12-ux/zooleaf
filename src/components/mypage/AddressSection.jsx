@@ -56,7 +56,7 @@ const fields = [
     label: "받는 분",
     placeholder: "이름",
     autoComplete: "name",
-    maxLength: 50,
+    maxLength: 8,
   },
   {
     name: "phone",

@@ -4,6 +4,7 @@ import Modal from "../common/Modal";
 import useCartStore from "../../store/cartStore";
 import { CART_BENEFITS, getBenefitDetails } from "../../utils/cartBenefits";
 import BenefitVerifyModal from "./BenefitVerifyModal";
+
 import {
   OrderSummary,
   SummaryTitle,
@@ -32,9 +33,6 @@ import {
 export default function CartOrderSummary({ cartItems, hasShippingAddress }) {
   // 페이지 이동에 사용할 함수
   const navigate = useNavigate();
-  const isCartBusy = useCartStore(
-    (state) => state.isLoading || state.isUpdating,
-  );
 
   // 구매 모달 열림 여부: 처음에는 닫힘
   const [isPurchaseModalOpen, setIsPurchaseModalOpen] = useState(false);
