@@ -57,7 +57,6 @@ export default function MainHero() {
         />
       )}
 
-      <MainHeroInner>
         <MainHeroContent className="main-hero__content">
           <MainHeroTitle>
             <div>
