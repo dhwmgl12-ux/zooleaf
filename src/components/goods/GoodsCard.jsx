@@ -1,6 +1,6 @@
 import { Link } from "react-router-dom";
-import { GoodsCardContainer } from "./GoodsCard.styles";
 import useCartStore from "../../store/cartStore";
+import { GoodsCardContainer,GoodsCardContent } from "./GoodsCard.styles";
 
 export default function GoodsCard({ goods }) {
   const name = goods?.name || "상품명";
@@ -62,24 +62,24 @@ export default function GoodsCard({ goods }) {
           )}
         </div>
 
-        <div className="goods-card__content">
+        <GoodsCardContent className="goods-card__content">
           <h3>{name}</h3>
           {hasDiscount ? (
             <div className="goods-card__price">
+              <del>{price.toLocaleString()}원</del>
               <div>
-                <del>₩ {price.toLocaleString()}</del>
                 <span>-{discountPercent}%</span>
+                <strong>
+                  {isUnitPrice && "(개당) "} {discountPrice.toLocaleString()}원
+                </strong>
               </div>
-              <strong>
-                {isUnitPrice && "(개당) "}₩ {discountPrice.toLocaleString()}
-              </strong>
             </div>
           ) : (
             <strong className="goods-card__single-price">
-              {isUnitPrice && "(개당) "}₩ {price.toLocaleString()}
+              {isUnitPrice && "(개당) "} {price.toLocaleString()}원
             </strong>
           )}
-        </div>
+        </GoodsCardContent>
       </Link>
     </GoodsCardContainer>
   );
