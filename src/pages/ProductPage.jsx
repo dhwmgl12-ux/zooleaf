@@ -6,6 +6,9 @@ import Pagination from '../components/product/Pagination';
 import { getProducts } from '../api/productApi';
 import bannerImage from '../assets/images/banner.webp';
 import mobileBannerImage from '../assets/images/banner-mobile.webp';
+import LoadingSpinner from '../components/common/LoadingSpinner';
+import ErrorState from '../components/common/ErrorState';
+import EmptyState from '../components/common/EmptyState';
 import { ProductPageContainer } from './ProductPage.styles';
 
 const PRODUCTS_PER_PAGE = 12;
@@ -116,11 +119,15 @@ export default function ProductPage() {
           </h1>
 
           {loading ? (
-            <p>불러오는 중...</p>
+            <LoadingSpinner />
           ) : error ? (
-            <p>{error}</p>
+            <ErrorState
+              title="상품을 불러올 수 없습니다."
+              description={error}
+              onButtonClick={() => window.location.reload()}
+            />
           ) : displayedProducts.length === 0 ? (
-            <p>상품이 없습니다.</p>
+            <EmptyState title="등록된 상품이 없습니다." />
           ) : (
             <div className="product-page__grid">
               {displayedProducts.map((product) => (
