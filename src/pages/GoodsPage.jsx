@@ -6,6 +6,7 @@ import { GoodsPageContainer } from "./GoodsPage.styles";
 import LoadingSpinner from "../components/common/LoadingSpinner";
 import ErrorState from "../components/common/ErrorState";
 import EmptyState from "../components/common/EmptyState";
+import Breadcrumb from '../components/common/Breadcrumb';
 
 const GOODS_PER_PAGE = 9;
 const GRID_COLUMNS = 3;
@@ -162,85 +163,94 @@ export default function GoodsPage() {
   }, [filters, usesClientPagination]);
 
   return (
-    <GoodsPageContainer aria-label="굿즈 목록">
-      <h2>Shop</h2>
-      <div className="goods-page__filters">
-        <nav aria-label="굿즈 카테고리">
-          <ul>
-            {GOODS_CATEGORIES.map((category) => (
-              <li key={category}>
-                <button
-                  type="button"
-                  onClick={() => handleSelectCategory(category)}
-                  aria-pressed={filters.subCategory === category}
-                >
-                  {category}
-                </button>
-              </li>
-            ))}
-          </ul>
-        </nav>
-        <div className="goods-page__sort">
-          <button
-            className="goods-page__sort-trigger"
-            type="button"
-            onClick={() => setIsSortOpen((isOpen) => !isOpen)}
-            aria-expanded={isSortOpen}
-          >
-            {selectedSortLabel}
-            <span className="goods-page__sort-arrow" aria-hidden="true" />
-          </button>
-          {isSortOpen && (
-            <ul aria-label="정렬 기준 선택">
-              {SORT_OPTIONS.map((option) => (
-                <li key={option.value || "default"}>
+    <>
+      <Breadcrumb
+        items={[
+          { label: '홈', to: '/' },
+          { label: 'Shop', to: '/goods' }
+        ]}
+      />
+
+      <GoodsPageContainer aria-label="굿즈 목록">
+        <h2>Shop</h2>
+        <div className="goods-page__filters">
+          <nav aria-label="굿즈 카테고리">
+            <ul>
+              {GOODS_CATEGORIES.map((category) => (
+                <li key={category}>
                   <button
                     type="button"
-                    onClick={() => handleSelectSort(option.value)}
-                    aria-pressed={filters.sort === option.value}
+                    onClick={() => handleSelectCategory(category)}
+                    aria-pressed={filters.subCategory === category}
                   >
-                    {option.label}
+                    {category}
                   </button>
                 </li>
               ))}
             </ul>
-          )}
+          </nav>
+          <div className="goods-page__sort">
+            <button
+              className="goods-page__sort-trigger"
+              type="button"
+              onClick={() => setIsSortOpen((isOpen) => !isOpen)}
+              aria-expanded={isSortOpen}
+            >
+              {selectedSortLabel}
+              <span className="goods-page__sort-arrow" aria-hidden="true" />
+            </button>
+            {isSortOpen && (
+              <ul aria-label="정렬 기준 선택">
+                {SORT_OPTIONS.map((option) => (
+                  <li key={option.value || "default"}>
+                    <button
+                      type="button"
+                      onClick={() => handleSelectSort(option.value)}
+                      aria-pressed={filters.sort === option.value}
+                    >
+                      {option.label}
+                    </button>
+                  </li>
+                ))}
+              </ul>
+            )}
+          </div>
         </div>
-      </div>
-      {loading ? (
-        <LoadingSpinner />
-      ) : error ? (
-        <ErrorState
-          title="굿즈를 불러올 수 없습니다."
-          description={error}
-          onButtonClick={() => window.location.reload()}
+        {loading ? (
+          <LoadingSpinner />
+        ) : error ? (
+          <ErrorState
+            title="굿즈를 불러올 수 없습니다."
+            description={error}
+            onButtonClick={() => window.location.reload()}
+          />
+        ) : displayedGoods.length === 0 ? (
+          <EmptyState title="등록된 굿즈가 없습니다." />
+        ) : (
+          <div className="goods-page__grid">
+            {displayedGoods.map((item) => (
+              <GoodsCard key={item.id} goods={item} />
+            ))}
+            {Array.from(
+              {
+                length:
+                  (GRID_COLUMNS - (displayedGoods.length % GRID_COLUMNS)) %
+                  GRID_COLUMNS,
+              },
+              (_, index) => (
+                <EmptyCell key={`empty-${index}`} />
+              ),
+            )}
+          </div>
+        )}
+        <Pagination
+          currentPage={filters.page}
+          totalPages={totalPages}
+          onPageChange={(page) => {
+            setFilters((prev) => ({ ...prev, page }));
+          }}
         />
-      ) : displayedGoods.length === 0 ? (
-        <EmptyState title="등록된 굿즈가 없습니다." />
-      ) : (
-        <div className="goods-page__grid">
-          {displayedGoods.map((item) => (
-            <GoodsCard key={item.id} goods={item} />
-          ))}
-          {Array.from(
-            {
-              length:
-                (GRID_COLUMNS - (displayedGoods.length % GRID_COLUMNS)) %
-                GRID_COLUMNS,
-            },
-            (_, index) => (
-              <EmptyCell key={`empty-${index}`} />
-            ),
-          )}
-        </div>
-      )}
-      <Pagination
-        currentPage={filters.page}
-        totalPages={totalPages}
-        onPageChange={(page) => {
-          setFilters((prev) => ({ ...prev, page }));
-        }}
-      />
-    </GoodsPageContainer>
+      </GoodsPageContainer>
+    </>
   );
 }
