@@ -195,14 +195,13 @@ export function useSignup() {
 
     setIsSubmitting(true);
     try {
-      const birthDateForServer = birthDate.replace(/\./g, '-');
       const result = await signup({
         id,
         password,
         passwordConfirm,
         name,
         phone,
-        birthDate: birthDateForServer,
+        birthDate,
         agreeTerms,
         agreePrivacy,
         agreeMarketing,
