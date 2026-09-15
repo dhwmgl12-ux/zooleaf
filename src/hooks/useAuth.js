@@ -265,9 +265,11 @@ export function useAuthRestore() {
       .then((result) => {
         setAuth(sessionStorage.getItem('token'), result.data);
       })
-      .catch(() => {
-        sessionStorage.removeItem('token');
-        clearAuth();
+      .catch((err) => {
+        if (err.status === 401) {
+          sessionStorage.removeItem('token');
+          clearAuth();
+        }
       });
   }, [setAuth, clearAuth]);
 }
