@@ -4,18 +4,18 @@ export default function useMarqueeDistance(containerRef, textRef) {
   const [distance, setDistance] = useState(0);
 
   useEffect(() => {
-    const measure = () => {
+    const measureOverflow = () => {
       if (!containerRef.current || !textRef.current) return;
       const overflow = textRef.current.scrollWidth - containerRef.current.clientWidth;
       setDistance(overflow > 0 ? overflow : 0);
     };
 
-    const frame = requestAnimationFrame(measure); 
-    window.addEventListener('resize', measure);
+    const frame = requestAnimationFrame(measureOverflow); 
+    window.addEventListener('resize', measureOverflow);
     
     return () => {
       cancelAnimationFrame(frame);
-      window.removeEventListener('resize', measure);
+      window.removeEventListener('resize', measureOverflow);
     };
   }, [containerRef, textRef]);
     

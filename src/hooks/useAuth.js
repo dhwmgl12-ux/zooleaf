@@ -207,7 +207,7 @@ export function useSignup() {
         agreeMarketing,
       });
 
-      showToast(`${result.data.name}님 환영합니다.`);
+      showToast(result.message);
       navigate('/login');
     } catch (err) {
       const field = mapServerErrorToField(err.message);
