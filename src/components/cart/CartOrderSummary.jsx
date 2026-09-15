@@ -123,6 +123,10 @@ export default function CartOrderSummary({ cartItems, hasShippingAddress }) {
 
   const [isNoticeOpen, setIsNoticeOpen] = useState(false);
 
+  const isCartBusy = useCartStore(
+    (state) => state.isLoading || state.isUpdating,
+  );
+
   return (
     <OrderSummary>
       <SummaryTitle>구매 하기</SummaryTitle>
