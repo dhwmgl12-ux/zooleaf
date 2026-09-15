@@ -1,0 +1,376 @@
+import styled from "@emotion/styled";
+import { theme } from "../../styles/variables";
+import { ContentContainer } from "./ContentContainer.styles";
+import { Link } from "react-router-dom";
+
+export const HeaderContainer = styled.header`
+  width: 100%;
+  color: ${theme.colors.textPrimary};
+
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 1000;
+
+  background-color: ${({ $isOverHero }) =>
+    $isOverHero ? "rgba(255, 255, 252, 0.35)" : theme.colors.background};
+
+  backdrop-filter: ${({ $isOverHero }) =>
+    $isOverHero ? "blur(10px)" : "none"};
+
+  transition:
+    background-color 0.25s ease,
+    backdrop-filter 0.25s ease,
+    box-shadow 0.25s ease;
+
+  @media (max-width: ${theme.layout.breakpoint.mobile}) {
+    min-width: 320px;
+  }
+`;
+
+export const HeaderInner = styled(ContentContainer)`
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: ${theme.spacing[16]};
+`;
+
+export const LogoHeading = styled.h1`
+  width: 180px;
+  flex-shrink: 0;
+`;
+
+export const LogoLink = styled(Link)`
+  display: block;
+`;
+
+export const LogoImage = styled.img`
+  width: 100%;
+  height: auto;
+
+  @media (max-width: ${theme.layout.breakpoint.tablet}) {
+    width: ${(prop) => (prop.variant === "menu" ? "164px" : "134px")};
+  }
+`;
+
+export const NavList = styled.ul`
+  display: flex;
+  gap: ${theme.spacing[56]};
+
+  @media (max-width: ${theme.layout.breakpoint.desktop}) {
+    gap: ${theme.spacing[48]};
+  }
+
+  @media (max-width: ${theme.layout.breakpoint.tablet}) {
+    display: none;
+  }
+`;
+
+export const LoginMenuItem = styled.li`
+  @media (max-width: ${theme.layout.breakpoint.tablet}) {
+    display: none;
+  }
+`;
+
+export const MenuTriggerItem = styled.li`
+  display: none;
+
+  @media (max-width: ${theme.layout.breakpoint.tablet}) {
+    display: flex;
+  }
+`;
+
+export const NavLink = styled(Link)`
+  font-size: ${theme.fontSize.h5.size};
+  line-height: ${theme.fontSize.h5.lineheight};
+  font-weight: ${theme.fontWeight.semiBold};
+  transition: color 0.2s ease;
+
+  &:hover,
+  &:focus-visible {
+    color: ${theme.colors.primary};
+  }
+
+  @media (max-width: ${theme.layout.breakpoint.desktop}) {
+    font-size: ${theme.fontSize.h6.size};
+    line-height: ${theme.fontSize.h6.lineheight};
+  }
+
+  @media (max-width: ${theme.layout.breakpoint.tablet}) {
+    display: none;
+  }
+`;
+
+export const UtilsList = styled.ul`
+  display: flex;
+  align-items: center;
+  gap: ${theme.spacing[32]};
+  flex-shrink: 0;
+
+  @media (max-width: ${theme.layout.breakpoint.tablet}) {
+    gap: ${theme.spacing[16]};
+  }
+`;
+
+export const IconLink = styled(Link)`
+  position: relative;
+  display: flex;
+  color: inherit;
+
+  svg {
+    color: inherit;
+    transition: color 0.2s ease;
+  }
+
+  &:hover svg,
+  &:focus-visible svg {
+    color: ${theme.colors.primary};
+  }
+
+  &:hover [data-tooltip],
+  &:focus-within [data-tooltip] {
+    opacity: 1;
+    visibility: visible;
+    transform: translate(0);
+  }
+`;
+
+export const Tooltip = styled.span`
+  position: absolute;
+  top: calc(100% + ${theme.spacing[12]});
+  right: 0;
+  white-space: nowrap;
+  
+  padding: ${theme.spacing[8]} ${theme.spacing[12]};
+  border-radius: ${theme.radius.input};
+  background: ${theme.colors.textPrimary};
+  color: ${theme.colors.white};
+  font-size: ${theme.fontSize.caption.size};
+  
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+  transform: translateY(-4px);
+  transition:
+    opacity 0.15s ease,
+    transform 0.15s ease,
+    visibility 0.15s ease;
+`;
+
+export const IconButton = styled.button`
+  display: flex;
+  color: inherit;
+
+  svg {
+    color: inherit;
+    transition: color 0.2s ease;
+  }
+
+  &:hover svg,
+  &:focus-visible svg {
+    color: ${theme.colors.primary};
+  }
+`;
+
+export const AccountMenuTrigger = styled.li`
+  position: relative;
+
+  &:hover [data-account-dropdown],
+  &:focus-within [data-account-dropdown] {
+    opacity: 1;
+    visibility: visible;
+    transform: translateY(0);
+  }
+
+  @media (max-width: ${theme.layout.breakpoint.tablet}) {
+    display: none;
+  }
+`;
+
+export const AccountDropdown = styled.div`
+  position: absolute;
+  top: 100%;
+  right: 0;
+  padding: ${theme.spacing[16]};
+
+  opacity: 0;
+  visibility: hidden;
+  transform: translateY(-8px);
+  transition:
+    opacity 0.2s ease,
+    transform 0.2s ease,
+    visibility 0.2s ease;
+`;
+
+export const AccountCard = styled.div`
+  width: 280px;
+  padding: ${theme.spacing[32]} ${theme.spacing[24]};
+  border-radius: ${theme.radius.box};
+  background: ${theme.colors.background};
+  box-shadow: 4px 4px 4px 12px 0 rgba(0, 0, 0, 0.12);
+  color: ${theme.colors.textPrimary};
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+`;
+
+export const AccountAvatar = styled.div`
+  width: 96px;
+  height: 96px;
+  border-radius: 50%;
+  background: ${theme.colors.primary};
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: ${theme.fontSize.h3.size};
+  font-weight: ${theme.fontWeight.bold};
+  color: ${theme.colors.white};
+`;
+
+export const AccountName = styled.p`
+  margin-top: ${theme.spacing[16]};
+  font-size: ${theme.fontSize.h6.size};
+  font-weight: ${theme.fontWeight.bold};
+`;
+
+export const AccountInfoList = styled.div`
+  margin-top: ${theme.spacing[24]};
+  display: flex;
+  flex-direction: column;
+  gap: ${theme.spacing[12]};
+  font-size: ${theme.fontSize.bodysmall.size};
+  color: ${theme.colors.textSecondary};
+`;
+
+export const AccountDivider = styled.hr`
+  width: 100%;
+  margin: ${theme.spacing[24]} 0;
+  border-top: 1px solid ${theme.colors.border};
+`;
+
+export const LogoutButton = styled.button`
+  font-size: ${theme.fontSize.bodysmall.size};
+  color: ${theme.colors.primary};
+  text-decoration: underline;
+  font-weight: ${theme.fontWeight.medium};
+
+  &:hover {
+    color: ${theme.colors.hover};
+  }
+`;
+
+export const MobileNavPanel = styled.nav`
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  overflow-y: auto;
+  background: ${theme.colors.background2};
+  padding: ${theme.spacing[20]} ${theme.spacing[16]};
+  display: flex;
+  flex-direction: column;
+  gap: ${theme.spacing[24]};
+`;
+
+export const MobileNavImg = styled.img`
+  width: 100%;
+  max-width: 165px;
+`;
+
+export const MobileNavTop = styled.div`
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+`;
+
+export const MobileNavCloseButton = styled.button`
+  font-size: ${theme.fontSize.h4.size};
+  line-height: 1;
+  color: ${theme.colors.textPrimary};
+  background: none;
+  border: none;
+  cursor: pointer;
+`;
+
+export const MobileNavAccount = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: ${theme.spacing[4]};
+`;
+
+export const MobileNavGreeting = styled.p`
+  font-size: ${theme.fontSize.bodylarge.size};
+  font-weight: ${theme.fontWeight.medium};
+  color: ${theme.colors.textPrimary};
+  margin: 0;
+`;
+
+export const MobileAccountLink = styled(Link)`
+  display: inline-block;
+  width: fit-content;
+  font-size: ${theme.fontSize.h6.size};
+  font-weight: ${theme.fontWeight.semiBold};
+  color: ${theme.colors.textPrimary};
+  text-decoration: underline;
+
+  &:hover,
+  &:focus-visible {
+    color: ${theme.colors.primary};
+  }
+`;
+
+export const MobileNavList = styled.ul`
+  display: flex;
+  flex-direction: column;
+  gap: ${theme.spacing[20]};
+`;
+
+export const MobileNavLink = styled(Link)`
+  display: inline-block;
+  font-size: ${theme.fontSize.h6.size};
+  font-weight: ${theme.fontWeight.semiBold};
+  color: ${theme.colors.textPrimary};
+
+  &:hover,
+  &:focus-visible {
+    color: ${theme.colors.primary};
+  }
+`;
+
+export const MobileNavDivider = styled.hr`
+  border-top: 1px solid ${theme.colors.border};
+`;
+
+export const MobileNavLogoutButton = styled.button`
+  align-self: flex-start;
+  font-size: ${theme.fontSize.bodysmall.size};
+  color: ${theme.colors.textSecondary};
+  background: none;
+  border: none;
+  cursor: pointer;
+`;
+
+export const CartBadge = styled.span`
+  position: absolute;
+  right: -5px;
+  bottom: -3px;
+
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+
+  min-width: 19px;
+  height: 19px;
+  padding: 0 4px;
+  border-radius: 999px;
+
+  background: ${theme.colors.primary};
+  color: ${theme.colors.white};
+  font-size: 11px;
+  font-weight: 700;
+  line-height: 1;
+  pointer-events: none;
+`;
