@@ -4,6 +4,10 @@ import Modal from "../common/Modal";
 import useCartStore from "../../store/cartStore";
 import { CART_BENEFITS, getBenefitDetails } from "../../utils/cartBenefits";
 import BenefitVerifyModal from "./BenefitVerifyModal";
+import useOrderStore from "../../store/orderStore";
+import useAuthStore from "../../store/authStore";
+import useAddressStore from "../../store/addressStore";
+import useToastStore from "../../store/toastStore";
 
 import {
   OrderSummary,
@@ -34,6 +38,8 @@ export default function CartOrderSummary({ cartItems, hasShippingAddress }) {
   // 페이지 이동에 사용할 함수
   const navigate = useNavigate();
 
+  const showToast = useToastStore((state) => state.showToast);
+
   // 구매 모달 열림 여부: 처음에는 닫힘
   const [isPurchaseModalOpen, setIsPurchaseModalOpen] = useState(false);
 
@@ -48,9 +54,57 @@ export default function CartOrderSummary({ cartItems, hasShippingAddress }) {
   };
 
   // 예 클릭 → 마이페이지 이동
-  const handleConfirm = () => {
-    setIsPurchaseModalOpen(false);
-    navigate("/mypage"); // 실제 마이페이지 경로에 맞춰야 해요.
+  const handleConfirm = async () => {
+    if (isCartBusy || cartItems.length === 0) return;
+
+    const userId = useAuthStore.getState().user?.id;
+
+    if (!userId) {
+      setIsPurchaseModalOpen(false);
+      navigate("/login");
+      return;
+    }
+
+    const address = useAddressStore
+      .getState()
+      .addressesByUser[userId]?.find((item) => item.isDefault);
+
+    if (!address) {
+      showToast("배송지를 먼저 등록해주세요.");
+      setIsPurchaseModalOpen(false);
+      navigate("/mypage");
+      return;
+    }
+
+    try {
+      useOrderStore.getState().createTestOrder(
+        userId,
+        crypto.randomUUID(),
+        cartItems,
+        {
+          shippingFee,
+          discountAmount: discountTotal,
+        },
+        address,
+      );
+
+      // 주문에 저장한 상품만 장바구니에서 삭제
+      const removed = await useCartStore
+        .getState()
+        .removeSelected(cartItems.map((item) => item.cartItemId));
+
+      setIsPurchaseModalOpen(false);
+
+      showToast(
+        removed
+          ? "테스트 주문을 생성하고 구매한 상품을 장바구니에서 삭제했습니다."
+          : "주문은 저장됐지만 장바구니 갱신에 실패했습니다. 주문내역을 확인한 후 남아 있는 상품을 삭제해주세요.",
+      );
+
+      navigate("/mypage");
+    } catch (error) {
+      showToast(error.message);
+    }
   };
 
   const productTotal = cartItems.reduce((sum, item) => {
