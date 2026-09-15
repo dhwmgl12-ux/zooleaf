@@ -2,6 +2,14 @@ import styled from '@emotion/styled';
 import {theme} from '../../styles/variables'
 import { Link } from "react-router-dom";
 
+import { ContentContainer } from "../layout/ContentContainer.styles";
+
+export const MainHeroInner = styled(ContentContainer)`
+  position: absolute;
+  inset: 0;
+  height: 100%;
+`;
+
 export const MainHeroContainer = styled.div`
   position: relative;
   width: 100%;
@@ -50,7 +58,7 @@ export const MainHeroContent = styled.div`
   position: absolute;
   z-index: 1;
   top: 20%;
-  left: 15%;
+  left: 5%;
 
   display: flex;
   flex-direction: column;

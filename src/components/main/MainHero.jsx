@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 
-import { MainHeroContainer, MainHeroTitle, MainHeroContent, MainHeroMoreLink } from "./MainHero.styles";
+import { MainHeroContainer, MainHeroInner, MainHeroTitle, MainHeroContent, MainHeroMoreLink } from "./MainHero.styles";
 import zooleafLogo from '../../assets/images/zooleaf-logo-2.webp'
 import heroDesktop from "../../assets/videos/zooleaf-banner-wide.mp4"
 import heroMobile from "../../assets/videos/zooleaf-mobile-banner.mp4"
@@ -50,19 +50,21 @@ export default function MainHero() {
         aria-hidden="true"
       />
 
-      <MainHeroContent className="main-hero__content">
-        <MainHeroTitle>
-          <div>
-            <img src={zooleafLogo} alt="ZOOLEAF" />
-            <span>에서</span>
-          </div>
-          <p>동물 친구들이 기다리고 있어요.</p>
-        </MainHeroTitle>
+      <MainHeroInner>
+        <MainHeroContent className="main-hero__content">
+          <MainHeroTitle>
+            <div>
+              <img src={zooleafLogo} alt="ZOOLEAF" />
+              <span>에서</span>
+            </div>
+            <p>동물 친구들이 기다리고 있어요.</p>
+          </MainHeroTitle>
 
-        <MainHeroMoreLink to="/products">
-          티켓 예매하러 가기
-        </MainHeroMoreLink>
-      </MainHeroContent>
+          <MainHeroMoreLink to="/products">
+            티켓 예매하러 가기
+          </MainHeroMoreLink>
+        </MainHeroContent>
+      </MainHeroInner>
     </MainHeroContainer>
   );
 }
