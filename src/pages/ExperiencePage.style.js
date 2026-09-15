@@ -3,13 +3,6 @@ import { theme } from '../styles/variables';
 
 export const ExperiencePageWrapper = styled.div`
   background-color: ${theme.colors.background2};
-  padding-bottom: ${theme.spacing[64]};
-`;
-
-export const ExperienceMain = styled.main`
-  max-width: 1200px;
-  margin: 0 auto;
-  padding: 40px 20px;
 `;
 
 export const ExperienceTitle = styled.h2`
@@ -25,25 +18,19 @@ export const ExperienceTitle = styled.h2`
   }
 `;
 
-export const ExperienceGrid = styled.div`
+export const ExperienceGrid = styled.ul`
   display: grid;
-  grid-template-columns: repeat(4, 1fr);
+  grid-template-columns: repeat(
+    auto-fit,
+    minmax(300px, 1fr)
+  );
   gap: ${theme.spacing[24]};
   justify-content: center;
   align-items: center;
-  max-width: 1440px;
-  margin: 0 auto;
-  @media (max-width: ${theme.layout.breakpoint.tablet}) {
-    grid-template-columns: repeat(3, 1fr);
-    margin-left: 0;
-  }
-
-  @media (max-width: ${theme.layout.breakpoint.mobile}) {
-    grid-template-columns: repeat(2, 1fr);
-  }
+  list-style: none;
   @media (max-width: ${theme.layout.breakpoint.smallMobile}) {
-    grid-template-columns: 100%;
-    margin: 0;
+    min-width: 0;
+    max-width: 100%;
   }
 `;
 

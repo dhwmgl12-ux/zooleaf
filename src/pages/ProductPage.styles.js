@@ -9,7 +9,12 @@ export const ProductPageContainer = styled.main`
   .product-page__layout { display: flex; gap: ${theme.spacing[32]}; align-items: flex-start; }
   .product-page__content { min-width: 0; flex: 1; }
   h1 { margin: 0 0 ${theme.spacing[32]}; color: ${theme.colors.textPrimary}; font-size: ${theme.fontSize.h3.size}; text-align: center; }
-  .product-page__grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: ${theme.spacing[24]}; }
+  .product-page__grid {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 300px));
+    justify-content: center;
+    gap: ${theme.spacing[24]};
+  }
 
   @media (max-width: ${theme.layout.breakpoint.tablet}) {
     padding-top: ${theme.spacing[32]};

@@ -1,19 +1,16 @@
 import { useEffect, useState } from 'react';
-import { Link } from 'react-router-dom';
+
 import Breadcrumb from '../components/common/Breadcrumb';
 import { getExperiences } from '../api/experienceApi';
 import LoadingSpinner from '../components/common/LoadingSpinner';
 import ErrorState from '../components/common/ErrorState';
 import EmptyState from '../components/common/EmptyState';
+import ExperienceCard from "../components/experience/ExperienceCard.jsx";
+
 import {
   ExperiencePageWrapper,
-  ExperienceMain,
   ExperienceTitle,
   ExperienceGrid,
-  ExperienceCard,
-  CardImageContainer,
-  CardOverlayText,
-  ReserveButton,
 } from './ExperiencePage.style';
 
 export default function ExperiencePage() {
@@ -49,36 +46,24 @@ export default function ExperiencePage() {
   return (
     <ExperiencePageWrapper>
       <Breadcrumb items={[{ label: '홈', to: '/' }, { label: '프로그램' }]} />
-      <ExperienceMain>
-        <section aria-label="체험 프로그램 목록">
-          <ExperienceTitle>체험 프로그램</ExperienceTitle>
-
-          {loading ? (
-            <LoadingSpinner />
+      <section aria-label="체험 프로그램 목록">
+        <ExperienceTitle>체험 프로그램</ExperienceTitle>
+        {loading ? (
+          <LoadingSpinner />
           ) : error ? (
             <ErrorState message={error} />
           ) : experiences.length === 0 ? (
             <EmptyState message="등록된 체험 프로그램이 없습니다." />
           ) : (
-            <ExperienceGrid>
-              {experiences.map((experience) => (
-                <ExperienceCard key={experience.id}>
-                  <CardImageContainer>
-                    <img src={experience.imageUrl} alt={experience.name} />
-                    <CardOverlayText>
-                      <h2>{experience.name}</h2>
-                      <strong>{experience.price.toLocaleString()}원</strong>
-                    </CardOverlayText>
-                  </CardImageContainer>
-                  <ReserveButton as={Link} to={`/experiences/${experience.id}`}>
-                    예매하기
-                  </ReserveButton>
-                </ExperienceCard>
-              ))}
-            </ExperienceGrid>
-          )}
-        </section>
-      </ExperienceMain>
+          <ExperienceGrid>
+            {experiences.map((experience) => (
+              <li key={experience.id}>
+                <ExperienceCard experience={experience} />
+              </li>
+            ))}
+          </ExperienceGrid>
+        )}
+      </section>
     </ExperiencePageWrapper>
   );
 }
