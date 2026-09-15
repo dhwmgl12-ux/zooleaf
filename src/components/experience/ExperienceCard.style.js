@@ -5,28 +5,30 @@ export const ExperienceCardContainer = styled.article`
   position: relative;
   background: transparent;
   border-radius: ${theme.radius.image};
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
-  height: 302px;
+  border: 1px solid ${theme.colors.background2};
+  box-shadow: 4px 4px 8px rgba(0, 0, 0, 0.08);
   width: 100%;
-  max-width: 330px;
+  min-width: 300px;
+  height: 300px;
   display: flex;
   flex-direction: column;
   overflow: hidden;
   justify-self: center;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  
+  &:hover {
+    transform: translateY(-4px);
+    border: 1px solid ${theme.colors.secondary};
+    box-shadow: 4px 4px 8px rgba(0, 0, 0, 0.26);
+  }
 
   @media (max-width: ${theme.layout.breakpoint.tablet}) {
-    max-width: 310px;
-    height: 300px;
     margin-bottom: ${theme.spacing[24]};
   }
   @media (max-width: ${theme.layout.breakpoint.mobile}) {
-    max-width: 352px;
-    height: 300px;
     margin-bottom: ${theme.spacing[4]};
   }
   @media (max-width: ${theme.layout.breakpoint.smallMobile}) {
-    max-width: 100%;
-    height: 262px;
     margin-bottom: ${theme.spacing[24]};
   }
 `;
@@ -83,11 +85,11 @@ export const CardOverlayText = styled.div`
 export const ReserveButton = styled.a`
   position: absolute;
   bottom: ${theme.spacing[20]};
-  left: 50%;
-  transform: translateX(-50%);
-  width: 86%;
-  max-width: 286px;
-  height: 41px;
+  left: ${theme.spacing[20]};
+  right: ${theme.spacing[20]};
+  bottom: ${theme.spacing[20]};
+  width: auto;
+  height: 40px;
   text-align: center;
   background-color: ${theme.colors.primary};
   color: ${theme.colors.white};
@@ -102,19 +104,9 @@ export const ReserveButton = styled.a`
   &:hover {
     background-color: ${theme.colors.hover};
   }
-  @media (max-width: ${theme.layout.breakpoint.tablet}) {
-    width: 86%;
-    max-width: 268px;
-    height: 41px;
-  }
-  @media (max-width: ${theme.layout.breakpoint.mobile}) {
-    width: 88%;
-    max-width: 310px;
-    height: 41px;
-  }
+
   @media (max-width: ${theme.layout.breakpoint.smallMobile}) {
-    width: 84%;
-    max-width: 222px;
-    height: 41px;
+    left: ${theme.spacing[16]};
+    right: ${theme.spacing[16]};
   }
 `;

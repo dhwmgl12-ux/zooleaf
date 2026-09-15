@@ -5,12 +5,14 @@ export const GoodsCardContainer = styled.article`
   overflow: hidden;
   border-radius: ${theme.radius.box};
   background-color: ${theme.colors.white};
-  box-shadow: 0 2px 6px rgba(44, 62, 53, 0.06);
+  box-shadow: 4px 4px 8px rgba(0, 0, 0, 0.08);
+  border: 1px solid ${theme.colors.background2};
   transition: transform 0.2s ease, box-shadow 0.2s ease;
 
   &:hover {
     transform: translateY(-4px);
-    box-shadow: 0 8px 18px rgba(44, 62, 53, 0.16);
+    box-shadow: 4px 4px 8px rgba(0, 0, 0, 0.26);
+    border: 1px solid ${theme.colors.secondary};
   }
 
   .goods-card__link { display: block; color: inherit; }
