@@ -1,6 +1,5 @@
 import { useState, useEffect, useRef } from 'react';
-import { fetchAnimalStories } from '../api/AnimalStoryApi';
-
+import { fetchAnimalStories } from '../api/AnimalStoryApi.js';
 import {
   Container,
   Title,
@@ -22,9 +21,9 @@ import {
   PageBtn,
 } from './AnimalStory.style.js';
 import Breadcrumb from '../components/common/Breadcrumb.jsx';
-import LoadingSpinner from '../components/common/LoadingSpinner';
-import ErrorState from '../components/common/ErrorState';
-import EmptyState from '../components/common/EmptyState';
+import LoadingSpinner from '../components/common/LoadingSpinner.jsx';
+import ErrorState from '../components/common/ErrorState.jsx';
+import EmptyState from '../components/common/EmptyState.jsx';
 
 export default function AnimalStory() {
   const [allAnimals, setAllAnimals] = useState([]);
@@ -53,20 +52,27 @@ export default function AnimalStory() {
 
   // 분리한 API 함수를 호출하여 데이터 가져오기
   useEffect(() => {
+    const controller = new AbortController();
+
     const loadAnimals = async () => {
       try {
         setLoading(true);
         setError('');
-        const animals = await fetchAnimalStories();
+        const animals = await fetchAnimalStories(controller.signal);
         setAllAnimals(animals);
       } catch (err) {
+        if (err.name === 'AbortError') return;
         setError(err.message || '동물 데이터를 불러오지 못했습니다.');
       } finally {
-        setLoading(false);
+        if (!controller.signal.aborted) {
+          setLoading(false);
+        }
       }
     };
 
     loadAnimals();
+
+    return () => controller.abort();
   }, []);
 
   const handleTabClick = (zone) => {
@@ -96,35 +102,19 @@ export default function AnimalStory() {
   // 2. 페이지네이션 계산
   const totalPages = Math.ceil(filteredAnimals.length / ITEMS_PER_PAGE) || 1;
   const startIndex = (currentPage - 1) * ITEMS_PER_PAGE;
-  const currentAnimals = filteredAnimals.slice(
-    startIndex,
-    startIndex + ITEMS_PER_PAGE,
-  );
+  const currentAnimals = filteredAnimals.slice(startIndex, startIndex + ITEMS_PER_PAGE);
 
   return (
     <>
-      <Breadcrumb
-        items={[{ label: '홈', to: '/' }, { label: '동물 이야기' }]}
-      />
+      <Breadcrumb items={[{ label: '홈', to: '/' }, { label: '동물 이야기' }]} />
       <Container>
         <Title>동물 이야기</Title>
         <SubTitle>자연과 교감하는 ZOOLEAF 동물 친구들</SubTitle>
 
         <FilterBox>
           <ZoneTabs>
-            {[
-              '전체',
-              '사파리존',
-              '판다존',
-              '파충류관',
-              '버드가든',
-              '어린이동물원',
-            ].map((zone) => (
-              <TabBtn
-                key={zone}
-                active={currentZone === zone}
-                onClick={() => handleTabClick(zone)}
-              >
+            {['전체', '사파리존', '판다존', '파충류관', '버드가든', '어린이동물원'].map((zone) => (
+              <TabBtn key={zone} active={currentZone === zone} onClick={() => handleTabClick(zone)}>
                 {zone}
               </TabBtn>
             ))}
@@ -152,12 +142,8 @@ export default function AnimalStory() {
             </DropdownHeader>
             {isOpen && (
               <DropdownList>
-                <DropdownItem onClick={() => handleSortSelect('latest')}>
-                  전체
-                </DropdownItem>
-                <DropdownItem onClick={() => handleSortSelect('name')}>
-                  이름순
-                </DropdownItem>
+                <DropdownItem onClick={() => handleSortSelect('latest')}>전체</DropdownItem>
+                <DropdownItem onClick={() => handleSortSelect('name')}>이름순</DropdownItem>
               </DropdownList>
             )}
           </DropdownWrapper>
@@ -191,9 +177,7 @@ export default function AnimalStory() {
                     </InfoRow>
 
                     <TmiBox>
-                      <span className="tmi-label">
-                        사육사가 전하는 동물 TMI
-                      </span>
+                      <span className="tmi-label">사육사가 전하는 동물 TMI</span>
                       <p className="tmi-text">{animal.keeperTmi}</p>
                     </TmiBox>
                   </AnimalInfo>
@@ -202,24 +186,19 @@ export default function AnimalStory() {
             </AnimalGrid>
 
             <Pagination>
-              <PageBtn
-                disabled={currentPage === 1}
-                onClick={() => setCurrentPage(currentPage - 1)}
-              >
+              <PageBtn disabled={currentPage === 1} onClick={() => setCurrentPage(currentPage - 1)}>
                 &lt;
               </PageBtn>
 
-              {Array.from({ length: totalPages }, (_, index) => index + 1).map(
-                (page) => (
-                  <PageBtn
-                    key={page}
-                    active={currentPage === page}
-                    onClick={() => setCurrentPage(page)}
-                  >
-                    {page}
-                  </PageBtn>
-                ),
-              )}
+              {Array.from({ length: totalPages }, (_, index) => index + 1).map((page) => (
+                <PageBtn
+                  key={page}
+                  active={currentPage === page}
+                  onClick={() => setCurrentPage(page)}
+                >
+                  {page}
+                </PageBtn>
+              ))}
 
               <PageBtn
                 disabled={currentPage === totalPages}
