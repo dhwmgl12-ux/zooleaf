@@ -6,6 +6,7 @@ import CartOrderSummary from "./CartOrderSummary";
 import CartDeleteModal from "./CartDeleteModal";
 import useAddressStore from "../../store/addressStore";
 import useAuthStore from "../../store/authStore";
+import LoadingSpinner from "../common/LoadingSpinner";
 
 import {
   CartTopBar,
@@ -52,7 +53,7 @@ export default function CartContents() {
   );
 
   // 장바구니 데이터를 불러오는 중일 때 표시
-  if (cart.isLoading) return <p role="status">장바구니를 불러오는 중입니다.</p>;
+  if (cart.isLoading) return <LoadingSpinner />;
 
   return (
     <>
