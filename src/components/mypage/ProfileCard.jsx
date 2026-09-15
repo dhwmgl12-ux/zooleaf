@@ -1,8 +1,9 @@
 import useToastStore from "../../store/toastStore";
 import { useState } from "react";
 import Modal from "../common/Modal";
-import { formatPhoneNumber } from "../../utils/validation";
+import { formatPhoneNumber, formatBirthDate } from "../../utils/validation";
 import { validateProfile } from "../../utils/profileValidation";
+
 import {
   Card,
   CardHeader,
@@ -43,7 +44,10 @@ export default function ProfileCard() {
 
   // 현재 정보를 입력창에 넣고 모달 열기
   const openEditModal = () => {
-    setForm({ ...profile });
+    setForm({
+      ...profile,
+      birthDate: formatBirthDate(profile.birthDate ?? ""),
+    });
     setErrors({});
     setIsEditOpen(true);
   };
@@ -55,10 +59,14 @@ export default function ProfileCard() {
 
   const handleChange = (event) => {
     const { name, value } = event.target;
+    let nextValue = value;
+
+    if (name === "phone") nextValue = formatPhoneNumber(value);
+    if (name === "birthDate") nextValue = formatBirthDate(value);
 
     setForm((prev) => ({
       ...prev,
-      [name]: name === "phone" ? formatPhoneNumber(value) : value,
+      [name]: nextValue,
     }));
 
     setErrors((prev) => ({
@@ -208,15 +216,13 @@ export default function ProfileCard() {
             <ProfileInput
               id="profile-birth-date"
               name="birthDate"
-              type="date"
-              autoComplete="bday"
+              type="text"
+              inputMode="numeric"
+              autoComplete="off"
               value={form.birthDate}
               onChange={handleChange}
-              max={[
-                new Date().getFullYear(),
-                String(new Date().getMonth() + 1).padStart(2, "0"),
-                String(new Date().getDate()).padStart(2, "0"),
-              ].join("-")}
+              placeholder="2000.05.14"
+              maxLength={10}
               required
               aria-invalid={Boolean(errors.birthDate)}
               aria-describedby={
