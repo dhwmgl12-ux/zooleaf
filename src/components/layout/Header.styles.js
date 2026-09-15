@@ -131,26 +131,26 @@ export const IconLink = styled(Link)`
   &:focus-within [data-tooltip] {
     opacity: 1;
     visibility: visible;
-    transform: translate(-50%, 0);
+    transform: translate(0);
   }
 `;
 
 export const Tooltip = styled.span`
   position: absolute;
   top: calc(100% + ${theme.spacing[12]});
-  left: 50%;
-  transform: translate(-50%, -4px);
+  right: 0;
   white-space: nowrap;
-
+  
   padding: ${theme.spacing[8]} ${theme.spacing[12]};
   border-radius: ${theme.radius.input};
   background: ${theme.colors.textPrimary};
   color: ${theme.colors.white};
   font-size: ${theme.fontSize.caption.size};
-
+  
   opacity: 0;
   visibility: hidden;
   pointer-events: none;
+  transform: translateY(-4px);
   transition:
     opacity 0.15s ease,
     transform 0.15s ease,
