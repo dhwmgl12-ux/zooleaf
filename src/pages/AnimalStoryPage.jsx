@@ -1,5 +1,6 @@
 import { useState, useEffect, useRef } from 'react';
 import { fetchAnimalStories } from '../api/AnimalStoryApi.js';
+import AnimalStoryCard from './AnimalStoryCard.jsx';
 import {
   Container,
   Title,
@@ -12,11 +13,6 @@ import {
   DropdownList,
   DropdownItem,
   AnimalGrid,
-  AnimalCard,
-  AnimalImg,
-  AnimalInfo,
-  InfoRow,
-  TmiBox,
   Pagination,
   PageBtn,
 } from './AnimalStory.style.js';
@@ -33,7 +29,6 @@ export default function AnimalStory() {
   const [currentZone, setCurrentZone] = useState('전체');
   const [currentSort, setCurrentSort] = useState('latest');
   const [currentPage, setCurrentPage] = useState(1);
-
   const [isOpen, setIsOpen] = useState(false);
   const dropdownRef = useRef(null);
 
@@ -159,29 +154,7 @@ export default function AnimalStory() {
           <>
             <AnimalGrid>
               {currentAnimals.map((animal) => (
-                <AnimalCard key={animal.id}>
-                  <AnimalImg src={animal.imageUrl} alt={animal.name} />
-                  <AnimalInfo>
-                    <h3>
-                      {animal.name} <span>({animal.species})</span>
-                    </h3>
-
-                    <InfoRow>
-                      <strong>특징:</strong>
-                      <span>{animal.description}</span>
-                    </InfoRow>
-
-                    <InfoRow>
-                      <strong>위치:</strong>
-                      <span>{animal.zone}</span>
-                    </InfoRow>
-
-                    <TmiBox>
-                      <span className="tmi-label">사육사가 전하는 동물 TMI</span>
-                      <p className="tmi-text">{animal.keeperTmi}</p>
-                    </TmiBox>
-                  </AnimalInfo>
-                </AnimalCard>
+                <AnimalStoryCard key={animal.id} animal={animal} />
               ))}
             </AnimalGrid>
 
