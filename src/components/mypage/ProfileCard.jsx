@@ -113,7 +113,7 @@ export default function ProfileCard() {
     },
     {
       label: "생년월일",
-      value: profile.birthDate?.replaceAll("-", ".") ?? "미등록",
+      value: profile.birthDate ?? "미등록",
     },
   ];
 
