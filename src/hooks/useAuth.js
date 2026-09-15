@@ -195,14 +195,13 @@ export function useSignup() {
 
     setIsSubmitting(true);
     try {
-      const birthDateForServer = birthDate.replace(/\./g, '-');
       const result = await signup({
         id,
         password,
         passwordConfirm,
         name,
         phone,
-        birthDate: birthDateForServer,
+        birthDate,
         agreeTerms,
         agreePrivacy,
         agreeMarketing,
@@ -266,9 +265,11 @@ export function useAuthRestore() {
       .then((result) => {
         setAuth(sessionStorage.getItem('token'), result.data);
       })
-      .catch(() => {
-        sessionStorage.removeItem('token');
-        clearAuth();
+      .catch((err) => {
+        if (err.status === 401) {
+          sessionStorage.removeItem('token');
+          clearAuth();
+        }
       });
   }, [setAuth, clearAuth]);
 }

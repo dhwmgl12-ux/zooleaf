@@ -13,7 +13,7 @@ import GoodsDetailPage from '../pages/GoodsDetailPage';
 import GoodsPage from '../pages/GoodsPage';
 import ExperiencePage from '../pages/ExperiencePage';
 import { IntroPage } from '../pages/Intro';
-import Animal from '../pages/AnimalStory';
+import Animal from '../pages/AnimalStoryPage';
 import MyPage from '../pages/MyPage';
 import NotFoundPage from '../pages/NotFoundPage';
 
