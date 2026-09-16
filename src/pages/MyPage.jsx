@@ -71,6 +71,7 @@ export default function MyPage() {
       </LogoutBox>
 
       <Modal
+        variant="mypage"
         isOpen={isLogoutModalOpen}
         onClose={closeLogoutModal}
         title="로그아웃 확인"

@@ -227,6 +227,7 @@ export default function OrderSection() {
       )}
 
       <Modal
+        variant="mypage"
         isOpen={Boolean(modal && selectedOrder)}
         onClose={closeModal}
         title={modalTitles[modal?.type] ?? "주문내역"}
@@ -303,7 +304,7 @@ export default function OrderSection() {
                 <p>선택한 주문 전체가 취소 처리됩니다.</p>
                 <p>계속 진행하시겠어요?</p>
 
-                <ProfileModalActions>
+                <ProfileModalActions data-order-modal-actions>
                   <ProfileCancelButton type="button" onClick={closeModal}>
                     취소
                   </ProfileCancelButton>
@@ -358,7 +359,7 @@ export default function OrderSection() {
                 <p>교환/반품 페이지는 현재 개발 중이에요.</p>
                 <p>조금만 기다려주세요!</p>
 
-                <ProfileModalActions>
+                <ProfileModalActions data-order-modal-actions>
                   <ProfileCancelButton type="button" onClick={closeModal}>
                     취소
                   </ProfileCancelButton>

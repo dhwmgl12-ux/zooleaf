@@ -26,6 +26,8 @@ import {
   ProfileModalActions,
   ProfileCancelButton,
   ProfileSaveButton,
+  AddressDeleteContent,
+  AddressDeleteNotice,
 } from "../../pages/Mypage.styles";
 
 import {
@@ -355,32 +357,39 @@ export default function AddressSection() {
         </ProfileEditForm>
       </Modal>
       <Modal
+        variant="mypage"
         isOpen={Boolean(deleteTarget)}
         onClose={closeDeleteModal}
-        title="배송지 삭제"
+        title="배송지를 삭제할까요?"
         returnFocusRef={addAddressButtonRef}
       >
-        <p>
-          <strong>{deleteTarget?.label}</strong>
-          {" 배송지를 삭제하시겠습니까?"}
-        </p>
-
-        {deleteTarget?.isDefault && (
+        <AddressDeleteContent>
           <p>
-            기본 배송지입니다. 다른 배송지가 남아 있다면 첫 번째 배송지가 기본
-            배송지로 지정됩니다.
+            <strong>‘{deleteTarget?.label}’</strong> 배송지를 삭제합니다.
+            <br />
+            계속 진행하시겠어요?
           </p>
-        )}
 
-        <ProfileModalActions>
-          <ProfileCancelButton type="button" onClick={closeDeleteModal}>
-            취소
-          </ProfileCancelButton>
+          {deleteTarget?.isDefault && (
+            <AddressDeleteNotice>
+              <strong>기본 배송지로 등록된 주소예요.</strong>
+              <p>
+                다른 배송지가 남아 있다면 첫 번째 배송지가 기본 배송지로
+                지정됩니다.
+              </p>
+            </AddressDeleteNotice>
+          )}
 
-          <ProfileSaveButton type="button" onClick={confirmDelete}>
-            삭제
-          </ProfileSaveButton>
-        </ProfileModalActions>
+          <ProfileModalActions>
+            <ProfileCancelButton type="button" onClick={closeDeleteModal}>
+              취소
+            </ProfileCancelButton>
+
+            <ProfileSaveButton type="button" onClick={confirmDelete}>
+              삭제하기
+            </ProfileSaveButton>
+          </ProfileModalActions>
+        </AddressDeleteContent>
       </Modal>
     </Card>
   );

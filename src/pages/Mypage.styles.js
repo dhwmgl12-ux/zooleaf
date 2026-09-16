@@ -381,15 +381,20 @@ export const ProfileFormError = styled.p`
   color: ${theme.colors.error};
   font-size: ${theme.fontSize.bodysmall.size};
   line-height: ${theme.fontSize.bodysmall.lineheight};
+  text-align: center;
 `;
 
 // 취소·저장 버튼을 같은 너비로 배치
 export const ProfileModalActions = styled.div`
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: ${theme.spacing[12]};
+  gap: ${theme.spacing[20]};
+  margin-top: ${theme.spacing[24]};
 
-  margin-top: ${theme.spacing[4]};
+  > button {
+    min-width: 0;
+    width: 100%;
+  }
 `;
 
 // 수정 취소 버튼
@@ -485,8 +490,7 @@ export const DefaultAddressLabel = styled.label`
 // 로그아웃 확인 문구
 export const LogoutMessage = styled.p`
   margin: 0;
-  padding: ${theme.spacing[20]} 0;
-  text-align: center;
+  text-align: left;
 
   font-size: ${theme.fontSize.body.size};
   line-height: ${theme.fontSize.body.lineheight};
@@ -627,6 +631,16 @@ export const OrderModalContent = styled.div`
   gap: ${theme.spacing[16]};
   white-space: normal;
   overflow-wrap: anywhere;
+  text-align: left;
+
+  > p {
+    margin: 0;
+    text-align: left;
+  }
+
+  > [data-order-modal-actions] {
+    margin-top: ${theme.spacing[8]};
+  }
 `;
 
 export const OrderInfoGrid = styled.div`
@@ -710,6 +724,7 @@ export const DeliveryPanel = styled.div`
   display: flex;
   flex-direction: column;
   gap: ${theme.spacing[8]};
+  text-align: center;
 
   padding: ${theme.spacing[20]};
   border: 1px solid ${theme.colors.border};
@@ -731,4 +746,36 @@ export const DeliveryTitle = styled.h3`
 export const DeliveryEvent = styled(DeliveryPanel)`
   border-left: 4px solid ${theme.colors.primary};
   background: ${theme.colors.background2};
+`;
+
+export const AddressDeleteContent = styled.div`
+  white-space: normal;
+  overflow-wrap: anywhere;
+  text-align: left;
+
+  > p {
+    margin: 0;
+    line-height: 1.6;
+  }
+`;
+
+export const AddressDeleteNotice = styled.div`
+  margin-top: ${theme.spacing[16]};
+  padding: ${theme.spacing[16]};
+  border-radius: 12px;
+  background: ${theme.colors.background2};
+
+  font-size: ${theme.fontSize.caption.size};
+  line-height: 1.6;
+  color: ${theme.colors.textSecondary};
+
+  > strong {
+    display: block;
+    margin-bottom: ${theme.spacing[8]};
+    color: ${theme.colors.textPrimary};
+  }
+
+  > p {
+    margin: 0;
+  }
 `;
