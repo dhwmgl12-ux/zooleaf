@@ -8,6 +8,7 @@ export const Sidebar = styled.aside`
   border-radius: ${theme.radius.box};
   background-color: ${theme.colors.white};
   box-shadow: 0 4px 10px rgba(44, 62, 53, 0.08);
+  padding: ${theme.spacing[32]} ${theme.spacing[32]};
 
   nav button,
   section button {
@@ -17,7 +18,7 @@ export const Sidebar = styled.aside`
     justify-content: center;
     padding: ${theme.spacing[16]} ${theme.spacing[20]};
     color: ${theme.colors.textPrimary};
-    font-size: ${theme.fontSize.body2.size};
+    font-size: ${theme.fontSize.body.size};
     font-weight: ${theme.fontWeight.bold};
     text-align: center;
   }
@@ -94,22 +95,59 @@ export const Sidebar = styled.aside`
   }
 
   @media (max-width: ${theme.layout.breakpoint.tablet}) {
-    width: 100%;
-    display: flex;
-    align-items: center;
-    padding: ${theme.spacing[8]} ${theme.spacing[16]};
-    nav { flex: 1; padding: 0; }
-    nav ul { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); }
-    nav button { width: 100%; padding: ${theme.spacing[16]} ${theme.spacing[8]}; }
-    .filter-options { display: flex; flex: 0 0 310px; gap: ${theme.spacing[12]}; margin: 0; border-top: 0; border-left: 1px solid ${theme.colors.background2}; padding: 0 0 0 ${theme.spacing[16]}; }
-    .filter-dropdown { width: 50%; margin-top: 0; }
+  width: 100%;
+  display: grid;
+  grid-template-columns:
+    minmax(0, 1fr)
+    minmax(280px, 310px);
+  align-items: center;
+  gap: ${theme.spacing[16]};
+  padding: ${theme.spacing[8]} ${theme.spacing[16]};
+
+  nav {
+    min-width: 0;
+    padding: 0;
   }
+
+  nav ul {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
+
+  nav button {
+    width: 100%;
+    min-width: 0;
+    padding: ${theme.spacing[16]} ${theme.spacing[8]};
+  }
+
+  .filter-options {
+    min-width: 0;
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: ${theme.spacing[12]};
+    margin: 0;
+    border-top: 0;
+    border-left: 1px solid ${theme.colors.background2};
+    padding: 0 0 0 ${theme.spacing[16]};
+  }
+
+  .filter-dropdown {
+    width: auto;
+    min-width: 0;
+    margin-top: 0;
+  }
+
+  .filter-dropdown > button {
+    min-width: 0;
+    padding-inline: ${theme.spacing[12]};
+  }
+}
 
   @media (max-width: ${theme.layout.breakpoint.mobile}) {
     display: block;
     padding: 0;
     nav ul { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); }
-    nav button { width: 100%; padding: ${theme.spacing[12]} ${theme.spacing[4]}; font-size: ${theme.fontSize.caption.size}; }
+    nav button { width: 100%; padding: ${theme.spacing[12]} ${theme.spacing[4]}; font-size: ${theme.fontSize.bodysmall.size}; white-space: nowrap; }
     .filter-options { display: block; margin: 0 ${theme.spacing[16]} ${theme.spacing[16]}; border-top: 1px solid ${theme.colors.background2}; padding: ${theme.spacing[12]} 0 0; }
     .filter-dropdown { width: 100%; }
   }
