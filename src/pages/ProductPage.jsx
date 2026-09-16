@@ -2,7 +2,6 @@ import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import CategorySidebar from '../components/product/CategorySidebar';
 import ProductCard from '../components/product/ProductCard';
-import Pagination from '../components/product/Pagination';
 import { getProducts } from '../api/productApi';
 import bannerImage from '../assets/images/banner.webp';
 import mobileBannerImage from '../assets/images/banner-mobile.webp';
@@ -26,7 +25,6 @@ function EmptyCell() {
 
 export default function ProductPage() {
   const [products, setProducts] = useState([]);
-  const [totalPages, setTotalPages] = useState(1);
   const [filters, setFilters] = useState({
     category: '전체상품',
     target: '전체',
@@ -62,6 +60,8 @@ export default function ProductPage() {
   };
 
   useEffect(() => {
+    const controller = new AbortController();
+
     const fetchProducts = async () => {
       setLoading(true);
       setError('');
@@ -73,19 +73,25 @@ export default function ProductPage() {
           limit: PRODUCTS_PER_PAGE,
           visitorType: isTicketCategory ? filters.target : undefined,
           availableTimeType: isTicketCategory ? filters.time : undefined,
+          signal: controller.signal,
         });
 
         setProducts(data?.products ?? []);
-        setTotalPages(data?.pagination?.totalPages ?? 1);
       } catch (err) {
-        setProducts([]);
-        setError(err.message || '상품을 불러오지 못했습니다.');
+        if (err.name !== 'AbortError') {
+          setProducts([]);
+          setError(err.message || '상품을 불러오지 못했습니다.');
+        }
       } finally {
-        setLoading(false);
+        if (!controller.signal.aborted) {
+          setLoading(false);
+        }
       }
     };
 
     fetchProducts();
+
+    return () => controller.abort();
   }, [filters, isTicketCategory]);
 
   return (
@@ -146,13 +152,6 @@ export default function ProductPage() {
             </div>
           )}
 
-          <Pagination
-            currentPage={filters.page}
-            totalPages={totalPages}
-            onPageChange={(page) => {
-              setFilters((prev) => ({ ...prev, page }));
-            }}
-          />
         </section>
       </div>
     </ProductPageContainer>

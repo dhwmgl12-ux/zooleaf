@@ -62,7 +62,9 @@ export async function getProducts(options = {}) {
   params.append("page", options.page ?? 1);
   params.append("limit", options.limit ?? 9);
 
-  const result = await apiClient(`/products?${params.toString()}`);
+  const result = await apiClient(`/products?${params.toString()}`, {
+    signal: options.signal,
+  });
 
   return {
     ...result.data,
