@@ -18,33 +18,33 @@ export const MainImageViewport = styled.div`
     width: min(100%, 480px);
     aspect-ratio: 480 / 320;
   }
-
+  
   @media (max-width: ${theme.layout.breakpoint.tablet}) {
     width: 100%;
     aspect-ratio: 480 / 320;
   }
-`
+  `
 
 export const ImageTrack = styled.ul`
   width: 100%;
   height: 100%;
-
+  
   display: flex;
-
+  
   transform: ${({ $currentIndex }) => `translateX(-${$currentIndex * 100}%)`};
-
+  
   transition: transform 300ms ease;
-
+  
   > li {
     flex: 0 0 100%;
     width: 100%;
     height: 100%;
   }
-
+  
   img {
     width: 100%;
     height: 100%;
-    object-fit: cover;
+    object-fit: ${({ $isProduct }) => $isProduct ? "contain" : "cover"};
   }
 `
 

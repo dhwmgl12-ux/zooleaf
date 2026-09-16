@@ -5,6 +5,7 @@ export default function DetailImage({
   imageUrl,
   name,
   images = [],
+  productType,
 }) {
 
   const [currentIndex, setCurrentIndex] = useState(0);
@@ -43,7 +44,7 @@ export default function DetailImage({
   return (
     <DetailImageContainer>
       <MainImageViewport className="main-image-area">
-        <ImageTrack $currentIndex={currentIndex}>
+        <ImageTrack $currentIndex={currentIndex} $isProduct={productType === "product"}>
           {galleryImages.map((image) => (
             <li key={image.key}>
               <img

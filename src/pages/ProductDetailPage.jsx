@@ -102,6 +102,7 @@ export default function ProductDetailPage() {
           <DetailImage 
             imageUrl={product.imageUrl ?? product.thumbnailImage}
             name={product.name}
+            productType="product"
           />
         </div>
         <div className="detail-content-area">
