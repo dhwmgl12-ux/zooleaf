@@ -1,9 +1,8 @@
 import styled from "@emotion/styled";
 import { theme } from "../styles/variables";
 
-export const Container = styled.main`
+export const Container = styled.section`
   min-height: 100vh;
-  padding: ${theme.spacing[32]} ${theme.spacing[24]};
   background: ${theme.colors.background2};
   color: ${theme.colors.textPrimary};
 
@@ -15,8 +14,8 @@ export const Container = styled.main`
 export const Title = styled.h2`
   max-width: ${theme.layout.maxWidth};
   margin: 0 auto ${theme.spacing[24]};
-  font-size: ${theme.fontSize.h4.size};
-  line-height: ${theme.fontSize.h4.lineheight};
+  font-size: ${theme.fontSize.h3.size};
+  line-height: ${theme.fontSize.h3.lineheight};
   font-weight: ${theme.fontWeight.bold};
   color: ${theme.colors.textPrimary};
 `;
@@ -47,8 +46,8 @@ export const SelectAllLabel = styled.label`
   align-items: center;
   gap: ${theme.spacing[8]};
 
-  font-size: ${theme.fontSize.bodysmall.size};
-  line-height: ${theme.fontSize.bodysmall.lineheight};
+  font-size: ${theme.fontSize.bodylarge.size};
+  line-height: ${theme.fontSize.bodylarge.lineheight};
   font-weight: ${theme.fontWeight.medium};
 
   color: ${theme.colors.textPrimary};
@@ -90,8 +89,8 @@ export const SelectDeleteButton = styled.button`
   background: ${theme.colors.white};
   color: ${theme.colors.textSecondary};
 
-  font-size: ${theme.fontSize.caption.size};
-  line-height: ${theme.fontSize.caption.lineheight};
+  font-size: ${theme.fontSize.body.size};
+  line-height: ${theme.fontSize.body.lineheight};
 
   cursor: pointer;
 
@@ -140,15 +139,15 @@ export const EmptyCart = styled.div`
   p:first-of-type {
     margin-top: ${theme.spacing[40]};
     color: ${theme.colors.textPrimary};
-    font-size: ${theme.fontSize.h6.size};
-    line-height: ${theme.fontSize.h6.lineheight};
+    font-size: ${theme.fontSize.h4.size};
+    line-height: ${theme.fontSize.h4.lineheight};
     font-weight: ${theme.fontWeight.bold};
   }
 
   p + p {
     margin-top: ${theme.spacing[12]};
-    font-size: ${theme.fontSize.bodysmall.size};
-    line-height: ${theme.fontSize.bodysmall.lineheight};
+    font-size: ${theme.fontSize.h6.size};
+    line-height: ${theme.fontSize.h6.lineheight};
   }
 
   @media (max-width: ${theme.layout.breakpoint.tablet}) {
@@ -162,15 +161,15 @@ export const EmptyCart = styled.div`
 
     p:first-of-type {
       margin-top: ${theme.spacing[24]};
-      font-size: ${theme.fontSize.body.size};
-      line-height: ${theme.fontSize.body.lineheight};
+      font-size: ${theme.fontSize.h5.size};
+      line-height: ${theme.fontSize.h5.lineheight};
     }
 
     p + p {
       max-width: 280px;
       margin-top: ${theme.spacing[8]};
-      font-size: ${theme.fontSize.caption.size};
-      line-height: ${theme.fontSize.caption.lineheight};
+      font-size: ${theme.fontSize.h6.size};
+      line-height: ${theme.fontSize.h6.lineheight};
     }
   }
 
@@ -195,8 +194,8 @@ export const CategoryTitle = styled.h2`
 
   color: ${theme.colors.primary};
 
-  font-size: ${theme.fontSize.h6.size};
-  line-height: ${theme.fontSize.h6.lineheight};
+  font-size: ${theme.fontSize.h4.size};
+  line-height: ${theme.fontSize.h4.lineheight};
   font-weight: ${theme.fontWeight.bold};
 `;
 
@@ -300,13 +299,13 @@ export const ItemName = styled.h3`
 
   color: ${theme.colors.textPrimary};
 
-  font-size: ${theme.fontSize.body.size};
+  font-size: ${theme.fontSize.h6.size};
   font-weight: ${theme.fontWeight.bold};
 
   word-break: keep-all;
 
   @media (max-width: ${theme.layout.breakpoint.mobile}) {
-    font-size: ${theme.fontSize.bodysmall.size};
+    font-size: ${theme.fontSize.bodylarge.size};
     line-height: 20px;
   }
 `;
@@ -316,43 +315,44 @@ export const ItemText = styled.p`
 
   color: ${theme.colors.textSecondary};
 
-  font-size: ${theme.fontSize.caption.size};
-  line-height: ${theme.fontSize.caption.lineheight};
-`;
+  font-size: ${theme.fontSize.bodysmall.size};
+  line-height: ${theme.fontSize.bodysmall.lineheight};
+  `;
 
 export const ItemPriceArea = styled.div`
   display: flex;
   flex-direction: column;
   justify-content: space-between;
   align-items: flex-end;
-
+  
   min-width: 0;
   min-height: 68px;
-
+  
   @media (max-width: ${theme.layout.breakpoint.mobile}) {
     grid-area: price;
-
+    
     justify-self: end;
     align-self: end;
-
+    
     min-height: auto;
   }
-`;
+  `;
 export const ItemTotal = styled.strong`
   margin-top: auto;
-
+  
   white-space: nowrap;
-
+  
   color: ${theme.colors.textPrimary};
-
-  font-size: ${theme.fontSize.body.size};
+  
+  font-size: ${theme.fontSize.h5.size};
+  line-height: ${theme.fontSize.h5.lineheight};
   font-weight: ${theme.fontWeight.bold};
 
   @media (max-width: ${theme.layout.breakpoint.mobile}) {
     margin-top: auto;
     padding-top: 28px;
 
-    font-size: ${theme.fontSize.bodysmall.size};
+    font-size: ${theme.fontSize.h6.size};
   }
 `;
 
@@ -396,7 +396,7 @@ export const ContinueShoppingButton = styled.button`
   background: ${theme.colors.white};
   color: ${theme.colors.primary};
 
-  font-size: ${theme.fontSize.body.size};
+  font-size: ${theme.fontSize.h5.size};
   font-weight: ${theme.fontWeight.bold};
 
   cursor: pointer;
@@ -486,8 +486,8 @@ export const SummaryTitle = styled.h2`
 
   color: ${theme.colors.textPrimary};
 
-  font-size: ${theme.fontSize.h5.size};
-  line-height: ${theme.fontSize.h5.lineheight};
+  font-size: ${theme.fontSize.h4.size};
+  line-height: ${theme.fontSize.h4.lineheight};
   font-weight: ${theme.fontWeight.bold};
 `;
 
@@ -500,14 +500,15 @@ export const SummaryRow = styled.div`
 
   color: ${theme.colors.textPrimary};
 
-  font-size: ${theme.fontSize.bodysmall.size};
-  line-height: ${theme.fontSize.bodysmall.lineheight};
-
   span {
-    font-weight: ${theme.fontWeight.medium};
+    font-size: ${theme.fontSize.h5.size};
+    line-height: ${theme.fontSize.h5.lineheight};
+    font-weight: ${theme.fontWeight.semiBold};
   }
-
+  
   strong {
+    font-size: ${theme.fontSize.body.size};
+    line-height: ${theme.fontSize.body.lineheight};
     color: ${theme.colors.textSecondary};
     font-weight: ${theme.fontWeight.regular};
   }
@@ -531,9 +532,9 @@ export const BenefitTitle = styled.h3`
 
   color: ${theme.colors.textPrimary};
 
-  font-size: ${theme.fontSize.body.size};
-  line-height: ${theme.fontSize.body.lineheight};
-  font-weight: ${theme.fontWeight.bold};
+  font-size: ${theme.fontSize.h5.size};
+  line-height: ${theme.fontSize.h5.lineheight};
+  font-weight: ${theme.fontWeight.semiBold};
 `;
 
 export const BenefitSelect = styled.select`
@@ -551,8 +552,8 @@ export const BenefitSelect = styled.select`
 
   color: ${theme.colors.textPrimary};
 
-  font-size: ${theme.fontSize.caption.size};
-  line-height: ${theme.fontSize.caption.lineheight};
+  font-size: ${theme.fontSize.body.size};
+  line-height: ${theme.fontSize.body.lineheight};
 
   cursor: pointer;
 
@@ -648,8 +649,8 @@ export const PurchaseButton = styled.button`
   background: ${theme.colors.primary};
   color: ${theme.colors.white};
 
-  font-size: ${theme.fontSize.button.size};
-  line-height: ${theme.fontSize.button.lineheight};
+  font-size: ${theme.fontSize.buttonlarge.size};
+  line-height: ${theme.fontSize.buttonlarge.lineheight};
   font-weight: ${theme.fontWeight.bold};
 
   cursor: pointer;
