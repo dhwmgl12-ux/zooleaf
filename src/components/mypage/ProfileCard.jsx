@@ -5,6 +5,7 @@ import { formatPhoneNumber, formatBirthDate } from "../../utils/validation";
 import { validateProfile } from "../../utils/profileValidation";
 import { getMe, updateMe } from "../../api/authApi";
 import useAuthStore from "../../store/authStore";
+import LoadingSpinner from "../common/LoadingSpinner";
 
 import {
   Card,
@@ -254,7 +255,10 @@ export default function ProfileCard() {
       </CardHeader>
 
       {isLoading ? (
-        <p role="status">회원정보를 불러오는 중입니다.</p>
+        // 변경
+        <div role="status" aria-label="회원정보를 불러오는 중입니다">
+          <LoadingSpinner />
+        </div>
       ) : loadError ? (
         <div role="alert">
           <p>{loadError}</p>

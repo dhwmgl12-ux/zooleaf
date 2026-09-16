@@ -5,6 +5,7 @@ import useOrderStore from "../../store/orderStore";
 import useToastStore from "../../store/toastStore";
 import { statusLabels } from "../../utils/orderStatus";
 import { groupOrderItems } from "../../utils/groupOrderItems";
+import LoadingSpinner from "../common/LoadingSpinner";
 import {
   Card,
   CardHeader,
@@ -198,7 +199,9 @@ export default function OrderSection() {
       </CardHeader>
 
       {isLoading ? (
-        <p role="status">주문 내역을 불러오는 중입니다.</p>
+        <div role="status" aria-label="주문 내역을 불러오는 중입니다">
+          <LoadingSpinner />
+        </div>
       ) : loadError ? (
         <div role="alert">
           <p>{loadError}</p>

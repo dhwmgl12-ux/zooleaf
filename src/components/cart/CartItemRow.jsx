@@ -128,48 +128,24 @@ export default function CartItemRow({
             <ItemText>{item.price.toLocaleString()}원</ItemText>
           </>
         )}
+
+        {/* 패키지·멤버십 정보 */}
+        {needsProductInfo && (
+          <>
+            {item.option && <ItemText>선택 옵션: {item.option}</ItemText>}
+
+            <ItemText>
+              수량: {item.quantity}
+              {itemType === "package" ? "개" : "매"}
+            </ItemText>
+
+            <ItemText>
+              {item.price.toLocaleString()}원 /{" "}
+              {itemType === "package" ? "1인" : "1매"}
+            </ItemText>
+          </>
+        )}
       </ItemInfo>
-
-      {/* 패키지·멤버십 정보 */}
-      {needsProductInfo && (
-        <>
-          {item.option && <ItemText>선택 옵션: {item.option}</ItemText>}
-
-          <ItemText>
-            수량: {item.quantity}
-            {itemType === "package" ? "세트" : "매"}
-          </ItemText>
-
-          <ItemText>
-            단가: {item.price.toLocaleString()}원 /{" "}
-            {itemType === "package" ? "1세트" : "1매"}
-          </ItemText>
-
-          {productInfo?.description && (
-            <ItemText>{productInfo.description}</ItemText>
-          )}
-
-          {productInfo?.target && (
-            <ItemText>이용 대상: {productInfo.target}</ItemText>
-          )}
-
-          {productInfo?.usageGuide && (
-            <ItemText>이용 안내: {productInfo.usageGuide}</ItemText>
-          )}
-
-          {itemType === "package" &&
-            Array.isArray(productInfo?.includedItems) &&
-            productInfo.includedItems.length > 0 && (
-              <ItemText>
-                포함 사항: {productInfo.includedItems.join(" · ")}
-              </ItemText>
-            )}
-
-          {descriptionError && (
-            <ItemText role="status">{descriptionError}</ItemText>
-          )}
-        </>
-      )}
 
       {/* 상품 수량 조절 */}
       <QuantityControl>

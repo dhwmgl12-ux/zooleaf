@@ -3,6 +3,8 @@ import useAddressStore from "../../store/addressStore";
 import useAuthStore from "../../store/authStore";
 import useToastStore from "../../store/toastStore";
 import { useEffect, useRef, useState } from "react";
+import LoadingSpinner from "../common/LoadingSpinner";
+
 import {
   Card,
   CardHeader,
@@ -332,7 +334,10 @@ export default function AddressSection() {
       )}
 
       {isLoading ? (
-        <p role="status">배송지를 불러오는 중입니다.</p>
+        // 변경
+        <div role="status" aria-label="배송지를 불러오는 중입니다">
+          <LoadingSpinner />
+        </div>
       ) : loadError ? (
         <div role="alert">
           <p>{loadError}</p>

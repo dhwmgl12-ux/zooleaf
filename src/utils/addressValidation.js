@@ -54,6 +54,9 @@ export function validateAddress(form) {
     errors.address = "주소를 1~200자로 입력해주세요.";
   } else if (/[ㄱ-ㅎㅏ-ㅣ\u1100-\u11FF]/u.test(values.address)) {
     errors.address = "자음·모음만 입력하지 말고 주소를 완성해주세요.";
+  } else if (!/[가-힣a-zA-Z]/.test(values.address)) {
+    errors.address =
+      "숫자나 기호만 입력할 수 없습니다. 도로명 또는 지번 주소를 입력해주세요.";
   }
 
   return { values, errors };
