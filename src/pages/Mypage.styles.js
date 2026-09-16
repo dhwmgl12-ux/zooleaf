@@ -2,46 +2,41 @@ import styled from "@emotion/styled";
 import { theme } from "../styles/variables";
 
 // 페이지 전체 너비와 세로 간격
-export const Container = styled.div`
+export const Container = styled.section`
   display: flex;
   flex-direction: column;
-  gap: 24px;
+  gap: ${theme.spacing[24]};
 
   width: 100%;
-  max-width: 1280px;
-  margin: 0 auto;
 
   color: ${theme.colors.textPrimary};
 
-  @media (max-width: 767px) {
-    gap: 16px;
+  @media (max-width: ${theme.layout.breakpoint.mobile}) {
+    gap: ${theme.spacing[16]};
   }
 `;
 
 // 마이페이지 제목과 안내 문구
 export const PageHeader = styled.header`
-  margin-bottom: 16px;
+  margin-bottom: ${theme.spacing[16]};
 
-  h1 {
-    margin-bottom: 12px;
-    font-size: 40px;
-    line-height: 1.3;
+  h2 {
+    margin-bottom: ${theme.spacing[14]};
+    font-size: ${theme.fontSize.h3.size};
+    line-height: ${theme.fontSize.h3.lineheight};
   }
-
+  
   p {
     color: ${theme.colors.textSecondary};
-    font-size: 18px;
-    line-height: 1.6;
+    font-size: ${theme.fontSize.bodylarge.size};
+    line-height: ${theme.fontSize.bodylarge.lineheight};
     word-break: keep-all;
   }
-
-  @media (max-width: 767px) {
-    h1 {
-      font-size: 30px;
-    }
-
+  
+  @media (max-width: ${theme.layout.breakpoint.mobile}) {   
     p {
-      font-size: 15px;
+      font-size: ${theme.fontSize.body.size};
+      line-height: ${theme.fontSize.body.lineheight};
     }
   }
 `;
@@ -50,7 +45,7 @@ export const PageHeader = styled.header`
 export const InfoGrid = styled.div`
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 24px;
+  gap: ${theme.spacing[24]};
 
   @media (max-width: ${theme.layout.breakpoint.tablet}) {
     grid-template-columns: 1fr;
@@ -60,14 +55,14 @@ export const InfoGrid = styled.div`
 // 회원정보·배송지·주문내역의 공통 카드
 export const Card = styled.section`
   min-width: 0;
-  padding: 24px;
+  padding: ${theme.spacing[24]};
 
   background: ${theme.colors.white};
-  border-radius: 18px;
+  border-radius: ${theme.radius.box};
   box-shadow: 0 2px 5px rgba(44, 62, 53, 0.1);
 
   @media (max-width: ${theme.layout.breakpoint.mobile}) {
-    padding: 20px;
+    padding: ${theme.spacing[20]};
   }
 `;
 
@@ -77,24 +72,24 @@ export const CardHeader = styled.div`
   align-items: center;
   justify-content: space-between;
   flex-wrap: wrap;
-  gap: 16px;
+  gap: ${theme.spacing[16]};
 
-  margin-bottom: 20px;
+  margin-bottom: ${theme.spacing[20]};
 `;
 
 // 아이콘과 제목·설명을 가로로 배치
 export const HeadingGroup = styled.div`
   display: flex;
   align-items: flex-start;
-  gap: 12px;
+  gap: ${theme.spacing[12]};
 
   min-width: 0;
 
   p {
-    margin-top: 4px;
+    margin-top: ${theme.spacing[4]};
     color: ${theme.colors.textSecondary};
-    font-size: 14px;
-    line-height: 1.5;
+    font-size: ${theme.fontSize.bodysmall.size};
+    line-height: ${theme.fontSize.bodysmall.lineheight};
     word-break: keep-all;
   }
 `;
@@ -123,18 +118,19 @@ export const IconCircle = styled.span`
 export const OutlineButton = styled.button`
   flex-shrink: 0;
   min-height: 40px;
-  padding: 8px 18px;
+  padding: ${theme.spacing[8]} ${theme.spacing[16]};
 
   border: 1px solid ${theme.colors.primary};
   border-radius: ${theme.radius.button};
 
   color: ${theme.colors.primary};
   background: ${theme.colors.white};
-  font-size: 14px;
-  font-weight: 600;
+  font-size: ${theme.fontSize.bodysmall.size};
+  line-height: ${theme.fontSize.bodysmall.lineheight};
+  font-weight: ${theme.fontWeight.semiBold};
 
   &:hover {
-    background: #edf3ee;
+    background: ${theme.colors.background2};
   }
 
   &:focus-visible {
@@ -149,15 +145,16 @@ export const LogoutBox = styled.section`
   align-items: center;
   justify-content: space-between;
   flex-wrap: wrap;
-  gap: 16px;
+  gap: ${theme.spacing[16]};
 
-  padding: 20px 24px;
-  border-radius: 18px;
+  padding: ${theme.spacing[20]} ${theme.spacing[24]};
+  border-radius: ${theme.radius.box};
   background: ${theme.colors.white};
   box-shadow: 0 2px 5px rgba(44, 62, 53, 0.1);
 
   h2 {
-    font-size: 22px;
+    font-size: ${theme.fontSize.h5.size};
+    line-height: ${theme.fontSize.h5.lineheight};
   }
 `;
 
@@ -165,7 +162,7 @@ export const LogoutBox = styled.section`
 export const LogoutButton = styled.button`
   min-width: 150px;
   min-height: 44px;
-  padding: 10px 24px;
+  padding: ${theme.spacing[10]} ${theme.spacing[24]};
 
   border-radius: ${theme.radius.button};
   background: ${theme.colors.primary};
@@ -200,7 +197,7 @@ export const AddressBox = styled.article`
   padding: ${theme.spacing[20]};
 
   border-radius: ${theme.radius.box};
-  background: ${theme.colors.background};
+  background: ${theme.colors.tertiary};
 
   @media (max-width: ${theme.layout.breakpoint.mobile}) {
     padding: ${theme.spacing[16]};
@@ -270,14 +267,9 @@ export const AddressDetails = styled.dl`
 
 // 카드 제목과 모바일 글자 크기
 export const CardTitle = styled.h2`
-  font-size: ${theme.fontSize.h4.size};
-  line-height: ${theme.fontSize.h4.lineheight};
+  font-size: ${theme.fontSize.h5.size};
+  line-height: ${theme.fontSize.h5.lineheight};
   font-weight: ${theme.fontWeight.bold};
-
-  @media (max-width: ${theme.layout.breakpoint.mobile}) {
-    font-size: ${theme.fontSize.h5.size};
-    line-height: ${theme.fontSize.h5.lineheight};
-  }
 `;
 
 // 회원정보 목록의 기본 여백 제거
