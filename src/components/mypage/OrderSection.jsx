@@ -4,6 +4,7 @@ import useAuthStore from "../../store/authStore";
 import useOrderStore from "../../store/orderStore";
 import useToastStore from "../../store/toastStore";
 import { statusLabels } from "../../utils/orderStatus";
+import { groupOrderItems } from "../../utils/groupOrderItems";
 import {
   Card,
   CardHeader,
@@ -101,6 +102,8 @@ export default function OrderSection() {
   const selectedOrder = orders.find(
     (order) => order.orderId === modal?.orderId,
   );
+
+  const selectedOrderItems = groupOrderItems(selectedOrder?.items ?? []);
 
   const selectedStatus = selectedOrder?.status;
 
@@ -214,8 +217,9 @@ export default function OrderSection() {
       ) : (
         <OrderList>
           {orders.map((order) => {
-            const firstItem = order.items[0];
-            const otherCount = Math.max(0, order.items.length - 1);
+            const groupedItems = groupOrderItems(order.items);
+            const firstItem = groupedItems[0];
+            const otherCount = Math.max(0, groupedItems.length - 1);
 
             const hasGoods = order.items.some(
               (item) => item.itemType === "goods",
@@ -319,8 +323,8 @@ export default function OrderSection() {
                   </OrderInfoBox>
                 </OrderInfoGrid>
 
-                {selectedOrder.items.map((item) => (
-                  <OrderProduct key={item.orderItemId}>
+                {selectedOrderItems.map((item) => (
+                  <OrderProduct key={item.groupKey}>
                     {item.imageUrl ? (
                       <OrderThumbnail src={item.imageUrl} alt="" />
                     ) : (
