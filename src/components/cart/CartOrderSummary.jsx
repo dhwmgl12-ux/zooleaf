@@ -343,12 +343,17 @@ export default function CartOrderSummary({ cartItems, hasShippingAddress }) {
               : "배송지를 등록해야 합니다."}
           </ModalText>
 
-          <ModalButtonArea>
-            <ModalCancelButton type="button" onClick={handleCloseModal}>
+          <ModalButtonArea data-modal-actions>
+            <ModalCancelButton
+              data-modal-cancel
+              type="button"
+              onClick={handleCloseModal}
+            >
               아니오
             </ModalCancelButton>
 
             <ModalDeleteButton
+              data-modal-confirm
               type="button"
               disabled={isCartBusy}
               onClick={handleConfirm}

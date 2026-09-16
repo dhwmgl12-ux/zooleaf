@@ -28,7 +28,7 @@ const previewProfile = {
   name: "고길동",
   id: "example@zooleaf.com",
   phone: "010-0000-0000",
-  birthDate: "1999-09-09",
+  birthDate: "1999.09.09",
 };
 
 export default function ProfileCard() {

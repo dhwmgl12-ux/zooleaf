@@ -371,9 +371,6 @@ export const ProfileInput = styled.input`
 
     &[aria-invalid="true"] {
       border-color: #b42318;
-    }
-
-    &[aria-invalid="true"]:focus-visible {
       outline-color: #b42318;
     }
   }
@@ -521,10 +518,6 @@ export const OrderList = styled.ul`
   display: flex;
   flex-direction: column;
   gap: ${theme.spacing[12]};
-
-  margin: 0;
-  padding: 0;
-  list-style: none;
 `;
 
 // 주문 본문과 상태·버튼 영역 배치
