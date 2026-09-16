@@ -62,8 +62,6 @@ export default function OrderSection() {
   // type: detail / cancel / delivery / returns
   const [modal, setModal] = useState(null);
 
-  const [now, setNow] = useState(Date.now);
-
   const [isLoading, setIsLoading] = useState(true);
   const [loadError, setLoadError] = useState("");
   const [retryCount, setRetryCount] = useState(0);
@@ -96,21 +94,6 @@ export default function OrderSection() {
     };
   }, [userId, fetchOrders, retryCount]);
 
-  useEffect(() => {
-    const refresh = () => setNow(Date.now());
-
-    // 화면을 켜둔 상태에서도 날짜 변경 반영
-    const timer = window.setInterval(refresh, 1000);
-
-    // 다른 탭에서 돌아오면 즉시 갱신
-    window.addEventListener("focus", refresh);
-
-    return () => {
-      window.clearInterval(timer);
-      window.removeEventListener("focus", refresh);
-    };
-  }, []);
-
   const selectedOrder = orders.find(
     (order) => order.orderId === modal?.orderId,
   );
@@ -124,18 +107,7 @@ export default function OrderSection() {
   };
 
   const handleCancel = () => {
-  showToast("주문 취소 API는 다음 단계에서 연결합니다.");
-};
-
-    const success = cancelOrder(userId, selectedOrder.orderId);
-
-    showToast(
-      success
-        ? "테스트 주문을 취소했습니다. 실제 환불은 발생하지 않습니다."
-        : "취소할 수 없는 주문입니다.",
-    );
-
-    closeModal();
+    showToast("주문 취소 API는 다음 단계에서 연결합니다.");
   };
 
   const modalTitles = {
@@ -172,18 +144,18 @@ export default function OrderSection() {
       </CardHeader>
 
       {isLoading ? (
-  <p role="status">주문 내역을 불러오는 중입니다.</p>
-) : loadError ? (
-  <div role="alert">
-    <p>{loadError}</p>
-    <OutlineButton
-      type="button"
-      onClick={() => setRetryCount((count) => count + 1)}
-    >
-      다시 불러오기
-    </OutlineButton>
-  </div>
-) : orders.length === 0 ? (
+        <p role="status">주문 내역을 불러오는 중입니다.</p>
+      ) : loadError ? (
+        <div role="alert">
+          <p>{loadError}</p>
+          <OutlineButton
+            type="button"
+            onClick={() => setRetryCount((count) => count + 1)}
+          >
+            다시 불러오기
+          </OutlineButton>
+        </div>
+      ) : orders.length === 0 ? (
         <OrderEmpty>
           <p>현재 주문한 내역이 없습니다.</p>
           <p>상품을 구매해주세요.</p>
@@ -381,19 +353,17 @@ export default function OrderSection() {
                     <p>등록된 운송장 정보가 없습니다.</p>
                   )}
 
-                  <small>
-  서버에 등록된 배송 정보입니다.
-</small>
+                  <small>서버에 등록된 배송 정보입니다.</small>
                 </DeliveryPanel>
 
                 <DeliveryEvent>
                   <DeliveryTitle>{statusLabels[selectedStatus]}</DeliveryTitle>
 
                   <p>
-  {selectedStatus === "delivered"
-    ? "배송이 완료되었습니다."
-    : "배송 중입니다."}
-</p>
+                    {selectedStatus === "delivered"
+                      ? "배송이 완료되었습니다."
+                      : "배송 중입니다."}
+                  </p>
                 </DeliveryEvent>
               </>
             )}
