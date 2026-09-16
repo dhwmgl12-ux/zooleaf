@@ -808,3 +808,12 @@ export const BenefitDetailNote = styled.p`
   margin-top: 8px !important;
   color: ${theme.colors.textSecondary};
 `;
+
+export const ItemImageLink = styled.a`
+  display: flex;
+  align-self: center;
+
+  @media (max-width: ${theme.layout.breakpoint.mobile}) {
+    grid-area: image;
+  }
+`;
