@@ -1,6 +1,5 @@
-import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
+import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import Layout from '../components/layout/Layout';
-import useAuthStore from '../store/authStore';
 import ProductPage from '../pages/ProductPage';
 import LoginPage from '../pages/LoginPage';
 import SignupPage from '../pages/SignupPage';
@@ -16,20 +15,9 @@ import { IntroPage } from '../pages/Intro';
 import Animal from '../pages/AnimalStoryPage';
 import MyPage from '../pages/MyPage';
 import NotFoundPage from '../pages/NotFoundPage';
+import ProtectedRoute from '../components/common/ProtectedRoute';
 
-const ProtectedRoute = ({ children }) => {
-  const isLoggedIn = useAuthStore((state) => state.isLoggedIn);
-  const isAuthReady = useAuthStore((state) => state.isAuthReady);
 
-  if (!isAuthReady) {
-    return null;
-  }
-
-  if (!isLoggedIn) {
-    return <Navigate to="/login" replace />;
-  }
-  return children;
-};
 
 export default function AppRouter() {
   return (
@@ -47,14 +35,18 @@ export default function AppRouter() {
               </ProtectedRoute>
             }
           />
-          <Route path="/cart" element={<CartPage />} />
+          <Route
+            path="/cart"
+            element={
+              <ProtectedRoute>
+                <CartPage />
+              </ProtectedRoute>
+            }
+          />
           <Route path="/products" element={<ProductPage />} />
           <Route path="/products/:productId" element={<ProductDetailPage />} />
           <Route path="/experiences" element={<ExperiencePage />} />
-          <Route
-            path="/experiences/:experienceId"
-            element={<ExperienceDetailPage />}
-          />
+          <Route path="/experiences/:experienceId" element={<ExperienceDetailPage />} />
           <Route path="/goods" element={<GoodsPage />} />
           <Route path="/goods/:goodsId" element={<GoodsDetailPage />} />
           <Route path="/discount" element={<Discount />} />
