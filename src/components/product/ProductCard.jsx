@@ -1,6 +1,15 @@
 import { Link } from 'react-router-dom';
 import zooleafCardLogo from '../../assets/images/zooleaf-logo-1.webp';
-import { ProductCardContainer } from './ProductCard.styles';
+import {
+  ProductCardContainer,
+  ProductCardContent,
+  ProductCardInfo,
+  ProductCardLogo,
+  ProductBadgeList,
+  ProductName,
+  ProductPrice,
+  ProductCardButton,
+} from "./ProductCard.styles";
 
 export default function ProductCard({ product }) {
   const displayName = product?.displayName || product?.name || '상품명';
@@ -29,36 +38,38 @@ export default function ProductCard({ product }) {
       to={`/products/${id}`}
       $variant={cardVariant}
     >
-      <div className="product-card__content">
-        <img className="product-card__logo" src={zooleafCardLogo} alt="ZOOLEAF" />
-        {badge.length > 0 && (
-          <ul aria-label="상품 혜택">
-            {badge.map((item) => (
-              <li key={item}>{item}</li>
-            ))}
-          </ul>
-        )}
+      <ProductCardContent className="product-card__content">
+        <ProductCardInfo>
+          <ProductCardLogo className="product-card__logo" src={zooleafCardLogo} alt="ZOOLEAF" />
+            {badge.length > 0 && (
+              <ProductBadgeList aria-label="상품 혜택">
+                {badge.map((item) => (
+                  <li key={item}>{item}</li>
+                ))}
+              </ProductBadgeList>
+            )}
 
-        <h3>
-          {hasEmphasizedLastWord ? (
-            <>
-              {nameParts.slice(0, -1).join(' ')} <span>{nameParts.at(-1)}</span>
-            </>
+          <ProductName $variant={cardVariant}>
+            {hasEmphasizedLastWord ? (
+              <>
+                {nameParts.slice(0, -1).join(' ')} <span>{nameParts.at(-1)}</span>
+              </>
+            ) : (
+              displayName
+            )}
+          </ProductName>
+
+          {hasDiscount ? (
+            <ProductPrice $variant={cardVariant}>{discountPrice.toLocaleString()}원</ProductPrice>
           ) : (
-            displayName
+            <ProductPrice $variant={cardVariant}>
+              {price?.toLocaleString() || '0'}원
+            </ProductPrice>
           )}
-        </h3>
+        </ProductCardInfo>
 
-        {hasDiscount ? (
-          <strong>{discountPrice.toLocaleString()}원</strong>
-        ) : (
-          <strong>
-            {price?.toLocaleString() || '0'}원
-          </strong>
-        )}
-
-        <span className="product-card__button">예매하기</span>
-      </div>
+        <ProductCardButton className="product-card__button" $variant={cardVariant}>예매하기</ProductCardButton>
+      </ProductCardContent>
     </ProductCardContainer>
   );
 }
