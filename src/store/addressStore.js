@@ -1,95 +1,87 @@
 import { create } from "zustand";
+import useAuthStore from "./authStore";
+import {
+  getAddresses,
+  createAddress,
+  updateAddress,
+  deleteAddress,
+} from "../api/addressApi";
+
+function requireUser(userId) {
+  const auth = useAuthStore.getState();
+
+  if (!userId || !auth.token || auth.user?.id !== userId) {
+    throw new Error("로그인 후 이용해주세요.");
+  }
+
+  return auth.token;
+}
+
+function toPayload(form) {
+  return {
+    label: form.label,
+    recipientName: form.recipientName,
+    phone: form.phone,
+    address: form.address,
+    isDefault: Boolean(form.isDefault),
+  };
+}
 
 const useAddressStore = create((set) => ({
-  // 로그인한 회원 ID별로 배송지 구분
   addressesByUser: {},
 
-  // 배송지 추가 또는 수정
-  saveAddress: (userId, form, addressId = null) => {
-    set((state) => {
-      const current = state.addressesByUser[userId] ?? [];
-      const isEditing = addressId !== null;
+  // 서버의 최신 배송지 목록 저장
+  fetchAddresses: async (userId) => {
+    const token = requireUser(userId);
+    const result = await getAddresses();
+    const addresses = result.data?.addresses;
 
-      const savedAddress = {
-        ...form,
-        addressId: isEditing ? addressId : crypto.randomUUID(),
-        isDefault: current.length === 0 || form.isDefault,
-      };
+    if (!Array.isArray(addresses)) {
+      throw new Error("배송지 목록 응답 형식을 확인해 주세요.");
+    }
 
-      let next = isEditing
-        ? current.map((item) =>
-            item.addressId === addressId ? savedAddress : item,
-          )
-        : [...current, savedAddress];
+    // 요청 도중 로그아웃하거나 계정이 바뀌면 반영하지 않음
+    const auth = useAuthStore.getState();
 
-      // 기본 배송지는 하나만 유지
-      if (savedAddress.isDefault) {
-        next = next.map((item) => ({
-          ...item,
-          isDefault: item.addressId === savedAddress.addressId,
-        }));
-      }
+    if (auth.token !== token || auth.user?.id !== userId) return;
 
-      // 기본 배송지가 없으면 첫 번째 배송지를 기본으로 지정
-      if (next.length > 0 && !next.some((item) => item.isDefault)) {
-        next = next.map((item, index) => ({
-          ...item,
-          isDefault: index === 0,
-        }));
-      }
+    set((state) => ({
+      addressesByUser: {
+        ...state.addressesByUser,
+        [userId]: addresses,
+      },
+    }));
 
-      return {
-        addressesByUser: {
-          ...state.addressesByUser,
-          [userId]: next,
-        },
-      };
+    return addresses;
+  },
+
+  // 추가 또는 수정
+  saveAddress: async (userId, form, addressId = null) => {
+    requireUser(userId);
+
+    const payload = toPayload(form);
+
+    if (addressId !== null) {
+      return updateAddress(addressId, payload);
+    }
+
+    return createAddress(payload);
+  },
+
+  // 기본 배송지 변경
+  setDefaultAddress: async (userId, addressId) => {
+    requireUser(userId);
+
+    return updateAddress(addressId, {
+      isDefault: true,
     });
   },
 
-  // 기본 배송지 전환
-  setDefaultAddress: (userId, addressId) => {
-    set((state) => {
-      const current = state.addressesByUser[userId] ?? [];
+  // 삭제
+  removeAddress: async (userId, addressId) => {
+    requireUser(userId);
 
-      if (!current.some((item) => item.addressId === addressId)) {
-        return state;
-      }
-
-      return {
-        addressesByUser: {
-          ...state.addressesByUser,
-          [userId]: current.map((item) => ({
-            ...item,
-            isDefault: item.addressId === addressId,
-          })),
-        },
-      };
-    });
-  },
-
-  // 배송지 삭제
-  removeAddress: (userId, addressId) => {
-    set((state) => {
-      let next = (state.addressesByUser[userId] ?? []).filter(
-        (item) => item.addressId !== addressId,
-      );
-
-      // 기본 배송지를 삭제하면 남은 첫 배송지를 기본 지정
-      if (next.length > 0 && !next.some((item) => item.isDefault)) {
-        next = next.map((item, index) => ({
-          ...item,
-          isDefault: index === 0,
-        }));
-      }
-
-      return {
-        addressesByUser: {
-          ...state.addressesByUser,
-          [userId]: next,
-        },
-      };
-    });
+    return deleteAddress(addressId);
   },
 }));
 
