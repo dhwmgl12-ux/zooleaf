@@ -1,10 +1,11 @@
-import { useState } from "react";
+import { useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import Modal from "../common/Modal";
 import useCartStore from "../../store/cartStore";
 import { CART_BENEFITS, getBenefitDetails } from "../../utils/cartBenefits";
 import BenefitVerifyModal from "./BenefitVerifyModal";
-import useOrderStore from "../../store/orderStore";
+import { createOrder } from "../../api/orderApi";
+import { deleteSelectedCartItems } from "../../api/cartApi";
 import useAuthStore from "../../store/authStore";
 import useAddressStore from "../../store/addressStore";
 import useToastStore from "../../store/toastStore";
@@ -34,7 +35,7 @@ import {
   BenefitDetailNote,
 } from "../../pages/CartPage.styles";
 
-export default function CartOrderSummary({ cartItems, hasShippingAddress }) {
+export default function CartOrderSummary({ cartItems }) {
   // 페이지 이동에 사용할 함수
   const navigate = useNavigate();
 
@@ -43,19 +44,37 @@ export default function CartOrderSummary({ cartItems, hasShippingAddress }) {
   // 구매 모달 열림 여부: 처음에는 닫힘
   const [isPurchaseModalOpen, setIsPurchaseModalOpen] = useState(false);
 
-  // 구매하기 클릭 → 모달 열기
+  const [isOrdering, setIsOrdering] = useState(false);
+  const [purchaseError, setPurchaseError] = useState("");
+
+  const orderingRef = useRef(false);
+
+  // 응답 오류 후 같은 주문을 재시도할 때 requestId 재사용
+  const pendingOrderRef = useRef(null);
+
+  // 구매 확인 모달 열기
   const handlePurchase = () => {
+    if (orderingRef.current || isCartBusy || cartItems.length === 0) {
+      return;
+    }
+
+    setPurchaseError("");
     setIsPurchaseModalOpen(true);
   };
 
-  // 아니오 클릭 → 모달 닫기
+  // 요청 중에는 모달을 닫지 않음
   const handleCloseModal = () => {
+    if (orderingRef.current) return;
+
     setIsPurchaseModalOpen(false);
+    setPurchaseError("");
   };
 
-  // 예 클릭 → 마이페이지 이동
+  // 주문 저장 → 구매한 상품 삭제 → 마이페이지 이동
   const handleConfirm = async () => {
-    if (isCartBusy || cartItems.length === 0) return;
+    if (orderingRef.current || isCartBusy || cartItems.length === 0) {
+      return;
+    }
 
     const userId = useAuthStore.getState().user?.id;
 
@@ -65,45 +84,101 @@ export default function CartOrderSummary({ cartItems, hasShippingAddress }) {
       return;
     }
 
-    const address = useAddressStore
-      .getState()
-      .addressesByUser[userId]?.find((item) => item.isDefault);
+    // 화면에서 합쳐 보여주는 상품의 원본 항목들
+    const sourceItems = cartItems.flatMap((item) => item.sourceItems ?? [item]);
 
-    if (!address) {
-      showToast("배송지를 먼저 등록해주세요.");
-      setIsPurchaseModalOpen(false);
-      navigate("/mypage");
+    const cartItemIds = [
+      ...new Set(sourceItems.map((item) => item.cartItemId)),
+    ];
+
+    if (cartItemIds.some((id) => id == null)) {
+      setPurchaseError(
+        "상품 정보를 확인할 수 없습니다. 장바구니를 새로고침해 주세요.",
+      );
       return;
     }
 
+    orderingRef.current = true;
+    setIsOrdering(true);
+    setPurchaseError("");
+
     try {
-      useOrderStore.getState().createTestOrder(
+      // 장바구니로 바로 진입해도 서버 배송지를 조회
+      const addresses = await useAddressStore.getState().fetchAddresses(userId);
+
+      if (!addresses) {
+        throw new Error("로그인 상태가 변경되었습니다. 다시 확인해 주세요.");
+      }
+
+      const address = addresses.find((item) => item.isDefault);
+
+      if (!address) {
+        showToast("기본 배송지를 먼저 등록해주세요.");
+        setIsPurchaseModalOpen(false);
+        navigate("/mypage");
+        return;
+      }
+
+      // 상품·수량·배송지·혜택이 같으면 같은 요청 ID 사용
+      const signature = JSON.stringify({
         userId,
-        crypto.randomUUID(),
-        cartItems,
-        {
-          shippingFee,
-          discountAmount: discountTotal,
-        },
-        address,
-      );
+        items: sourceItems.map((item) => ({
+          cartItemId: item.cartItemId,
+          quantity: item.quantity,
+        })),
+        addressId: address.addressId,
+        benefitId: benefitId || null,
+      });
 
-      // 주문에 저장한 상품만 장바구니에서 삭제
-      const removed = await useCartStore
-        .getState()
-        .removeSelected(cartItems.map((item) => item.cartItemId));
+      if (pendingOrderRef.current?.signature !== signature) {
+        pendingOrderRef.current = {
+          signature,
+          requestId: crypto.randomUUID(),
+        };
+      }
 
+      await createOrder({
+        requestId: pendingOrderRef.current.requestId,
+        cartItemIds,
+        addressId: address.addressId,
+        benefitId: benefitId || null,
+      });
+
+      // 여기부터는 주문 저장이 성공한 상태
+      // 장바구니 삭제 실패를 주문 실패로 처리하지 않음
+      let cartRemoved = true;
+
+      try {
+        await deleteSelectedCartItems(cartItemIds);
+      } catch {
+        cartRemoved = false;
+      }
+
+      // 장바구니 화면과 헤더의 상품 수 갱신
+      try {
+        await useCartStore.getState().fetchCart();
+      } catch {
+        // 주문 저장 결과에는 영향을 주지 않음
+      }
+
+      pendingOrderRef.current = null;
       setIsPurchaseModalOpen(false);
 
       showToast(
-        removed
-          ? "테스트 주문을 생성하고 구매한 상품을 장바구니에서 삭제했습니다."
-          : "주문은 저장됐지만 장바구니 갱신에 실패했습니다. 주문내역을 확인한 후 남아 있는 상품을 삭제해주세요.",
+        cartRemoved
+          ? "주문이 저장되었습니다."
+          : "주문은 저장됐지만 장바구니 상품 삭제에 실패했습니다. 주문내역을 확인한 뒤 남은 상품을 삭제해주세요.",
       );
 
       navigate("/mypage");
     } catch (error) {
-      showToast(error.message);
+      setPurchaseError(
+        error.message ||
+          "주문 요청 결과를 확인하지 못했습니다. 주문내역을 확인해 주세요.",
+      );
+    } finally {
+      orderingRef.current = false;
+      setIsOrdering(false);
     }
   };
 
@@ -210,6 +285,7 @@ export default function CartOrderSummary({ cartItems, hasShippingAddress }) {
         <BenefitSelect
           aria-label="결제 혜택"
           value={benefitId}
+          disabled={isOrdering}
           onChange={handleBenefitChange}
         >
           <option value="">할인 혜택을 선택해주세요.</option>
@@ -324,10 +400,10 @@ export default function CartOrderSummary({ cartItems, hasShippingAddress }) {
 
       <PurchaseButton
         type="button"
-        disabled={cartItems.length === 0 || isCartBusy}
+        disabled={cartItems.length === 0 || isCartBusy || isOrdering}
         onClick={handlePurchase}
       >
-        구매하기
+        {isOrdering ? "주문 처리 중..." : "구매하기"}
       </PurchaseButton>
 
       {isPurchaseModalOpen && (
@@ -338,16 +414,19 @@ export default function CartOrderSummary({ cartItems, hasShippingAddress }) {
           title="구매 확인"
         >
           <ModalText>
-            {hasShippingAddress
-              ? "결제를 진행하시겠습니까?"
-              : "배송지를 등록해야 합니다."}
+            선택한 상품을 주문하시겠습니까?
+            <br />
+            실제 결제 없이 테스트 주문이 저장됩니다.
           </ModalText>
+
+          {purchaseError && <p role="alert">{purchaseError}</p>}
 
           <ModalButtonArea data-modal-actions>
             <ModalCancelButton
               data-modal-cancel
               type="button"
               onClick={handleCloseModal}
+              disabled={isOrdering}
             >
               아니오
             </ModalCancelButton>
@@ -355,10 +434,10 @@ export default function CartOrderSummary({ cartItems, hasShippingAddress }) {
             <ModalDeleteButton
               data-modal-confirm
               type="button"
-              disabled={isCartBusy}
+              disabled={isCartBusy || isOrdering}
               onClick={handleConfirm}
             >
-              예
+              {isOrdering ? "주문 처리 중..." : "예"}
             </ModalDeleteButton>
           </ModalButtonArea>
         </Modal>

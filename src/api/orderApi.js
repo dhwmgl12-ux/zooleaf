@@ -12,3 +12,16 @@ export function cancelOrderRequest(orderId) {
     method: "POST",
   });
 }
+
+// 장바구니 선택 상품으로 주문 저장
+export function createOrder({ requestId, cartItemIds, addressId, benefitId }) {
+  return apiClient("/orders", {
+    method: "POST",
+    body: JSON.stringify({
+      requestId,
+      cartItemIds,
+      addressId,
+      benefitId,
+    }),
+  });
+}
