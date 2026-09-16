@@ -4,7 +4,6 @@ import { theme } from '../styles/variables';
 export const DiscountPage = styled.div`
   background-color: ${theme.colors.background2};
   min-height: 100vh;
-  padding: ${theme.spacing[32]} ${theme.spacing[16]} ${theme.spacing[64]};
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -18,21 +17,18 @@ export const DiscountSection = styled.section`
   display: grid;
   grid-template-columns: repeat(2, 1fr);
   gap: 24px;
-  margin-bottom: ${theme.spacing[32]};
   order: 1;
 
   @media (max-width: ${theme.layout.breakpoint.tablet}) {
     display: flex;
     flex-direction: column;
     align-items: center;
-    padding: 0 ${theme.spacing[16]};
     order: 2; /* 태블릿부터는 주의사항 아래로 이동 */
   }
   @media (max-width: ${theme.layout.breakpoint.mobile}) {
     display: flex;
     flex-direction: column;
     align-items: center;
-    padding: 0;
     order: 2;
   }
   @media (max-width: ${theme.layout.breakpoint.smallMobile}) {
@@ -99,15 +95,12 @@ export const NoticeBox = styled.div`
 
   /* [태블릿 이하 화면 스타일: 기존 박스 형태 유지] */
   @media (max-width: ${theme.layout.breakpoint.tablet}) {
-    max-width: 816px;
     order: 1; /* 태블릿에서는 최상단으로 이동 */
   }
   @media (max-width: ${theme.layout.breakpoint.mobile}) {
-    max-width: 726px;
     order: 1;
   }
   @media (max-width: ${theme.layout.breakpoint.smallMobile}) {
-    max-width: 343px;
     order: 1;
     h3 {
       margin: 0;
@@ -142,17 +135,14 @@ export const SpecialHeader = styled.div`
   }
 
   @media (max-width: ${theme.layout.breakpoint.tablet}) {
-    max-width: 816px;
     margin-top: ${theme.spacing[40]};
     order: 3;
   }
   @media (max-width: ${theme.layout.breakpoint.mobile}) {
-    max-width: 726px;
     margin-top: ${theme.spacing[40]};
     order: 3;
   }
   @media (max-width: ${theme.layout.breakpoint.smallMobile}) {
-    max-width: 343px;
     order: 3;
     h2 {
       font-size: ${theme.fontSize.h4.size};
@@ -173,7 +163,6 @@ export const SpecialSection = styled.section`
     display: flex;
     flex-direction: column;
     align-items: center;
-    padding: 0 ${theme.spacing[16]};
     order: 4;
   }
   @media (max-width: ${theme.layout.breakpoint.mobile}) {
@@ -197,8 +186,7 @@ export const PageTitle = styled.h1`
   line-height: ${theme.fontSize.h2.lineheight};
   font-weight: ${theme.fontWeight.bold};
   color: ${theme.colors.textPrimary};
-  margin-bottom: ${theme.spacing[80]};
-  margin-top: ${theme.spacing[100]};
+  margin-bottom: ${theme.spacing[100]};
   text-align: center;
 
   @media (max-width: ${theme.layout.breakpoint.tablet}) {
@@ -226,28 +214,16 @@ export const DiscountCard = styled.div`
   gap: ${theme.spacing[32]};
   width: 100%;
   max-width: 100%;
-  height: 400px;
   flex-shrink: 0;
 
-  margin-bottom: ${theme.spacing[24]};
-
   @media (max-width: ${theme.layout.breakpoint.tablet}) {
-    max-width: 816px;
-    height: 410px;
     padding: ${theme.spacing[24]};
     gap: ${theme.spacing[32]};
     margin-left: auto;
     margin-right: auto;
   }
+
   @media (max-width: ${theme.layout.breakpoint.mobile}) {
-    max-width: 726px;
-    height: 410px;
-    padding: ${theme.spacing[24]};
-    gap: ${theme.spacing[8]};
-    margin-left: auto;
-    margin-right: auto;
-  }
-  @media (max-width: ${theme.layout.breakpoint.smallMobile}) {
     flex-direction: column;
     height: auto;
     align-items: center;
@@ -358,7 +334,6 @@ export const ConditionArea = styled.div`
     > p {
       font-size: ${theme.fontSize.bodysmall.size};
     }
-    padding: 0;
     gap: 0;
   }
 `;
@@ -387,32 +362,21 @@ export const SpecialCard = styled.div`
   gap: ${theme.spacing[24]}; /* 간격을 너무 넓게 잡지 않고 유연하게 조절 */
   width: 100%;
   max-width: 100%;
-  height: 200px;
-  margin-bottom: ${theme.spacing[40]};
 
   @media (max-width: ${theme.layout.breakpoint.tablet}) {
-    max-width: 816px;
-    height: 200px;
     padding: ${theme.spacing[24]} ${theme.spacing[40]};
     margin-left: auto;
     margin-right: auto;
   }
+
   @media (max-width: ${theme.layout.breakpoint.mobile}) {
-    max-width: 726px;
-    height: 200px;
-    padding: ${theme.spacing[24]} ${theme.spacing[40]};
-    margin-left: auto;
-    margin-right: auto;
-  }
-  @media (max-width: ${theme.layout.breakpoint.smallMobile}) {
     flex-direction: column;
     height: auto;
     align-items: center;
     text-align: center;
     gap: ${theme.spacing[16]};
     padding: ${theme.spacing[24]};
-    margin-left: auto;
-    margin-right: auto;
+    margin: 0 auto;
   }
 `;
 
@@ -431,6 +395,14 @@ export const SpecialTextWrap = styled.div`
     text-align: left;
     word-break: keep-all;
     white-space: pre-line; /* 👈 이 코드가 있어야 \n을 인식하여 줄바꿈이 정상 적용됩니다! */
+  }
+
+  @media (max-width: ${theme.layout.breakpoint.mobile}) {
+    align-items: center;
+
+    p {
+      text-align: center;
+    }
   }
 
   @media (max-width: ${theme.layout.breakpoint.smallMobile}) {
@@ -459,8 +431,13 @@ export const SpecialImageWrap = styled.div`
     height: 100%;
     object-fit: contain;
   }
+
+  @media (max-width: ${theme.layout.breakpoint.mobile}) {
+    margin-left: 0;
+    margin-right: 0;
+  }
   @media (max-width: ${theme.layout.breakpoint.smallMobile}) {
-    heigth: 95px;
+    height: 95px;
     margin-left: ${theme.spacing[100]};
     margin-right: ${theme.spacing[100]};
   }
