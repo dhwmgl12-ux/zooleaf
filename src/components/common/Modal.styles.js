@@ -60,16 +60,15 @@ export const ModalHeader = styled.div`
   padding: ${theme.spacing[24]};
 
   ${({ $variant }) =>
-    $variant === "cart" &&
+    $variant === "mypage" &&
     css`
-      padding: 24px 24px 16px;
-      gap: 12px;
+      padding: 32px 32px 24px;
+      gap: 16px;
+      align-items: flex-start;
 
       h3 {
         margin: 0;
-        font-size: 20px;
-        line-height: 1.4;
-        font-weight: 700;
+        min-width: 0;
         text-align: left;
       }
     `}
@@ -126,16 +125,14 @@ export const ModalBody = styled.div`
   }
 
   ${({ $variant }) =>
-    $variant === "cart" &&
+    ($variant === "mypage" || $variant === "cart") &&
     css`
       margin: 0;
-      padding: 0 24px 24px;
-      flex: 0 1 auto;
+      padding: 8px 32px 32px;
       min-height: 0;
-      font-size: 14px;
-      line-height: 1.7;
+      flex: 0 1 auto;
       white-space: normal;
-      overflow-wrap: anywhere;
+      text-align: left;
 
       p {
         margin: 0;

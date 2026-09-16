@@ -6,6 +6,7 @@ import CartOrderSummary from "./CartOrderSummary";
 import CartDeleteModal from "./CartDeleteModal";
 import useAddressStore from "../../store/addressStore";
 import useAuthStore from "../../store/authStore";
+import LoadingSpinner from "../common/LoadingSpinner";
 
 import {
   CartTopBar,
@@ -23,9 +24,18 @@ import {
 
 // 장바구니 상품 카테고리 정보
 const categories = [
-  { type: "ticket", title: "입장권 항목" },
-  { type: "experience", title: "체험권 항목" },
-  { type: "goods", title: "굿즈 항목" },
+  {
+    types: ["ticket", "package", "membership"],
+    title: "입장권·패키지·멤버십 항목",
+  },
+  {
+    types: ["experience"],
+    title: "체험권 항목",
+  },
+  {
+    types: ["goods"],
+    title: "굿즈 항목",
+  },
 ];
 
 export default function CartContents() {
@@ -43,7 +53,7 @@ export default function CartContents() {
   );
 
   // 장바구니 데이터를 불러오는 중일 때 표시
-  if (cart.isLoading) return <p role="status">장바구니를 불러오는 중입니다.</p>;
+  if (cart.isLoading) return <LoadingSpinner />;
 
   return (
     <>
@@ -91,12 +101,14 @@ export default function CartContents() {
             </EmptyCart>
           ) : (
             // 상품을 카테고리별로 나누어 출력
-            categories.map(({ type, title }) => {
-              const items = cart.cartItems.filter((item) => item.type === type);
+            categories.map(({ types, title }) => {
+              const items = cart.cartItems.filter((item) =>
+                types.includes(item.itemType ?? item.type),
+              );
               if (items.length === 0) return null;
 
               return (
-                <CategorySection key={type}>
+                <CategorySection key={types[0]}>
                   <CategoryTitle>{title}</CategoryTitle>
 
                   {/* 해당 카테고리의 상품 목록 */}

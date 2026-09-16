@@ -1,16 +1,16 @@
-import { apiClient } from './client';
-import { AUTH_ENDPOINTS } from './endpoints';
+import { apiClient } from "./client";
+import { AUTH_ENDPOINTS } from "./endpoints";
 
 export function checkId(id) {
   return apiClient(AUTH_ENDPOINTS.CHECK_ID, {
-    method: 'POST',
+    method: "POST",
     body: JSON.stringify({ id }),
   });
 }
 
 export function signup(payload) {
   return apiClient(AUTH_ENDPOINTS.SIGNUP, {
-    method: 'POST',
+    method: "POST",
     body: JSON.stringify(payload),
   });
 }
@@ -19,19 +19,31 @@ export function signup(payload) {
 
 export function login({ id, password }) {
   return apiClient(AUTH_ENDPOINTS.LOGIN, {
-    method: 'POST',
+    method: "POST",
     body: JSON.stringify({ id, password }),
   });
 }
 
 export function logout() {
   return apiClient(AUTH_ENDPOINTS.LOGOUT, {
-    method: 'POST',
+    method: "POST",
   });
 }
 
 export function getMe() {
   return apiClient(AUTH_ENDPOINTS.ME, {
-    method: 'GET',
+    method: "GET",
+  });
+}
+
+// 회원정보 수정
+export function updateMe({ name, phone, birthDate }) {
+  return apiClient(AUTH_ENDPOINTS.ME, {
+    method: "PATCH",
+    body: JSON.stringify({
+      name,
+      phone,
+      birthDate,
+    }),
   });
 }

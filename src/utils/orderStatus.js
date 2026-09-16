@@ -1,6 +1,3 @@
-const DAY_MS = 24 * 60 * 60 * 1000;
-const KST_OFFSET_MS = 9 * 60 * 60 * 1000;
-
 export const statusLabels = {
   paid: "결제 완료",
   shipping: "배송 중",
