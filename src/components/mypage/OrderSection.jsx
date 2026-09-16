@@ -1,9 +1,9 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import Modal from "../common/Modal";
 import useAuthStore from "../../store/authStore";
 import useOrderStore from "../../store/orderStore";
 import useToastStore from "../../store/toastStore";
-import { getOrderStatus, statusLabels } from "../../utils/orderStatus";
+import { statusLabels } from "../../utils/orderStatus";
 import {
   Card,
   CardHeader,
@@ -33,7 +33,6 @@ import {
   OrderGrandTotal,
   DeliveryPanel,
   DeliveryTitle,
-  DeliveryEvent,
 } from "../../pages/Mypage.styles";
 
 const emptyOrders = [];
@@ -57,52 +56,109 @@ export default function OrderSection() {
   const orders = useOrderStore(
     (state) => state.ordersByUser[userId] ?? emptyOrders,
   );
+  const fetchOrders = useOrderStore((state) => state.fetchOrders);
   const cancelOrder = useOrderStore((state) => state.cancelOrder);
 
   // type: detail / cancel / delivery / returns
   const [modal, setModal] = useState(null);
 
-  const [now, setNow] = useState(Date.now);
+  const [isLoading, setIsLoading] = useState(true);
+  const [loadError, setLoadError] = useState("");
+  const [retryCount, setRetryCount] = useState(0);
+
+  const [isCancelling, setIsCancelling] = useState(false);
+  const [cancelError, setCancelError] = useState("");
+  const cancellingRef = useRef(false);
 
   useEffect(() => {
-    const refresh = () => setNow(Date.now());
+    let ignore = false;
 
-    // 화면을 켜둔 상태에서도 날짜 변경 반영
-    const timer = window.setInterval(refresh, 1000);
+    const loadOrders = async () => {
+      setIsLoading(true);
+      setLoadError("");
+      setModal(null);
 
-    // 다른 탭에서 돌아오면 즉시 갱신
-    window.addEventListener("focus", refresh);
+      try {
+        await fetchOrders(userId);
+      } catch (error) {
+        if (!ignore) {
+          setLoadError(error.message || "주문 내역을 불러오지 못했습니다.");
+        }
+      } finally {
+        if (!ignore) {
+          setIsLoading(false);
+        }
+      }
+    };
+
+    loadOrders();
 
     return () => {
-      window.clearInterval(timer);
-      window.removeEventListener("focus", refresh);
+      ignore = true;
     };
-  }, []);
+  }, [userId, fetchOrders, retryCount]);
 
   const selectedOrder = orders.find(
     (order) => order.orderId === modal?.orderId,
   );
 
-  const selectedStatus = getOrderStatus(selectedOrder, now);
+  const selectedStatus = selectedOrder?.status;
 
-  const closeModal = () => setModal(null);
+  const closeModal = () => {
+    if (cancellingRef.current) return;
+
+    setModal(null);
+    setCancelError("");
+  };
 
   const openModal = (type, orderId) => {
+    if (cancellingRef.current) return;
+
+    setCancelError("");
     setModal({ type, orderId });
   };
 
-  const handleCancel = () => {
-    if (!selectedOrder) return;
+  const handleCancel = async () => {
+    if (!selectedOrder || cancellingRef.current) return;
 
-    const success = cancelOrder(userId, selectedOrder.orderId);
+    if (selectedOrder.status !== "paid") {
+      setCancelError("결제 완료 상태의 주문만 취소할 수 있습니다.");
+      return;
+    }
 
-    showToast(
-      success
-        ? "테스트 주문을 취소했습니다. 실제 환불은 발생하지 않습니다."
-        : "취소할 수 없는 주문입니다.",
-    );
+    cancellingRef.current = true;
+    setIsCancelling(true);
+    setCancelError("");
 
-    closeModal();
+    try {
+      await cancelOrder(userId, selectedOrder.orderId);
+
+      // 서버에서 취소가 완료된 뒤 모달 닫기
+      setModal(null);
+      showToast("주문을 취소했습니다.");
+
+      // 취소 성공과 목록 재조회 실패를 구분
+      setIsLoading(true);
+      setLoadError("");
+
+      try {
+        await fetchOrders(userId);
+      } catch {
+        setLoadError(
+          "주문 취소는 완료됐지만 목록을 불러오지 못했습니다. 다시 불러오기를 눌러주세요.",
+        );
+      } finally {
+        setIsLoading(false);
+      }
+    } catch (error) {
+      // 취소 실패 시 모달을 유지하고 오류 표시
+      setCancelError(
+        error.message || "주문 취소에 실패했습니다. 다시 시도해 주세요.",
+      );
+    } finally {
+      cancellingRef.current = false;
+      setIsCancelling(false);
+    }
   };
 
   const modalTitles = {
@@ -138,7 +194,19 @@ export default function OrderSection() {
         </HeadingGroup>
       </CardHeader>
 
-      {orders.length === 0 ? (
+      {isLoading ? (
+        <p role="status">주문 내역을 불러오는 중입니다.</p>
+      ) : loadError ? (
+        <div role="alert">
+          <p>{loadError}</p>
+          <OutlineButton
+            type="button"
+            onClick={() => setRetryCount((count) => count + 1)}
+          >
+            다시 불러오기
+          </OutlineButton>
+        </div>
+      ) : orders.length === 0 ? (
         <OrderEmpty>
           <p>현재 주문한 내역이 없습니다.</p>
           <p>상품을 구매해주세요.</p>
@@ -147,14 +215,14 @@ export default function OrderSection() {
         <OrderList>
           {orders.map((order) => {
             const firstItem = order.items[0];
-            const otherCount = order.items.length - 1;
+            const otherCount = Math.max(0, order.items.length - 1);
 
             const hasGoods = order.items.some(
               (item) => item.itemType === "goods",
             );
 
             // 추가
-            const status = getOrderStatus(order, now);
+            const status = order.status;
 
             return (
               <OrderCard key={order.orderId}>
@@ -163,7 +231,7 @@ export default function OrderSection() {
                   onClick={() => openModal("detail", order.orderId)}
                   aria-label={`${order.orderNumber} 주문 상세 보기`}
                 >
-                  {firstItem.imageUrl ? (
+                  {firstItem?.imageUrl ? (
                     <OrderThumbnail src={firstItem.imageUrl} alt="" />
                   ) : (
                     <OrderThumbnail as="span" aria-hidden="true">
@@ -175,7 +243,7 @@ export default function OrderSection() {
                     <small>주문번호: {order.orderNumber}</small>
 
                     <strong>
-                      {firstItem.name}
+                      {firstItem?.name ?? "상품 정보 없음"}
                       {otherCount > 0 && ` 외 ${otherCount}종`}
                     </strong>
 
@@ -227,6 +295,7 @@ export default function OrderSection() {
       )}
 
       <Modal
+        variant="mypage"
         isOpen={Boolean(modal && selectedOrder)}
         onClose={closeModal}
         title={modalTitles[modal?.type] ?? "주문내역"}
@@ -303,19 +372,33 @@ export default function OrderSection() {
                 <p>선택한 주문 전체가 취소 처리됩니다.</p>
                 <p>계속 진행하시겠어요?</p>
 
-                <ProfileModalActions>
-                  <ProfileCancelButton type="button" onClick={closeModal}>
-                    취소
+                {cancelError && (
+                  <p role="alert" style={{ color: "#b42318" }}>
+                    {cancelError}
+                  </p>
+                )}
+
+                <ProfileModalActions data-order-modal-actions>
+                  <ProfileCancelButton
+                    type="button"
+                    onClick={closeModal}
+                    disabled={isCancelling}
+                  >
+                    돌아가기
                   </ProfileCancelButton>
 
-                  <ProfileSaveButton type="button" onClick={handleCancel}>
-                    확인
+                  <ProfileSaveButton
+                    type="button"
+                    onClick={handleCancel}
+                    disabled={isCancelling}
+                  >
+                    {isCancelling ? "취소 처리 중..." : "주문 취소"}
                   </ProfileSaveButton>
                 </ProfileModalActions>
               </>
             )}
 
-            {/* 초록색 테마 배송 조회 */}
+            {/* 배송 조회 */}
             {modal?.type === "delivery" && (
               <>
                 <p>주문번호: {selectedOrder.orderNumber}</p>
@@ -323,50 +406,60 @@ export default function OrderSection() {
                 <DeliveryPanel>
                   <p>현재 배송 상태</p>
 
-                  <DeliveryTitle>{statusLabels[selectedStatus]}</DeliveryTitle>
+                  <DeliveryTitle>
+                    {statusLabels[selectedStatus] ?? "상태 확인 필요"}
+                  </DeliveryTitle>
 
                   {selectedOrder.tracking?.trackingNumber ? (
-                    <p>
-                      {selectedOrder.tracking.carrier}
-                      {" · "}
-                      {selectedOrder.tracking.trackingNumber}
-                    </p>
+                    <>
+                      <p>
+                        택배사: {selectedOrder.tracking.carrier || "미등록"}
+                      </p>
+                      <p>
+                        운송장 번호: {selectedOrder.tracking.trackingNumber}
+                      </p>
+                    </>
                   ) : (
-                    <p>등록된 운송장 정보가 없습니다.</p>
+                    <p>아직 운송장 정보가 등록되지 않았습니다.</p>
                   )}
 
-                  <small>
-                    구매 날짜 기준으로 표시하는 테스트 배송 상태입니다.
-                  </small>
+                  {selectedStatus === "delivered" &&
+                    selectedOrder.tracking?.deliveredAt && (
+                      <p>
+                        배송 완료 일시:{" "}
+                        {formatDateTime(selectedOrder.tracking.deliveredAt)}
+                      </p>
+                    )}
+
+                  <small>주문 조회 시 서버에서 받은 배송 정보입니다.</small>
                 </DeliveryPanel>
 
-                <DeliveryEvent>
-                  <DeliveryTitle>{statusLabels[selectedStatus]}</DeliveryTitle>
+                {selectedOrder.shippingAddress && (
+                  <DeliveryPanel>
+                    <DeliveryTitle>받는 곳</DeliveryTitle>
+                    <p>
+                      받는 분: {selectedOrder.shippingAddress.recipientName}
+                    </p>
+                    <p>연락처: {selectedOrder.shippingAddress.phone}</p>
+                    <p>주소: {selectedOrder.shippingAddress.address}</p>
+                  </DeliveryPanel>
+                )}
 
-                  <p>
-                    {selectedStatus === "delivered"
-                      ? "테스트 주문이 배송 완료 상태입니다."
-                      : "테스트 주문이 배송 중 상태입니다."}
-                  </p>
-                </DeliveryEvent>
+                <ProfileSaveButton type="button" onClick={closeModal}>
+                  확인
+                </ProfileSaveButton>
               </>
             )}
 
-            {/* 이미지와 동일하게 개발 중 안내 */}
+            {/* 교환/반품 안내 */}
             {modal?.type === "returns" && (
               <>
-                <p>교환/반품 페이지는 현재 개발 중이에요.</p>
-                <p>조금만 기다려주세요!</p>
+                <p>현재 사이트에서는 교환/반품 신청을 지원하지 않습니다.</p>
+                <p>이 화면에서는 신청이 접수되지 않습니다.</p>
 
-                <ProfileModalActions>
-                  <ProfileCancelButton type="button" onClick={closeModal}>
-                    취소
-                  </ProfileCancelButton>
-
-                  <ProfileSaveButton type="button" onClick={closeModal}>
-                    확인
-                  </ProfileSaveButton>
-                </ProfileModalActions>
+                <ProfileSaveButton type="button" onClick={closeModal}>
+                  확인
+                </ProfileSaveButton>
               </>
             )}
           </OrderModalContent>

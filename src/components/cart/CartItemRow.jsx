@@ -11,7 +11,10 @@
   ItemPriceArea,
   DeleteButton,
   ItemTotal,
+  ItemImageLink,
 } from "../../pages/CartPage.styles";
+
+import { Link } from "react-router-dom";
 
 // 장바구니 상품 1개의 정보를 보여주는 컴포넌트
 export default function CartItemRow({
@@ -23,6 +26,17 @@ export default function CartItemRow({
   onDecrease,
   onDelete,
 }) {
+  const itemType = item.itemType ?? item.type;
+  const productId = item.productId ?? item.id;
+
+  const detailPaths = {
+    ticket: "/products", // 입장권·패키지·멤버십
+    experience: "/experiences",
+    goods: "/goods",
+  };
+
+  const detailPath = `${detailPaths[itemType]}/${encodeURIComponent(productId)}`;
+
   return (
     <CartItem>
       {/* 상품 선택 체크박스 */}
@@ -33,11 +47,24 @@ export default function CartItemRow({
         aria-label={`${item.name} 선택`}
       />
       {/* 상품 이미지 */}
-      <ItemImage src={item.imageUrl} alt={item.name} />
+      <ItemImageLink
+        as={Link}
+        to={detailPath}
+        aria-label={`${item.name} 상세페이지`}
+      >
+        <ItemImage src={item.imageUrl} alt={item.name} />
+      </ItemImageLink>
 
       {/* 상품 기본 정보 */}
       <ItemInfo>
-        <ItemName>{item.name}</ItemName>
+        <ItemName>
+          <Link
+            to={detailPath}
+            style={{ color: "inherit", textDecoration: "none" }}
+          >
+            {item.name}
+          </Link>
+        </ItemName>
 
         {/* 입장권/체험권 이용일 표시 */}
         {item.type !== "goods" && item.visitDate && (
@@ -45,7 +72,7 @@ export default function CartItemRow({
         )}
 
         {/* 입장권 정보 */}
-        {item.type === "ticket" && (
+        {(item.type === "ticket" || item.type === "experience") && (
           <>
             <ItemText>인원: {item.quantity}명</ItemText>
             <ItemText>{item.price.toLocaleString()}원 / 1인</ItemText>

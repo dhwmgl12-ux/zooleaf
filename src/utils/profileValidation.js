@@ -16,7 +16,7 @@ export function validateProfile(form) {
   const fieldErrors = {
     name: getNameError(values.name),
     phone: getPhoneError(values.phone),
-    birthDate: getBirthDateError(values.birthDate.replaceAll("-", ".")),
+    birthDate: getBirthDateError(values.birthDate),
   };
 
   const errors = Object.fromEntries(

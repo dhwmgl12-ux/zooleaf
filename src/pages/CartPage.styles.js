@@ -122,7 +122,6 @@ export const EmptyCart = styled.div`
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  box-sizing: border-box;
   min-height: 560px;
   padding: ${theme.spacing[48]} ${theme.spacing[24]};
   text-align: center;
@@ -237,16 +236,13 @@ export const CartItem = styled.article`
   }
 
   @media (max-width: ${theme.layout.breakpoint.mobile}) {
-    display: grid;
-
     grid-template-columns: 76px minmax(0, 1fr);
 
     grid-template-areas:
       "image info"
       "quantity price";
 
-    column-gap: ${theme.spacing[12]};
-    row-gap: ${theme.spacing[12]};
+    gap: ${theme.spacing[12]};
 
     padding: ${theme.spacing[40]} ${theme.spacing[16]} ${theme.spacing[16]};
 
@@ -270,7 +266,6 @@ export const ItemImage = styled.img`
   @media (max-width: ${theme.layout.breakpoint.mobile}) {
     grid-area: image;
 
-    width: 76px;
     height: 76px;
 
     align-self: center;
@@ -289,8 +284,6 @@ export const ItemInfo = styled.div`
     grid-area: info;
 
     align-self: center;
-
-    min-width: 0;
   }
 `;
 
@@ -349,7 +342,6 @@ export const ItemTotal = styled.strong`
   font-weight: ${theme.fontWeight.bold};
 
   @media (max-width: ${theme.layout.breakpoint.mobile}) {
-    margin-top: auto;
     padding-top: 28px;
 
     font-size: ${theme.fontSize.h6.size};
@@ -766,10 +758,7 @@ export const ModalAddButton = styled.button`
 `;
 
 export const EmptyCartImage = styled.img`
-  display: block;
   width: 420px;
-  max-width: 100%;
-  height: auto;
   flex-shrink: 0;
 
   object-fit: contain;
@@ -818,4 +807,13 @@ export const BenefitDetailAmount = styled.strong`
 export const BenefitDetailNote = styled.p`
   margin-top: 8px !important;
   color: ${theme.colors.textSecondary};
+`;
+
+export const ItemImageLink = styled.a`
+  display: flex;
+  align-self: center;
+
+  @media (max-width: ${theme.layout.breakpoint.mobile}) {
+    grid-area: image;
+  }
 `;
