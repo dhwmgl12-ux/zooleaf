@@ -1,7 +1,6 @@
 import React from 'react';
 import styled from '@emotion/styled';
-
-const PRIMARY_GREEN = '#1E4D3A';
+import { theme } from '../../styles/variables';
 
 const Pagination = ({ currentPage = 1, totalPages = 5, onPageChange }) => {
   const pages = Array.from({ length: totalPages }, (_, i) => i + 1);
@@ -53,12 +52,12 @@ const PageButton = styled.button`
   cursor: pointer;
   font-size: 14px;
   font-weight: ${(props) => (props.isActive ? 'bold' : 'normal')};
-  background-color: ${(props) => (props.isActive ? PRIMARY_GREEN : '#F3F4F6')};
-  color: ${(props) => (props.isActive ? '#ffffff' : '#4B5563')};
+  background-color: ${(props) => (props.isActive ? theme.colors.paginationActive : theme.colors.paginationBackground)};
+  color: ${(props) => (props.isActive ? theme.colors.white : theme.colors.paginationText)};
   transition: all 0.2s ease-in-out;
 
   &:hover {
-    background-color: ${(props) => (props.isActive ? PRIMARY_GREEN : '#E5E7EB')};
+    background-color: ${(props) => (props.isActive ? theme.colors.paginationActive : theme.colors.paginationHover)};
   }
 `;
 
@@ -68,7 +67,7 @@ const NavButton = styled.button`
   border-radius: 50%;
   border: none;
   background: transparent;
-  color: #9CA3AF;
+  color: ${theme.colors.paginationDisabled};
   cursor: pointer;
 
   &:disabled {
