@@ -41,6 +41,12 @@ export const MainCardList = styled.ul`
   grid-template-columns: repeat(4, minmax(0, 1fr));
   gap: ${theme.spacing[24]};
 
+  @media (max-width: ${theme.layout.breakpoint.desktop}) {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    ${({ $showOnlyTwo }) =>
+      $showOnlyTwo && `> li:nth-of-type(n + 4) { display: none; }`}
+  }
+
   @media screen and (max-width: ${theme.layout.breakpoint.tablet}) {
     grid-template-columns: repeat(2, minmax(0, 1fr));
 
