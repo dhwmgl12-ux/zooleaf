@@ -125,7 +125,7 @@ export const ModalBody = styled.div`
   }
 
   ${({ $variant }) =>
-    $variant === "mypage" &&
+    ($variant === "mypage" || $variant === "cart") &&
     css`
       margin: 0;
       padding: 8px 32px 32px;

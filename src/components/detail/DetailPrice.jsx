@@ -192,7 +192,9 @@ export default function DetailPrice({ product, productType }) {
   const [cartError, setCartError] = useState("");
 
   // 상세페이지의 product를 장바구니의 ticket으로 변환
-  const cartItemType = productType === "product" ? "ticket" : productType;
+  // 변경
+  const cartItemType =
+    productType === "product" ? product.categoryId : productType;
 
   const hasSelectedItems = hasOptions
     ? selectedOptions.length > 0

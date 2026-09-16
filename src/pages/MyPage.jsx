@@ -45,7 +45,7 @@ export default function MyPage() {
   return (
     <Container>
       <PageHeader>
-        <h1>마이페이지</h1>
+        <h2>마이페이지</h2>
         <p>
           내 정보와 주문 내역을 한눈에 관리하고, 더 편리한 쇼핑을 경험하세요.
         </p>

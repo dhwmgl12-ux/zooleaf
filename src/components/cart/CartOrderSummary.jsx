@@ -47,19 +47,48 @@ export default function CartOrderSummary({ cartItems }) {
   const [isOrdering, setIsOrdering] = useState(false);
   const [purchaseError, setPurchaseError] = useState("");
 
+  const [isCheckingAddress, setIsCheckingAddress] = useState(false);
+  const [needsAddress, setNeedsAddress] = useState(false);
+
   const orderingRef = useRef(false);
 
   // 응답 오류 후 같은 주문을 재시도할 때 requestId 재사용
   const pendingOrderRef = useRef(null);
 
   // 구매 확인 모달 열기
-  const handlePurchase = () => {
+  const handlePurchase = async () => {
     if (orderingRef.current || isCartBusy || cartItems.length === 0) {
       return;
     }
 
+    const userId = useAuthStore.getState().user?.id;
+
+    if (!userId) {
+      navigate("/login");
+      return;
+    }
+
+    orderingRef.current = true;
+    setIsCheckingAddress(true);
     setPurchaseError("");
-    setIsPurchaseModalOpen(true);
+
+    try {
+      const addresses = await useAddressStore.getState().fetchAddresses(userId);
+
+      if (!addresses) {
+        throw new Error("로그인 상태가 변경되었습니다. 다시 확인해주세요.");
+      }
+
+      const hasDefaultAddress = addresses.some((address) => address.isDefault);
+
+      setNeedsAddress(!hasDefaultAddress);
+      setIsPurchaseModalOpen(true);
+    } catch (error) {
+      showToast(error.message || "배송지 정보를 확인하지 못했습니다.");
+    } finally {
+      orderingRef.current = false;
+      setIsCheckingAddress(false);
+    }
   };
 
   // 요청 중에는 모달을 닫지 않음
@@ -113,9 +142,7 @@ export default function CartOrderSummary({ cartItems }) {
       const address = addresses.find((item) => item.isDefault);
 
       if (!address) {
-        showToast("기본 배송지를 먼저 등록해주세요.");
-        setIsPurchaseModalOpen(false);
-        navigate("/mypage");
+        setNeedsAddress(true);
         return;
       }
 
@@ -400,10 +427,19 @@ export default function CartOrderSummary({ cartItems }) {
 
       <PurchaseButton
         type="button"
-        disabled={cartItems.length === 0 || isCartBusy || isOrdering}
+        disabled={
+          cartItems.length === 0 ||
+          isCartBusy ||
+          isOrdering ||
+          isCheckingAddress
+        }
         onClick={handlePurchase}
       >
-        {isOrdering ? "주문 처리 중..." : "구매하기"}
+        {isCheckingAddress
+          ? "배송지 확인 중..."
+          : isOrdering
+            ? "주문 처리 중..."
+            : "구매하기"}
       </PurchaseButton>
 
       {isPurchaseModalOpen && (
@@ -411,12 +447,12 @@ export default function CartOrderSummary({ cartItems }) {
           variant="cart"
           isOpen={isPurchaseModalOpen}
           onClose={handleCloseModal}
-          title="구매 확인"
+          title={needsAddress ? "배송지 등록 안내" : "구매 확인"}
         >
           <ModalText>
-            선택한 상품을 주문하시겠습니까?
-            <br />
-            실제 결제 없이 테스트 주문이 저장됩니다.
+            {needsAddress
+              ? "구매하려면 기본 배송지를 먼저 등록해주세요."
+              : "선택한 상품을 주문하시겠습니까?"}
           </ModalText>
 
           {purchaseError && <p role="alert">{purchaseError}</p>}
@@ -428,16 +464,27 @@ export default function CartOrderSummary({ cartItems }) {
               onClick={handleCloseModal}
               disabled={isOrdering}
             >
-              아니오
+              취소
             </ModalCancelButton>
 
             <ModalDeleteButton
               data-modal-confirm
               type="button"
               disabled={isCartBusy || isOrdering}
-              onClick={handleConfirm}
+              onClick={
+                needsAddress
+                  ? () => {
+                      setIsPurchaseModalOpen(false);
+                      navigate("/mypage");
+                    }
+                  : handleConfirm
+              }
             >
-              {isOrdering ? "주문 처리 중..." : "예"}
+              {needsAddress
+                ? "배송지 등록하기"
+                : isOrdering
+                  ? "주문 처리 중..."
+                  : "예"}
             </ModalDeleteButton>
           </ModalButtonArea>
         </Modal>
