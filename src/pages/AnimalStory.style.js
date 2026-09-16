@@ -18,14 +18,14 @@ export const Title = styled.h2`
 export const SubTitle = styled.p`
   font-size: ${theme.fontSize.bodylarge.size};
   color: ${theme.colors.textPrimary};
-  margin-bottom: ${theme.spacing[80]};
+  margin-bottom: ${theme.spacing[32]};
 `;
 
 export const FilterBox = styled.div`
   width: 100%;
   background: ${theme.colors.white};
   border-radius: ${theme.radius.box};
-  padding: ${theme.spacing[14]} 60px;
+  padding: ${theme.spacing[12]} 60px;
   display: flex;
   align-items: center;
   justify-content: space-between;
