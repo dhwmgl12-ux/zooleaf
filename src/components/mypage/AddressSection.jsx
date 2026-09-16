@@ -1,4 +1,3 @@
-import { useRef, useState } from "react";
 import Modal from "../common/Modal";
 import useAddressStore from "../../store/addressStore";
 import useAuthStore from "../../store/authStore";
