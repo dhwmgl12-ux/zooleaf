@@ -2,7 +2,7 @@ import styled from '@emotion/styled';
 import { theme } from '../../styles/variables';
 
 export const Sidebar = styled.aside`
-  width: 170px;
+  width: 220px;
   flex-shrink: 0;
   overflow: visible;
   border-radius: ${theme.radius.box};
@@ -15,20 +15,20 @@ export const Sidebar = styled.aside`
     width: 100%;
     align-items: center;
     justify-content: center;
-    padding: ${theme.spacing[12]} ${theme.spacing[16]};
+    padding: ${theme.spacing[16]} ${theme.spacing[20]};
     color: ${theme.colors.textPrimary};
-    font-size: ${theme.fontSize.label.size};
+    font-size: ${theme.fontSize.body2.size};
     font-weight: ${theme.fontWeight.bold};
     text-align: center;
   }
 
   nav {
-    padding: ${theme.spacing[8]} 0;
+    padding: ${theme.spacing[12]} 0;
   }
 
   nav button {
-    padding-top: ${theme.spacing[16]};
-    padding-bottom: ${theme.spacing[16]};
+    padding-top: ${theme.spacing[20]};
+    padding-bottom: ${theme.spacing[20]};
   }
 
   nav button:hover {
@@ -46,14 +46,14 @@ export const Sidebar = styled.aside`
   }
 
   .filter-options {
-    margin: ${theme.spacing[8]} ${theme.spacing[16]} ${theme.spacing[16]};
+    margin: ${theme.spacing[12]} ${theme.spacing[20]} ${theme.spacing[20]};
     border-top: 1px solid ${theme.colors.background2};
-    padding-top: ${theme.spacing[12]};
+    padding-top: ${theme.spacing[16]};
   }
 
   .filter-dropdown {
     position: relative;
-    margin-top: ${theme.spacing[12]};
+    margin-top: ${theme.spacing[16]};
   }
 
   .filter-dropdown > button {
