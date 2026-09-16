@@ -8,7 +8,8 @@ import mobileBannerImage from '../assets/images/banner-mobile.webp';
 import LoadingSpinner from '../components/common/LoadingSpinner';
 import ErrorState from '../components/common/ErrorState';
 import EmptyState from '../components/common/EmptyState';
-import { ProductPageContainer } from './ProductPage.styles';
+import { ProductPageContainer, ProductPageLayout, ProductBanner } from './ProductPage.styles';
+import Breadcrumb from '../components/common/Breadcrumb';
 
 const PRODUCTS_PER_PAGE = 12;
 const GRID_COLUMNS = 3;
@@ -95,65 +96,74 @@ export default function ProductPage() {
   }, [filters, isTicketCategory]);
 
   return (
-    <ProductPageContainer>
-      <Link
-        to="/discount"
-        aria-label="ZOOLEAF 제휴 및 할인 혜택 보기"
-        className="product-page__banner"
-      >
-        <picture>
-          <source media="(max-width: 320px)" srcSet={mobileBannerImage} />
-          <img src={bannerImage} alt="ZOOLEAF 할인 혜택을 확인해 보세요" />
-        </picture>
-      </Link>
+    <>
+      <Breadcrumb
+        items={[
+          { label: '홈', to: '/' },
+          { label: 'Shop', to: '/goods' }
+        ]}
+      />
 
-      <div className="product-page__layout">
-        <CategorySidebar
-          selectedCategory={filters.category}
-          onSelectCategory={handleSelectCategory}
-          selectedTarget={filters.target}
-          onSelectTarget={handleSelectTarget}
-          selectedTime={filters.time}
-          onSelectTime={handleSelectTime}
-        />
+      <ProductPageContainer>
+        <h2>
+          {filters.category === '전체상품'
+            ? '입장권 & 패키지'
+            : filters.category}
+        </h2>
 
-        <section className="product-page__content" aria-label="상품 목록">
-          <h1>
-            {filters.category === '전체상품'
-              ? '입장권 & 패키지'
-              : filters.category}
-          </h1>
+        <ProductBanner
+          to="/discount"
+          aria-label="ZOOLEAF 제휴 및 할인 혜택 보기"
+          className="product-page__banner"
+        >
+          <picture>
+            <source media="(max-width: 375px)" srcSet={mobileBannerImage} />
+            <img src={bannerImage} alt="ZOOLEAF 할인 혜택을 확인해 보세요" />
+          </picture>
+        </ProductBanner>
 
-          {loading ? (
-            <LoadingSpinner />
-          ) : error ? (
-            <ErrorState
-              title="상품을 불러올 수 없습니다."
-              description={error}
-              onButtonClick={() => window.location.reload()}
-            />
-          ) : displayedProducts.length === 0 ? (
-            <EmptyState title="등록된 상품이 없습니다." />
-          ) : (
-            <div className="product-page__grid">
-              {displayedProducts.map((product) => (
-                <ProductCard key={product.id} product={product} />
-              ))}
-              {Array.from(
-                {
-                  length:
-                    (GRID_COLUMNS - (displayedProducts.length % GRID_COLUMNS)) %
-                    GRID_COLUMNS,
-                },
-                (_, index) => (
-                  <EmptyCell key={`empty-${index}`} />
-                ),
-              )}
-            </div>
-          )}
+        <ProductPageLayout className="product-page__layout">
+          <CategorySidebar
+            selectedCategory={filters.category}
+            onSelectCategory={handleSelectCategory}
+            selectedTarget={filters.target}
+            onSelectTarget={handleSelectTarget}
+            selectedTime={filters.time}
+            onSelectTime={handleSelectTime}
+          />
 
-        </section>
-      </div>
-    </ProductPageContainer>
+          <div className="product-page__content" aria-label="상품 목록">
+
+            {loading ? (
+              <LoadingSpinner />
+            ) : error ? (
+              <ErrorState
+                title="상품을 불러올 수 없습니다."
+                description={error}
+                onButtonClick={() => window.location.reload()}
+              />
+            ) : displayedProducts.length === 0 ? (
+              <EmptyState title="등록된 상품이 없습니다." />
+            ) : (
+              <div className="product-page__grid">
+                {displayedProducts.map((product) => (
+                  <ProductCard key={product.id} product={product} />
+                ))}
+                {Array.from(
+                  {
+                    length:
+                      (GRID_COLUMNS - (displayedProducts.length % GRID_COLUMNS)) %
+                      GRID_COLUMNS,
+                  },
+                  (_, index) => (
+                    <EmptyCell key={`empty-${index}`} />
+                  ),
+                )}
+              </div>
+            )}
+          </div>
+        </ProductPageLayout>
+      </ProductPageContainer>
+    </>
   );
 }
