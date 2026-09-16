@@ -21,7 +21,6 @@ export const Container = styled.section`
     z-index: 0;
     width: 400px;
     max-width: 90%;
-    height: auto;
     transform: translate(-50%, -50%);
 
     pointer-events: none;

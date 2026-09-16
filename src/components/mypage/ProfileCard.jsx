@@ -1,8 +1,11 @@
 import useToastStore from "../../store/toastStore";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Modal from "../common/Modal";
-import { formatPhoneNumber } from "../../utils/validation";
+import { formatPhoneNumber, formatBirthDate } from "../../utils/validation";
 import { validateProfile } from "../../utils/profileValidation";
+import { getMe, updateMe } from "../../api/authApi";
+import useAuthStore from "../../store/authStore";
+
 import {
   Card,
   CardHeader,
@@ -23,42 +26,103 @@ import {
 } from "../../pages/Mypage.styles";
 
 // 화면 확인용 데이터
-const previewProfile = {
-  name: "고길동",
-  id: "example@zooleaf.com",
-  phone: "010-0000-0000",
-  birthDate: "1999-09-09",
+const emptyProfile = {
+  name: "",
+  id: "",
+  phone: "",
+  birthDate: "",
 };
 
 export default function ProfileCard() {
   const showToast = useToastStore((state) => state.showToast);
 
-  // 카드에 표시할 정보
-  const [profile, setProfile] = useState(previewProfile);
+  // 카드에 표시할 회원정보
+  const [profile, setProfile] = useState(emptyProfile);
 
-  // 모달 열림 여부와 수정 중인 입력값
+  // 수정 모달 상태
   const [isEditOpen, setIsEditOpen] = useState(false);
-  const [form, setForm] = useState(previewProfile);
+  const [form, setForm] = useState(emptyProfile);
   const [errors, setErrors] = useState({});
+  const [isSaving, setIsSaving] = useState(false);
+  const [saveError, setSaveError] = useState("");
+
+  // 회원정보 조회 상태
+  const [isLoading, setIsLoading] = useState(true);
+  const [loadError, setLoadError] = useState("");
+  const [retryCount, setRetryCount] = useState(0);
+
+  useEffect(() => {
+    let ignore = false;
+
+    const fetchProfile = async () => {
+      setIsLoading(true);
+      setLoadError("");
+
+      try {
+        const result = await getMe();
+        const data = result.data;
+
+        if (!data || typeof data !== "object") {
+          throw new Error("회원정보 응답 형식을 확인해 주세요.");
+        }
+
+        if (ignore) return;
+
+        setProfile({
+          name: data.name ?? "",
+          id: data.id ?? "",
+          phone: formatPhoneNumber(data.phone ?? ""),
+          birthDate: formatBirthDate(data.birthDate ?? ""),
+        });
+      } catch (error) {
+        if (!ignore) {
+          setLoadError(error.message || "회원정보를 불러오지 못했습니다.");
+        }
+      } finally {
+        if (!ignore) {
+          setIsLoading(false);
+        }
+      }
+    };
+
+    fetchProfile();
+
+    return () => {
+      ignore = true;
+    };
+  }, [retryCount]);
 
   // 현재 정보를 입력창에 넣고 모달 열기
+  // 현재 정보를 입력창에 넣고 모달 열기
   const openEditModal = () => {
-    setForm({ ...profile });
+    if (isLoading || loadError || isSaving) return;
+
+    setForm({
+      ...profile,
+      birthDate: formatBirthDate(profile.birthDate ?? ""),
+    });
     setErrors({});
+    setSaveError("");
     setIsEditOpen(true);
   };
 
-  // 취소하면 입력 중인 내용은 카드에 반영하지 않음
+  // 저장 중에는 모달을 닫지 않음
   const closeEditModal = () => {
+    if (isSaving) return;
+
     setIsEditOpen(false);
   };
 
   const handleChange = (event) => {
     const { name, value } = event.target;
+    let nextValue = value;
+
+    if (name === "phone") nextValue = formatPhoneNumber(value);
+    if (name === "birthDate") nextValue = formatBirthDate(value);
 
     setForm((prev) => ({
       ...prev,
-      [name]: name === "phone" ? formatPhoneNumber(value) : value,
+      [name]: nextValue,
     }));
 
     setErrors((prev) => ({
@@ -67,13 +131,16 @@ export default function ProfileCard() {
     }));
   };
 
-  const handleSave = (event) => {
+  const handleSave = async (event) => {
     event.preventDefault();
+
+    if (isSaving) return;
 
     const result = validateProfile(form);
 
     setForm(result.values);
     setErrors(result.errors);
+    setSaveError("");
 
     const firstError = Object.keys(result.errors)[0];
 
@@ -82,11 +149,56 @@ export default function ProfileCard() {
       return;
     }
 
-    // 서버 연결 전: 화면에만 반영
-    setProfile(result.values);
-    closeEditModal();
+    setIsSaving(true);
 
-    showToast("화면에 반영했습니다. 서버 저장은 아직 연결 전입니다.");
+    try {
+      const response = await updateMe({
+        name: result.values.name,
+        phone: result.values.phone,
+        birthDate: result.values.birthDate,
+      });
+
+      const data = response.data;
+
+      if (!data || typeof data !== "object") {
+        throw new Error(
+          "저장 응답을 확인하지 못했습니다. 새로고침 후 회원정보를 확인해 주세요.",
+        );
+      }
+
+      const updatedProfile = {
+        id: data.id ?? "",
+        name: data.name ?? "",
+        phone: formatPhoneNumber(data.phone ?? ""),
+        birthDate: formatBirthDate(data.birthDate ?? ""),
+      };
+
+      // 서버가 반환한 정보로 카드와 입력값 갱신
+      setProfile(updatedProfile);
+      setForm(updatedProfile);
+
+      // 헤더 등에서 사용하는 로그인 회원정보도 갱신
+      useAuthStore.setState((state) => {
+        if (state.user?.id !== data.id) return state;
+
+        return {
+          user: {
+            ...state.user,
+            ...data,
+          },
+        };
+      });
+
+      // 저장 중 닫기 방지 함수를 거치지 않고 성공 시 닫기
+      setIsEditOpen(false);
+      showToast("회원정보를 수정했습니다.");
+    } catch (error) {
+      setSaveError(
+        error.message || "회원정보 수정에 실패했습니다. 다시 시도해 주세요.",
+      );
+    } finally {
+      setIsSaving(false);
+    }
   };
 
   // 같은 구조의 정보를 배열로 만들어 반복 출력
@@ -97,15 +209,15 @@ export default function ProfileCard() {
     },
     {
       label: "이메일",
-      value: profile.id ?? "미등록",
+      value: profile.id || "미등록",
     },
     {
       label: "전화번호",
-      value: profile.phone ?? "미등록",
+      value: profile.phone || "미등록",
     },
     {
       label: "생년월일",
-      value: profile.birthDate?.replaceAll("-", ".") ?? "미등록",
+      value: profile.birthDate || "미등록",
     },
   ];
 
@@ -132,19 +244,37 @@ export default function ProfileCard() {
           </div>
         </HeadingGroup>
 
-        <OutlineButton type="button" onClick={openEditModal}>
+        <OutlineButton
+          type="button"
+          onClick={openEditModal}
+          disabled={isLoading || Boolean(loadError) || isSaving}
+        >
           수정하기
         </OutlineButton>
       </CardHeader>
 
-      <ProfileList>
-        {rows.map(({ label, value }) => (
-          <ProfileRow key={label}>
-            <dt>{label}</dt>
-            <dd>{value}</dd>
-          </ProfileRow>
-        ))}
-      </ProfileList>
+      {isLoading ? (
+        <p role="status">회원정보를 불러오는 중입니다.</p>
+      ) : loadError ? (
+        <div role="alert">
+          <p>{loadError}</p>
+          <OutlineButton
+            type="button"
+            onClick={() => setRetryCount((count) => count + 1)}
+          >
+            다시 불러오기
+          </OutlineButton>
+        </div>
+      ) : (
+        <ProfileList>
+          {rows.map(({ label, value }) => (
+            <ProfileRow key={label}>
+              <dt>{label}</dt>
+              <dd>{value}</dd>
+            </ProfileRow>
+          ))}
+        </ProfileList>
+      )}
       <Modal isOpen={isEditOpen} onClose={closeEditModal} title="회원정보 수정">
         <ProfileEditForm
           onSubmit={handleSave}
@@ -158,6 +288,7 @@ export default function ProfileCard() {
               id="profile-name"
               name="name"
               type="text"
+              disabled={isSaving}
               autoComplete="name"
               value={form.name}
               onChange={handleChange}
@@ -182,6 +313,7 @@ export default function ProfileCard() {
               id="profile-phone"
               name="phone"
               type="tel"
+              disabled={isSaving}
               autoComplete="tel"
               value={form.phone}
               onChange={handleChange}
@@ -208,15 +340,14 @@ export default function ProfileCard() {
             <ProfileInput
               id="profile-birth-date"
               name="birthDate"
-              type="date"
-              autoComplete="bday"
+              type="text"
+              disabled={isSaving}
+              inputMode="numeric"
+              autoComplete="off"
               value={form.birthDate}
               onChange={handleChange}
-              max={[
-                new Date().getFullYear(),
-                String(new Date().getMonth() + 1).padStart(2, "0"),
-                String(new Date().getDate()).padStart(2, "0"),
-              ].join("-")}
+              placeholder="2000.05.14"
+              maxLength={10}
               required
               aria-invalid={Boolean(errors.birthDate)}
               aria-describedby={
@@ -230,12 +361,22 @@ export default function ProfileCard() {
             )}
           </ProfileField>
 
+          {saveError && (
+            <ProfileFormError role="alert">{saveError}</ProfileFormError>
+          )}
+
           <ProfileModalActions>
-            <ProfileCancelButton type="button" onClick={closeEditModal}>
+            <ProfileCancelButton
+              type="button"
+              onClick={closeEditModal}
+              disabled={isSaving}
+            >
               취소
             </ProfileCancelButton>
 
-            <ProfileSaveButton type="submit">저장하기</ProfileSaveButton>
+            <ProfileSaveButton type="submit" disabled={isSaving}>
+              {isSaving ? "저장 중..." : "저장하기"}
+            </ProfileSaveButton>
           </ProfileModalActions>
         </ProfileEditForm>
       </Modal>
