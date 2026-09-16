@@ -1,6 +1,5 @@
 import { create } from "zustand";
-import { getOrderStatus } from "../utils/orderStatus";
-import { getOrders } from "../api/orderApi";
+import { getOrders, cancelOrderRequest } from "../api/orderApi";
 import useAuthStore from "./authStore";
 
 const useOrderStore = create((set, get) => ({
@@ -99,60 +98,16 @@ const useOrderStore = create((set, get) => ({
     return order;
   },
 
-  // 결제 완료 상태에서만 테스트 취소 가능
-  cancelOrder: (userId, orderId) => {
-    const current = get().ordersByUser[userId] ?? [];
-    const target = current.find((order) => order.orderId === orderId);
+  // 서버에 주문 취소 요청
+  cancelOrder: async (userId, orderId) => {
+    const auth = useAuthStore.getState();
 
-    // 날짜 기준으로 결제 완료인 주문만 취소 가능
-    if (!target || getOrderStatus(target) !== "paid") {
-      return false;
+    if (!userId || !auth.token || auth.user?.id !== userId) {
+      throw new Error("로그인 후 이용해주세요.");
     }
 
-    set({
-      ordersByUser: {
-        ...get().ordersByUser,
-        [userId]: current.filter((order) => order.orderId !== orderId),
-      },
-    });
-
-    return true;
-  },
-
-  // 배송 완료 화면 확인용: 굿즈가 포함된 주문만 가능
-  completeTestDelivery: (userId, orderId) => {
-    if (!import.meta.env.DEV) return;
-
-    const current = get().ordersByUser[userId] ?? [];
-
-    set({
-      ordersByUser: {
-        ...get().ordersByUser,
-        [userId]: current.map((order) => {
-          const hasGoods = order.items.some(
-            (item) => item.itemType === "goods",
-          );
-
-          if (
-            order.orderId !== orderId ||
-            order.status !== "paid" ||
-            !hasGoods
-          ) {
-            return order;
-          }
-
-          return {
-            ...order,
-            status: "delivered",
-            tracking: {
-              carrier: "테스트 택배",
-              trackingNumber: "TEST-0000",
-              deliveredAt: new Date().toISOString(),
-            },
-          };
-        }),
-      },
-    });
+    // 실제 취소 가능 여부는 서버가 최종 판단
+    return cancelOrderRequest(orderId);
   },
 }));
 
