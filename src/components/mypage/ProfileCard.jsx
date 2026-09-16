@@ -1,8 +1,9 @@
 import useToastStore from "../../store/toastStore";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Modal from "../common/Modal";
 import { formatPhoneNumber, formatBirthDate } from "../../utils/validation";
 import { validateProfile } from "../../utils/profileValidation";
+import { getMe } from "../../api/authApi";
 
 import {
   Card,
@@ -24,23 +25,69 @@ import {
 } from "../../pages/Mypage.styles";
 
 // 화면 확인용 데이터
-const previewProfile = {
-  name: "고길동",
-  id: "example@zooleaf.com",
-  phone: "010-0000-0000",
-  birthDate: "1999.09.09",
+const emptyProfile = {
+  name: "",
+  id: "",
+  phone: "",
+  birthDate: "",
 };
 
 export default function ProfileCard() {
   const showToast = useToastStore((state) => state.showToast);
 
-  // 카드에 표시할 정보
-  const [profile, setProfile] = useState(previewProfile);
+  // 카드에 표시할 회원정보
+  const [profile, setProfile] = useState(emptyProfile);
 
-  // 모달 열림 여부와 수정 중인 입력값
+  // 수정 모달 상태
   const [isEditOpen, setIsEditOpen] = useState(false);
-  const [form, setForm] = useState(previewProfile);
+  const [form, setForm] = useState(emptyProfile);
   const [errors, setErrors] = useState({});
+
+  // 회원정보 조회 상태
+  const [isLoading, setIsLoading] = useState(true);
+  const [loadError, setLoadError] = useState("");
+  const [retryCount, setRetryCount] = useState(0);
+
+  useEffect(() => {
+    let ignore = false;
+
+    const fetchProfile = async () => {
+      setIsLoading(true);
+      setLoadError("");
+
+      try {
+        const result = await getMe();
+        const data = result.data;
+
+        if (!data || typeof data !== "object") {
+          throw new Error("회원정보 응답 형식을 확인해 주세요.");
+        }
+
+        if (ignore) return;
+
+        setProfile({
+          name: data.name ?? "",
+          id: data.id ?? "",
+          phone: formatPhoneNumber(data.phone ?? ""),
+          birthDate: formatBirthDate(data.birthDate ?? ""),
+        });
+      } catch (error) {
+        if (!ignore) {
+          setLoadError(error.message || "회원정보를 불러오지 못했습니다.");
+        }
+      } finally {
+        if (!ignore) {
+          setIsLoading(false);
+        }
+      }
+    };
+
+    fetchProfile();
+
+    return () => {
+      ignore = true;
+    };
+  }, [retryCount]);
 
   // 현재 정보를 입력창에 넣고 모달 열기
   const openEditModal = () => {
@@ -105,15 +152,15 @@ export default function ProfileCard() {
     },
     {
       label: "이메일",
-      value: profile.id ?? "미등록",
+      value: profile.id || "미등록",
     },
     {
       label: "전화번호",
-      value: profile.phone ?? "미등록",
+      value: profile.phone || "미등록",
     },
     {
       label: "생년월일",
-      value: profile.birthDate ?? "미등록",
+      value: profile.birthDate || "미등록",
     },
   ];
 
@@ -140,19 +187,38 @@ export default function ProfileCard() {
           </div>
         </HeadingGroup>
 
-        <OutlineButton type="button" onClick={openEditModal}>
+        <OutlineButton
+          type="button"
+          onClick={openEditModal}
+          disabled
+          title="회원정보 수정 API 연결 예정"
+        >
           수정하기
         </OutlineButton>
       </CardHeader>
 
-      <ProfileList>
-        {rows.map(({ label, value }) => (
-          <ProfileRow key={label}>
-            <dt>{label}</dt>
-            <dd>{value}</dd>
-          </ProfileRow>
-        ))}
-      </ProfileList>
+      {isLoading ? (
+        <p role="status">회원정보를 불러오는 중입니다.</p>
+      ) : loadError ? (
+        <div role="alert">
+          <p>{loadError}</p>
+          <OutlineButton
+            type="button"
+            onClick={() => setRetryCount((count) => count + 1)}
+          >
+            다시 불러오기
+          </OutlineButton>
+        </div>
+      ) : (
+        <ProfileList>
+          {rows.map(({ label, value }) => (
+            <ProfileRow key={label}>
+              <dt>{label}</dt>
+              <dd>{value}</dd>
+            </ProfileRow>
+          ))}
+        </ProfileList>
+      )}
       <Modal isOpen={isEditOpen} onClose={closeEditModal} title="회원정보 수정">
         <ProfileEditForm
           onSubmit={handleSave}
