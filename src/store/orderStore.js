@@ -1,8 +1,43 @@
 import { create } from "zustand";
 import { getOrderStatus } from "../utils/orderStatus";
+import { getOrders } from "../api/orderApi";
+import useAuthStore from "./authStore";
 
 const useOrderStore = create((set, get) => ({
   ordersByUser: {},
+
+  // 서버 주문 목록 조회
+  fetchOrders: async (userId) => {
+    const auth = useAuthStore.getState();
+
+    if (!userId || !auth.token || auth.user?.id !== userId) {
+      throw new Error("로그인 후 이용해주세요.");
+    }
+
+    const token = auth.token;
+    const result = await getOrders();
+    const orders = result.data?.orders;
+
+    if (!Array.isArray(orders)) {
+      throw new Error("주문 목록 응답 형식을 확인해 주세요.");
+    }
+
+    // 요청 도중 로그인 계정이 바뀌면 반영하지 않음
+    const currentAuth = useAuthStore.getState();
+
+    if (currentAuth.token !== token || currentAuth.user?.id !== userId) {
+      return;
+    }
+
+    set((state) => ({
+      ordersByUser: {
+        ...state.ordersByUser,
+        [userId]: orders,
+      },
+    }));
+
+    return orders;
+  },
 
   // 개발 환경에서만 테스트 주문 생성
   createTestOrder: (userId, requestId, cartItems, amounts, address) => {

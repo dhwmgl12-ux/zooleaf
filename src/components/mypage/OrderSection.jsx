@@ -3,7 +3,7 @@ import Modal from "../common/Modal";
 import useAuthStore from "../../store/authStore";
 import useOrderStore from "../../store/orderStore";
 import useToastStore from "../../store/toastStore";
-import { getOrderStatus, statusLabels } from "../../utils/orderStatus";
+import { statusLabels } from "../../utils/orderStatus";
 import {
   Card,
   CardHeader,
@@ -57,12 +57,44 @@ export default function OrderSection() {
   const orders = useOrderStore(
     (state) => state.ordersByUser[userId] ?? emptyOrders,
   );
-  const cancelOrder = useOrderStore((state) => state.cancelOrder);
+  const fetchOrders = useOrderStore((state) => state.fetchOrders);
 
   // type: detail / cancel / delivery / returns
   const [modal, setModal] = useState(null);
 
   const [now, setNow] = useState(Date.now);
+
+  const [isLoading, setIsLoading] = useState(true);
+  const [loadError, setLoadError] = useState("");
+  const [retryCount, setRetryCount] = useState(0);
+
+  useEffect(() => {
+    let ignore = false;
+
+    const loadOrders = async () => {
+      setIsLoading(true);
+      setLoadError("");
+      setModal(null);
+
+      try {
+        await fetchOrders(userId);
+      } catch (error) {
+        if (!ignore) {
+          setLoadError(error.message || "주문 내역을 불러오지 못했습니다.");
+        }
+      } finally {
+        if (!ignore) {
+          setIsLoading(false);
+        }
+      }
+    };
+
+    loadOrders();
+
+    return () => {
+      ignore = true;
+    };
+  }, [userId, fetchOrders, retryCount]);
 
   useEffect(() => {
     const refresh = () => setNow(Date.now());
@@ -83,7 +115,7 @@ export default function OrderSection() {
     (order) => order.orderId === modal?.orderId,
   );
 
-  const selectedStatus = getOrderStatus(selectedOrder, now);
+  const selectedStatus = selectedOrder?.status;
 
   const closeModal = () => setModal(null);
 
@@ -92,7 +124,8 @@ export default function OrderSection() {
   };
 
   const handleCancel = () => {
-    if (!selectedOrder) return;
+  showToast("주문 취소 API는 다음 단계에서 연결합니다.");
+};
 
     const success = cancelOrder(userId, selectedOrder.orderId);
 
@@ -138,7 +171,19 @@ export default function OrderSection() {
         </HeadingGroup>
       </CardHeader>
 
-      {orders.length === 0 ? (
+      {isLoading ? (
+  <p role="status">주문 내역을 불러오는 중입니다.</p>
+) : loadError ? (
+  <div role="alert">
+    <p>{loadError}</p>
+    <OutlineButton
+      type="button"
+      onClick={() => setRetryCount((count) => count + 1)}
+    >
+      다시 불러오기
+    </OutlineButton>
+  </div>
+) : orders.length === 0 ? (
         <OrderEmpty>
           <p>현재 주문한 내역이 없습니다.</p>
           <p>상품을 구매해주세요.</p>
@@ -147,14 +192,14 @@ export default function OrderSection() {
         <OrderList>
           {orders.map((order) => {
             const firstItem = order.items[0];
-            const otherCount = order.items.length - 1;
+            const otherCount = Math.max(0, order.items.length - 1);
 
             const hasGoods = order.items.some(
               (item) => item.itemType === "goods",
             );
 
             // 추가
-            const status = getOrderStatus(order, now);
+            const status = order.status;
 
             return (
               <OrderCard key={order.orderId}>
@@ -163,7 +208,7 @@ export default function OrderSection() {
                   onClick={() => openModal("detail", order.orderId)}
                   aria-label={`${order.orderNumber} 주문 상세 보기`}
                 >
-                  {firstItem.imageUrl ? (
+                  {firstItem?.imageUrl ? (
                     <OrderThumbnail src={firstItem.imageUrl} alt="" />
                   ) : (
                     <OrderThumbnail as="span" aria-hidden="true">
@@ -175,7 +220,7 @@ export default function OrderSection() {
                     <small>주문번호: {order.orderNumber}</small>
 
                     <strong>
-                      {firstItem.name}
+                      {firstItem?.name ?? "상품 정보 없음"}
                       {otherCount > 0 && ` 외 ${otherCount}종`}
                     </strong>
 
@@ -337,18 +382,18 @@ export default function OrderSection() {
                   )}
 
                   <small>
-                    구매 날짜 기준으로 표시하는 테스트 배송 상태입니다.
-                  </small>
+  서버에 등록된 배송 정보입니다.
+</small>
                 </DeliveryPanel>
 
                 <DeliveryEvent>
                   <DeliveryTitle>{statusLabels[selectedStatus]}</DeliveryTitle>
 
                   <p>
-                    {selectedStatus === "delivered"
-                      ? "테스트 주문이 배송 완료 상태입니다."
-                      : "테스트 주문이 배송 중 상태입니다."}
-                  </p>
+  {selectedStatus === "delivered"
+    ? "배송이 완료되었습니다."
+    : "배송 중입니다."}
+</p>
                 </DeliveryEvent>
               </>
             )}
