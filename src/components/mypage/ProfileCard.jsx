@@ -3,7 +3,8 @@ import { useEffect, useState } from "react";
 import Modal from "../common/Modal";
 import { formatPhoneNumber, formatBirthDate } from "../../utils/validation";
 import { validateProfile } from "../../utils/profileValidation";
-import { getMe } from "../../api/authApi";
+import { getMe, updateMe } from "../../api/authApi";
+import useAuthStore from "../../store/authStore";
 
 import {
   Card,
@@ -42,6 +43,8 @@ export default function ProfileCard() {
   const [isEditOpen, setIsEditOpen] = useState(false);
   const [form, setForm] = useState(emptyProfile);
   const [errors, setErrors] = useState({});
+  const [isSaving, setIsSaving] = useState(false);
+  const [saveError, setSaveError] = useState("");
 
   // 회원정보 조회 상태
   const [isLoading, setIsLoading] = useState(true);
@@ -90,17 +93,23 @@ export default function ProfileCard() {
   }, [retryCount]);
 
   // 현재 정보를 입력창에 넣고 모달 열기
+  // 현재 정보를 입력창에 넣고 모달 열기
   const openEditModal = () => {
+    if (isLoading || loadError || isSaving) return;
+
     setForm({
       ...profile,
       birthDate: formatBirthDate(profile.birthDate ?? ""),
     });
     setErrors({});
+    setSaveError("");
     setIsEditOpen(true);
   };
 
-  // 취소하면 입력 중인 내용은 카드에 반영하지 않음
+  // 저장 중에는 모달을 닫지 않음
   const closeEditModal = () => {
+    if (isSaving) return;
+
     setIsEditOpen(false);
   };
 
@@ -122,13 +131,16 @@ export default function ProfileCard() {
     }));
   };
 
-  const handleSave = (event) => {
+  const handleSave = async (event) => {
     event.preventDefault();
+
+    if (isSaving) return;
 
     const result = validateProfile(form);
 
     setForm(result.values);
     setErrors(result.errors);
+    setSaveError("");
 
     const firstError = Object.keys(result.errors)[0];
 
@@ -137,11 +149,56 @@ export default function ProfileCard() {
       return;
     }
 
-    // 서버 연결 전: 화면에만 반영
-    setProfile(result.values);
-    closeEditModal();
+    setIsSaving(true);
 
-    showToast("화면에 반영했습니다. 서버 저장은 아직 연결 전입니다.");
+    try {
+      const response = await updateMe({
+        name: result.values.name,
+        phone: result.values.phone,
+        birthDate: result.values.birthDate,
+      });
+
+      const data = response.data;
+
+      if (!data || typeof data !== "object") {
+        throw new Error(
+          "저장 응답을 확인하지 못했습니다. 새로고침 후 회원정보를 확인해 주세요.",
+        );
+      }
+
+      const updatedProfile = {
+        id: data.id ?? "",
+        name: data.name ?? "",
+        phone: formatPhoneNumber(data.phone ?? ""),
+        birthDate: formatBirthDate(data.birthDate ?? ""),
+      };
+
+      // 서버가 반환한 정보로 카드와 입력값 갱신
+      setProfile(updatedProfile);
+      setForm(updatedProfile);
+
+      // 헤더 등에서 사용하는 로그인 회원정보도 갱신
+      useAuthStore.setState((state) => {
+        if (state.user?.id !== data.id) return state;
+
+        return {
+          user: {
+            ...state.user,
+            ...data,
+          },
+        };
+      });
+
+      // 저장 중 닫기 방지 함수를 거치지 않고 성공 시 닫기
+      setIsEditOpen(false);
+      showToast("회원정보를 수정했습니다.");
+    } catch (error) {
+      setSaveError(
+        error.message || "회원정보 수정에 실패했습니다. 다시 시도해 주세요.",
+      );
+    } finally {
+      setIsSaving(false);
+    }
   };
 
   // 같은 구조의 정보를 배열로 만들어 반복 출력
@@ -190,8 +247,7 @@ export default function ProfileCard() {
         <OutlineButton
           type="button"
           onClick={openEditModal}
-          disabled
-          title="회원정보 수정 API 연결 예정"
+          disabled={isLoading || Boolean(loadError) || isSaving}
         >
           수정하기
         </OutlineButton>
@@ -232,6 +288,7 @@ export default function ProfileCard() {
               id="profile-name"
               name="name"
               type="text"
+              disabled={isSaving}
               autoComplete="name"
               value={form.name}
               onChange={handleChange}
@@ -256,6 +313,7 @@ export default function ProfileCard() {
               id="profile-phone"
               name="phone"
               type="tel"
+              disabled={isSaving}
               autoComplete="tel"
               value={form.phone}
               onChange={handleChange}
@@ -283,6 +341,7 @@ export default function ProfileCard() {
               id="profile-birth-date"
               name="birthDate"
               type="text"
+              disabled={isSaving}
               inputMode="numeric"
               autoComplete="off"
               value={form.birthDate}
@@ -302,12 +361,22 @@ export default function ProfileCard() {
             )}
           </ProfileField>
 
+          {saveError && (
+            <ProfileFormError role="alert">{saveError}</ProfileFormError>
+          )}
+
           <ProfileModalActions>
-            <ProfileCancelButton type="button" onClick={closeEditModal}>
+            <ProfileCancelButton
+              type="button"
+              onClick={closeEditModal}
+              disabled={isSaving}
+            >
               취소
             </ProfileCancelButton>
 
-            <ProfileSaveButton type="submit">저장하기</ProfileSaveButton>
+            <ProfileSaveButton type="submit" disabled={isSaving}>
+              {isSaving ? "저장 중..." : "저장하기"}
+            </ProfileSaveButton>
           </ProfileModalActions>
         </ProfileEditForm>
       </Modal>
