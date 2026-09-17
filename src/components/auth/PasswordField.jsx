@@ -34,6 +34,8 @@ export default function PasswordField({
           autoComplete={autoComplete}
           value={value}
           onChange={onChange}
+          aria-invalid={!!error}
+          aria-describedby={error ? `${name}-error` : undefined}
         />
         {!value && (
           <FakePlaceHolder ref={containerRef}>
@@ -110,7 +112,7 @@ export default function PasswordField({
           )}
         </ToggleButton>
       </InputWrapper>
-      {error && <ErrorText>{error}</ErrorText>}
+      {error && <ErrorText id={`${name}-error`} role='alert'>{error}</ErrorText>}
     </div>
   );
 }

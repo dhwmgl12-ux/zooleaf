@@ -50,19 +50,21 @@ export default function SignupForm() {
   return (
     <FormCard variant="signup">
       <Title>회원가입</Title>
-      {errors.form && <ErrorText>{errors.form}</ErrorText>}
+      {errors.form && <ErrorText role='alert'>{errors.form}</ErrorText>}
       <Form onSubmit={handleSubmit}>
         <div>
-          <Label htmlFor='id'>이메일 아이디</Label>
+          <Label htmlFor="id">이메일 아이디</Label>
           <CheckIdRow>
             <Input
-              id='id'
+              id="id"
               type="email"
               name="id"
               autoComplete="username"
               value={id}
               onChange={handleChange}
               placeholder="user@example.com"
+              aria-invalid={!!errors.id}
+              aria-describedby={errors.id ? 'id-error' : undefined}
             />
             <CheckIdButton
               type="button"
@@ -72,72 +74,86 @@ export default function SignupForm() {
               중복확인
             </CheckIdButton>
           </CheckIdRow>
-          {errors.id && <ErrorText>{errors.id}</ErrorText>}
+          {errors.id && (
+            <ErrorText id="id-error" role="alert">
+              {errors.id}
+            </ErrorText>
+          )}
           {idCheckStatus === 'available' && <SuccessText>{idCheckMessage}</SuccessText>}
         </div>
 
         <PasswordField
-          label='비밀번호'
-          name='password'
+          label="비밀번호"
+          name="password"
           value={password}
           onChange={handleChange}
-          autoComplete='new-password'
-          placeholder='8 ~ 20자 이상 영문 + 숫자 + 특수문자를 포함하여 주세요.'
+          autoComplete="new-password"
+          placeholder="8 ~ 20자 이상 영문 + 숫자 + 특수문자를 포함하여 주세요."
           error={errors.password}
         />
 
         <PasswordField
-          label='비밀번호 확인'
-          name='passwordConfirm'
+          label="비밀번호 확인"
+          name="passwordConfirm"
           value={passwordConfirm}
           onChange={handleChange}
-          autoComplete='new-password'
-          placeholder='비밀번호를 다시 입력해주세요.'
+          autoComplete="new-password"
+          placeholder="비밀번호를 다시 입력해주세요."
           error={errors.passwordConfirm}
         />
 
         <div>
-          <Label htmlFor='name'>이름</Label>
+          <Label htmlFor="name">이름</Label>
           <Input
-            id='name'
+            id="name"
             type="text"
             name="name"
-            autoComplete='name'
+            autoComplete="name"
             value={name}
             onChange={handleChange}
             placeholder="홍길동"
+            aria-invalid={!!errors.name}
+            aria-describedby={errors.name ? 'name-error' : undefined}
           />
-          {errors.name && <ErrorText>{errors.name}</ErrorText>}
+          {errors.name && (
+            <ErrorText id="name-error" role="alert">
+              {errors.name}
+            </ErrorText>
+          )}
         </div>
 
         <div>
-          <Label htmlFor='phone'>휴대폰 번호</Label>
+          <Label htmlFor="phone">휴대폰 번호</Label>
           <Input
-            id='phone'
+            id="phone"
             type="text"
             inputMode="numeric"
             name="phone"
-            autoComplete='tel'
+            autoComplete="tel"
             value={phone}
             onChange={handleChange}
             placeholder="010-0000-0000"
+            aria-invalid={!!errors.phone}
+            aria-describedby={errors.phone ? 'phone-error' : undefined}
           />
-          {errors.phone && <ErrorText>{errors.phone}</ErrorText>}
+          {errors.phone && <ErrorText id="phone-error" role='alert'>{errors.phone}</ErrorText>}
         </div>
 
         <div>
-          <Label htmlFor='birthDate'>생년월일</Label>
+          <Label htmlFor="birthDate">생년월일</Label>
           <Input
-            id='birthDate'
+            id="birthDate"
             type="text"
             inputMode="numeric"
             name="birthDate"
-            autoComplete='off'
+            autoComplete="off"
             value={birthDate}
             onChange={handleChange}
             placeholder="2000.00.00"
+            aria-invalid={!!errors.birthDate}
+            aria-describedby={errors.birthDate ? 'birthDate-error' : undefined}
           />
-          {errors.birthDate && <ErrorText>{errors.birthDate}</ErrorText>}
+          {errors.birthDate && <ErrorText id='birthDate-error' role='alert'>{errors.birthDate}</ErrorText>}
         </div>
 
         <AgreeGroup>
@@ -150,7 +166,7 @@ export default function SignupForm() {
                 onChange={handleChange}
               />
               <span>[필수] 이용약관 동의</span>
-              {errors.agreeTerms && <InlineErrorText>{errors.agreeTerms}</InlineErrorText>}
+              {errors.agreeTerms && <InlineErrorText role='alert'>{errors.agreeTerms}</InlineErrorText>}
             </AgreeLeftGroup>
             <ArrowIcon
               type="button"
@@ -183,7 +199,7 @@ export default function SignupForm() {
                 onChange={handleChange}
               />
               [필수] 개인정보 수집 및 이용 동의
-              {errors.agreePrivacy && <InlineErrorText>{errors.agreePrivacy}</InlineErrorText>}
+              {errors.agreePrivacy && <InlineErrorText role='alert'>{errors.agreePrivacy}</InlineErrorText>}
             </AgreeLeftGroup>
             <ArrowIcon
               type="button"

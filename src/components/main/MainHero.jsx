@@ -6,7 +6,7 @@ import {
   MainHeroMoreLink,
   MainHeroInner,
 } from './MainHero.styles';
-import zooleafLogo from '../../assets/images/zooleaf-logo-2.webp';
+import zooleafLogo from '../../assets/images/zooleaf-logo 2.webp';
 import posterDesktop from '../../../public/assets/images/fallback.webp';
 import posterMobile from '../../../public/assets/images/fallback-mobile.webp';
 import { theme } from '../../styles/variables';
