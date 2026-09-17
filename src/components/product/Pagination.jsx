@@ -10,6 +10,7 @@ const Pagination = ({ currentPage = 1, totalPages = 5, onPageChange }) => {
       <NavButton
         onClick={() => onPageChange(currentPage - 1)}
         disabled={currentPage === 1}
+        aria-label="이전 페이지"
       >
         &lt;
       </NavButton>
@@ -27,6 +28,7 @@ const Pagination = ({ currentPage = 1, totalPages = 5, onPageChange }) => {
       <NavButton
         onClick={() => onPageChange(currentPage + 1)}
         disabled={currentPage === totalPages}
+        aria-label="다음 페이지"
       >
         &gt;
       </NavButton>
