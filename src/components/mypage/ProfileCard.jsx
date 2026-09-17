@@ -279,7 +279,7 @@ export default function ProfileCard() {
           ))}
         </ProfileList>
       )}
-      <Modal isOpen={isEditOpen} onClose={closeEditModal} title="회원정보 수정">
+      <Modal variant="mypage" isOpen={isEditOpen} onClose={closeEditModal} title="회원정보 수정">
         <ProfileEditForm
           onSubmit={handleSave}
           aria-label="회원정보 수정"

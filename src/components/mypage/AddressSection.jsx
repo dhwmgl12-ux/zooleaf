@@ -416,6 +416,7 @@ export default function AddressSection() {
 
       <Modal
         isOpen={isModalOpen}
+        variant="mypage"
         onClose={closeModal}
         title={isEditing ? "배송지 수정" : "배송지 추가"}
       >

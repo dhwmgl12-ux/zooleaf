@@ -25,15 +25,15 @@ export const PageHeader = styled.header`
     font-size: ${theme.fontSize.h3.size};
     line-height: ${theme.fontSize.h3.lineheight};
   }
-  
+
   p {
     color: ${theme.colors.textSecondary};
     font-size: ${theme.fontSize.bodylarge.size};
     line-height: ${theme.fontSize.bodylarge.lineheight};
     word-break: keep-all;
   }
-  
-  @media (max-width: ${theme.layout.breakpoint.mobile}) {   
+
+  @media (max-width: ${theme.layout.breakpoint.mobile}) {
     p {
       font-size: ${theme.fontSize.body.size};
       line-height: ${theme.fontSize.body.lineheight};
@@ -47,8 +47,12 @@ export const InfoGrid = styled.div`
   grid-template-columns: repeat(2, minmax(0, 1fr));
   gap: ${theme.spacing[24]};
 
-  @media (max-width: ${theme.layout.breakpoint.tablet}) {
-    grid-template-columns: 1fr;
+  @media (max-width: 1024px) {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 20px;
+  }
+  @media (max-width: 768px) {
+    gap: 16px;
   }
 `;
 
@@ -63,6 +67,10 @@ export const Card = styled.section`
 
   @media (max-width: ${theme.layout.breakpoint.mobile}) {
     padding: ${theme.spacing[20]};
+  }
+  @media (max-width: 375px) {
+    padding: 14px;
+    border-radius: 14px;
   }
 `;
 
@@ -92,6 +100,16 @@ export const HeadingGroup = styled.div`
     line-height: ${theme.fontSize.bodysmall.lineheight};
     word-break: keep-all;
   }
+  > div {
+    min-width: 0;
+    overflow-wrap: anywhere;
+  }
+  @media (max-width: 375px) {
+    gap: 8px;
+    p {
+      font-size: 13px;
+    }
+  }
 `;
 
 // 제목 옆 아이콘의 원형 배경
@@ -111,6 +129,14 @@ export const IconCircle = styled.span`
   svg {
     width: 28px;
     height: 28px;
+  }
+  @media (max-width: 375px) {
+    width: 36px;
+    height: 36px;
+    svg {
+      width: 22px;
+      height: 22px;
+    }
   }
 `;
 
@@ -137,6 +163,12 @@ export const OutlineButton = styled.button`
     outline: 3px solid ${theme.colors.secondary};
     outline-offset: 3px;
   }
+  max-width: 100%;
+  overflow-wrap: anywhere;
+  @media (max-width: 375px) {
+    padding: 8px 12px;
+    font-size: 13px;
+  }
 `;
 
 // 로그아웃 제목과 버튼을 담는 영역
@@ -155,6 +187,19 @@ export const LogoutBox = styled.section`
   h2 {
     font-size: ${theme.fontSize.h5.size};
     line-height: ${theme.fontSize.h5.lineheight};
+  }
+  @media (max-width: 768px) {
+    padding: 20px;
+  }
+  @media (max-width: 375px) {
+    padding: 14px;
+    h2 {
+      font-size: 18px;
+    }
+    > button {
+      width: 100%;
+      min-width: 0;
+    }
   }
 `;
 
@@ -202,6 +247,9 @@ export const AddressBox = styled.article`
   @media (max-width: ${theme.layout.breakpoint.mobile}) {
     padding: ${theme.spacing[16]};
   }
+  @media (max-width: 375px) {
+    padding: 12px;
+  }
 `;
 
 // 기본 배송지 표시 배지
@@ -235,6 +283,13 @@ export const ButtonGroup = styled.div`
   display: flex;
   flex-wrap: wrap;
   gap: ${theme.spacing[8]};
+  min-width: 0;
+  @media (max-width: 375px) {
+    width: 100%;
+    > button {
+      flex: 1 1 auto;
+    }
+  }
 `;
 
 // 수령인·연락처·주소의 항목명과 값을 정렬
@@ -263,6 +318,12 @@ export const AddressDetails = styled.dl`
     margin: 0;
     overflow-wrap: anywhere;
   }
+  @media (max-width: 375px) {
+    font-size: 13px;
+    > div {
+      gap: 8px;
+    }
+  }
 `;
 
 // 카드 제목과 모바일 글자 크기
@@ -270,6 +331,18 @@ export const CardTitle = styled.h2`
   font-size: ${theme.fontSize.h5.size};
   line-height: ${theme.fontSize.h5.lineheight};
   font-weight: ${theme.fontWeight.bold};
+
+  overflow-wrap: anywhere;
+  @media (max-width: 1024px) {
+    font-size: 26px;
+    line-height: 1.4;
+  }
+  @media (max-width: 768px) {
+    font-size: 22px;
+  }
+  @media (max-width: 375px) {
+    font-size: 18px;
+  }
 `;
 
 // 회원정보 목록의 기본 여백 제거
@@ -306,6 +379,12 @@ export const ProfileRow = styled.div`
     gap: ${theme.spacing[12]};
     font-size: ${theme.fontSize.bodysmall.size};
     line-height: ${theme.fontSize.bodysmall.lineheight};
+  }
+  @media (max-width: 375px) {
+    grid-template-columns: 64px minmax(0, 1fr);
+    gap: 8px;
+    font-size: 14px;
+    padding: 12px 0;
   }
 `;
 
@@ -387,6 +466,10 @@ export const ProfileModalActions = styled.div`
     min-width: 0;
     width: 100%;
   }
+  @media (max-width: 375px) {
+    gap: 8px;
+    margin-top: 16px;
+  }
 `;
 
 // 수정 취소 버튼
@@ -409,6 +492,10 @@ export const ProfileCancelButton = styled.button`
   &:focus-visible {
     outline: 3px solid ${theme.colors.primary};
     outline-offset: 3px;
+  }
+  @media (max-width: 375px) {
+    padding: 10px 8px;
+    font-size: 14px;
   }
 `;
 
@@ -526,8 +613,12 @@ export const OrderCard = styled.li`
   border-radius: ${theme.radius.box};
   background: ${theme.colors.background};
 
-  @media (max-width: ${theme.layout.breakpoint.mobile}) {
+  @media (max-width: 768px) {
     grid-template-columns: minmax(0, 1fr);
+  }
+  @media (max-width: 375px) {
+    padding: 12px;
+    gap: 12px;
   }
 `;
 
@@ -549,6 +640,10 @@ export const OrderBodyButton = styled.button`
     outline: 3px solid ${theme.colors.primary};
     outline-offset: 3px;
   }
+  @media (max-width: 375px) {
+    gap: 10px;
+    align-items: flex-start;
+  }
 `;
 
 // 목록과 상세에서 공통 사용
@@ -567,6 +662,10 @@ export const OrderThumbnail = styled.img`
   @media (max-width: ${theme.layout.breakpoint.mobile}) {
     width: ${theme.spacing[64]};
     height: ${theme.spacing[64]};
+  }
+  @media (max-width: 375px) {
+    width: 48px;
+    height: 48px;
   }
 `;
 
@@ -588,6 +687,12 @@ export const OrderText = styled.span`
     font-size: ${theme.fontSize.body.size};
     line-height: ${theme.fontSize.body.lineheight};
   }
+  @media (max-width: 375px) {
+    > strong {
+      font-size: 14px;
+      line-height: 1.5;
+    }
+  }
 `;
 
 export const OrderSide = styled.div`
@@ -596,6 +701,13 @@ export const OrderSide = styled.div`
   align-items: flex-end;
   justify-content: space-between;
   gap: ${theme.spacing[16]};
+  min-width: 0;
+  @media (max-width: 768px) {
+    flex-direction: row;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 12px;
+  }
 `;
 
 export const OrderStatus = styled.p`
@@ -679,12 +791,22 @@ export const OrderProduct = styled.article`
   > div > strong {
     color: ${theme.colors.primary};
   }
+  @media (max-width: 375px) {
+    padding: 12px;
+    gap: 10px;
+    align-items: flex-start;
+  }
 `;
 
 export const OrderProductTitle = styled.h3`
   font-size: ${theme.fontSize.body.size};
   line-height: ${theme.fontSize.body.lineheight};
   font-weight: ${theme.fontWeight.bold};
+  overflow-wrap: anywhere;
+  @media (max-width: 375px) {
+    font-size: 14px;
+    line-height: 1.5;
+  }
 `;
 
 export const OrderAmountBox = styled.div`
@@ -695,6 +817,9 @@ export const OrderAmountBox = styled.div`
   padding: ${theme.spacing[20]};
   border-radius: ${theme.radius.box};
   background: ${theme.colors.background2};
+  @media (max-width: 375px) {
+    padding: 12px;
+  }
 `;
 
 export const OrderAmountRow = styled.div`

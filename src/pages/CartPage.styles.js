@@ -196,6 +196,22 @@ export const CategoryTitle = styled.h2`
   font-size: ${theme.fontSize.h4.size};
   line-height: ${theme.fontSize.h4.lineheight};
   font-weight: ${theme.fontWeight.bold};
+  word-break: keep-all;
+  overflow-wrap: anywhere;
+
+  @media (max-width: 1024px) {
+    font-size: 24px;
+    line-height: 1.4;
+  }
+
+  @media (max-width: 768px) {
+    font-size: 20px;
+  }
+
+  @media (max-width: 375px) {
+    font-size: 16px;
+    margin-bottom: 10px;
+  }
 `;
 
 export const CartItem = styled.article`
