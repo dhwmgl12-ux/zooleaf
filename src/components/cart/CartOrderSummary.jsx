@@ -9,6 +9,7 @@ import { deleteSelectedCartItems } from "../../api/cartApi";
 import useAuthStore from "../../store/authStore";
 import useAddressStore from "../../store/addressStore";
 import useToastStore from "../../store/toastStore";
+import { saveOrderDisplayAmounts } from "../../utils/orderDisplayAmounts";
 
 import {
   OrderSummary,
@@ -164,12 +165,33 @@ export default function CartOrderSummary({ cartItems }) {
         };
       }
 
-      await createOrder({
+      // API 응답을 기다리기 전에 구매 당시 화면 금액을 확보합니다.
+      const displayAmounts = {
+        subtotal: productTotal,
+        shippingFee,
+        discountAmount: discountTotal,
+      };
+
+      const result = await createOrder({
         requestId: pendingOrderRef.current.requestId,
         cartItemIds,
         addressId: address.addressId,
         benefitId: benefitId || null,
       });
+
+      if (benefitDiscount > 0) {
+        const saved = saveOrderDisplayAmounts(
+          userId,
+          result.data?.orderId,
+          displayAmounts,
+        );
+
+        if (!saved) {
+          showToast(
+            "주문은 저장됐지만 시연용 할인 금액은 이 브라우저에 저장하지 못했습니다.",
+          );
+        }
+      }
 
       // 여기부터는 주문 저장이 성공한 상태
       // 장바구니 삭제 실패를 주문 실패로 처리하지 않음

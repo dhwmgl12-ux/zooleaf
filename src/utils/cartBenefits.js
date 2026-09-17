@@ -65,38 +65,42 @@ export function getBenefitDetails(items, benefitId, benefitDate = "") {
   let remaining = benefit.maxQuantity;
   const details = [];
 
-  // 대인 종일권 → 소인 종일권 순서로 적용
-  const getPriority = (item) => {
-    const productId = Number(item.productId ?? item.id);
-
-    if (productId === 1) return 0;
-    if (productId === 3) return 1;
-    return 2;
+  // 시연 기준: 기존과 동일하게 대인 → 소인 → 기타 순서.
+  // 실제 본인 확인이나 대상자 선택을 대신하는 규칙은 아닙니다.
+  const priority = (item) => {
+    const id = Number(item.productId ?? item.id);
+    return id === 1 ? 0 : id === 3 ? 1 : 2;
   };
 
-  const sortedItems = [...items].sort(
-    (a, b) => getPriority(a) - getPriority(b),
-  );
+  const sortedItems = [...items].sort((a, b) => priority(a) - priority(b));
 
   for (const item of sortedItems) {
     const type = item.itemType ?? item.type;
     const productId = Number(item.productId ?? item.id);
+    const quantity = Number(item.quantity);
+    const unitPrice = Number(item.price);
 
     if (
       type !== "ticket" ||
       !benefit.productIds.includes(productId) ||
+      !Number.isInteger(quantity) ||
+      quantity <= 0 ||
+      !Number.isFinite(unitPrice) ||
+      unitPrice < 0 ||
       remaining <= 0
     ) {
       continue;
     }
 
-    // 상품 방문일 대신 모달에서 확인한 날짜로 혜택 계산
-    if (benefit.id === "cultureDay" && !isLastWednesday(benefitDate)) {
+    const visitDate = item.visitDate || benefitDate;
+
+    if (benefit.id === "cultureDay" && !isLastWednesday(visitDate)) {
       continue;
     }
 
-    const appliedQuantity = Math.min(item.quantity, remaining);
-    const unitDiscount = Math.floor(item.price * benefit.rate);
+    const appliedQuantity = Math.min(quantity, remaining);
+    const discountAmount =
+      Math.floor(unitPrice * benefit.rate) * appliedQuantity;
 
     remaining -= appliedQuantity;
 
@@ -104,20 +108,17 @@ export function getBenefitDetails(items, benefitId, benefitDate = "") {
       key: item.groupKey ?? item.cartItemId,
       name: item.name,
       option: item.option,
-      visitDate: item.visitDate,
-      unitPrice: item.price,
+      visitDate,
+      unitPrice,
       rate: benefit.rate,
       appliedQuantity,
-      unappliedQuantity: item.quantity - appliedQuantity,
-      discountAmount: unitDiscount * appliedQuantity,
+      unappliedQuantity: quantity - appliedQuantity,
+      discountAmount,
     });
   }
 
   return {
-    totalDiscount: details.reduce(
-      (sum, detail) => sum + detail.discountAmount,
-      0,
-    ),
+    totalDiscount: details.reduce((sum, item) => sum + item.discountAmount, 0),
     details,
   };
 }
