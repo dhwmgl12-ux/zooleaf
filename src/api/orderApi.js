@@ -13,6 +13,13 @@ export function cancelOrderRequest(orderId) {
   });
 }
 
+const BENEFIT_API_IDS = {
+  partner: 1,
+  membership: 2,
+  culture: 3,
+  cultureDay: 4,
+};
+
 // 장바구니 선택 상품으로 주문 저장
 export function createOrder({ requestId, cartItemIds, addressId, benefitId }) {
   return apiClient("/orders", {
@@ -21,7 +28,7 @@ export function createOrder({ requestId, cartItemIds, addressId, benefitId }) {
       requestId,
       cartItemIds,
       addressId,
-      benefitId,
+      benefitId: BENEFIT_API_IDS[benefitId] ?? null,
     }),
   });
 }
