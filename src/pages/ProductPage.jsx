@@ -99,7 +99,7 @@ export default function ProductPage() {
       <Breadcrumb
         items={[
           { label: '홈', to: '/' },
-          { label: '입장권 & 패키지', to: '/products' }
+          { label: '입장권 & 패키지' }
         ]}
       />
 

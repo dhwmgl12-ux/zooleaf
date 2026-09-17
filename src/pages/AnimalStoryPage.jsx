@@ -13,13 +13,12 @@ import {
   DropdownList,
   DropdownItem,
   AnimalGrid,
-  Pagination,
-  PageBtn,
 } from './AnimalStory.style.js';
 import Breadcrumb from '../components/common/Breadcrumb.jsx';
 import LoadingSpinner from '../components/common/LoadingSpinner.jsx';
 import ErrorState from '../components/common/ErrorState.jsx';
 import EmptyState from '../components/common/EmptyState.jsx';
+import Pagination from '../components/product/Pagination.jsx';
 
 export default function AnimalStory() {
   const [allAnimals, setAllAnimals] = useState([]);
@@ -158,28 +157,11 @@ export default function AnimalStory() {
               ))}
             </AnimalGrid>
 
-            <Pagination>
-              <PageBtn disabled={currentPage === 1} onClick={() => setCurrentPage(currentPage - 1)}>
-                &lt;
-              </PageBtn>
-
-              {Array.from({ length: totalPages }, (_, index) => index + 1).map((page) => (
-                <PageBtn
-                  key={page}
-                  active={currentPage === page}
-                  onClick={() => setCurrentPage(page)}
-                >
-                  {page}
-                </PageBtn>
-              ))}
-
-              <PageBtn
-                disabled={currentPage === totalPages}
-                onClick={() => setCurrentPage(currentPage + 1)}
-              >
-                &gt;
-              </PageBtn>
-            </Pagination>
+            <Pagination
+              currentPage={currentPage}
+              totalPages={totalPages}
+              onPageChange={setCurrentPage}
+            />        
           </>
         )}
       </Container>
