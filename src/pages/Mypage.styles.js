@@ -34,9 +34,19 @@ export const PageHeader = styled.header`
   }
 
   @media (max-width: ${theme.layout.breakpoint.mobile}) {
+    h2 {
+      font-size: 28px;
+      line-height: 1.4;
+    }
+
     p {
       font-size: ${theme.fontSize.body.size};
       line-height: ${theme.fontSize.body.lineheight};
+    }
+  }
+  @media (max-width: ${theme.layout.breakpoint.smallMobile}) {
+    h2 {
+      font-size: 24px;
     }
   }
 `;
@@ -83,6 +93,14 @@ export const CardHeader = styled.div`
   gap: ${theme.spacing[16]};
 
   margin-bottom: ${theme.spacing[20]};
+
+  @media (max-width: ${theme.layout.breakpoint.smallMobile}) {
+    gap: ${theme.spacing[12]};
+
+    > button {
+      width: 100%;
+    }
+  }
 `;
 
 // 아이콘과 제목·설명을 가로로 배치
@@ -329,18 +347,11 @@ export const AddressDetails = styled.dl`
 // 카드 제목과 모바일 글자 크기
 export const CardTitle = styled.h2`
   font-size: ${theme.fontSize.h5.size};
-  line-height: ${theme.fontSize.h5.lineheight};
+  line-height: 1.4;
   font-weight: ${theme.fontWeight.bold};
-
   overflow-wrap: anywhere;
-  @media (max-width: 1024px) {
-    font-size: 26px;
-    line-height: 1.4;
-  }
-  @media (max-width: 768px) {
-    font-size: 22px;
-  }
-  @media (max-width: 375px) {
+
+  @media (max-width: ${theme.layout.breakpoint.smallMobile}) {
     font-size: 18px;
   }
 `;
