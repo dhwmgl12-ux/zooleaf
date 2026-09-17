@@ -35,7 +35,7 @@ function getDisplayOrder(name = '') {
   return ticketOrder === -1 ? TICKET_DISPLAY_ORDER.length : ticketOrder;
 }
 
-function toProductListItem(product) {
+export function toProductListItem(product) {
   return {
     ...product,
     cardVariant: getCardVariant(product.name),

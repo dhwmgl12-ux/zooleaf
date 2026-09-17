@@ -1,4 +1,7 @@
-﻿import {
+﻿import { useEffect, useState } from "react";
+import { getProductById } from "../../api/productApi";
+
+import {
   CartItem,
   CheckBox,
   ItemImage,
@@ -30,12 +33,46 @@ export default function CartItemRow({
   const productId = item.productId ?? item.id;
 
   const detailPaths = {
-    ticket: "/products", // 입장권·패키지·멤버십
+    ticket: "/products",
+    package: "/products",
+    membership: "/products",
     experience: "/experiences",
     goods: "/goods",
   };
 
   const detailPath = `${detailPaths[itemType]}/${encodeURIComponent(productId)}`;
+
+  const [productInfo, setProductInfo] = useState(null);
+  const [descriptionError, setDescriptionError] = useState("");
+
+  const needsProductInfo = itemType === "package" || itemType === "membership";
+
+  useEffect(() => {
+    if (!needsProductInfo || productId == null) return;
+
+    const controller = new AbortController();
+    let ignore = false;
+
+    setProductInfo(null);
+    setDescriptionError("");
+
+    getProductById(productId, controller.signal)
+      .then((data) => {
+        if (!ignore) setProductInfo(data);
+      })
+      .catch(() => {
+        if (!ignore) {
+          setDescriptionError(
+            "상품 설명을 불러오지 못했습니다. 상품명을 눌러 상세페이지를 확인해주세요.",
+          );
+        }
+      });
+
+    return () => {
+      ignore = true;
+      controller.abort();
+    };
+  }, [productId, itemType, needsProductInfo]);
 
   return (
     <CartItem>
@@ -89,6 +126,23 @@ export default function CartItemRow({
           <>
             {item.option && <ItemText>옵션: {item.option}</ItemText>}
             <ItemText>{item.price.toLocaleString()}원</ItemText>
+          </>
+        )}
+
+        {/* 패키지·멤버십 정보 */}
+        {needsProductInfo && (
+          <>
+            {item.option && <ItemText>선택 옵션: {item.option}</ItemText>}
+
+            <ItemText>
+              수량: {item.quantity}
+              {itemType === "package" ? "개" : "매"}
+            </ItemText>
+
+            <ItemText>
+              {item.price.toLocaleString()}원 /{" "}
+              {itemType === "package" ? "1인" : "1매"}
+            </ItemText>
           </>
         )}
       </ItemInfo>

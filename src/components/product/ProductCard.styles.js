@@ -32,10 +32,12 @@ export const ProductCardContainer = styled.article`
   text-decoration: none;
 
   transition:
+    transform 0.2s ease,
     border-color 0.2s ease,
     box-shadow 0.2s ease;
 
   &:hover {
+    transform: translateY(-4px);
     border-color: ${theme.colors.primary};
     box-shadow: ${theme.shadow.cardHover};
   }

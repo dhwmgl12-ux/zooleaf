@@ -51,6 +51,12 @@ export const ModalBox = styled.div`
       border-radius: 18px;
       box-shadow: 0 8px 28px rgba(0, 0, 0, 0.12);
     `}
+  ${({ $variant }) => $variant === "mypage" && css`
+    @media (max-width: 768px) {
+      width: 100%;
+      max-height: 85dvh;
+    }
+  `}
 `;
 
 export const ModalHeader = styled.div`
@@ -72,6 +78,16 @@ export const ModalHeader = styled.div`
         text-align: left;
       }
     `}
+  ${({ $variant }) => $variant === "mypage" && css`
+    flex-shrink: 0;
+    @media (max-width: 768px) { padding: 24px 24px 16px; }
+    @media (max-width: 375px) {
+      padding: 16px 16px 12px;
+      gap: 8px;
+      h3 { font-size: 20px; line-height: 1.4; overflow-wrap: anywhere; }
+      button { flex-shrink: 0; }
+    }
+  `}
 `;
 
 export const ModalTitle = styled.h3`
@@ -203,4 +219,10 @@ export const ModalBody = styled.div`
         border-radius: 8px;
       }
     `}
+  ${({ $variant }) => $variant === "mypage" && css`
+    min-height: 0;
+    overflow-wrap: anywhere;
+    @media (max-width: 768px) { padding: 8px 24px 24px; }
+    @media (max-width: 375px) { padding: 8px 16px 16px; font-size: 14px; }
+  `}
 `;

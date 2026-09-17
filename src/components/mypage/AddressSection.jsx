@@ -3,6 +3,8 @@ import useAddressStore from "../../store/addressStore";
 import useAuthStore from "../../store/authStore";
 import useToastStore from "../../store/toastStore";
 import { useEffect, useRef, useState } from "react";
+import LoadingSpinner from "../common/LoadingSpinner";
+
 import {
   Card,
   CardHeader,
@@ -332,7 +334,10 @@ export default function AddressSection() {
       )}
 
       {isLoading ? (
-        <p role="status">배송지를 불러오는 중입니다.</p>
+        // 변경
+        <div role="status" aria-label="배송지를 불러오는 중입니다">
+          <LoadingSpinner />
+        </div>
       ) : loadError ? (
         <div role="alert">
           <p>{loadError}</p>
@@ -411,6 +416,7 @@ export default function AddressSection() {
 
       <Modal
         isOpen={isModalOpen}
+        variant="mypage"
         onClose={closeModal}
         title={isEditing ? "배송지 수정" : "배송지 추가"}
       >
@@ -462,22 +468,20 @@ export default function AddressSection() {
             기본 배송지로 설정
           </DefaultAddressLabel>
 
+          {actionError && <p role="alert">{actionError}</p>}
+
           <ProfileModalActions>
-            {actionError && <p role="alert">{actionError}</p>}
+            <ProfileCancelButton
+              type="button"
+              onClick={closeModal}
+              disabled={isSubmitting}
+            >
+              취소
+            </ProfileCancelButton>
 
-            <ProfileModalActions>
-              <ProfileCancelButton
-                type="button"
-                onClick={closeModal}
-                disabled={isSubmitting}
-              >
-                취소
-              </ProfileCancelButton>
-
-              <ProfileSaveButton type="submit" disabled={isSubmitting}>
-                {isSubmitting ? "저장 중..." : "저장하기"}
-              </ProfileSaveButton>
-            </ProfileModalActions>
+            <ProfileSaveButton type="submit" disabled={isSubmitting}>
+              {isSubmitting ? "저장 중..." : "저장하기"}
+            </ProfileSaveButton>
           </ProfileModalActions>
         </ProfileEditForm>
       </Modal>
