@@ -35,21 +35,6 @@ const fontStyles = css`
     font-display: swap;
   }
 
-  @font-face {
-    font-family: 'Pretendard';
-    src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/pretendard@1.0/Pretendard-ExtraBold.woff2')
-      format('woff2');
-    font-weight: 800;
-    font-display: swap;
-  }
-
-  @font-face {
-    font-family: 'Pretendard';
-    src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/pretendard@1.0/Pretendard-Black.woff2')
-      format('woff2');
-    font-weight: 900;
-    font-display: swap;
-  }
 
   @font-face {
     font-family: 'Wave';
