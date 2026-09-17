@@ -207,7 +207,7 @@ export const AccountCard = styled.div`
   padding: ${theme.spacing[32]} ${theme.spacing[24]};
   border-radius: ${theme.radius.box};
   background: ${theme.colors.background};
-  box-shadow: 4px 4px 4px 12px 0 rgba(0, 0, 0, 0.12);
+  box-shadow: 4px 4px 4px 12px rgba(0, 0, 0, 0.12);
   color: ${theme.colors.textPrimary};
 
   display: flex;

@@ -5,36 +5,12 @@ import { theme } from './variables';
 const fontStyles = css`
   @font-face {
     font-family: 'Pretendard';
-    src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/pretendard@1.0/Pretendard-Regular.woff2')
-      format('woff2');
-    font-weight: 400;
+    src: url('https://cdn.jsdelivr.net/npm/pretendard@1.3.9/dist/web/variable/woff2/PretendardVariable.woff2')
+      format('woff2-variations');
+    font-weight: 400 900;
+    font-style: normal;
     font-display: swap;
   }
-
-  @font-face {
-    font-family: 'Pretendard';
-    src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/pretendard@1.0/Pretendard-Medium.woff2')
-      format('woff2');
-    font-weight: 500;
-    font-display: swap;
-  }
-
-  @font-face {
-    font-family: 'Pretendard';
-    src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/pretendard@1.0/Pretendard-SemiBold.woff2')
-      format('woff2');
-    font-weight: 600;
-    font-display: swap;
-  }
-
-  @font-face {
-    font-family: 'Pretendard';
-    src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/pretendard@1.0/Pretendard-Bold.woff2')
-      format('woff2');
-    font-weight: 700;
-    font-display: swap;
-  }
-
 
   @font-face {
     font-family: 'Wave';
