@@ -3,7 +3,7 @@ import Modal from "../common/Modal";
 import useAuthStore from "../../store/authStore";
 import useOrderStore from "../../store/orderStore";
 import useToastStore from "../../store/toastStore";
-import { statusLabels } from "../../utils/orderStatus";
+import { getOrderStatus, statusLabels } from "../../utils/orderStatus";
 import { groupOrderItems } from "../../utils/groupOrderItems";
 import LoadingSpinner from "../common/LoadingSpinner";
 import {
@@ -64,6 +64,20 @@ export default function OrderSection() {
   // type: detail / cancel / delivery / returns
   const [modal, setModal] = useState(null);
 
+  const [now, setNow] = useState(Date.now);
+
+  useEffect(() => {
+    const refresh = () => setNow(Date.now());
+
+    const timer = window.setInterval(refresh, 1000);
+    window.addEventListener("focus", refresh);
+
+    return () => {
+      window.clearInterval(timer);
+      window.removeEventListener("focus", refresh);
+    };
+  }, []);
+
   const [isLoading, setIsLoading] = useState(true);
   const [loadError, setLoadError] = useState("");
   const [retryCount, setRetryCount] = useState(0);
@@ -106,7 +120,7 @@ export default function OrderSection() {
 
   const selectedOrderItems = groupOrderItems(selectedOrder?.items ?? []);
 
-  const selectedStatus = selectedOrder?.status;
+  const selectedStatus = getOrderStatus(selectedOrder, now);
 
   const closeModal = () => {
     if (cancellingRef.current) return;
@@ -125,7 +139,7 @@ export default function OrderSection() {
   const handleCancel = async () => {
     if (!selectedOrder || cancellingRef.current) return;
 
-    if (selectedOrder.status !== "paid") {
+    if (getOrderStatus(selectedOrder, Date.now()) !== "paid") {
       setCancelError("결제 완료 상태의 주문만 취소할 수 있습니다.");
       return;
     }
@@ -229,7 +243,7 @@ export default function OrderSection() {
             );
 
             // 추가
-            const status = order.status;
+            const status = getOrderStatus(order, now);
 
             return (
               <OrderCard key={order.orderId}>
@@ -438,7 +452,10 @@ export default function OrderSection() {
                       </p>
                     )}
 
-                  <small>주문 조회 시 서버에서 받은 배송 정보입니다.</small>
+                  <small>
+                    배송 상태는 주문 날짜 기준의 시연용 표시입니다. 운송장
+                    정보는 서버에 등록된 내용을 보여줍니다.
+                  </small>
                 </DeliveryPanel>
 
                 {selectedOrder.shippingAddress && (
@@ -462,7 +479,7 @@ export default function OrderSection() {
             {modal?.type === "returns" && (
               <>
                 <p>현재 사이트에서는 교환/반품 신청을 지원하지 않습니다.</p>
-                <p>이 화면에서는 신청이 접수되지 않습니다.</p>
+                <p>개발 준비 중입니다!</p>
 
                 <ProfileSaveButton type="button" onClick={closeModal}>
                   확인

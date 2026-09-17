@@ -468,22 +468,20 @@ export default function AddressSection() {
             기본 배송지로 설정
           </DefaultAddressLabel>
 
+          {actionError && <p role="alert">{actionError}</p>}
+
           <ProfileModalActions>
-            {actionError && <p role="alert">{actionError}</p>}
+            <ProfileCancelButton
+              type="button"
+              onClick={closeModal}
+              disabled={isSubmitting}
+            >
+              취소
+            </ProfileCancelButton>
 
-            <ProfileModalActions>
-              <ProfileCancelButton
-                type="button"
-                onClick={closeModal}
-                disabled={isSubmitting}
-              >
-                취소
-              </ProfileCancelButton>
-
-              <ProfileSaveButton type="submit" disabled={isSubmitting}>
-                {isSubmitting ? "저장 중..." : "저장하기"}
-              </ProfileSaveButton>
-            </ProfileModalActions>
+            <ProfileSaveButton type="submit" disabled={isSubmitting}>
+              {isSubmitting ? "저장 중..." : "저장하기"}
+            </ProfileSaveButton>
           </ProfileModalActions>
         </ProfileEditForm>
       </Modal>
