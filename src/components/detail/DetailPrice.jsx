@@ -307,7 +307,7 @@ export default function DetailPrice({ product, productType }) {
           <Rating aria-label={`평점 ${rating}점, 후기 ${reviewCount}개`}>
             <div aria-hidden="true">
               {starIcons.map((icon, index) => (
-                <img key={index} src={icon} alt="" />
+                <img key={index} src={icon} alt="" width="16" height="16" />
               ))}
             </div>
             <span>

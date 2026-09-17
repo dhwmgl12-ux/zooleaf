@@ -43,3 +43,11 @@ export const DetailPageContainer = styled.article`
   @media (max-width: ${theme.layout.breakpoint.mobile}) {
   }
 `
+export const DetailLoadingArea = styled.div`
+  min-height: calc(
+    100svh - var(--header-height, 96px)
+  );
+
+  display: grid;
+  place-items: center;
+`;
