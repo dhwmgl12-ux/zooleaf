@@ -52,7 +52,6 @@ export default function DetailImage({
                 alt={`${name} ${image.label}`}
                 fetchPriority={index === 0 ? "high" : "auto"}
                 loading={index === 0 ? "eager" : "lazy"}
-                decoding="async"
               />
             </li>
           ))}
