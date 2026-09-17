@@ -28,25 +28,39 @@ export const MainImageViewport = styled.div`
 export const ImageTrack = styled.ul`
   width: 100%;
   height: 100%;
-  
+
   display: flex;
-  
-  transform: ${({ $currentIndex }) => `translateX(-${$currentIndex * 100}%)`};
-  
+
+  transform: ${({ $currentIndex }) =>
+    `translateX(-${$currentIndex * 100}%)`};
+
   transition: transform 300ms ease;
-  
+
   > li {
     flex: 0 0 100%;
     width: 100%;
     height: 100%;
+
+    display: grid;
+    place-items: center;
   }
-  
+
   img {
-    width: 100%;
-    height: 100%;
-    object-fit: ${({ $isProduct }) => $isProduct ? "contain" : "cover"};
+    display: block;
+
+    width: ${({ $isProduct }) => ($isProduct ? "auto" : "100%")};
+    height: ${({ $isProduct }) => ($isProduct ? "auto" : "100%")};
+
+    max-width: 100%;
+    max-height: 100%;
+
+    object-fit: ${({ $isProduct }) =>
+      $isProduct ? "contain" : "cover"};
+
+    border-radius: ${theme.radius.image};
   }
-`
+`;
+
 
 export const SlideButton = styled.button`
   position: absolute;
