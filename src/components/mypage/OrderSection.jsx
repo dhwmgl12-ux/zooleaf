@@ -6,6 +6,7 @@ import useToastStore from "../../store/toastStore";
 import { getOrderStatus, statusLabels } from "../../utils/orderStatus";
 import { groupOrderItems } from "../../utils/groupOrderItems";
 import LoadingSpinner from "../common/LoadingSpinner";
+import { getOrderDisplayAmounts } from "../../utils/orderDisplayAmounts";
 
 import {
   Card,
