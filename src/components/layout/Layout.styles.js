@@ -3,6 +3,7 @@ import { theme } from "../../styles/variables.js";
 
 export const LayoutContainer = styled.main`
   width: 100%;
+  min-height: 80vh;
   padding-top: ${({ $isMainPage, $hasBreadcrumb, $isAboutPage }) => {
     if ($isMainPage) {
       return "0";}

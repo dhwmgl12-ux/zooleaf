@@ -1,11 +1,10 @@
-import { lazy, Suspense } from 'react';
+import { lazy } from 'react';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import Layout from '../components/layout/Layout';
 import LoginPage from '../pages/LoginPage';
 import SignupPage from '../pages/SignupPage';
 import MainPage from '../pages/MainPage';
 import ProtectedRoute from '../components/common/ProtectedRoute';
-import LoadingSpinner from '../components/common/LoadingSpinner';
 
 const ProductPage = lazy(() => import('../pages/ProductPage'));
 const CartPage = lazy(() => import('../pages/CartPage'));
@@ -23,7 +22,6 @@ const NotFoundPage = lazy(() => import('../pages/NotFoundPage'));
 export default function AppRouter() {
   return (
     <BrowserRouter>
-      <Suspense fallback={<LoadingSpinner />}>
         <Routes>
           <Route element={<Layout />}>
             <Route path="/" element={<MainPage />} />
@@ -57,7 +55,6 @@ export default function AppRouter() {
             <Route path="*" element={<NotFoundPage />} />
           </Route>
         </Routes>
-      </Suspense>
     </BrowserRouter>
   );
 }

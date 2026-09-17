@@ -19,6 +19,13 @@ export const ProductBanner = styled(Link)`
     display: block; 
     width: 100%; 
     height: auto; 
+    aspect-ratio: 1600 / 433;
+  }
+
+  @media (max-width: ${theme.layout.breakpoint.smallMobile}) {
+    img {
+      aspect-ratio: 513 / 411;
+    }
   }
 `
 
