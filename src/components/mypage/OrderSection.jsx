@@ -6,6 +6,8 @@ import useToastStore from "../../store/toastStore";
 import { getOrderStatus, statusLabels } from "../../utils/orderStatus";
 import { groupOrderItems } from "../../utils/groupOrderItems";
 import LoadingSpinner from "../common/LoadingSpinner";
+import { getOrderDisplayAmounts } from "../../utils/orderDisplayAmounts";
+
 import {
   Card,
   CardHeader,
@@ -117,6 +119,7 @@ export default function OrderSection() {
   const selectedOrder = orders.find(
     (order) => order.orderId === modal?.orderId,
   );
+  const selectedAmounts = getOrderDisplayAmounts(userId, selectedOrder);
 
   const selectedOrderItems = groupOrderItems(selectedOrder?.items ?? []);
 
@@ -271,7 +274,10 @@ export default function OrderSection() {
                     <span>
                       {formatDate(order.createdAt)}
                       {" · "}
-                      {formatMoney(order.totalAmount)}
+                      {getOrderDisplayAmounts(userId, order).isDemo && ""}
+                      {formatMoney(
+                        getOrderDisplayAmounts(userId, order).totalAmount,
+                      )}
                     </span>
                   </OrderText>
                 </OrderBodyButton>
@@ -366,23 +372,32 @@ export default function OrderSection() {
                 <OrderAmountBox>
                   <OrderAmountRow>
                     <span>상품 금액</span>
-                    <span>{formatMoney(selectedOrder.subtotal)}</span>
+                    <span>{formatMoney(selectedAmounts.subtotal)}</span>
                   </OrderAmountRow>
 
                   <OrderAmountRow>
                     <span>배송비</span>
-                    <span>{formatMoney(selectedOrder.shippingFee)}</span>
+                    <span>{formatMoney(selectedAmounts.shippingFee)}</span>
                   </OrderAmountRow>
 
                   <OrderAmountRow>
                     <span>할인</span>
-                    <span>-{formatMoney(selectedOrder.discountAmount)}</span>
+                    <span>-{formatMoney(selectedAmounts.discountAmount)}</span>
                   </OrderAmountRow>
 
                   <OrderGrandTotal>
-                    <strong>총 결제 금액</strong>
-                    <strong>{formatMoney(selectedOrder.totalAmount)}</strong>
+                    <strong>
+                      {selectedAmounts.isDemo ? "총 결제 금액" : "총 결제 금액"}
+                    </strong>
+                    <strong>{formatMoney(selectedAmounts.totalAmount)}</strong>
                   </OrderGrandTotal>
+
+                  {selectedAmounts.isDemo && (
+                    <small>
+                      구매 당시 장바구니에서 계산한 시연 금액입니다. 서버에
+                      저장된 주문 금액과 다를 수 있습니다.
+                    </small>
+                  )}
                 </OrderAmountBox>
               </>
             )}

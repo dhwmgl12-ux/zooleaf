@@ -49,7 +49,7 @@ export default function GoodsCard({ goods }) {
       <Link className="goods-card__link" to={`/goods/${id}`}>
         <div className="goods-card__image">
           {imageUrl ? (
-            <img src={imageUrl} alt={name} />
+            <img src={imageUrl} alt={name} width="400" height="286" loading="lazy" />
           ) : (
             <span aria-hidden="true">상품 이미지</span>
           )}

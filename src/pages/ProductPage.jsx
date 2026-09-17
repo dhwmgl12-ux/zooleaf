@@ -117,7 +117,7 @@ export default function ProductPage() {
         >
           <picture>
             <source media="(max-width: 375px)" srcSet={mobileBannerImage} />
-            <img src={bannerImage} alt="ZOOLEAF 할인 혜택을 확인해 보세요" />
+            <img src={bannerImage} alt="ZOOLEAF 할인 혜택을 확인해 보세요" fetchpriority="high" />
           </picture>
         </ProductBanner>
 
