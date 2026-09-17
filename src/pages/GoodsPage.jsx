@@ -6,6 +6,7 @@ import { GoodsPageContainer } from "./GoodsPage.styles";
 import LoadingSpinner from "../components/common/LoadingSpinner";
 import ErrorState from "../components/common/ErrorState";
 import EmptyState from "../components/common/EmptyState";
+import Breadcrumb from '../components/common/Breadcrumb';
 
 const GOODS_PER_PAGE = 9;
 const GRID_COLUMNS = 3;
@@ -162,10 +163,16 @@ export default function GoodsPage() {
   }, [filters, usesClientPagination]);
 
   return (
-    <GoodsPageContainer>
-      <section aria-label="굿즈 목록">
-        <h1>Shop</h1>
+    <>
+      <Breadcrumb
+        items={[
+          { label: '홈', to: '/' },
+          { label: 'Shop', to: '/goods' }
+        ]}
+      />
 
+      <GoodsPageContainer aria-label="굿즈 목록">
+        <h2>Shop</h2>
         <div className="goods-page__filters">
           <nav aria-label="굿즈 카테고리">
             <ul>
@@ -182,7 +189,6 @@ export default function GoodsPage() {
               ))}
             </ul>
           </nav>
-
           <div className="goods-page__sort">
             <button
               className="goods-page__sort-trigger"
@@ -210,7 +216,6 @@ export default function GoodsPage() {
             )}
           </div>
         </div>
-
         {loading ? (
           <LoadingSpinner />
         ) : error ? (
@@ -238,7 +243,6 @@ export default function GoodsPage() {
             )}
           </div>
         )}
-
         <Pagination
           currentPage={filters.page}
           totalPages={totalPages}
@@ -246,7 +250,7 @@ export default function GoodsPage() {
             setFilters((prev) => ({ ...prev, page }));
           }}
         />
-      </section>
-    </GoodsPageContainer>
+      </GoodsPageContainer>
+    </>
   );
 }

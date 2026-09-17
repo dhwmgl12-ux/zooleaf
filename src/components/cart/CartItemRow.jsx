@@ -1,4 +1,7 @@
-﻿import {
+﻿import { useEffect, useState } from "react";
+import { getProductById } from "../../api/productApi";
+
+import {
   CartItem,
   CheckBox,
   ItemImage,
@@ -11,7 +14,10 @@
   ItemPriceArea,
   DeleteButton,
   ItemTotal,
+  ItemImageLink,
 } from "../../pages/CartPage.styles";
+
+import { Link } from "react-router-dom";
 
 // 장바구니 상품 1개의 정보를 보여주는 컴포넌트
 export default function CartItemRow({
@@ -23,6 +29,51 @@ export default function CartItemRow({
   onDecrease,
   onDelete,
 }) {
+  const itemType = item.itemType ?? item.type;
+  const productId = item.productId ?? item.id;
+
+  const detailPaths = {
+    ticket: "/products",
+    package: "/products",
+    membership: "/products",
+    experience: "/experiences",
+    goods: "/goods",
+  };
+
+  const detailPath = `${detailPaths[itemType]}/${encodeURIComponent(productId)}`;
+
+  const [productInfo, setProductInfo] = useState(null);
+  const [descriptionError, setDescriptionError] = useState("");
+
+  const needsProductInfo = itemType === "package" || itemType === "membership";
+
+  useEffect(() => {
+    if (!needsProductInfo || productId == null) return;
+
+    const controller = new AbortController();
+    let ignore = false;
+
+    setProductInfo(null);
+    setDescriptionError("");
+
+    getProductById(productId, controller.signal)
+      .then((data) => {
+        if (!ignore) setProductInfo(data);
+      })
+      .catch(() => {
+        if (!ignore) {
+          setDescriptionError(
+            "상품 설명을 불러오지 못했습니다. 상품명을 눌러 상세페이지를 확인해주세요.",
+          );
+        }
+      });
+
+    return () => {
+      ignore = true;
+      controller.abort();
+    };
+  }, [productId, itemType, needsProductInfo]);
+
   return (
     <CartItem>
       {/* 상품 선택 체크박스 */}
@@ -33,11 +84,24 @@ export default function CartItemRow({
         aria-label={`${item.name} 선택`}
       />
       {/* 상품 이미지 */}
-      <ItemImage src={item.imageUrl} alt={item.name} />
+      <ItemImageLink
+        as={Link}
+        to={detailPath}
+        aria-label={`${item.name} 상세페이지`}
+      >
+        <ItemImage src={item.imageUrl} alt={item.name} />
+      </ItemImageLink>
 
       {/* 상품 기본 정보 */}
       <ItemInfo>
-        <ItemName>{item.name}</ItemName>
+        <ItemName>
+          <Link
+            to={detailPath}
+            style={{ color: "inherit", textDecoration: "none" }}
+          >
+            {item.name}
+          </Link>
+        </ItemName>
 
         {/* 입장권/체험권 이용일 표시 */}
         {item.type !== "goods" && item.visitDate && (
@@ -45,7 +109,7 @@ export default function CartItemRow({
         )}
 
         {/* 입장권 정보 */}
-        {item.type === "ticket" && (
+        {(item.type === "ticket" || item.type === "experience") && (
           <>
             <ItemText>인원: {item.quantity}명</ItemText>
             <ItemText>{item.price.toLocaleString()}원 / 1인</ItemText>
@@ -62,6 +126,23 @@ export default function CartItemRow({
           <>
             {item.option && <ItemText>옵션: {item.option}</ItemText>}
             <ItemText>{item.price.toLocaleString()}원</ItemText>
+          </>
+        )}
+
+        {/* 패키지·멤버십 정보 */}
+        {needsProductInfo && (
+          <>
+            {item.option && <ItemText>선택 옵션: {item.option}</ItemText>}
+
+            <ItemText>
+              수량: {item.quantity}
+              {itemType === "package" ? "개" : "매"}
+            </ItemText>
+
+            <ItemText>
+              {item.price.toLocaleString()}원 /{" "}
+              {itemType === "package" ? "1인" : "1매"}
+            </ItemText>
           </>
         )}
       </ItemInfo>

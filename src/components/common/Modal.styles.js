@@ -51,6 +51,12 @@ export const ModalBox = styled.div`
       border-radius: 18px;
       box-shadow: 0 8px 28px rgba(0, 0, 0, 0.12);
     `}
+  ${({ $variant }) => $variant === "mypage" && css`
+    @media (max-width: 768px) {
+      width: 100%;
+      max-height: 85dvh;
+    }
+  `}
 `;
 
 export const ModalHeader = styled.div`
@@ -60,19 +66,28 @@ export const ModalHeader = styled.div`
   padding: ${theme.spacing[24]};
 
   ${({ $variant }) =>
-    $variant === "cart" &&
+    $variant === "mypage" &&
     css`
-      padding: 24px 24px 16px;
-      gap: 12px;
+      padding: 32px 32px 24px;
+      gap: 16px;
+      align-items: flex-start;
 
       h3 {
         margin: 0;
-        font-size: 20px;
-        line-height: 1.4;
-        font-weight: 700;
+        min-width: 0;
         text-align: left;
       }
     `}
+  ${({ $variant }) => $variant === "mypage" && css`
+    flex-shrink: 0;
+    @media (max-width: 768px) { padding: 24px 24px 16px; }
+    @media (max-width: 375px) {
+      padding: 16px 16px 12px;
+      gap: 8px;
+      h3 { font-size: 20px; line-height: 1.4; overflow-wrap: anywhere; }
+      button { flex-shrink: 0; }
+    }
+  `}
 `;
 
 export const ModalTitle = styled.h3`
@@ -126,16 +141,14 @@ export const ModalBody = styled.div`
   }
 
   ${({ $variant }) =>
-    $variant === "cart" &&
+    ($variant === "mypage" || $variant === "cart") &&
     css`
       margin: 0;
-      padding: 0 24px 24px;
-      flex: 0 1 auto;
+      padding: 8px 32px 32px;
       min-height: 0;
-      font-size: 14px;
-      line-height: 1.7;
+      flex: 0 1 auto;
       white-space: normal;
-      overflow-wrap: anywhere;
+      text-align: left;
 
       p {
         margin: 0;
@@ -206,4 +219,10 @@ export const ModalBody = styled.div`
         border-radius: 8px;
       }
     `}
+  ${({ $variant }) => $variant === "mypage" && css`
+    min-height: 0;
+    overflow-wrap: anywhere;
+    @media (max-width: 768px) { padding: 8px 24px 24px; }
+    @media (max-width: 375px) { padding: 8px 16px 16px; font-size: 14px; }
+  `}
 `;

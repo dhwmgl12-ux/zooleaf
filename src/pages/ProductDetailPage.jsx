@@ -6,7 +6,7 @@ import DetailImage from "../components/detail/DetailImage";
 import DetailContent from "../components/detail/DetailContent";
 import DetailPrice from "../components/detail/DetailPrice";
 import Breadcrumb from "../components/common/Breadcrumb";
-import { DetailPageContainer } from "../components/detail/DetailPage.styles";
+import { DetailLoadingArea, DetailPageContainer } from "../components/detail/DetailPage.styles";
 import LoadingSpinner from "../components/common/LoadingSpinner"
 import ErrorState from "../components/common/ErrorState"
 import EmptyState from "../components/common/EmptyState"
@@ -54,7 +54,11 @@ export default function ProductDetailPage() {
   }, [productId]);
 
   if (isLoading) {
-    return <LoadingSpinner />;
+    return (
+      <DetailLoadingArea>
+        <LoadingSpinner />
+      </DetailLoadingArea>
+    );
   }
 
   const isNotFound =
@@ -102,6 +106,7 @@ export default function ProductDetailPage() {
           <DetailImage 
             imageUrl={product.imageUrl ?? product.thumbnailImage}
             name={product.name}
+            productType="product"
           />
         </div>
         <div className="detail-content-area">

@@ -61,13 +61,16 @@ export const HeroImage = styled.img`
   width: 100%;
   max-width: 658px;
   height: auto;
-
+  aspect-ratio: 987 / 386;
+  
   @media (max-width: ${theme.layout.breakpoint.desktop}) {
     max-width: 420px;
+    aspect-ratio: 579 / 503;
   }
-
+  
   @media (max-width: ${theme.layout.breakpoint.tablet}) {
     max-width: 550px;
+    aspect-ratio: 870 / 386;
   }
 
   @media (max-width: ${theme.layout.breakpoint.mobile}) {

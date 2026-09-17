@@ -3,6 +3,7 @@ export const theme = {
   colors: {
     primary: '#2D6A4F',
     secondary: '#8EAE67',
+    tertiary: '#F7F9F6',
 
     white: '#FFFFFF',
     error: '#D90429',
@@ -22,6 +23,11 @@ export const theme = {
     productCardMembership: '#FFF891',
     buttonMuted: '#D9D9D9',
     buttonMutedHover: '#C8C9C9',
+    paginationActive: '#1E4D3A',
+    paginationBackground: '#F3F4F6',
+    paginationHover: '#E5E7EB',
+    paginationText: '#4B5563',
+    paginationDisabled: '#9CA3AF',
   },
 
   fontSize: {

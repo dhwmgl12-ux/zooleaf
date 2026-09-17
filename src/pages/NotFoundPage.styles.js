@@ -21,7 +21,6 @@ export const Container = styled.section`
     z-index: 0;
     width: 400px;
     max-width: 90%;
-    height: auto;
     transform: translate(-50%, -50%);
 
     pointer-events: none;
@@ -44,7 +43,7 @@ export const Container = styled.section`
       margin-bottom: ${theme.spacing[16]};
       color: ${theme.colors.primary};
       font-size: clamp(96px, 12vw, 144px);
-      font-weight: 800;
+      font-weight: 700;
       letter-spacing: 0.02em;
     }
 

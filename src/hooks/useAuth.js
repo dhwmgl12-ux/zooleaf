@@ -195,20 +195,19 @@ export function useSignup() {
 
     setIsSubmitting(true);
     try {
-      const birthDateForServer = birthDate.replace(/\./g, '-');
       const result = await signup({
         id,
         password,
         passwordConfirm,
         name,
         phone,
-        birthDate: birthDateForServer,
+        birthDate,
         agreeTerms,
         agreePrivacy,
         agreeMarketing,
       });
 
-      showToast(`${result.data.name}님 환영합니다.`);
+      showToast(result.message);
       navigate('/login');
     } catch (err) {
       const field = mapServerErrorToField(err.message);
@@ -266,9 +265,11 @@ export function useAuthRestore() {
       .then((result) => {
         setAuth(sessionStorage.getItem('token'), result.data);
       })
-      .catch(() => {
-        sessionStorage.removeItem('token');
-        clearAuth();
+      .catch((err) => {
+        if (err.status === 401) {
+          sessionStorage.removeItem('token');
+          clearAuth();
+        }
       });
   }, [setAuth, clearAuth]);
 }

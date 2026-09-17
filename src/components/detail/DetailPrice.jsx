@@ -1,5 +1,5 @@
 import { useState } from "react";
-
+import {useNavigate} from "react-router-dom"
 import useCartStore from "../../store/cartStore";
 import CartAddModal from "../cart/CartAddModal";
 import fullStarIcon from "../../assets/icons/full-black.svg";
@@ -25,7 +25,8 @@ import {
   SelectedOptionCardTop,
   SelectedOptionCardBottom,
 } from "./DetailPrice.styles.js";
-import { useNavigate } from "react-router-dom";
+import useAuthStore from '../../store/authStore.js';
+import useToastStore from "../../store/toastStore.js";
 
 export default function DetailPrice({ product, productType }) {
   const [quantity, setQuantity] = useState(0);
@@ -33,6 +34,7 @@ export default function DetailPrice({ product, productType }) {
   const [selectedOptions, setSelectedOptions] = useState([]);
   const [isOptionOpen, setIsOptionOpen] = useState(false);
   const [isCartModalOpen, setIsCartModalOpen] = useState(false);
+  const showToast = useToastStore((state) => state.showToast);
 
   const {
     name,
@@ -190,7 +192,9 @@ export default function DetailPrice({ product, productType }) {
   const [cartError, setCartError] = useState("");
 
   // 상세페이지의 product를 장바구니의 ticket으로 변환
-  const cartItemType = productType === "product" ? "ticket" : productType;
+  // 변경
+  const cartItemType =
+    productType === "product" ? product.categoryId : productType;
 
   const hasSelectedItems = hasOptions
     ? selectedOptions.length > 0
@@ -200,6 +204,12 @@ export default function DetailPrice({ product, productType }) {
 
   const handleSubmit = async (event) => {
     event.preventDefault();
+
+    if (!useAuthStore.getState().isLoggedIn) {
+      showToast("로그인이 필요합니다.");
+      navigate("/login");
+      return;
+    }
 
     // 같은 순간에 들어오는 중복 요청도 차단
     const cartState = useCartStore.getState();
@@ -297,7 +307,7 @@ export default function DetailPrice({ product, productType }) {
           <Rating aria-label={`평점 ${rating}점, 후기 ${reviewCount}개`}>
             <div aria-hidden="true">
               {starIcons.map((icon, index) => (
-                <img key={index} src={icon} alt="" />
+                <img key={index} src={icon} alt="" width="16" height="16" />
               ))}
             </div>
             <span>
@@ -336,7 +346,7 @@ export default function DetailPrice({ product, productType }) {
                       setIsOptionOpen((current) => !current);
                     }}
                   >
-                    옵션을 선택해 주세요
+                    {selectedOption ? selectedOption.value : "옵션을 선택해 주세요"}
                     <svg
                       width="13"
                       height="6"

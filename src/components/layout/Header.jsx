@@ -1,5 +1,5 @@
 import { useLocation } from "react-router-dom";
-import zooleafLogo from "../../assets/images/zooleaf-logo-2.webp";
+import zooleafLogo from "../../assets/images/zooleaf-logo 2.webp";
 import { useEffect, useRef, useState } from "react";
 import useAuthStore from "../../store/authStore";
 import { useLogout } from "../../hooks/useAuth";
@@ -154,7 +154,7 @@ export default function Header() {
       <HeaderInner>
         <LogoHeading>
           <LogoLink to="/">
-            <LogoImage src={zooleafLogo} alt="ZOOLEAF" />
+            <LogoImage src={zooleafLogo} alt="ZOOLEAF" width={536} height={165}/>
           </LogoLink>
         </LogoHeading>
 
@@ -348,7 +348,7 @@ export default function Header() {
         <MobileNavPanel ref={menuPanelRef}>
           <MobileNavTop>
             <LogoLink to="/" onClick={() => setIsMenuOpen(false)}>
-              <LogoImage variant="menu" src={zooleafLogo} alt="ZOOLEAF" />
+              <LogoImage variant="menu" src={zooleafLogo} alt="ZOOLEAF" width={536} height={165}/>
             </LogoLink>
             <MobileNavCloseButton
               type="button"

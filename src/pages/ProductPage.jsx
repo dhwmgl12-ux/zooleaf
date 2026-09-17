@@ -1,12 +1,14 @@
 import { useEffect, useState } from 'react';
-import { Link } from 'react-router-dom';
 import CategorySidebar from '../components/product/CategorySidebar';
 import ProductCard from '../components/product/ProductCard';
-import Pagination from '../components/product/Pagination';
 import { getProducts } from '../api/productApi';
 import bannerImage from '../assets/images/banner.webp';
 import mobileBannerImage from '../assets/images/banner-mobile.webp';
-import { ProductPageContainer } from './ProductPage.styles';
+import LoadingSpinner from '../components/common/LoadingSpinner';
+import ErrorState from '../components/common/ErrorState';
+import EmptyState from '../components/common/EmptyState';
+import { ProductPageContainer, ProductPageLayout, ProductBanner } from './ProductPage.styles';
+import Breadcrumb from '../components/common/Breadcrumb';
 
 const PRODUCTS_PER_PAGE = 12;
 const GRID_COLUMNS = 3;
@@ -23,7 +25,6 @@ function EmptyCell() {
 
 export default function ProductPage() {
   const [products, setProducts] = useState([]);
-  const [totalPages, setTotalPages] = useState(1);
   const [filters, setFilters] = useState({
     category: '전체상품',
     target: '전체',
@@ -59,6 +60,8 @@ export default function ProductPage() {
   };
 
   useEffect(() => {
+    const controller = new AbortController();
+
     const fetchProducts = async () => {
       setLoading(true);
       setError('');
@@ -70,84 +73,96 @@ export default function ProductPage() {
           limit: PRODUCTS_PER_PAGE,
           visitorType: isTicketCategory ? filters.target : undefined,
           availableTimeType: isTicketCategory ? filters.time : undefined,
+          signal: controller.signal,
         });
 
         setProducts(data?.products ?? []);
-        setTotalPages(data?.pagination?.totalPages ?? 1);
       } catch (err) {
-        setProducts([]);
-        setError(err.message || '상품을 불러오지 못했습니다.');
+        if (err.name !== 'AbortError') {
+          setProducts([]);
+          setError(err.message || '상품을 불러오지 못했습니다.');
+        }
       } finally {
-        setLoading(false);
+        if (!controller.signal.aborted) {
+          setLoading(false);
+        }
       }
     };
 
     fetchProducts();
+
+    return () => controller.abort();
   }, [filters, isTicketCategory]);
 
   return (
-    <ProductPageContainer>
-      <Link
-        to="/discount"
-        aria-label="ZOOLEAF 제휴 및 할인 혜택 보기"
-        className="product-page__banner"
-      >
-        <picture>
-          <source media="(max-width: 320px)" srcSet={mobileBannerImage} />
-          <img src={bannerImage} alt="ZOOLEAF 할인 혜택을 확인해 보세요" />
-        </picture>
-      </Link>
+    <>
+      <Breadcrumb
+        items={[
+          { label: '홈', to: '/' },
+          { label: '입장권 & 패키지' }
+        ]}
+      />
 
-      <div className="product-page__layout">
-        <CategorySidebar
-          selectedCategory={filters.category}
-          onSelectCategory={handleSelectCategory}
-          selectedTarget={filters.target}
-          onSelectTarget={handleSelectTarget}
-          selectedTime={filters.time}
-          onSelectTime={handleSelectTime}
-        />
+      <ProductPageContainer>
+        <h2>
+          {filters.category === '전체상품'
+            ? '입장권 & 패키지'
+            : filters.category}
+        </h2>
 
-        <section className="product-page__content" aria-label="상품 목록">
-          <h1>
-            {filters.category === '전체상품'
-              ? '입장권 & 패키지'
-              : filters.category}
-          </h1>
+        <ProductBanner
+          to="/discount"
+          aria-label="ZOOLEAF 제휴 및 할인 혜택 보기"
+          className="product-page__banner"
+        >
+          <picture>
+            <source media="(max-width: 375px)" srcSet={mobileBannerImage} />
+            <img src={bannerImage} alt="ZOOLEAF 할인 혜택을 확인해 보세요" />
+          </picture>
+        </ProductBanner>
 
-          {loading ? (
-            <p>불러오는 중...</p>
-          ) : error ? (
-            <p>{error}</p>
-          ) : displayedProducts.length === 0 ? (
-            <p>상품이 없습니다.</p>
-          ) : (
-            <div className="product-page__grid">
-              {displayedProducts.map((product) => (
-                <ProductCard key={product.id} product={product} />
-              ))}
-              {Array.from(
-                {
-                  length:
-                    (GRID_COLUMNS - (displayedProducts.length % GRID_COLUMNS)) %
-                    GRID_COLUMNS,
-                },
-                (_, index) => (
-                  <EmptyCell key={`empty-${index}`} />
-                ),
-              )}
-            </div>
-          )}
-
-          <Pagination
-            currentPage={filters.page}
-            totalPages={totalPages}
-            onPageChange={(page) => {
-              setFilters((prev) => ({ ...prev, page }));
-            }}
+        <ProductPageLayout className="product-page__layout">
+          <CategorySidebar
+            selectedCategory={filters.category}
+            onSelectCategory={handleSelectCategory}
+            selectedTarget={filters.target}
+            onSelectTarget={handleSelectTarget}
+            selectedTime={filters.time}
+            onSelectTime={handleSelectTime}
           />
-        </section>
-      </div>
-    </ProductPageContainer>
+
+          <div className="product-page__content" aria-label="상품 목록">
+
+            {loading ? (
+              <LoadingSpinner />
+            ) : error ? (
+              <ErrorState
+                title="상품을 불러올 수 없습니다."
+                description={error}
+                onButtonClick={() => window.location.reload()}
+              />
+            ) : displayedProducts.length === 0 ? (
+              <EmptyState title="등록된 상품이 없습니다." />
+            ) : (
+              <div className="product-page__grid">
+                {displayedProducts.map((product) => (
+                  <ProductCard key={product.id} product={product} />
+                ))}
+                {Array.from(
+                  {
+                    length:
+                      (GRID_COLUMNS - (displayedProducts.length % GRID_COLUMNS)) %
+                      GRID_COLUMNS,
+                  },
+                  (_, index) => (
+                    <EmptyCell key={`empty-${index}`} />
+                  ),
+                )}
+              </div>
+            )}
+          </div>
+        </ProductPageLayout>
+      </ProductPageContainer>
+    </>
   );
 }

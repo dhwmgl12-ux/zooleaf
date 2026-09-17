@@ -1,8 +1,10 @@
-import { useRef, useState } from "react";
 import Modal from "../common/Modal";
 import useAddressStore from "../../store/addressStore";
 import useAuthStore from "../../store/authStore";
 import useToastStore from "../../store/toastStore";
+import { useEffect, useRef, useState } from "react";
+import LoadingSpinner from "../common/LoadingSpinner";
+
 import {
   Card,
   CardHeader,
@@ -26,6 +28,8 @@ import {
   ProfileModalActions,
   ProfileCancelButton,
   ProfileSaveButton,
+  AddressDeleteContent,
+  AddressDeleteNotice,
 } from "../../pages/Mypage.styles";
 
 import {
@@ -56,7 +60,7 @@ const fields = [
     label: "받는 분",
     placeholder: "이름",
     autoComplete: "name",
-    maxLength: 50,
+    maxLength: 8,
   },
   {
     name: "phone",
@@ -89,6 +93,84 @@ export default function AddressSection() {
   const saveAddress = useAddressStore((state) => state.saveAddress);
   const setDefaultAddress = useAddressStore((state) => state.setDefaultAddress);
   const removeAddress = useAddressStore((state) => state.removeAddress);
+  const fetchAddresses = useAddressStore((state) => state.fetchAddresses);
+
+  const [isLoading, setIsLoading] = useState(true);
+  const [loadError, setLoadError] = useState("");
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [actionError, setActionError] = useState("");
+  const [retryCount, setRetryCount] = useState(0);
+
+  // 연속 클릭으로 같은 요청이 중복 실행되는 것 방지
+  const submittingRef = useRef(false);
+
+  useEffect(() => {
+    let ignore = false;
+
+    const load = async () => {
+      setIsLoading(true);
+      setLoadError("");
+
+      try {
+        await fetchAddresses(userId);
+      } catch (error) {
+        if (!ignore) {
+          setLoadError(error.message || "배송지를 불러오지 못했습니다.");
+        }
+      } finally {
+        if (!ignore) {
+          setIsLoading(false);
+        }
+      }
+    };
+
+    load();
+
+    return () => {
+      ignore = true;
+    };
+  }, [userId, fetchAddresses, retryCount]);
+
+  // 변경 성공 후 목록 재조회
+  // 변경 요청 실패와 목록 재조회 실패를 구분
+  const refreshAfterChange = async () => {
+    setIsLoading(true);
+    setLoadError("");
+
+    try {
+      await fetchAddresses(userId);
+    } catch {
+      setLoadError(
+        "변경은 완료됐지만 목록을 불러오지 못했습니다. 다시 불러오기를 눌러주세요.",
+      );
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  const runMutation = async (request, onSuccess, message) => {
+    if (submittingRef.current) return;
+
+    submittingRef.current = true;
+    setIsSubmitting(true);
+    setActionError("");
+
+    try {
+      await request();
+
+      onSuccess();
+      showToast(message);
+
+      await refreshAfterChange();
+    } catch (error) {
+      setActionError(
+        error.message || "요청에 실패했습니다. 다시 시도해 주세요.",
+      );
+    } finally {
+      submittingRef.current = false;
+      setIsSubmitting(false);
+    }
+  };
 
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [editingId, setEditingId] = useState(null);
@@ -106,25 +188,33 @@ export default function AddressSection() {
       return;
     }
 
+    if (isLoading || loadError || submittingRef.current) return;
+
     setEditingId(null);
     setForm({
       ...initialForm,
       isDefault: addresses.length === 0,
     });
     setErrors({});
+    setActionError("");
     setIsModalOpen(true);
   };
 
-  // 수정할 배송지 정보를 입력창에 표시
   const openEditModal = (address) => {
+    if (submittingRef.current) return;
+
     setEditingId(address.addressId);
     setForm({ ...address });
     setErrors({});
+    setActionError("");
     setIsModalOpen(true);
   };
 
   const closeModal = () => {
+    if (submittingRef.current) return;
+
     setIsModalOpen(false);
+    setActionError("");
   };
 
   const handleChange = (event) => {
@@ -148,18 +238,16 @@ export default function AddressSection() {
     }));
   };
 
-  const handleSave = (event) => {
+  const handleSave = async (event) => {
     event.preventDefault();
 
-    if (!userId) {
-      showToast("로그인 후 이용해주세요.");
-      return;
-    }
+    if (submittingRef.current) return;
 
     const result = validateAddress(form);
 
     setForm(result.values);
     setErrors(result.errors);
+    setActionError("");
 
     const firstError = Object.keys(result.errors)[0];
 
@@ -168,35 +256,44 @@ export default function AddressSection() {
       return;
     }
 
-    saveAddress(userId, result.values, editingId);
-    closeModal();
-
-    showToast(isEditing ? "배송지를 수정했습니다." : "배송지를 추가했습니다.");
+    await runMutation(
+      () => saveAddress(userId, result.values, editingId),
+      () => setIsModalOpen(false),
+      isEditing ? "배송지를 수정했습니다." : "배송지를 추가했습니다.",
+    );
   };
 
   // 삭제 버튼 클릭: 확인 모달만 열기
   const handleDelete = (address) => {
+    if (submittingRef.current) return;
+
+    setActionError("");
     setDeleteTarget(address);
   };
 
   const closeDeleteModal = () => {
+    if (submittingRef.current) return;
+
     setDeleteTarget(null);
+    setActionError("");
   };
 
-  // 확인 모달에서 삭제를 눌렀을 때 실제 삭제
-  const confirmDelete = () => {
-    if (!userId) {
-      showToast("로그인 후 이용해주세요.");
-      closeDeleteModal();
-      return;
-    }
+  const confirmDelete = async () => {
+    if (!deleteTarget || submittingRef.current) return;
 
-    if (!deleteTarget) return;
+    await runMutation(
+      () => removeAddress(userId, deleteTarget.addressId),
+      () => setDeleteTarget(null),
+      "배송지를 삭제했습니다.",
+    );
+  };
 
-    removeAddress(userId, deleteTarget.addressId);
-    closeDeleteModal();
-
-    showToast("배송지를 삭제했습니다.");
+  const handleSetDefault = async (addressId) => {
+    await runMutation(
+      () => setDefaultAddress(userId, addressId),
+      () => {},
+      "기본 배송지를 변경했습니다.",
+    );
   };
 
   return (
@@ -225,13 +322,34 @@ export default function AddressSection() {
         <OutlineButton
           ref={addAddressButtonRef}
           type="button"
+          disabled={isLoading || Boolean(loadError) || isSubmitting}
           onClick={openAddModal}
         >
           + 새 배송지 추가
         </OutlineButton>
       </CardHeader>
 
-      {addresses.length === 0 ? (
+      {actionError && !isModalOpen && !deleteTarget && (
+        <p role="alert">{actionError}</p>
+      )}
+
+      {isLoading ? (
+        // 변경
+        <div role="status" aria-label="배송지를 불러오는 중입니다">
+          <LoadingSpinner />
+        </div>
+      ) : loadError ? (
+        <div role="alert">
+          <p>{loadError}</p>
+          <OutlineButton
+            type="button"
+            disabled={isSubmitting}
+            onClick={() => setRetryCount((count) => count + 1)}
+          >
+            다시 불러오기
+          </OutlineButton>
+        </div>
+      ) : addresses.length === 0 ? (
         <AddressEmpty>
           <p>현재 등록된 배송지가 없습니다.</p>
           <p>배송지를 등록해주세요.</p>
@@ -248,6 +366,7 @@ export default function AddressSection() {
                 <ButtonGroup>
                   <OutlineButton
                     type="button"
+                    disabled={isSubmitting}
                     aria-label={`${address.label} 배송지 수정`}
                     onClick={() => openEditModal(address)}
                   >
@@ -256,6 +375,7 @@ export default function AddressSection() {
 
                   <OutlineButton
                     type="button"
+                    disabled={isSubmitting}
                     aria-label={`${address.label} 배송지 삭제`}
                     onClick={() => handleDelete(address)}
                   >
@@ -266,9 +386,8 @@ export default function AddressSection() {
                     <OutlineButton
                       type="button"
                       aria-label={`${address.label} 기본 배송지로 설정`}
-                      onClick={() =>
-                        setDefaultAddress(userId, address.addressId)
-                      }
+                      disabled={isSubmitting}
+                      onClick={() => handleSetDefault(address.addressId)}
                     >
                       기본으로 설정
                     </OutlineButton>
@@ -297,6 +416,7 @@ export default function AddressSection() {
 
       <Modal
         isOpen={isModalOpen}
+        variant="mypage"
         onClose={closeModal}
         title={isEditing ? "배송지 수정" : "배송지 추가"}
       >
@@ -310,6 +430,7 @@ export default function AddressSection() {
                 id={`address-${field.name}`}
                 name={field.name}
                 type={field.type ?? "text"}
+                disabled={isSubmitting}
                 value={form[field.name]}
                 onChange={handleChange}
                 placeholder={field.placeholder}
@@ -340,47 +461,74 @@ export default function AddressSection() {
               name="isDefault"
               checked={form.isDefault}
               onChange={handleChange}
-              disabled={addresses.length === 0 || isEditingDefault}
+              disabled={
+                isSubmitting || addresses.length === 0 || isEditingDefault
+              }
             />
             기본 배송지로 설정
           </DefaultAddressLabel>
 
+          {actionError && <p role="alert">{actionError}</p>}
+
           <ProfileModalActions>
-            <ProfileCancelButton type="button" onClick={closeModal}>
+            <ProfileCancelButton
+              type="button"
+              onClick={closeModal}
+              disabled={isSubmitting}
+            >
               취소
             </ProfileCancelButton>
 
-            <ProfileSaveButton type="submit">저장하기</ProfileSaveButton>
+            <ProfileSaveButton type="submit" disabled={isSubmitting}>
+              {isSubmitting ? "저장 중..." : "저장하기"}
+            </ProfileSaveButton>
           </ProfileModalActions>
         </ProfileEditForm>
       </Modal>
       <Modal
+        variant="mypage"
         isOpen={Boolean(deleteTarget)}
         onClose={closeDeleteModal}
-        title="배송지 삭제"
+        title="배송지를 삭제할까요?"
         returnFocusRef={addAddressButtonRef}
       >
-        <p>
-          <strong>{deleteTarget?.label}</strong>
-          {" 배송지를 삭제하시겠습니까?"}
-        </p>
-
-        {deleteTarget?.isDefault && (
+        <AddressDeleteContent>
           <p>
-            기본 배송지입니다. 다른 배송지가 남아 있다면 첫 번째 배송지가 기본
-            배송지로 지정됩니다.
+            <strong>‘{deleteTarget?.label}’</strong> 배송지를 삭제합니다.
+            <br />
+            계속 진행하시겠어요?
           </p>
-        )}
 
-        <ProfileModalActions>
-          <ProfileCancelButton type="button" onClick={closeDeleteModal}>
-            취소
-          </ProfileCancelButton>
+          {deleteTarget?.isDefault && (
+            <AddressDeleteNotice>
+              <strong>기본 배송지로 등록된 주소예요.</strong>
+              <p>
+                다른 배송지가 남아 있다면 첫 번째 배송지가 기본 배송지로
+                지정됩니다.
+              </p>
+            </AddressDeleteNotice>
+          )}
 
-          <ProfileSaveButton type="button" onClick={confirmDelete}>
-            삭제
-          </ProfileSaveButton>
-        </ProfileModalActions>
+          {actionError && <p role="alert">{actionError}</p>}
+
+          <ProfileModalActions>
+            <ProfileCancelButton
+              type="button"
+              onClick={closeDeleteModal}
+              disabled={isSubmitting}
+            >
+              취소
+            </ProfileCancelButton>
+
+            <ProfileSaveButton
+              type="button"
+              onClick={confirmDelete}
+              disabled={isSubmitting}
+            >
+              {isSubmitting ? "삭제 중..." : "삭제하기"}
+            </ProfileSaveButton>
+          </ProfileModalActions>
+        </AddressDeleteContent>
       </Modal>
     </Card>
   );

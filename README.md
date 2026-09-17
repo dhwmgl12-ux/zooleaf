@@ -1,16 +1,236 @@
-# React + Vite
+# 🦁 ZOOLEAF
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+---
 
-Currently, two official plugins are available:
+## 📌 프로젝트 소개
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+동물원 이커머스 서비스 — 입장권·패키지 구매, 굿즈 샵, 체험 프로그램 예약을 한 곳에서 구매할 수 있는 사이트
 
-## React Compiler
+## 🎯 서비스 콘셉트
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+동물들의 서식 환경을 최대한 존중하는 친환경 테마 동물원 ZOOLEAF가, 입장권 예매부터 체험 프로그램·굿즈 쇼핑까지 한 번에 이어지는 온라인 경험을 제공합니다.
 
-## Expanding the ESLint configuration
+> "자연과 인간, 그리고 동물이 초록빛 교감을 나누는 생태 문화 공간"
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+동물원이 가진 이 정체성을 웹 서비스에도 그대로 녹여내는 것을 콘셉트로 삼았습니다. (이미지·콘텐츠 저작권 이슈에서 비교적 자유로운 소재를 고민하다 '동물원 · 굿즈 상품'을 주제로 선정했습니다.)
+
+## 👥 팀원 및 역할
+
+| 이름 | 역할 |
+| --- | --- |
+| 박형우 | 장바구니 / 마이페이지 / 404 |
+| 박근영 | 메인페이지 / 상세페이지 / Header / Footer |
+| 황상빈 | 로그인 / 회원가입 / API명세 |
+| 정현우 | 카테고리 / 프로덕트 / 굿즈 페이지 |
+| 송유림 | 디자인 / 제휴 & 할인 / 동물원 소개 / 보유 동물 / 체험 프로그램 |
+
+## 📅 개발 기간
+
+2026-08-25 ~ 2026-09-17
+
+## ✨ 주요 기능
+
+- 회원가입 / 로그인 (세션 기반 토큰 인증)
+- 마이페이지 (회원정보 조회·수정, 배송지 관리, 주문 내역/취소)
+- 메인 페이지 (추천 입장권·패키지, 동물원 지도, 추천 굿즈, 방문 후기)
+- 입장권 & 패키지 목록 · 상세
+- Shop (굿즈) 목록 · 상세
+- 체험 프로그램 목록 · 상세
+- 동물 이야기 콘텐츠
+- 장바구니 (담기 · 수량 변경 · 선택 삭제)
+- 제휴 할인
+- 커스텀 404 (일반 404 / 상품 · 굿즈 미존재 404)
+
+
+## 🛠 기술 스택
+
+**Frontend**
+- React 19
+- Vite
+- React Router 7
+- Zustand 5 (전역 상태 관리)
+- Emotion (`@emotion/styled`, `@emotion/react`)
+- ESLint
+
+
+## 📂 프로젝트 파일 구조
+
+```
+src/
+├─ api/          # 서버 통신 (auth, product, goods, experience, cart, animalStory)
+├─ assets/
+│  ├─ icons/
+│  └─ images/
+├─ components/
+│  ├─ auth/       # 로그인·회원가입 폼
+│  ├─ cart/       # 장바구니
+│  ├─ common/     # Breadcrumb, Modal, LoadingSpinner 등 공용
+│  ├─ detail/     # 상품/체험 상세 가격·옵션
+│  ├─ experience/
+│  ├─ goods/
+│  ├─ layout/     # Header, Footer, Layout
+│  ├─ main/       # 메인 페이지 섹션들
+│  ├─ mypage/     # 마이페이지(프로필, 배송지, 주문내역)
+│  ├─ product/
+│  └─ review/
+├─ constants/
+├─ hooks/         # useAuth, useCart, useMarqueeDistance 등
+├─ pages/         # 라우트별 페이지
+├─ routes/        # AppRouter
+├─ store/         # zustand 스토어 (auth, cart, toast, order, address)
+├─ styles/        # theme, GlobalStyle (전역 전용 — 페이지별 스타일은 pages/에 짝지어 위치)
+└─ utils/         # validation 등
+```
+
+## 🚀 실행 방법
+
+```bash
+# 1. 저장소 클론
+git clone <repository-url>
+cd zooleaf
+
+# 2. 의존성 설치
+npm install
+
+# 3. 환경 변수 설정 (🔐 환경 변수 안내 참고)
+
+# 4. 개발 서버 실행
+npm run dev
+
+# 5. 빌드
+npm run build
+
+# 6. 빌드 결과 미리보기
+npm run preview
+```
+
+> `package.json`의 실제 스크립트명(`dev`/`build`/`lint` 등)과 다르면 이 부분만 맞춰서 수정해 주세요.
+
+
+## 🔐 환경 변수 안내
+
+프로젝트 루트에 `.env` 파일을 생성하고 아래 값을 채워주세요.
+
+```
+VITE_API_BASE_URL=https://api.mylecture.kr/api/14/team2
+```
+
+
+## 🖼 주요 화면
+
+| 화면 | 설명 |
+| --- | --- |
+| 메인 | 추천 입장권·패키지, 동물원 지도, 추천 굿즈, 방문 후기 |
+| 로그인 / 회원가입 | 세션 기반 토큰 인증, 실시간 유효성 검증 |
+| 입장권 & 패키지 | 목록 · 상세, 예매 |
+| Shop | 굿즈 목록 · 상세 |
+| 체험 프로그램 | 목록 · 상세, 예약 |
+| 동물 이야기 | 보유 동물 정보 콘텐츠 |
+| 장바구니 | 담기 · 수량 변경 · 선택 삭제 |
+| 마이페이지 | 회원정보 · 배송지 · 주문 내역 |
+| 404 | 일반 404 / 상품·굿즈 미존재 커스텀 404 |
+
+> 스크린샷은 추후 추가 예정입니다. `docs/screenshots/` 등에 이미지를 넣고 아래 형식으로 링크해 주세요.
+> `![메인 페이지](./docs/screenshots/main.png)`
+
+
+## 🔌 API 사용 방법
+
+Base URL: `https://api.mylecture.kr/api/14/team2`
+
+인증이 필요한 요청은 헤더에 토큰을 실어 보냅니다.
+
+```
+Authorization: Bearer <token>
+```
+
+공통 응답 형식은 `{ success, data, message }`이며, **로그인 응답만 예외적으로** `token`, `userInfo`가 최상위로 내려옵니다.
+
+| 도메인 | 메서드 | 엔드포인트 | 설명 |
+| --- | --- | --- | --- |
+| 인증 | POST | `/auth/login` | 로그인 |
+| 인증 | POST | `/auth/check-id` | 아이디 중복 확인 |
+| 인증 | POST | `/auth/signup` | 회원가입 |
+| 인증 | GET | `/auth/me` | 로그인 상태 복원 / 회원정보 조회 |
+| 인증 | PATCH | `/auth/me` | 회원정보 수정 |
+| 인증 | POST | `/auth/logout` | 로그아웃 |
+| 배송지 | GET | `/addresses` | 배송지 목록 |
+| 배송지 | POST | `/addresses` | 배송지 추가 |
+| 배송지 | PATCH | `/addresses/:addressId` | 배송지 수정 · 기본 배송지 설정 |
+| 배송지 | DELETE | `/addresses/:addressId` | 배송지 삭제 |
+| 주문 | POST | `/orders` | 장바구니 구매 확정 → 주문 저장 |
+| 주문 | GET | `/orders` | 주문 내역 조회 |
+| 주문 | POST | `/orders/:orderId/cancel` | 주문 취소 |
+| 메인 | GET | `/main` | 추천 입장권/패키지, 동물원 지도, 추천 굿즈, 방문 후기 |
+| 입장권/패키지 | GET | `/products` | 목록 |
+| 입장권/패키지 | GET | `/products/:productId` | 상세 |
+| Shop/굿즈 | GET | `/goods` | 목록 |
+| Shop/굿즈 | GET | `/goods/:goodsId` | 상세 |
+| 체험 프로그램 | GET | `/experiences` | 목록 |
+| 체험 프로그램 | GET | `/experiences/:experienceId` | 상세 |
+| 동물 이야기 | GET | `/animals` | 목록 |
+| 장바구니 | POST | `/cart` | 담기 |
+| 장바구니 | GET | `/cart` | 조회 |
+| 장바구니 | PATCH | `/cart/:cartItemId` | 수량 변경 |
+| 장바구니 | DELETE | `/cart/:cartItemId` | 개별 삭제 |
+| 장바구니 | DELETE | `/cart` | 선택/전체 삭제 |
+
+
+## 🐛 트러블슈팅
+
+### 01. UI 및 레이아웃 오버플로우
+
+**Sticky 영역 뷰포트 이탈**
+- **문제**: 옵션이 늘어날 때 sticky 영역의 높이가 화면보다 커지면서 내용이 잘림
+- **원인**: 별도의 높이 제한과 내부 스크롤 처리가 없었음
+- **해결**: `max-height`와 `overflow-y: auto`를 적용하고 반응형으로 대응
+
+**Marquee 애니메이션 고정**
+- **문제**: 창 크기를 조절해도 텍스트 흐름 이동 거리가 그대로 고정됨
+- **원인**: 마운트 시점에만 단발성으로 거리를 계산하고 리사이즈 리스너가 구현되어 있지 않았음
+- **해결**: 훅 내부에 resize 이벤트 리스너를 추가해 실시간으로 재계산하도록 처리
+
+### 02. 로직 및 유효성 검사 개선
+
+**비밀번호 확인 에러 매핑 오류**
+- **문제**: 에러 메시지가 엉뚱한 password 입력 칸에 표시됨
+- **원인**: 매핑 함수 내에서 일반적인 조건이 구체적인 조건보다 먼저 걸려 잘못 매칭됨
+- **해결**: 조건 검사 순서를 변경해 구체적인 문자열을 먼저 검사하도록 수정
+
+**리다이렉트 로직 중복 코드**
+- **문제**: 로그인/회원가입 페이지에 동일한 유효성 체크 로직이 각각 파편화되어 있었음
+- **원인**: 동일한 `useEffect` 블록이 컴포넌트별로 중복 선언됨
+- **해결**: 커스텀 훅 `useRedirectIfLoggedIn`으로 로직을 공통화하고 리팩토링
+
+### 03. API 연동 및 데이터 정합성
+
+**API 에러 및 404 예외 처리**
+- **문제**: 존재하지 않는 ID로 접근했을 때 404 대신 일반 API 오류로 표시됨
+- **원인**: 상태 코드별 예외 분기 처리가 누락되어 있었음
+- **해결**: `error.status === 404` 분기를 추가하고 NotFoundPage를 반환하도록 처리
+
+**회원가입 Payload 이중 감싸기**
+- **문제**: 회원가입 요청이 잘못된 포맷으로 전송됨
+- **원인**: `JSON.stringify({ payload })` 형태로 감싸면서 payload가 이중으로 객체화됨
+- **해결**: `JSON.stringify(payload)` 형태의 단일 객체로 구조를 수정
+
+
+## 💭 프로젝트 회고
+
+**완성도 평가 (10점 만점)**: 박형우 10 · 박근영 10 · 황상빈 9 · 송유림 9 · 정현우 9 (평균 9.4)
+
+**박형우 (팀장)**
+장바구니와 마이페이지를 구현하며 화면 구성뿐 아니라 API를 통한 데이터 흐름과 예외 처리의 중요성을 배웠습니다. 초기에 API 명세와 공통 컴포넌트 구조를 충분히 이해하지 못해 수정이 반복되고, 반응형을 뒤늦게 보완한 점이 아쉬웠습니다. 다음 프로젝트에서는 설계 단계부터 데이터 구조와 다양한 화면 크기를 고려하고, 기능별 테스트를 병행해 완성도를 더욱 높이고 싶습니다.
+
+**박근영**
+첫 React 프로젝트로서 단순 UI 구현을 넘어 API 연동, 컴포넌트 재사용성, 반응형 레이아웃을 다각도로 고민하며 성장의 계기가 되었습니다. 초기 기획의 아쉬움은 있었지만 끝까지 프로젝트를 완성도 있게 끝마쳤다는 점이 가장 뿌듯합니다.
+
+**황상빈**
+좋은 점: 컴포넌트 구조를 사용하며 컴포넌트에 대한 이해도가 늘었고, API 명세를 작성하고 활용하는 방법을 알게 되었습니다.
+아쉬운 점: 기획을 거의 하지 않고 바로 시작한 감이 있어 디자인 및 개발의 갈피를 잡기 힘들었습니다.
+
+**송유림**
+피그마를 활용한 주도적인 디자인과 단독 페이지 구현을 통해 실전 개발 역량과 성취감을 얻은 점은 좋았지만, 컨디션 관리 및 초기 기술 이해도 부족으로 어려움을 겪었던 점은 아쉬웠습니다.
+
+**정현우**
+API 연동으로 단순히 UI를 그리는 것보다 데이터가 어떻게 흐르는지 이해하는 것이 중요하다고 느꼈고, 기획·협업 과정에서 이해와 기여가 부족했던 점이 아쉬웠습니다.

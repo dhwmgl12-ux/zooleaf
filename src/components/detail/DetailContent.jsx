@@ -31,7 +31,14 @@ export default function DetailContent({product}) {
       <DetailDescription id="detail-description">
         <DetailImageViewport id="detail-image-content" $isExpanded={isExpanded}>
           {detailImage ? (
-            <img src={detailImage} alt={`${name} 상세 설명`} />
+            <img 
+              src={detailImage} 
+              alt={`${name} 상세 설명`} 
+              width="700"
+              height="1000"
+              loading="lazy"
+              decoding="async"
+            />
           ) : (
             <p>등록된 상세 이미지가 없습니다.</p>
           )}

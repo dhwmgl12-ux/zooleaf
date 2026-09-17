@@ -18,12 +18,12 @@ export const MainImageViewport = styled.div`
     width: min(100%, 480px);
     aspect-ratio: 480 / 320;
   }
-
+  
   @media (max-width: ${theme.layout.breakpoint.tablet}) {
     width: 100%;
     aspect-ratio: 480 / 320;
   }
-`
+  `
 
 export const ImageTrack = styled.ul`
   width: 100%;
@@ -31,7 +31,8 @@ export const ImageTrack = styled.ul`
 
   display: flex;
 
-  transform: ${({ $currentIndex }) => `translateX(-${$currentIndex * 100}%)`};
+  transform: ${({ $currentIndex }) =>
+    `translateX(-${$currentIndex * 100}%)`};
 
   transition: transform 300ms ease;
 
@@ -39,14 +40,27 @@ export const ImageTrack = styled.ul`
     flex: 0 0 100%;
     width: 100%;
     height: 100%;
+
+    display: grid;
+    place-items: center;
   }
 
   img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
+    display: block;
+
+    width: ${({ $isProduct }) => ($isProduct ? "auto" : "100%")};
+    height: ${({ $isProduct }) => ($isProduct ? "auto" : "100%")};
+
+    max-width: 100%;
+    max-height: 100%;
+
+    object-fit: ${({ $isProduct }) =>
+      $isProduct ? "contain" : "cover"};
+
+    border-radius: ${theme.radius.image};
   }
-`
+`;
+
 
 export const SlideButton = styled.button`
   position: absolute;

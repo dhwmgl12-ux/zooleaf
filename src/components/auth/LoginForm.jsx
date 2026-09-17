@@ -31,8 +31,10 @@ export default function LoginForm() {
             value={id}
             onChange={handleChange}
             placeholder="user@example.com"
+            aria-invalid={!!errors.id}
+            aria-describedby={errors.id ? 'id-error' : undefined}
           />
-          {errors.id && <ErrorText>{errors.id}</ErrorText>}
+          {errors.id && <ErrorText id="id-error" role="alert">{errors.id}</ErrorText>}
         </div>
         <PasswordField
           label='비밀번호'
@@ -43,7 +45,7 @@ export default function LoginForm() {
           placeholder="비밀번호를 입력해주세요!"
           error={errors.password}
         />
-        {errors.form && <FormErrorText>{errors.form}</FormErrorText>}
+        {errors.form && <FormErrorText role="alert">{errors.form}</FormErrorText>}
         <SubmitButton type="submit" disabled={isSubmitting}>{isSubmitting ? '로그인 중' : '로그인'}</SubmitButton>
       </Form>
 

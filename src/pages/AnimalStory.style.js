@@ -3,7 +3,6 @@ import { theme } from '../styles/variables';
 
 export const Container = styled.div`
   margin: 0 auto;
-  padding: ${theme.spacing[4]};
   text-align: center;
   display: flex;
   flex-direction: column;
@@ -14,29 +13,25 @@ export const Title = styled.h2`
   font-size: ${theme.fontSize.h3.size};
   color: ${theme.colors.textPrimary};
   margin-bottom: ${theme.spacing[16]};
-  margin-top: ${theme.spacing[100]};
-  @media (max-width: ${theme.layout.breakpoint.smallMobile}) {
-    margin-top: ${theme.spacing[56]};
-  }
 `;
 
 export const SubTitle = styled.p`
   font-size: ${theme.fontSize.bodylarge.size};
   color: ${theme.colors.textPrimary};
-  margin-bottom: ${theme.spacing[80]};
+  margin-bottom: ${theme.spacing[32]};
 `;
 
 export const FilterBox = styled.div`
   width: 100%;
-  background: ${theme.colors.white || '#ffffff'};
+  background: ${theme.colors.white};
   border-radius: ${theme.radius.box};
-  padding: 16px 24px;
+  padding: ${theme.spacing[12]} 60px;
   display: flex;
   align-items: center;
   justify-content: space-between;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.04);
   margin-bottom: ${theme.spacing[64]};
-  gap: ${theme.spacing[100]};
+  gap: ${theme.spacing[32]};
 
   .divider {
     width: 1px;
@@ -44,35 +39,26 @@ export const FilterBox = styled.div`
     background-color: ${theme.colors.background2};
     flex-shrink: 0;
   }
+  
   @media (max-width: ${theme.layout.breakpoint.tablet}) {
-    flex-direction: row;
-    justify-content: space-between;
-    align-items: center;
-    padding: 16px 20px;
-    gap: ${theme.spacing[12]};
-
-    .divider {
-      display: block;
-    }
-  }
-  @media (max-width: ${theme.layout.breakpoint.mobile}) {
     flex-direction: column;
     align-items: stretch;
     gap: ${theme.spacing[16]};
-    padding: ${theme.spacing[20]};
+    padding: ${theme.spacing[20]} 60px;
 
     .divider {
       width: 100%;
       height: 1px;
     }
   }
-  @media (max-width: ${theme.layout.breakpoint.smallMobile}) {
+  @media (max-width: ${theme.layout.breakpoint.mobile}) {
+    padding: ${theme.spacing[20]};
     width: 100%;
   }
 `;
 
 export const TabBtn = styled.button`
-  padding: 8px 12px;
+  align-self: flex-end;
   border: none;
   background-color: transparent;
   color: ${(props) =>
@@ -86,37 +72,34 @@ export const TabBtn = styled.button`
     color: ${theme.colors.primary};
     background-color: transparent;
   }
+
+  @media (max-width: ${theme.layout.breakpoint.tablet}) {
+    padding: ${theme.spacing[4]} ${theme.spacing[8]};
+  }
 `;
 
 export const ZoneTabs = styled.div`
   display: flex;
-  gap: ${theme.spacing[24]};
+  gap: ${theme.spacing[14]};
   align-items: center;
   justify-content: space-between;
-  max-width: 650px; /* 누락된 단위 추가 */
   width: 100%; /* 고정 크기 대신 유연하게 줄어들도록 추가 */
-  overflow-x: auto;
 
-  &::-webkit-scrollbar {
-    display: none;
+  @media (max-width: ${theme.layout.breakpoint.tablet}) {
+    width: 100%;
   }
+
   @media (max-width: ${theme.layout.breakpoint.mobile}) {
     width: 100%;
-    justify-content: flex-start;
-    gap: ${theme.spacing[24]};
-  }
-  @media (max-width: ${theme.layout.breakpoint.smallMobile}) {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
-    gap: 8px 4px;
-    width: 100%;
-
+    gap: ${theme.spacing[8]} ${theme.spacing[4]};
     button {
       margin-top: ${theme.spacing[10]};
       width: 100%;
-      text-align: left;
+      font-size: ${theme.fontSize.body.size};
+      text-align: center;
       padding: ${theme.spacing[8]} 0;
-      font-size: ${theme.fontSize.label.size};
     }
   }
 `;
@@ -124,13 +107,15 @@ export const ZoneTabs = styled.div`
 export const DropdownWrapper = styled.div`
   position: relative;
   display: inline-block;
-  flex: 1;
+  flex-shrink: 0;
+  width: 100%;
   max-width: 340px;
   text-align: left;
-  @media (max-width: ${theme.layout.breakpoint.mobile}) {
+  @media (max-width: ${theme.layout.breakpoint.tablet}) {
     width: 100%;
     max-width: none;
-    flex: none;
+    margin-left: 0;
+    flex-shrink: 1;
 
     > div,
     button {
@@ -140,6 +125,7 @@ export const DropdownWrapper = styled.div`
 `;
 
 export const DropdownHeader = styled.div`
+  max-width: 340px;
   padding: 8px 16px;
   border-radius: ${theme.radius.button};
   border: 1px solid ${theme.colors.background2};
@@ -163,6 +149,10 @@ export const DropdownHeader = styled.div`
     transform: ${(props) => (props.isOpen ? 'rotate(180deg)' : 'rotate(0deg)')};
     transition: transform 0.2s ease;
   }
+
+  @media (max-width: ${theme.layout.breakpoint.tablet}) {
+    max-width: 100%;
+  }
 `;
 
 export const DropdownList = styled.ul`
@@ -170,7 +160,7 @@ export const DropdownList = styled.ul`
   top: calc(100% + 4px);
   left: 0;
   width: 100%;
-  background: ${theme.colors?.white || '#fff'};
+  background: ${theme.colors?.white};
   border: 1px solid ${theme.colors.background2};
   border-radius: ${theme.radius.input};
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
@@ -227,6 +217,7 @@ export const InfoRow = styled.div`
     font-size: ${theme.fontSize.body.size};
     color: ${theme.colors.textPrimary};
     white-space: pre-line;
+    text-align: left;
   }
   @media (max-width: ${theme.layout.breakpoint.tablet}) {
     margin-left: 0;
@@ -241,24 +232,19 @@ export const InfoRow = styled.div`
 
 export const AnimalCard = styled.div`
   width: 100%;
-  background: ${theme.colors.white || '#fff'};
+  background: ${theme.colors.white};
   border-radius: ${theme.radius.box};
   overflow: hidden;
   display: flex;
-  align-items: flex-start;
+  align-items: center;
   padding: ${theme.spacing[32]};
   gap: ${theme.spacing[24]};
-  text-align: left;
+  text-align: center;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.03);
   height: 100%;
   @media (max-width: ${theme.layout.breakpoint.tablet}) {
-    padding: ${theme.spacing[24]};
-    gap: ${theme.spacing[20]};
-  }
-  @media (max-width: ${theme.layout.breakpoint.mobile}) {
     flex-direction: column;
     align-items: stretch; /* 아이템들을 가로로 꽉 채워 유연하게 정렬 */
-    text-align: left;
     padding: ${theme.spacing[16]};
   }
   @media (max-width: ${theme.layout.breakpoint.smallMobile}) {
@@ -271,13 +257,15 @@ export const AnimalImg = styled.img`
   width: 200px;
   height: 200px;
   object-fit: cover;
-  margin-top: ${theme.spacing[20]};
   border-radius: ${theme.radius.image};
   flex-shrink: 0;
+  background-color: ${theme.colors.background2};
+  opacity: ${(porps) => (porps.$loaded ? 1 : 0)};
+  transition: opacity 0.25s ease;
   @media (max-width: ${theme.layout.breakpoint.tablet}) {
     width: 116px;
     height: 116px;
-    margin-top: ${theme.spacing[56]};
+    /* margin-top: ${theme.spacing[56]}; */
   }
   @media (max-width: ${theme.layout.breakpoint.mobile}) {
     width: 116px;
@@ -361,34 +349,4 @@ export const TmiBox = styled.div`
   }
 `;
 
-export const Pagination = styled.div`
-  display: flex;
-  justify-content: center;
-  gap: ${theme.spacing[8]};
-`;
 
-export const PageBtn = styled.button`
-  width: 36px;
-  height: 36px;
-  border-radius: 50%;
-  border: 1px solid
-    ${(props) => (props.active ? theme.colors.primary || '#27ae60' : '#ddd')};
-  background-color: ${(props) =>
-    props.active ? theme.colors.primary || '#27ae60' : '#fff'};
-  color: ${(props) => (props.active ? '#fff' : '#333')};
-  font-weight: ${theme.fontWeight.semiBold};
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-
-  &:disabled {
-    opacity: 0.4;
-    cursor: not-allowed;
-  }
-
-  &:hover:not(:disabled) {
-    background-color: ${(props) =>
-      props.active ? theme.colors.primary || '#27ae60' : '#f1f2f6'};
-  }
-`;
