@@ -63,6 +63,8 @@ export default function ZooMapSection({zones=[],}) {
         <MapImage
           src={zoneMapImage}
           alt="ZOOLEAF 동물원 구역 안내 지도"
+          loading="lazy"
+          decoding="async"
         />
 
         {zones.map((zone) => {
@@ -86,6 +88,8 @@ export default function ZooMapSection({zones=[],}) {
               <img
                 src={zoneImage}
                 alt=""
+                loading="lazy"
+                decoding="async"
               />
             </MapHotspot>
           );
