@@ -109,7 +109,6 @@ npm run preview
 
 ## 🔐 환경 변수 안내
 
-프로젝트 루트에 `.env` 파일을 생성하고 아래 값을 채워주세요.
 
 ```
 VITE_API_BASE_URL=https://api.mylecture.kr/api/14/team2
@@ -118,20 +117,7 @@ VITE_API_BASE_URL=https://api.mylecture.kr/api/14/team2
 
 ## 🖼 주요 화면
 
-| 화면 | 설명 |
-| --- | --- |
-| 메인 | 추천 입장권·패키지, 동물원 지도, 추천 굿즈, 방문 후기 |
-| 로그인 / 회원가입 | 세션 기반 토큰 인증, 실시간 유효성 검증 |
-| 입장권 & 패키지 | 목록 · 상세, 예매 |
-| Shop | 굿즈 목록 · 상세 |
-| 체험 프로그램 | 목록 · 상세, 예약 |
-| 동물 이야기 | 보유 동물 정보 콘텐츠 |
-| 장바구니 | 담기 · 수량 변경 · 선택 삭제 |
-| 마이페이지 | 회원정보 · 배송지 · 주문 내역 |
-| 404 | 일반 404 / 상품·굿즈 미존재 커스텀 404 |
-
-> 스크린샷은 추후 추가 예정입니다. `docs/screenshots/` 등에 이미지를 넣고 아래 형식으로 링크해 주세요.
-> `![메인 페이지](./docs/screenshots/main.png)`
+<table> <tr> <td align="center"><b>메인</b><br><img src="./docs/screenshots/main.png" width="260"></td> <td align="center"><b>로그인</b><br><img src="./docs/screenshots/login.png" width="260"></td> <td align="center"><b>회원가입</b><br><img src="./docs/screenshots/sign-up.png" width="260"></td> </tr> <tr> <td align="center"><b>동물원 소개</b><br><img src="./docs/screenshots/story.png" width="260"></td> <td align="center"><b>동물 이야기</b><br><img src="./docs/screenshots/animal.png" width="260"></td> <td align="center"><b>체험 프로그램</b><br><img src="./docs/screenshots/experience.png" width="260"></td> </tr> <tr> <td align="center"><b>입장권 & 패키지</b><br><img src="./docs/screenshots/product.png" width="260"></td> <td align="center"><b>입장권 상세</b><br><img src="./docs/screenshots/detail.png" width="260"></td> <td align="center"><b>Shop</b><br><img src="./docs/screenshots/shop.png" width="260"></td> </tr> <tr> <td align="center"><b>굿즈 상세</b><br><img src="./docs/screenshots/detail2.png" width="260"></td> <td align="center"><b>장바구니</b><br><img src="./docs/screenshots/cart.png" width="260"></td> <td align="center"><b>마이페이지</b><br><img src="./docs/screenshots/mypage.png" width="260"></td> </tr> <tr> <td align="center"><b>404</b><br><img src="./docs/screenshots/404.png" width="260"></td> <td></td> <td></td> </tr> </table>
 
 
 ## 🔌 API 사용 방법
