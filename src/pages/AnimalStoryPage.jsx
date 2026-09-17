@@ -152,8 +152,8 @@ export default function AnimalStory() {
         ) : (
           <>
             <AnimalGrid>
-              {currentAnimals.map((animal) => (
-                <AnimalStoryCard key={animal.id} animal={animal} />
+              {currentAnimals.map((animal, index) => (
+                <AnimalStoryCard key={animal.id} animal={animal} priority={index < 2}/>
               ))}
             </AnimalGrid>
 
