@@ -1,5 +1,4 @@
 import { useEffect, useState } from 'react';
-import { Link } from 'react-router-dom';
 import CategorySidebar from '../components/product/CategorySidebar';
 import ProductCard from '../components/product/ProductCard';
 import { getProducts } from '../api/productApi';
@@ -100,7 +99,7 @@ export default function ProductPage() {
       <Breadcrumb
         items={[
           { label: '홈', to: '/' },
-          { label: 'Shop', to: '/goods' }
+          { label: '입장권 & 패키지', to: '/products' }
         ]}
       />
 
