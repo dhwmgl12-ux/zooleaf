@@ -119,6 +119,7 @@ export default function OrderSection() {
   const selectedOrder = orders.find(
     (order) => order.orderId === modal?.orderId,
   );
+  const selectedAmounts = getOrderDisplayAmounts(userId, selectedOrder);
 
   const selectedOrderItems = groupOrderItems(selectedOrder?.items ?? []);
 
