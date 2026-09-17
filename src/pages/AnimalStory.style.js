@@ -349,34 +349,4 @@ export const TmiBox = styled.div`
   }
 `;
 
-export const Pagination = styled.div`
-  display: flex;
-  justify-content: center;
-  gap: ${theme.spacing[8]};
-`;
 
-export const PageBtn = styled.button`
-  width: 36px;
-  height: 36px;
-  border-radius: 50%;
-  border: 1px solid
-    ${(props) => (props.active ? theme.colors.primary || '#27ae60' : '#ddd')};
-  background-color: ${(props) =>
-    props.active ? theme.colors.primary || '#27ae60' : '#fff'};
-  color: ${(props) => (props.active ? '#fff' : '#333')};
-  font-weight: ${theme.fontWeight.semiBold};
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-
-  &:disabled {
-    opacity: 0.4;
-    cursor: not-allowed;
-  }
-
-  &:hover:not(:disabled) {
-    background-color: ${(props) =>
-      props.active ? theme.colors.primary || '#27ae60' : '#f1f2f6'};
-  }
-`;
