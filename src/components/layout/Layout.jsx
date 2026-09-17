@@ -4,6 +4,7 @@ import Footer from './Footer.jsx';
 import { ContentContainer } from './ContentContainer.styles.js';
 import { LayoutContainer } from './Layout.styles.js';
 import ScrollTopButton from '../common/ScrollTopButton.jsx';
+import { Suspense } from 'react';
 
 export default function Layout() {
   const { pathname } = useLocation();
@@ -25,13 +26,15 @@ export default function Layout() {
         $isAboutPage={isAboutPage}
         $hasBreadcrumb={hasBreadcrumb}
       >
-        {isMainPage ? (
-          <Outlet />
-        ) : (
-          <ContentContainer>
+        <Suspense fallback={null}>
+          {isMainPage ? (
             <Outlet />
-          </ContentContainer>
-        )}
+          ) : (
+            <ContentContainer>
+              <Outlet />
+            </ContentContainer>
+          )}
+        </Suspense>
       </LayoutContainer>
 
       <Footer />
